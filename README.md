@@ -1,6 +1,6 @@
 # xf2-gmcore-interfacer
 
-Please refer to my [GMCore GMod repo](../gmcore-ttt) for my notes. This is an extension of gmcore-ttt with 10 years of major iterations being performed. I am proud of where the GMCore XF is, and my full notes are shared in my GMod repo.
+Please refer to my [GMCore GMod repo](https://github.com/PeteSavarese/gmcore-ttt) for my notes. This is an extension of gmcore-ttt with 10 years of major iterations being performed. I am proud of where the GMCore XF is, and my full notes are shared in my GMod repo.
 
 The XenForo web frontend for GMCore, a Garry's Mod community platform with game servers, forum, and Discord.
 
