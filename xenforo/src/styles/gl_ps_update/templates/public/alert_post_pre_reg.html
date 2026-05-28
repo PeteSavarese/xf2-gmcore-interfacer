@@ -1,0 +1,12 @@
+<xf:if is="$extra.welcome">
+	{{ phrase('welcome_to_boardtitle', {'boardTitle': $xf.options.boardTitle}) }}
+</xf:if>
+<xf:if is="$content.isFirstPost()">
+	{{ phrase('your_thread_x_was_created', {
+		'title': '<a href="' . link('threads', $content.Thread) . '" class="fauxBlockLink-blockLink">' . prefix('thread', $content.Thread) . $content.Thread.title . '</a>'
+	}) }}
+<xf:else />
+	{{ phrase('your_reply_to_thread_x_was_submitted', {
+		'title': '<a href="' . link('posts', $content) . '" class="fauxBlockLink-blockLink">' . prefix('thread', $content.Thread) . $content.Thread.title . '</a>'
+	}) }}
+</xf:if>

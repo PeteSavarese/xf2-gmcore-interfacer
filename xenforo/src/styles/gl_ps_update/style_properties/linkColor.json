@@ -1,0 +1,16 @@
+{
+    "group_name": "color",
+    "title": "Link color",
+    "description": "Basic hyperlinks on standard background colors will use this style",
+    "property_type": "value",
+    "css_components": [],
+    "value_type": "color",
+    "value_parameters": "",
+    "has_variations": true,
+    "depends_on": "",
+    "value_group": "links",
+    "property_value": {
+        "default": "#5dade2"
+    },
+    "display_order": 1000
+}

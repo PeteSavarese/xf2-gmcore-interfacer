@@ -1,0 +1,68 @@
+.widget-serverRow {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 10px;
+	border-bottom: 1px solid rgba(52, 73, 94, 0.3);
+	transition: background 0.15s ease;
+}
+.widget-serverRow:hover {
+	background: rgba(52, 152, 219, 0.04);
+}
+.widget-serverRow:last-child {
+	border-bottom: none;
+}
+
+.widget-RowLeftMap {
+	flex-shrink: 0;
+}
+
+.widget-serverRowMiddle {
+	flex: 1;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 2px;
+}
+.widget-serverRowMiddle > span {
+	display: block;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	line-height: 1.3;
+}
+
+.widget-serverRowRight {
+	flex-shrink: 0;
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
+
+.widget-mapImage {
+	width: 48px;
+	height: 48px;
+	border-radius: 6px;
+	border: 1px solid rgba(52, 73, 94, 0.5);
+	object-fit: cover;
+}
+
+.widget-niceServerName {
+	font-weight: 700;
+	color: #ecf0f1;
+}
+
+.widget-serverCount {
+	padding-right: 0;
+	color: #95a5a6;
+	font-size: 0.85rem;
+}
+
+.widget-joinServerButton {
+	height: 100%;
+}
+
+.widget-serverRowMiddle br {
+	display: none;
+}

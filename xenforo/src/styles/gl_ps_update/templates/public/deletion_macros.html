@@ -1,0 +1,14 @@
+<xf:macro id="notice" arg-log="!" arg-message="">
+	<ul class="listInline listInline--bullet listInline--selfInline">
+		<xf:if is="$message is not empty">
+			<li>{$message}</li>
+		</xf:if>
+		<li>{{ phrase('deleted_by_x', {'name': $log.delete_username ?: phrase('n_a')}) }}</li>
+		<xf:if is="{$log}">
+			<li><xf:date time="{$log.delete_date}" /></li>
+			<xf:if is="{$log.delete_reason}">
+				<li>{{ phrase('reason:') }} {$log.delete_reason}</li>
+			</xf:if>
+		</xf:if>
+	</ul>
+</xf:macro>

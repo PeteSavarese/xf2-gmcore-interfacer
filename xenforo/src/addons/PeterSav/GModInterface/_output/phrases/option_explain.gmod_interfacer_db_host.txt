@@ -1,0 +1,1 @@
+IP address for MySQL database for server core.

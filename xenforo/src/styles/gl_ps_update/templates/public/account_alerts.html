@@ -1,0 +1,38 @@
+<xf:title>{{ phrase('alerts') }}</xf:title>
+
+<xf:wrap template="account_wrapper" />
+
+<div class="block">
+	<div class="block-outer"><xf:trim>
+		<div class="block-outer-opposite">
+			<div class="buttonGroup">
+				<xf:button href="{{ link('account/alerts/mark-read') }}"
+					class="button--link" overlay="true">
+					{{ phrase('mark_read') }}
+				</xf:button>
+			</div>
+		</div>
+	</xf:trim></div>
+
+	<div class="block-container">
+		<div class="block-body">
+			<xf:if is="$alerts is not empty">
+				<ol class="listPlain" data-xf-init="alerts-list">
+				<xf:foreach loop="$alerts" value="$alert">
+					<li data-alert-id="{$alert.alert_id}"
+						class="alert js-alert block-row block-row--separated {{ $alert.isUnreadInUi() ? 'is-unread' : '' }}">
+						<xf:macro id="alert_macros::row" arg-alert="{$alert}" />
+					</li>
+				</xf:foreach>
+				</ol>
+			<xf:elseif is="$page <= 1" />
+				<div class="block-row">{{ phrase('you_do_not_have_any_recent_alerts') }}</div>
+			<xf:else />
+				<div class="block-row">{{ phrase('no_alerts_can_be_shown') }}</div>
+			</xf:if>
+		</div>
+	</div>
+
+	<xf:pagenav link="account/alerts" page="{$page}" perpage="{$perPage}" total="{$totalAlerts}"
+		wrapperclass="block-outer block-outer--after" />
+</div>

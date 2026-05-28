@@ -1,0 +1,43 @@
+<xf:macro id="attachment_list_item" arg-attachment="!" arg-canView="!">
+	<li class="file file--linked">
+		<a class="u-anchorTarget" id="attachment-{$attachment.attachment_id}"></a>
+		<xf:if is="$attachment.has_thumbnail">
+			<xf:macro id="lightbox_macros::setup" arg-canViewAttachments="{$canView}" />
+
+			<a
+				class="file-preview {{ $canView ? 'js-lbImage' : '' }}"
+				href="{$attachment.direct_url}"
+				data-type="{{ $canView ? 'image' : '' }}"
+				target="_blank">
+				<img src="{$attachment.thumbnail_url}"
+					srcset="{{ $attachment.has_retina_thumbnail ? $attachment.retina_thumbnail_url . ' 2x' : '' }}"
+					alt="{$attachment.filename}"
+					width="{$attachment.thumbnail_width}" height="{$attachment.thumbnail_height}" loading="lazy" />
+			</a>
+		<xf:elseif is="$attachment.is_video AND $canView" />
+			<a class="file-preview" href="{$attachment.direct_url}" target="_blank">
+				<video title="{$attachment.filename}" data-xf-init="video-init">
+					<source src="{$attachment.direct_url}" />
+				</video>
+			</a>
+		<xf:else />
+			<a class="file-preview" href="{$attachment.direct_url}" target="_blank">
+				<span class="file-typeIcon">
+					<xf:fa icon="{$attachment.icon}" title="{$attachment.filename}" />
+				</span>
+			</a>
+		</xf:if>
+
+		<div class="file-content">
+			<div class="file-info">
+				<span class="file-name" title="{$attachment.filename}">{$attachment.filename}</span>
+				<div class="file-meta">
+					{$attachment.file_size|file_size}
+					<xf:if is="!$attachment.is_video AND !$attachment.is_audio">
+					&middot; {{ phrase('views:') }} {$attachment.view_count|number}
+					</xf:if>
+				</div>
+			</div>
+		</div>
+	</li>
+</xf:macro>

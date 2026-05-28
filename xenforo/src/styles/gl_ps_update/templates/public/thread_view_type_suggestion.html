@@ -1,0 +1,21 @@
+<xf:extends template="thread_view" />
+
+<xf:extension id="pinned_outer_after">
+	<xf:if contentcheck="true">
+		<div class="block-outer block-outer--after">
+			<div class="blockStatus">
+				<div class="blockStatus-message blockStatus-message--locked">
+				<xf:contentcheck>
+					<xf:if is="$suggestionInfo.implemented">
+						{{ phrase('suggestion_implemented_votes_not_accepted') }}
+					<xf:elseif is="$suggestionInfo.closed" />
+						{{ phrase('suggestion_closed_votes_not_accepted') }}
+					<xf:elseif is="$thread.type_data.allow_voting === 'paused'" />
+						{{ phrase('voting_on_this_suggestion_has_been_paused') }}
+					</xf:if>
+				</xf:contentcheck>
+				</div>
+			</div>
+		</div>
+	</xf:if>
+</xf:extension>

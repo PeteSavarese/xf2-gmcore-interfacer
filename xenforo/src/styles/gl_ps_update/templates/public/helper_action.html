@@ -1,0 +1,94 @@
+<xf:macro id="edit_type" arg-canEditSilently="{{ false }}" arg-silentName="silent" arg-clearEditName="clear_edit" arg-silentEdit="{{ false }}" arg-clearEdit="{{ false }}">
+	<xf:if is="$canEditSilently">
+		<xf:checkbox>
+			<xf:option name="{$silentName}" checked="{$silentEdit}"
+				label="{{ phrase('edit_silently') }}"
+				hint="{{ phrase('if_selected_no_last_edited_note_will_be_added_for_this_edit') }}">
+
+				<xf:checkbox>
+					<xf:option name="{$clearEditName}" checked="{$clearEdit}"
+						label="{{ phrase('clear_last_edit_information') }}"
+						hint="{{ phrase('if_selected_any_existing_last_edited_note_will_be_removed') }}" />
+				</xf:checkbox>
+			</xf:option>
+		</xf:checkbox>
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="delete_type" arg-canHardDelete="{{ false }}" arg-typeName="hard_delete" arg-reasonName="reason">
+	<xf:if is="$canHardDelete">
+		<xf:radiorow name="{$typeName}" value="0"
+			label="{{ phrase('deletion_type') }}">
+
+			<xf:option value="0"
+				label="{{ phrase('remove_from_public_view') }}">
+
+				<xf:textbox name="{$reasonName}" placeholder="{{ phrase('reason...') }}"
+					maxlength="{{ max_length('XF:DeletionLog', 'delete_reason') }}" />
+			</xf:option>
+
+			<xf:option value="1"
+				label="{{ phrase('permanently_delete') }}"
+				hint="{{ phrase('selecting_this_option_will_permanently_and_irreversibly_delete_item') }}" />
+		</xf:radiorow>
+	<xf:else />
+		<xf:textboxrow name="{$reasonName}" maxlength="{{ max_length('XF:DeletionLog', 'delete_reason') }}"
+			label="{{ phrase('reason_for_deletion') }}" />
+
+		<xf:hiddenval name="{$typeName}">0</xf:hiddenval>
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="author_alert" arg-selected="{{ false }}" arg-alertName="author_alert" arg-reasonName="author_alert_reason" arg-row="{{ true }}">
+	<xf:set var="$checkbox">
+		<xf:checkbox>
+			<xf:option name="{$alertName}" selected="{$selected}"
+				label="{{ phrase('notify_author_of_this_action') }} {{ phrase('reason:') }}">
+
+				<xf:textbox name="{$reasonName}" placeholder="{{ phrase('optional') }}" />
+				<xf:afterhint>{{ phrase('note_that_author_will_see_alert_even_no_longer_view_content') }}</xf:afterhint>
+			</xf:option>
+		</xf:checkbox>
+	</xf:set>
+	<xf:if is="$row">
+		<xf:formrow>
+			{$checkbox|raw}
+		</xf:formrow>
+	<xf:else />
+		{$checkbox|raw}
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="thread_alert" arg-selected="{{ false }}" arg-alertName="starter_alert" arg-reasonName="starter_alert_reason">
+	<xf:checkboxrow>
+		<xf:option name="{$alertName}" selected="{$selected}"
+			label="{{ phrase('notify_thread_starter_of_this_action') }} {{ phrase('reason:') }}">
+
+			<xf:textbox name="{$reasonName}" placeholder="{{ phrase('optional') }}" />
+			<xf:afterhint>{{ phrase('note_thread_starter_see_alert_even_no_longer_view_thread') }}</xf:afterhint>
+		</xf:option>
+	</xf:checkboxrow>
+</xf:macro>
+
+<xf:macro id="thread_redirect" arg-label="!">
+	<xf:radiorow name="redirect_type" value="none"
+		label="{{ phrase('redirection_notice') }}">
+
+		<xf:option value="none">{{ phrase('do_not_leave_redirect') }}</xf:option>
+		<xf:option value="permanent">{{ phrase('leave_permanent_redirect') }}</xf:option>
+		<xf:option value="temporary" label="{{ phrase('leave_redirect_that_expires_after:') }}">
+			<xf:dependent>
+				<div class="inputGroup">
+					<xf:numberbox name="redirect_length[amount]" value="1" min="0" />
+					<span class="inputGroup-splitter"></span>
+					<xf:select name="redirect_length[unit]" value="days" class="input--inline">
+						<xf:option value="hours">{{ phrase('hours') }}</xf:option>
+						<xf:option value="days">{{ phrase('days') }}</xf:option>
+						<xf:option value="weeks">{{ phrase('weeks') }}</xf:option>
+						<xf:option value="months">{{ phrase('months') }}</xf:option>
+					</xf:select>
+				</div>
+			</xf:dependent>
+		</xf:option>
+	</xf:radiorow>
+</xf:macro>

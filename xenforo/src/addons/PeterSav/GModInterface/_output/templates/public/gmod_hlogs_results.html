@@ -1,0 +1,523 @@
+<xf:title>History Logs Results</xf:title>
+<xf:css src="gmod_interfacer.less"/>
+
+<xf:if is="$searchQuery">
+    <xf:breadcrumb href="/gl/hlogs/search?q={$searchQuery|urlencode}">History Logs</xf:breadcrumb>
+    <xf:else/>
+    <xf:breadcrumb href="/gl/hlogs/search">History Logs</xf:breadcrumb>
+</xf:if>
+<xf:breadcrumb href="/gl/hlogs/results?steamid={$steamId64}">Results</xf:breadcrumb>
+
+<div class="action-bar u-flexJustifyEnd u-marginBottom20">
+    <xf:form action="/gl/hlogs/search" method="get">
+        <div class="u-flex u-flexAlignItemsCenter u-flexGap10">
+            <xf:textbox name="q" maxlength="64" placeholder="Search SteamID or name"/>
+            <xf:button type="submit" class="button--cta button--icon button--icon--search">
+                Search
+            </xf:button>
+        </div>
+    </xf:form>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <span><xf:fa icon="fa-server" aria-hidden="true"/> Server Overview</span>
+    </div>
+    <div class="card-content">
+        <div class="table-height-scrollable">
+            <table>
+                <thead>
+                <tr>
+                    <th>Server</th>
+                    <th>Playtime</th>
+                    <th>Slain</th>
+                    <th>Kicked</th>
+                    <th>First Joined</th>
+                    <th>Last Seen</th>
+                </tr>
+                </thead>
+                <tbody>
+                <xf:foreach loop="$playerStatsByServer" value="$row">
+                    <tr>
+                        <td>
+                            <p><strong>{$row.server_nice_name}</strong></p>
+                            <p>{$row.server_hostname}</p>
+                        </td>
+                        <td>{$row.playTime}</td>
+                        <td>{$row.slainCount}</td>
+                        <td>{$row.kickCount}</td>
+                        <td>
+                            <xf:if is="{$row.created_on}">
+                                {{ timestamp_format($row.created_on) }}
+                                <xf:else/>
+                                N/A
+                            </xf:if>
+                        </td>
+                        <td>
+                            <xf:if is="{$row.last_seen_on}">
+                                {{ timestamp_format($row.last_seen_on) }}
+                                <xf:else/>
+                                N/A
+                            </xf:if>
+                        </td>
+                    </tr>
+                </xf:foreach>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="grid">
+    <div class="card u-marginBottom0">
+        <div class="card-header">
+            <span><xf:fa icon="fa-user" aria-hidden="true"/> Player Information</span>
+            <span class="badge badge-primary">{$steamId}</span>
+        </div>
+        <div class="avatar-container">
+            <xf:if is="{$forumAccount}">
+                <xf:avatar user="$forumAccount" size="m" img="true"/>
+                <div class="username">
+                    <xf:username user="$forumAccount" rich="true"/>
+                </div>
+                <xf:else/>
+                <div class="empty-state">
+                    <xf:fa icon="fa-check-circle" aria-hidden="true"/>
+                    <p>No forum account has been connected to this player's Steam account</p>
+                </div>
+            </xf:if>
+        </div>
+
+        <div class="card-content">
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">SteamID</div>
+                    <div class="info-value">{$steamId64}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Steam Profile</div>
+                    <div class="info-value">
+                        <a href="https://steamcommunity.com/profiles/{$steamId64}/" target="_blank">
+                            <i class="fab fa-steam"></i> Visit Profile
+                        </a>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Total Play Time</div>
+                    <div class="info-value">
+                        <xf:if is="{$playerStats}">
+                            {{ minutes_to_time($playerStats.total_minutes) }}
+                            <xf:else/>
+                            N/A
+                        </xf:if>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">First Join</div>
+                    <div class="info-value">
+                        <xf:if is="{$playerStats}">
+                            {{ timestamp_format($playerStats.first_join_date, 'm/d/Y') }}
+                            <xf:else/>
+                            N/A
+                        </xf:if>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Last Seen</div>
+                    <div class="info-value">
+                        <xf:if is="{$playerStats}">
+                            {{ timestamp_format($playerStats.last_seen_date, 'm/d/Y g:ia') }}
+                            <xf:else/>
+                            N/A
+                        </xf:if>
+                    </div>
+                </div>
+            </div>
+
+            <div class="u-marginTop20">
+                <div class="info-label">Name History</div>
+                <div class="history-container">
+                    <xf:if is="{$playerData}">
+                        <xf:foreach loop="$playerData.previous_names" value="$name" i="$i">
+                            <div class="history-item">{$name}</div>
+                        </xf:foreach>
+                    </xf:if>
+                </div>
+            </div>
+
+            <xf:if is="$xf.visitor.hasPermission('general', 'viewIps')">
+                <div class="u-marginTop20">
+                    <div class="info-label">IP History</div>
+                    <div class="action-bar">
+                        <xf:button href="/gl/{$steamId64}/ip/requesthistory" class="button--cta" icon="download"
+                                   overlay="true" rel="nofollow">
+                            Request History
+                        </xf:button>
+                    </div>
+                </div>
+            </xf:if>
+        </div>
+    </div>
+
+    <div class="card u-marginBottom0">
+        <div class="card-header">
+            <span><xf:fa icon="fa-gavel" aria-hidden="true"/>  Ban History</span>
+        </div>
+        <div class="card-content">
+            <xf:if is="{$bans}">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Reason</th>
+                            <th>Expires</th>
+                            <th>Staff</th>
+                            <th>Server</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <xf:foreach loop="$bans" value="$ban" i="$i">
+                            <tr>
+                                <td>{{ time($ban.banned_on, 'F d, Y g:ia') }}</td>
+                                <td>{$ban.reason}</td>
+                                <xf:if is="{$ban.unban_time} == 0">
+                                    <td>Never (Permanent)</td>
+                                    <xf:else/>
+                                    <td>{{ time($ban.unban_time, 'F d, Y g:ia') }}</td>
+                                </xf:if>
+                                <td>{$ban.banned_by}</td>
+                                <xf:if is="{$ban.server} == 'Global'">
+                                    <td>Global</td>
+                                    <xf:else/>
+                                    <td>{$ban.niceName}</td>
+                                </xf:if>
+                                <xf:if is="{$ban.void} == 'Y'">
+                                    <xf:set var="$admin" value="{{ userid_to_user($ban.void_user) }}"/>
+                                    <td><span data-xf-init="tooltip" title="{$admin->username} - {$ban.void_reason}"
+                                              class="status status-voided">Void</span></td>
+                                    <xf:elseif is="{$curTime} > {$ban.unban_time} && {$ban.unban_time} != 0"/>
+                                    <td><span class="status status-expired">Expired</span></td>
+                                    <xf:elseif is="{$ban.status} == 0"/>
+                                    <td><span class="status status-expired">Unbanned</span></td>
+                                    <xf:else/>
+                                    <td><span class="status status-active">Active</span></td>
+                                </xf:if>
+                                <td>
+                                    <xf:if is="{$ban.void} == 'Y'">
+                                        <xf:button href="/gl/{$ban.id}/void/remove" class="button--cta" rel="nofollow">
+                                            UnVoid
+                                        </xf:button>
+                                        <xf:else/>
+                                        <xf:button href="/gl/{$ban.id}/void/addpopup" class="button--cta" overlay="true"
+                                                   rel="nofollow">
+                                            Void
+                                        </xf:button>
+                                    </xf:if>
+                                </td>
+                            </tr>
+                        </xf:foreach>
+                        </tbody>
+                    </table>
+                </div>
+                <xf:else/>
+                <div class="empty-state">
+                    <xf:fa icon="fa-check-circle" aria-hidden="true"/>
+                    <p>No ban history found for this player</p>
+                </div>
+            </xf:if>
+
+            <xf:if is="{$altCheckerBansFlat}">
+                <div class="u-marginTop16">
+                    <div class="accordion">
+                        <div class="accordion-header">
+							<span>
+								<xf:fa icon="fa-globe" aria-hidden="true"/>
+								<a href="{$altCheckerUrl}" target="_blank" rel="noopener">
+									AltChecker Bans ({{ count($altCheckerBansFlat) }})
+								</a>
+							</span>
+                            <xf:fa icon="fa-chevron-down" id="chevron" aria-hidden="true"/>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="accordion-content-inner">
+                                <div class="table-container table-height-scrollable">
+                                    <table>
+                                        <thead>
+                                        <tr>
+                                            <th>Community</th>
+                                            <th>Date</th>
+                                            <th>Reason</th>
+                                            <th>Length</th>
+                                            <th>Status</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <xf:foreach loop="$altCheckerBansFlat" value="$ban">
+                                            <tr>
+                                                <td>{$ban.communityName}</td>
+                                                <td>
+                                                    <xf:if is="{$ban.banned}">
+                                                        {{ time($ban.banned, 'F d, Y g:ia') }}
+                                                        <xf:else/>
+                                                        N/A
+                                                    </xf:if>
+                                                </td>
+                                                <td>{$ban.reason}</td>
+                                                <td>
+                                                    <xf:if is="{$ban.perma}">
+                                                        Permanent
+                                                        <xf:elseif is="{$ban.length} > 0"/>
+                                                        {{ minutes_to_time(floor($ban.length / 60)) }}
+                                                        <xf:else/>
+                                                        N/A
+                                                    </xf:if>
+                                                </td>
+                                                <td>
+                                                    <xf:if is="{$ban.unbanned}">
+                                                        <span class="status status-expired">Unbanned</span>
+                                                        <xf:else/>
+                                                        <span class="status status-active">Active</span>
+                                                    </xf:if>
+                                                </td>
+                                            </tr>
+                                        </xf:foreach>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xf:if>
+
+            <xf:if is="{$altCheckerDirectAlts}">
+                <div class="u-marginTop16">
+                    <div class="accordion">
+                        <div class="accordion-header">
+							<span>
+								<xf:fa icon="fa-users" aria-hidden="true"/>
+                <a href="{$altCheckerUrl}" target="_blank" rel="noopener">
+								  Direct Alts ({{ count($altCheckerDirectAlts) }})
+                </a>
+							</span>
+                            <xf:fa icon="fa-chevron-down" id="chevron" aria-hidden="true"/>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="accordion-content-inner">
+                                <div class="table-container table-height-scrollable">
+                                    <table>
+                                        <thead>
+                                        <tr>
+                                            <th>SteamID</th>
+                                            <th>Name</th>
+                                            <th>Steam Account Created</th>
+                                            <th>Servers</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <xf:foreach loop="$altCheckerDirectAlts" value="$alt">
+                                            <tr>
+                                                <td>
+                                                    <a href="/gl/hlogs/results?steamid={$alt.steamid}">{$alt.steamid}</a>
+                                                </td>
+                                                <td>
+                                                    <xf:if is="{$alt.avatar}">
+                                                        <img src="{$alt.avatar}" alt="" width="24" height="24"
+                                                             loading="lazy"
+                                                             class="u-verticalAlignMiddle u-borderRadius50 u-marginRight6"/>
+                                                    </xf:if>
+                                                    {$alt.name}
+                                                </td>
+                                                <td>
+                                                    <xf:if is="{$alt.created}">
+                                                        {{ time($alt.created, 'F d, Y') }}
+                                                        <xf:else/>
+                                                        N/A
+                                                    </xf:if>
+                                                </td>
+                                                <td>
+                                                    <xf:if is="{$alt.servers}">
+                                                        <xf:foreach loop="$alt.servers" value="$srv">
+                                                            <div>{$srv.name}</div>
+                                                        </xf:foreach>
+                                                        <xf:else/>
+                                                        N/A
+                                                    </xf:if>
+                                                </td>
+                                            </tr>
+                                        </xf:foreach>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xf:if>
+        </div>
+    </div>
+</div>
+
+<!-- Punishment History -->
+<div class="card">
+    <div class="card-header">
+        <span><xf:fa icon="fa-exclamation-triangle" aria-hidden="true"/>  Punishment History</span>
+    </div>
+    <div class="card-content">
+        <xf:if is="{$playerPunishments}">
+            <!-- ASlay block -->
+            <xf:if is="{$playerPunishments.ASlay}">
+                <div class="accordion">
+                    <div class="accordion-header">
+                        <span><xf:fa icon="fa-skull" aria-hidden="true"/> ASlay ({{ count($playerPunishments.ASlay) - 1 }})</span>
+                        <xf:fa icon="fa-chevron-down" id="chevron" aria-hidden="true"/>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-content-inner">
+                            <div class="table-container table-height-scrollable">
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th>Staff</th>
+                                        <th>Server</th>
+                                        <th>Date</th>
+                                        <th>Reason</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <xf:foreach loop="$playerPunishments.ASlay" value="$punishment" key="$key">
+                                        <xf:if is="is_array($punishment)">
+                                            <tr>
+                                                <td>{$punishment.admin}</td>
+                                                <td>{$punishment.server_name}</td>
+                                                <td>{{ date('M d, Y', $punishment.added) }}</td>
+                                                <td>{$punishment.reason}</td>
+                                            </tr>
+                                        </xf:if>
+                                    </xf:foreach>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xf:if>
+
+            <!-- Kicks block -->
+            <xf:if is="{$playerPunishments.kick}">
+                <div class="accordion">
+                    <div class="accordion-header">
+                        <span><xf:fa icon="fa-running" aria-hidden="true"/> Kicks ({{ count($playerPunishments.kick) - 1 }})</span>
+                        <xf:fa icon="fa-chevron-down" id="chevron" aria-hidden="true"/>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-content-inner">
+                            <div class="table-container table-height-scrollable">
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th>Staff</th>
+                                        <th>Server</th>
+                                        <th>Date</th>
+                                        <th>Reason</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <xf:foreach loop="$playerPunishments.kick" value="$kick" key="$kId">
+                                        <xf:if is="is_array($kick)">
+                                            <tr>
+                                                <td>{$kick.admin}</td>
+                                                <td>{$kick.server_name}</td>
+                                                <td>{{ date('M d, Y', $kick.added) }}</td>
+                                                <td>{$kick.reason}</td>
+                                            </tr>
+                                        </xf:if>
+                                    </xf:foreach>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xf:if>
+            <xf:else/>
+            <div class="empty-state">
+                <xf:fa icon="fa-check-circle" aria-hidden="true"/>
+                <p>No punishment history found for this player</p>
+            </div>
+        </xf:if>
+    </div>
+</div>
+
+<!-- Player Notes -->
+<div class="card">
+    <div class="card-header">
+        <span><xf:fa icon="fa-sticky-note" aria-hidden="true"/> Player Notes</span>
+    </div>
+    <div class="card-content">
+        <div class="action-bar">
+            <xf:button href="/gl/{$steamId64}/notes/addpopup" class="button--cta" icon="write" overlay="true"
+                       rel="nofollow">
+                Add Note
+            </xf:button>
+        </div>
+
+        <xf:if is="{$playerNotes}">
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Staff</th>
+                        <th>Date</th>
+                        <th>Note</th>
+                        <th>Visibility</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <xf:foreach loop="$playerNotes" value="$note" key="$key">
+                        <tr>
+                            <td>
+                                <xf:username user="{{ userid_to_user($note.by) }}" rich="true"/>
+                            </td>
+                            <td>{{ time($note.added, 'F d, Y g:ia') }}</td>
+                            <td>{$note.note|raw}</td>
+                            <td>
+                                <xf:if is="{$note.visibility} == 'admin'">
+                                    <span class="badge badge-primary">Admin</span>
+                                    <xf:elseif is="{$note.visibility} == 'lead'"/>
+                                    <span class="badge badge-warning">Lead</span>
+                                    <xf:else/>
+                                    <span class="badge">All Staff</span>
+                                </xf:if>
+                            </td>
+                        </tr>
+                    </xf:foreach>
+                    </tbody>
+                </table>
+            </div>
+            <xf:else/>
+            <div class="empty-state">
+                <xf:fa icon="fa-clipboard" aria-hidden="true"/>
+                <p>No notes have been added for this player</p>
+            </div>
+        </xf:if>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Accordion functionality
+        const accordions = document.querySelectorAll('.accordion-header');
+        accordions.forEach(header => {
+            header.addEventListener('click', function () {
+                const accordion = this.nextElementSibling && this.nextElementSibling.classList.contains('accordion-content')
+                    ? this.parentElement
+                    : this.parentElement; // keep structure
+                accordion.classList.toggle('active');
+            });
+        });
+    });
+</script>

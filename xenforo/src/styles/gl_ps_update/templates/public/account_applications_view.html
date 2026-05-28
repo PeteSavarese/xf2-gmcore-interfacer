@@ -1,0 +1,26 @@
+<xf:title>{{ phrase('connected_application:') }} {{ $client.title }}</xf:title>
+
+<xf:wrap template="account_wrapper" />
+
+<xf:pageaction>
+	<xf:button href="{{ link('account/applications/revoke', $client) }}" class="button--link" overlay="true">{{ phrase('revoke') }}</xf:button>
+</xf:pageaction>
+
+<div class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<h3 class="block-header">
+				{$client.title}
+			</h3>
+		</div>
+
+		<h3 class="block-textHeader">{{ phrase('permissions') }}</h3>
+		<div class="block-body" dir="ltr">
+			<ul>
+				<xf:foreach loop="$scopes" value="$scope">
+					<li>{{ $scope.getDescription() }}</li>
+				</xf:foreach>
+			</ul>
+		</div>
+	</div>
+</div>

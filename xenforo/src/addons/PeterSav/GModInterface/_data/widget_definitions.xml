@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<widget_definitions>
+  <widget_definition definition_id="gmod_servers_widget" definition_class="PeterSav\GModInterface\Widget\Servers"/>
+</widget_definitions>

@@ -1,0 +1,17 @@
+<xf:title>{{ $isLiked ? phrase('unlike_content') : phrase('like_content') }}</xf:title>
+
+<xf:form action="{$confirmUrl}" class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:inforow rowtype="confirm">
+				<xf:if is="$isLiked">
+					{{ phrase('you_sure_you_want_to_unlike_this_content') }}
+				<xf:else />
+					{{ phrase('you_sure_you_want_to_like_this_content') }}
+					<xf:if is="$contentTitle"><strong>{$contentTitle}</strong></xf:if>
+				</xf:if>
+			</xf:inforow>
+		</div>
+		<xf:submitrow icon="confirm" rowtype="simple" />
+	</div>
+</xf:form>

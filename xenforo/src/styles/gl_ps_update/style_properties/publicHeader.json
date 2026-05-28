@@ -1,0 +1,21 @@
+{
+    "group_name": "headerNav",
+    "title": "Header/logo row",
+    "description": "The header row contains your logo and sits at the top of every public page",
+    "property_type": "css",
+    "css_components": [
+        "text",
+        "background",
+        "extra"
+    ],
+    "value_type": "",
+    "value_parameters": "",
+    "has_variations": false,
+    "depends_on": "",
+    "value_group": "",
+    "property_value": {
+        "color": "@xf-paletteColor2",
+        "background-color": "rgba(23, 32, 48, 0.98)"
+    },
+    "display_order": 20000
+}

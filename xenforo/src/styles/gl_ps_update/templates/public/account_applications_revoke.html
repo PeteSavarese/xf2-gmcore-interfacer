@@ -1,0 +1,12 @@
+<xf:title>{{ phrase('revoke_application') }}</xf:title>
+
+<xf:form action="{{ link('account/applications/revoke', $client) }}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:inforow rowtype="confirm">
+				{{ phrase('please_confirm_that_you_want_to_revoke_this_application') }}
+			</xf:inforow>
+		</div>
+		<xf:submitrow submit="{{ phrase('revoke_access') }}" rowtype="simple" />
+	</div>
+</xf:form>

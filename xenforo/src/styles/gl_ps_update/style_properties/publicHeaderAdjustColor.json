@@ -1,0 +1,16 @@
+{
+    "group_name": "headerNav",
+    "title": "Header adjustment color",
+    "description": "The color of the header background is adjusted to be used as the background for the inbox and alerts area in the header",
+    "property_type": "value",
+    "css_components": [],
+    "value_type": "color",
+    "value_parameters": "",
+    "has_variations": true,
+    "depends_on": "",
+    "value_group": "header",
+    "property_value": {
+        "default": ""
+    },
+    "display_order": 100
+}

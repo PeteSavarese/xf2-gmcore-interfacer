@@ -1,0 +1,22 @@
+{
+    "group_name": "button",
+    "title": "Button - primary",
+    "description": "These rules are used mostly for the main submit button for forms",
+    "property_type": "css",
+    "css_components": [
+        "text",
+        "background",
+        "extra"
+    ],
+    "value_type": "",
+    "value_parameters": "",
+    "has_variations": false,
+    "depends_on": "",
+    "value_group": "",
+    "property_value": {
+        "color": "@xf-textColorDimmed",
+        "background-color": "#3498db",
+        "extra": "min-width: 80px;"
+    },
+    "display_order": 20200
+}

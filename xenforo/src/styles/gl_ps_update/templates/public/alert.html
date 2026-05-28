@@ -1,0 +1,11 @@
+<div class="contentRow">
+	<div class="contentRow-figure">
+		<xf:avatar user="$alert.User" size="xxs" defaultname="{$alert.username}" />
+	</div>
+	<div class="contentRow-main contentRow-main--close">
+		{$alert.render()|raw}
+		<div class="contentRow-minor contentRow-minor--smaller">
+			<xf:date time="$alert.event_date" />
+		</div>
+	</div>
+</div>

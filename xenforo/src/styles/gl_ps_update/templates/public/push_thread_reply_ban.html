@@ -1,0 +1,7 @@
+<xf:if is="$extra.expiry">
+	{{ phrase('you_unable_reply_to_thread_x_until_expiry_y', {'title': prefix('thread', $content, 'plain') . $content.title, 'expiry': date($extra.expiry)}) }}
+<xf:else />
+	{{ phrase('you_are_no_longer_able_to_reply_thread_x', {'title': prefix('thread', $content, 'plain') . $content.title}) }}
+</xf:if>
+<xf:if is="$extra.reason">{{ phrase('reason:') }} {$extra.reason}</xf:if>
+<push:url>{{ link('canonical:threads', $content) }}</push:url>

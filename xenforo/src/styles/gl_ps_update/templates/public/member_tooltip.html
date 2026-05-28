@@ -1,0 +1,126 @@
+<xf:css src="member_tooltip.less" />
+
+<div class="tooltip-content-inner">
+	<div class="memberTooltip {{ $user.Profile.banner_date ? 'memberTooltip--withBanner' : '' }}">
+		<xf:profilebanner user="$user" size="m" class="memberTooltip-header" toggle="memberTooltip--withBanner">
+			<span class="memberTooltip-avatar">
+				<xf:avatar user="{$user}" size="m" notooltip="true" />
+			</span>
+			<div class="memberTooltip-headerInfo">
+				<xf:if contentcheck="true">
+					<div class="memberTooltip-headerAction">
+						<xf:contentcheck>
+						<!--[XF:header_action_start]-->
+						<xf:if contentcheck="true">
+							<xf:button class="button--link button--small menuTrigger"
+								data-xf-click="menu"
+								aria-label="{{ phrase('more_options') }}"
+								aria-expanded="false"
+								aria-haspopup="true">
+								<xf:fa icon="fa-cog" />
+							</xf:button>
+
+							<div class="menu" data-menu="menu" aria-hidden="true">
+								<div class="menu-content">
+									<h3 class="menu-header">{{ phrase('moderator_tools') }}</h3>
+									<xf:contentcheck>
+										<xf:macro id="member_macros::moderator_menu_actions"
+											arg-user="{$user}"
+											arg-context="tooltip" />
+									</xf:contentcheck>
+								</div>
+							</div>
+						</xf:if>
+						<!--[XF:header_action_end]-->
+						</xf:contentcheck>
+					</div>
+				</xf:if>
+
+				<h4 class="memberTooltip-name">
+					<span class="memberTooltip-nameWrapper">
+						<xf:username user="$user" rich="true" notooltip="true" />
+					</span>
+
+					<xf:if is="$user.hasViewableUsernameHistory()">
+						<a class="memberTooltip-nameChangeIndicator"
+							data-xf-click="menu"
+							data-xf-init="tooltip"
+							title="{{ phrase('username_changed')|for_attr }}"
+							role="button"
+							tabindex="0"
+							aria-expanded="false"
+							aria-haspopup="true"
+							aria-label="{{ phrase('username_changed')|for_attr }}"><xf:fa icon="fa-history" /></a>
+						<div class="menu" data-menu="menu" aria-hidden="true"
+							data-href="{{ link('members/username-history', $user, {'menu': 1}) }}"
+							data-load-target=".js-usernameHistoryBody">
+							<div class="menu-content">
+								<h3 class="menu-header">{{ phrase('previous_usernames') }}</h3>
+								<div class="js-usernameHistoryBody">
+									<div class="menu-row">
+										{{ phrase('loading...') }}
+									</div>
+								</div>
+							</div>
+						</div>
+					</xf:if>
+				</h4>
+
+				<xf:if contentcheck="true">
+					<div class="memberTooltip-banners">
+						<xf:contentcheck><xf:userbanners user="$user" /></xf:contentcheck>
+					</div>
+				</xf:if>
+
+				<div class="memberTooltip-blurbContainer">
+					<xf:if contentcheck="true">
+						<div class="memberTooltip-blurb">
+						<xf:contentcheck>
+							<xf:userblurb user="$user" tag="div" />
+						</xf:contentcheck>
+						</div>
+					</xf:if>
+
+					<div class="memberTooltip-blurb">
+						<dl class="pairs pairs--inline">
+							<dt>{{ phrase('joined') }}</dt>
+							<dd><xf:date time="$user.register_date" /></dd>
+						</dl>
+					</div>
+
+					<xf:if contentcheck="true">
+						<div class="memberTooltip-blurb">
+							<dl class="pairs pairs--inline">
+								<dt>{{ phrase('last_seen') }}</dt>
+								<dd dir="auto">
+									<xf:contentcheck><xf:useractivity user="$user" class="pairs--plainLabel" /></xf:contentcheck>
+								</dd>
+							</dl>
+						</div>
+					</xf:if>
+				</div>
+			</div>
+		</xf:profilebanner>
+		<div class="memberTooltip-info">
+			<div class="memberTooltip-stats">
+				<div class="pairJustifier">
+					<xf:macro id="member_macros::member_stat_pairs"
+						arg-user="{$user}"
+						arg-context="tooltip" />
+				</div>
+			</div>
+		</div>
+
+		<xf:if contentcheck="true">
+			<hr class="memberTooltip-separator" />
+
+			<div class="memberTooltip-actions">
+			<xf:contentcheck>
+				<xf:macro id="member_macros::member_action_buttons"
+					arg-user="{$user}"
+					arg-context="tooltip" />
+			</xf:contentcheck>
+			</div>
+		</xf:if>
+	</div>
+</div>

@@ -1,0 +1,9 @@
+{
+    "event_id": "navigation_setup",
+    "execute_order": 10,
+    "callback_class": "BlackTea\\SteamAuth\\Listener\\NavigationSetup",
+    "callback_method": "run",
+    "active": true,
+    "hint": "",
+    "description": ""
+}

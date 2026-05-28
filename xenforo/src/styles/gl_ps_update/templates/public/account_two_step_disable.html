@@ -1,0 +1,22 @@
+<xf:if is="$provider">
+	<xf:title>{{ phrase('disable_two_step_verification:') }} {$provider.title}</xf:title>
+<xf:else />
+	<xf:title>{{ phrase('disable_two_step_verification') }}</xf:title>
+</xf:if>
+
+<xf:wrap template="account_wrapper" />
+
+<xf:form action="{{ link('account/two-step/disable', $provider) }}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:inforow rowtype="confirm">
+				<xf:if is="$provider">
+					{{ phrase('you_sure_you_want_disable_two_step_x', {'title': $provider.title}) }}
+				<xf:else />
+					{{ phrase('you_sure_you_want_disable_two_step') }}
+				</xf:if>
+			</xf:inforow>
+		</div>
+		<xf:submitrow submit="{{ phrase('confirm') }}" rowtype="simple" icon="disable" />
+	</div>
+</xf:form>

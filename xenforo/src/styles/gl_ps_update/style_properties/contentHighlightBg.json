@@ -1,0 +1,16 @@
+{
+    "group_name": "color",
+    "title": "Highlighted content background color",
+    "description": "When the standard background color is highlighted or selected, it will use this color",
+    "property_type": "value",
+    "css_components": [],
+    "value_type": "color",
+    "value_parameters": "",
+    "has_variations": true,
+    "depends_on": "",
+    "value_group": "contentBackground",
+    "property_value": {
+        "default": "rgba(52, 152, 219, 0.15)"
+    },
+    "display_order": 2300
+}

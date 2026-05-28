@@ -1,0 +1,13 @@
+<xf:title>{{ phrase('two_step_verification_setup:') }} {$provider.title}</xf:title>
+
+<xf:wrap template="account_wrapper" />
+
+<xf:form action="{{ link('account/two-step/enable', $provider) }}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			{{ $provider.render('setup', $xf.visitor, $providerData, $triggerData)|raw }}
+		</div>
+		<xf:submitrow submit="{{ phrase('confirm') }}" />
+	</div>
+	<xf:hiddenval name="step">confirm</xf:hiddenval>
+</xf:form>

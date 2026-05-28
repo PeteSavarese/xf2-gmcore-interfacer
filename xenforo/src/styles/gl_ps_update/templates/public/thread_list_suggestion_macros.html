@@ -1,0 +1,42 @@
+<xf:macro id="item" extends="thread_list_macros::item">
+	<xf:extension id="icon_cell">
+		<div class="structItem-cell structItem-cell--vote">
+			<xf:if is="$thread.isContentVotingSupported()">
+				<xf:macro id="content_vote_macros::vote_display"
+					arg-content="{$thread}"
+					arg-extraClass="contentVote--small" />
+			<xf:else />
+				<xf:macro id="content_vote_macros::vote_display_placeholder" arg-extraClass="contentVote--small" />
+			</xf:if>
+		</div>
+
+		<xf:extensionparent />
+	</xf:extension>
+
+	<xf:extension id="before_status_watch">
+		<xf:if is="$xf.visitor.user_id">
+			<xf:set var="$voteState" value="{{ $thread.getVisitorContentVote() }}" />
+			<xf:if is="$voteState == 'up'">
+				<li>
+					<i class="structItem-status structItem-status--upvoted" aria-hidden="true" title="{{ phrase('upvoted')|for_attr }}"></i>
+					<span class="u-srOnly">{{ phrase('upvoted') }}</span>
+				</li>
+			<xf:elseif is="$voteState == 'down'" />
+				<li>
+					<i class="structItem-status structItem-status--downvoted" aria-hidden="true" title="{{ phrase('downvoted')|for_attr }}"></i>
+					<span class="u-srOnly">{{ phrase('downvoted') }}</span>
+				</li>
+			</xf:if>
+		</xf:if>
+	</xf:extension>
+</xf:macro>
+
+<xf:macro id="quick_thread" extends="thread_list_macros::quick_thread">
+	<xf:extension id="icon_cell">
+		<div class="structItem-cell structItem-cell--vote">
+			<xf:macro id="content_vote_macros::vote_display_placeholder" arg-extraClass="contentVote--small" />
+		</div>
+
+		<xf:extensionparent />
+	</xf:extension>
+</xf:macro>

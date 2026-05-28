@@ -1,0 +1,71 @@
+<xf:title>{{ phrase('send_direct_message') }}</xf:title>
+
+<xf:breadcrumb href="{{ link('direct-messages') }}">{{ phrase('direct_messages') }}</xf:breadcrumb>
+
+<xf:if contentcheck="true">
+	<div class="blockMessage blockMessage--error blockMessage--iconic">
+		<xf:contentcheck>
+			<xf:if is="$errorUsernames is not empty">
+				<div>{{ phrase('you_can_not_send_direct_message_to_following_users_because_of_privacy', {'usernames': $errorUsernames|join(', ')}) }}</div>
+			</xf:if>
+
+			<xf:if is="$notFoundUsernames is not empty">
+				<div>{{ phrase('following_users_not_found_x', {'usernames': $notFoundUsernames|join(', ')}) }}</div>
+			</xf:if>
+
+			<xf:if is="$recipientLimit">
+				<div>{{ phrase('you_have_exceeded_allowed_number_of_recipients_x_for', {'limit': $recipientLimit}) }}</div>
+			</xf:if>
+		</xf:contentcheck>
+	</div>
+</xf:if>
+
+<xf:form action="{{ link('direct-messages/add') }}" ajax="true" draft="{{ link('direct-messages/draft') }}" class="block" data-xf-init="attachment-manager">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:tokeninputrow name="recipients" value="{$to}" href="{{ link('members/find') }}"
+				rowtype="fullWidth"
+				label="{{ ($maxRecipients == -1 OR $maxRecipients > 1) ? phrase('recipients') : phrase('recipient') }}"
+				min-length="1"
+				max-tokens="{{ ($maxRecipients > -1) ? $maxRecipients : null }}"
+				explain="{{ ($maxRecipients == -1 OR $maxRecipients > 1) ? phrase('separate_names_with_comma') : null }}" />
+
+			<xf:textboxrow name="title" value="{$title}" rowtype="fullWidth noLabel" class="input--title"
+				maxlength="{{ max_length('XF:ConversationMaster', 'title') }}"
+				placeholder="{{ phrase('title...') }}"
+				label="{{ phrase('title') }}" />
+
+			<xf:editorrow name="message"
+				value="{$message}"
+				attachments="{{ $attachmentData ? $attachmentData.attachments : [] }}"
+				rowtype="fullWidth noLabel mergePrev"
+				data-preview-url="{{ link('direct-messages/add-preview') }}" />
+
+			<xf:formrow>
+				<xf:if is="$attachmentData">
+					<xf:macro id="helper_attach_upload::upload_block"
+						arg-attachmentData="{$attachmentData}"
+						arg-forceHash="{$draft.attachment_hash}" />
+				</xf:if>
+
+				<xf:if is="$xf.options.multiQuote">
+					<xf:macro id="multi_quote_macros::button"
+						arg-href="{{ link('direct-messages/multi-quote', $conversation) }}"
+						arg-messageSelector=".js-message"
+						arg-storageKey="multiQuoteConversation" />
+				</xf:if>
+			</xf:formrow>
+
+			<xf:checkboxrow>
+				<xf:option name="open_invite" checked="{{ ($draft.open_invite OR $conversation.open_invite) ? 'checked' : '' }}">
+					{{ phrase('allow_anyone_in_direct_message_to_invite_others') }}
+				</xf:option>
+
+				<xf:option name="conversation_locked" checked="{{ ($draft.conversation_open OR $conversation.conversation_open) ? '' : 'checked' }}">
+					{{ phrase('lock_direct_message_no_responses_will_be_allowed') }}
+				</xf:option>
+			</xf:checkboxrow>
+		</div>
+		<xf:submitrow submit="{{ phrase('send_direct_message') }}" sticky="true" icon="conversation" />
+	</div>
+</xf:form>

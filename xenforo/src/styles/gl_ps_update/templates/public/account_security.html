@@ -1,0 +1,60 @@
+<xf:title>{{ phrase('password_and_security') }}</xf:title>
+
+<xf:wrap template="account_wrapper" />
+
+<xf:if is="$tfaEnabled && $deprecatedProviders">
+	<div class="blockMessage blockMessage--error blockMessage--iconic">
+		{{ phrase('following_two_step_verification_providers_are_deprecated_x', {'deprecatedProviders': $deprecatedProviders|join(', ')}) }}
+	</div>
+</xf:if>
+
+<xf:if is="$isSecurityLocked">
+	<div class="blockMessage blockMessage--important">
+		{{ phrase('we_require_you_to_change_your_password') }}
+	</div>
+</xf:if>
+
+<xf:macro id="passkeys_macros::your_passkeys" arg-passkeys="{$passkeys}" />
+
+<xf:form action="{{ link('account/security') }}" ajax="true" class="block" data-force-flash-message="true">
+	<div class="block-container">
+		<div class="block-body">
+
+			<xf:if is="!$isSecurityLocked && $tfaEnabled">
+				<xf:formrow rowtype="button"
+					label="{{ phrase('two_step_verification') }}">
+
+					<xf:if is="$xf.visitor.Option.use_tfa">
+						{{ phrase('enabled_providers_x', {'providers': $enabledTfaProviders|join(', ')}) }}
+					<xf:else />
+						{{ phrase('disabled') }}
+					</xf:if>
+					<xf:button href="{{ link('account/two-step') }}" class="button--link">{{ phrase('change') }}</xf:button>
+				</xf:formrow>
+
+				<hr class="formRowSep" />
+			</xf:if>
+
+			<xf:if is="$hasPassword">
+				<xf:passwordboxrow name="old_password" autocomplete="current-password" autofocus="autofocus"
+					label="{{ phrase('your_existing_password') }}"
+					explain="{{ phrase('you_must_verify_existing_password_before_changing') }}" />
+
+				<xf:passwordboxrow name="password" autocomplete="new-password" checkstrength="true"
+					label="{{ phrase('new_password') }}" />
+
+				<xf:passwordboxrow name="password_confirm" autocomplete="new-password"
+					label="{{ phrase('confirm_new_password') }}" />
+			<xf:else />
+				<xf:formrow label="{{ phrase('password') }}">
+					{{ phrase('your_account_does_not_currently_have_password') }} <a href="{{ link('account/request-password') }}" data-xf-click="overlay">{{ phrase('request_password_be_emailed_to_you') }}</a>
+				</xf:formrow>
+			</xf:if>
+		</div>
+		<xf:if is="$hasPassword">
+			<xf:submitrow icon="save" />
+		</xf:if>
+	</div>
+
+	<xf:redirect url="{$redirect}" />
+</xf:form>

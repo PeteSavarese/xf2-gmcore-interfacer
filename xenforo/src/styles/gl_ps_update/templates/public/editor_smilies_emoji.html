@@ -1,0 +1,57 @@
+<div class="menu-row menu-row--highlighted menu-row--insertedMessage js-emojiInsertedRow">
+	<div class="menu-emojiInsertedMessage">
+		{{ phrase('inserted:') }} <span class="js-emojiInsert"></span>
+	</div>
+</div>
+<div class="menu-row menu-row--alt menu-row--close">
+	<div class="inputGroup">
+		<xf:textbox class="js-emojiSearch" placeholder="{{ phrase('search...') }}" autofocus="autofocus" />
+		<xf:button icon="close" class="button--iconOnly button--plain js-emojiCloser" title="{{ phrase('close') }}"
+			data-no-auto-focus="true" data-menu-closer="true">
+			<span class="u-srOnly">{{ phrase('close') }}</span>
+		</xf:button>
+	</div>
+</div>
+<div class="menu-scroller js-emojiFullList">
+	<h3 class="menu-header js-recentHeader {{ !$recent ? 'is-hidden' : '' }}">{{ phrase('recently_used') }}</h3>
+	<div class="menu-row js-recentBlock {{ !$recent ? 'is-hidden' : '' }}">
+		<ul class="emojiList js-recentList">
+			<xf:foreach loop="$recent" key="$shortname" value="$emoji">
+				<li><a class="js-emoji" data-shortname="{$shortname}">
+					<xf:if is="$emoji.smilie_id">
+						{{ smilie($shortname, 'rte') }}
+					<xf:else />
+						{$emoji.html|raw}
+					</xf:if>
+				</a></li>
+			</xf:foreach>
+		</ul>
+	</div>
+	<xf:foreach loop="$smilieCategories"
+		key="$categoryId"
+		value="$category">
+		<xf:if contentcheck="true">
+			<h3 class="menu-header">{{ $categoryId ? $category.title : phrase('smilies') }}</h3>
+			<div class="menu-row">
+				<ul class="emojiList js-emojiList">
+					<xf:contentcheck>
+						<xf:foreach loop="{$groupedSmilies.{$categoryId}}" value="{$smilie}">
+							<li><a class="js-emoji" data-shortname="{$smilie.smilie_text_options.0}">{{ smilie($smilie.smilie_text_options.0, 'rte') }}</a></li>
+						</xf:foreach>
+					</xf:contentcheck>
+				</ul>
+			</div>
+		</xf:if>
+	</xf:foreach>
+	<xf:foreach loop="$emojiCategories" key="$categoryId" value="$name">
+		<h3 class="menu-header">{$name}</h3>
+		<div class="menu-row">
+			<ul class="emojiList js-emojiList">
+				<xf:foreach loop="{$groupedEmoji.{$categoryId}}" value="{$emoji}">
+					<li><a class="js-emoji" data-shortname="{$emoji.shortname}">{$emoji.html|raw}</a></li>
+				</xf:foreach>
+			</ul>
+		</div>
+	</xf:foreach>
+</div>
+<div class="menu-scroller js-emojiSearchResults" style="display: none;"></div>

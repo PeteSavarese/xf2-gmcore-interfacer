@@ -1,0 +1,70 @@
+services:
+  nginx:
+    image: ${NGINX_IMAGE:?set NGINX_IMAGE}
+    restart: unless-stopped
+    depends_on:
+      - php
+    ports:
+      - "${HTTP_PORT:-80}:80"
+    env_file:
+      - .env
+    volumes:
+      - nginx_logs:/var/log/nginx
+      - xf_data:/var/www/html/data:ro
+      - xf_internal:/var/www/html/internal_data:ro
+
+  php:
+    image: ${PHP_IMAGE:?set PHP_IMAGE}
+    restart: unless-stopped
+    env_file:
+      - .env
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    environment:
+      - ENVIRONMENT=${ENVIRONMENT:-prod}
+    volumes:
+      - xf_data:/var/www/html/data
+      - xf_internal:/var/www/html/internal_data
+
+  mariadb:
+    image: mariadb:11
+    restart: unless-stopped
+    ports:
+      - "${MARIADB_EXTERNAL_PORT:-3306}:3306"
+    env_file:
+      - .env
+    command:
+      - --innodb-use-native-aio=0
+      - --innodb-ft-cache-size=32000000
+      - --innodb-ft-result-cache-limit=4000000000
+      - --innodb-buffer-pool-size=512M
+    healthcheck:
+      test: ["CMD", "mariadb-admin", "ping", "-h", "127.0.0.1", "-uroot", "-p${MARIADB_ROOT_PASSWORD}"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+    volumes:
+      - mariadb_data:/var/lib/mysql
+      - ./mariadb/initdb:/docker-entrypoint-initdb.d:ro
+      - ./mariadb:/dumps:ro
+
+  flyway-gmcore-core:
+    image: ${FLYWAY_IMAGE:?set FLYWAY_IMAGE}
+    env_file:
+      - .env
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    command: migrate
+    restart: "no"
+
+volumes:
+  mariadb_data:
+    name: ${COMPOSE_PROJECT_NAME}_mariadb_data
+  nginx_logs:
+    name: ${COMPOSE_PROJECT_NAME}_nginx_logs
+  xf_data:
+    name: ${COMPOSE_PROJECT_NAME}_xf_data
+  xf_internal:
+    name: ${COMPOSE_PROJECT_NAME}_xf_internal

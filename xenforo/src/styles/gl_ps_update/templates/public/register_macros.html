@@ -1,0 +1,89 @@
+<xf:macro id="username_row"
+	arg-fieldName="username"
+	arg-value=""
+	arg-autoFocus="{{ true }}">
+
+	<xf:textboxrow name="{$fieldName}" value="{$value}" autocomplete="username" required="required"
+		autofocus="{{ $autoFocus ? 'autofocus' : false }}"
+		maxlength="{{ $xf.options.usernameLength.max ?: max_length($xf.visitor, 'username') }}"
+		label="{{ phrase('user_name') }}"
+		hint="{{ phrase('required') }}"
+		explain="{{ phrase('this_is_name_that_will_be_shown_with_your_messages') }}"
+		validation-url="{{ link('misc/validate-username') }}" />
+</xf:macro>
+
+<xf:macro id="email_row"
+	arg-fieldName="email"
+	arg-value="">
+
+	<xf:textboxrow name="{$fieldName}" value="{$value}" type="email" autocomplete="email" required="required"
+		maxlength="{{ max_length($xf.visitor, 'email') }}"
+		label="{{ phrase('email') }}"
+		hint="{{ phrase('required') }}" />
+</xf:macro>
+
+<xf:macro id="dob_row" arg-dobData="{{ [] }}">
+	<xf:if is="$xf.options.registrationSetup.requireDob">
+		<xf:macro id="helper_user_dob_edit::dob_edit"
+			arg-dobData="{$dobData}"
+			arg-required="{{ true }}" />
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="location_row"
+	arg-fieldName="location"
+	arg-value="">
+
+	<xf:if is="$xf.options.registrationSetup.requireLocation">
+		<xf:textboxrow name="{$fieldName}" value="{$value}" required="true"
+			label="{{ phrase('location') }}"
+			hint="{{ phrase('required') }}" />
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="email_choice_row"
+	arg-fieldName="email_choice">
+
+	<xf:if is="$xf.options.registrationSetup.requireEmailChoice">
+		<xf:checkboxrow>
+			<xf:option name="{$fieldName}" selected="{$xf.options.registrationDefaults.receive_admin_email}"
+				label="{{ phrase('receive_site_mailings') }}"
+				hint="{{ phrase('receive_site_mailings_hint') }}" />
+		</xf:checkboxrow>
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="custom_fields">
+	<xf:macro id="custom_fields_macros::custom_fields_edit"
+		arg-type="users" arg-group="{{ null }}"
+		arg-set="{$xf.visitor.Profile.custom_fields}"
+		arg-additionalFilters="{{ ['registration'] }}" />
+</xf:macro>
+
+<xf:macro id="tos_row">
+	<xf:if is="$xf.tosUrl OR $xf.privacyPolicyUrl">
+		<xf:checkboxrow standalone="true">
+			<xf:if is="$xf.tosUrl AND $xf.privacyPolicyUrl">
+				<xf:option name="accept" required="required">{{ phrase('by_registering_you_agree_to_our_terms_and_privacy_policy', {'tos': $xf.tosUrl, 'privacy': $xf.privacyPolicyUrl}) }}</xf:option>
+			<xf:elseif is="$xf.tosUrl" />
+				<xf:option name="accept" required="required">{{ phrase('by_registering_you_agree_to_our_terms_and_rules', {'tos': $xf.tosUrl}) }}</xf:option>
+			<xf:else />
+				<xf:option name="accept" required="required">{{ phrase('by_registering_you_agree_to_our_privacy_policy', {'privacy': $xf.privacyPolicyUrl}) }}</xf:option>
+			</xf:if>
+		</xf:checkboxrow>
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="submit_row">
+	<xf:submitrow><xf:html>
+		<xf:button type="submit" class="button--primary" id="js-signUpButton">
+			<xf:if is="$xf.options.registrationTimer">
+				<span id="js-regTimer" data-timer-complete="{{ phrase('register')|for_attr }}">
+					{{ phrase('(please_wait_x_seconds)', {'seconds': "<span>{$xf.options.registrationTimer}</span>"}) }}
+				</span>
+			<xf:else />
+				{{ phrase('register') }}
+			</xf:if>
+		</xf:button>
+	</xf:html></xf:submitrow>
+</xf:macro>

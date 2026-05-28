@@ -1,0 +1,11 @@
+{
+    "parent_navigation_id": "gmodinterfacer_store_options",
+    "display_order": 300,
+    "link": "gl-store/manualapply",
+    "icon": "",
+    "admin_permission_id": "gmod_manage_store_ranks",
+    "debug_only": false,
+    "development_only": false,
+    "super_admin_only": false,
+    "hide_no_children": false
+}

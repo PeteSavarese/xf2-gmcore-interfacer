@@ -1,0 +1,20 @@
+<xf:sidenav>
+	<div class="block">
+		<div class="block-container">
+			<h3 class="block-header">{{ phrase('members') }}</h3>
+			<div class="block-body">
+				<a class="blockLink {{ $pageSelected == 'overview' ? 'is-selected' : '' }}" href="{{ link('members') }}">{{ phrase('overview') }}</a>
+				<xf:foreach loop="$memberStats" key="$key" value="$memberStat">
+					<a class="blockLink {{ $pageSelected == $key ? 'is-selected' : '' }}" href="{{ link('members', null, {'key': $memberStat.member_stat_key}) }}">{$memberStat.title}</a>
+				</xf:foreach>
+				<xf:if is="$xf.options.enableMemberList">
+					<a class="blockLink {{ $pageSelected == 'member_list' ? 'is-selected' : '' }}" href="{{ link('members/list') }}">{{ phrase('registered_members') }}</a>
+				</xf:if>
+			</div>
+		</div>
+	</div>
+</xf:sidenav>
+<xf:page option="sideNavTitle">{{ phrase('members') }}</xf:page>
+
+<xf:widgetpos id="member_wrapper_sidenav" position="sidenav" />
+{$innerContent|raw}

@@ -1,0 +1,5 @@
+<xf:title>{{ phrase('ip_address_information_for_content_by_x', {'name': $ip.User.username ?: phrase('guest')}) }}</xf:title>
+
+<xf:breadcrumb source="{$breadcrumbs}" />
+
+<xf:macro id="helper_ip::ip_block" arg-ip="{$ip.ip}" arg-user="{$ip.User}" />

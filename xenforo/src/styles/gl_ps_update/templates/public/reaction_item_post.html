@@ -1,0 +1,28 @@
+<xf:macro id="reaction_snippet" arg-reactionUser="!" arg-reactionId="!" arg-post="!" arg-date="!" arg-fallbackName="{{ phrase('unknown_member') }}">
+	<div class="contentRow-title">
+		<xf:if is="$post.user_id && $post.user_id == $xf.visitor.user_id">
+			{{ phrase('x_reacted_to_your_post_in_the_thread_y', {
+				'name': username_link($reactionUser, false, {'defaultname': $fallbackName}),
+				'posterParams': 'href="' . link('posts', $post) . '"',
+				'reaction': alert_reaction($reactionId, 'medium')|preescaped,
+				'title': '<a href="' . link('threads', $post.Thread) . '">' . prefix('thread', $post.Thread) . $post.Thread.title . '</a>'
+			}) }}
+		<xf:else />
+			{{ phrase('x_reacted_to_ys_post_in_the_thread_z', {
+				'name': username_link($reactionUser, false, {'defaultname': $fallbackName}),
+				'posterParams': 'href="' . link('posts', $post) . '"',
+				'poster': $post.username,
+				'reaction': alert_reaction($reactionId, 'medium')|preescaped,
+				'title': '<a href="' . link('threads', $post.Thread) . '">' . prefix('thread', $post.Thread) . $post.Thread.title . '</a>'
+			}) }}
+		</xf:if>
+	</div>
+
+	<div class="contentRow-snippet">{{
+		snippet($post.message, $xf.options.newsFeedMessageSnippetLength, {'stripQuote': true})
+	}}</div>
+
+	<div class="contentRow-minor"><xf:date time="{$date}" /></div>
+</xf:macro>
+
+<xf:macro id="reaction_snippet" arg-reactionUser="{$reaction.ReactionUser}" arg-reactionId="{$reaction.reaction_id}" arg-post="{$content}" arg-date="{$reaction.reaction_date}" />

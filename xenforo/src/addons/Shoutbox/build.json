@@ -1,0 +1,9 @@
+{
+  "additional_files": [
+    "js/shoutbox",
+    "styles/fa/regular/discord.svg"
+  ],
+  "minify": [
+    "js/shoutbox/shoutbox.js"
+  ]
+}

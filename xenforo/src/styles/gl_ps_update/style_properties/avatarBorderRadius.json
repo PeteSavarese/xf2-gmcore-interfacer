@@ -1,0 +1,14 @@
+{
+    "group_name": "avatar",
+    "title": "Avatar border radius",
+    "description": "Controls the size of the rounded corners on avatars - a sufficiently large value will make avatars circular",
+    "property_type": "value",
+    "css_components": [],
+    "value_type": "unit",
+    "value_parameters": "",
+    "has_variations": false,
+    "depends_on": "",
+    "value_group": "",
+    "property_value": "12px",
+    "display_order": 200
+}

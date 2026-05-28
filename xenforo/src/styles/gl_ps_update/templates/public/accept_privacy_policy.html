@@ -1,0 +1,30 @@
+<xf:title>{{ phrase('privacy_policy') }}</xf:title>
+
+<div class="blockMessage blockMessage--iconic blockMessage--important">
+	{{ phrase('please_read_and_accept_our_privacy_policy_before_continuing') }} {{ phrase('last_updated:') }} <xf:date time="$xf.options.privacyPolicyLastUpdate" />.
+</div>
+
+<xf:form action="{{ link('misc/accept-privacy-policy') }}" ajax="true" class="block" data-force-flash-message="on">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:checkboxrow label="">
+				<xf:option name="accept" required="required">{{ phrase('i_have_read_and_accept_your_privacy_policy', {'privacyPolicyUrl': $xf.privacyPolicyUrl}) }}</xf:option>
+			</xf:checkboxrow>
+		</div>
+		<xf:submitrow icon="confirm" submit="{{ phrase('accept') }}" />
+	</div>
+</xf:form>
+
+<xf:if is="$privacyPolicyOption.type == 'default'">
+	<xf:if is="$page.advanced_mode">
+		{$templateHtml|raw}
+	<xf:else />
+		<div class="block">
+			<div class="block-container">
+				<div class="block-body block-row">
+					{$templateHtml|raw}
+				</div>
+			</div>
+		</div>
+	</xf:if>
+</xf:if>

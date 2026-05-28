@@ -1,0 +1,9 @@
+<span class="u-srOnly">{{ phrase('reactions:') }}</span>
+<a class="reactionsBar-link" href="{{ link($link, $content, $linkParams) }}" data-xf-click="overlay" data-cache="false" rel="nofollow">
+	<xf:foreach loop="$content.reactions" key="$reactionId" value="$count">
+		<span class="reactionItem">
+			<xf:reaction id="{$reactionId}" small="true" />
+			<span class="reactionItem-count">&times; {$count}</span>
+		</span>
+	</xf:foreach>
+</a>

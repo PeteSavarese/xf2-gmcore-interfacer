@@ -1,0 +1,365 @@
+<xf:title>TTT Stats</xf:title>
+<xf:css src="gmod_interfacer.less"/>
+
+<xf:macro name="summary_grid" arg-stats="!" arg-derived="!">
+    <div class="info-grid">
+        <div class="info-item">
+            <div class="info-label">Kills</div>
+            <div class="info-value">{$stats.kills}</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">Deaths</div>
+            <div class="info-value">{$stats.deaths}</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">Suicides</div>
+            <div class="info-value">{$stats.suicides}</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">Team kills</div>
+            <div class="info-value">{$derived.teamKills}</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">Headshots</div>
+            <div class="info-value">{$stats.headshots}</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">Prop Kills</div>
+            <div class="info-value">{$stats.prop_kills}</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">DNA Kills (Traitors)</div>
+            <div class="info-value">{$stats.killed_traitors_with_dna}</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">Top Kills (Traitors)</div>
+            <div class="info-value">{$stats.highest_kills_on_traitors}</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">Top Kills (Innos)</div>
+            <div class="info-value">{$stats.highest_kills_on_innos}</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">Traitor Contribution</div>
+            <div class="info-value">{$stats.traitor_contribution}</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">Innocent Contribution</div>
+            <div class="info-value">{$stats.innocent_contribution}</div>
+        </div>
+    </div>
+</xf:macro>
+
+<xf:macro name="role_grid" arg-derived="!">
+    <div class="gmod-roleGrid">
+        <div class="card gmod-roleCard gmod-roleCard--innocent">
+            <div class="card-header">
+                <span><xf:fa icon="fa-user" aria-hidden="true"/> Innocent</span>
+                <span class="badge gmod-rolePill gmod-rolePill--innocent">Rounds: {$derived.roles.innocent.rounds}</span>
+            </div>
+
+            <div class="card-content">
+                <div class="gmod-statList">
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-trophy" aria-hidden="true"/></span><span
+                            class="gmod-statKey">Wins</span><span
+                            class="gmod-statVal">{$derived.roles.innocent.wins}</span></div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-ban"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Losses</span><span class="gmod-statVal">{$derived.roles.innocent.losses}</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-percent" aria-hidden="true"/></span><span
+                            class="gmod-statKey">Win rate</span><span class="gmod-statVal">{$derived.roles.innocent.winRate}%</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-heartbeat"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Survived</span><span class="gmod-statVal">{$derived.roles.innocent.survived}</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-life-ring"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Survival rate</span><span class="gmod-statVal">{$derived.roles.innocent.survivalRate}%</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-skull"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Deaths</span><span class="gmod-statVal">{$derived.roles.innocent.deaths}</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-shield" aria-hidden="true"/></span><span
+                            class="gmod-statKey">Traitors killed</span><span class="gmod-statVal">{$derived.roles.innocent.enemyKills}</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-user-friends"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Team kills</span><span class="gmod-statVal">{$derived.roles.innocent.teamKills}</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-chart-bar"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Role K/D</span><span
+                            class="gmod-statVal">{$derived.roles.innocent.kd}</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card gmod-roleCard gmod-roleCard--detective">
+            <div class="card-header">
+                <span><xf:fa icon="fa-search" aria-hidden="true"/> Detective</span>
+                <span class="badge gmod-rolePill gmod-rolePill--detective">Rounds: {$derived.roles.detective.rounds}</span>
+            </div>
+
+            <div class="card-content">
+                <div class="gmod-statList">
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-trophy" aria-hidden="true"/></span><span
+                            class="gmod-statKey">Wins</span><span
+                            class="gmod-statVal">{$derived.roles.detective.wins}</span></div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-ban"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Losses</span><span class="gmod-statVal">{$derived.roles.detective.losses}</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-percent" aria-hidden="true"/></span><span
+                            class="gmod-statKey">Win rate</span><span class="gmod-statVal">{$derived.roles.detective.winRate}%</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-heartbeat"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Survived</span><span class="gmod-statVal">{$derived.roles.detective.survived}</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-life-ring"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Survival rate</span><span class="gmod-statVal">{$derived.roles.detective.survivalRate}%</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-skull"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Deaths</span><span class="gmod-statVal">{$derived.roles.detective.deaths}</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-shield" aria-hidden="true"/></span><span
+                            class="gmod-statKey">Traitors killed</span><span class="gmod-statVal">{$derived.roles.detective.enemyKills}</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-user-friends"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Team kills</span><span class="gmod-statVal">{$derived.roles.detective.teamKills}</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-chart-bar"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Role K/D</span><span
+                            class="gmod-statVal">{$derived.roles.detective.kd}</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card gmod-roleCard gmod-roleCard--traitor">
+            <div class="card-header">
+                <span><xf:fa icon="fa-user-secret" aria-hidden="true"/> Traitor</span>
+                <span class="badge gmod-rolePill gmod-rolePill--traitor">Rounds: {$derived.roles.traitor.rounds}</span>
+            </div>
+
+            <div class="card-content">
+                <div class="gmod-statList">
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-trophy" aria-hidden="true"/></span><span
+                            class="gmod-statKey">Wins</span><span
+                            class="gmod-statVal">{$derived.roles.traitor.wins}</span></div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-ban"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Losses</span><span
+                            class="gmod-statVal">{$derived.roles.traitor.losses}</span></div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-percent" aria-hidden="true"/></span><span
+                            class="gmod-statKey">Win rate</span><span class="gmod-statVal">{$derived.roles.traitor.winRate}%</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-heartbeat"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Survived</span><span class="gmod-statVal">{$derived.roles.traitor.survived}</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-life-ring"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Survival rate</span><span class="gmod-statVal">{$derived.roles.traitor.survivalRate}%</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-skull"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Deaths</span><span
+                            class="gmod-statVal">{$derived.roles.traitor.deaths}</span></div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-crosshairs"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Kills (Innos+Detectives)</span><span class="gmod-statVal">{$derived.roles.traitor.enemyKills}</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-user-friends"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Team kills (Traitors)</span><span class="gmod-statVal">{$derived.roles.traitor.teamKills}</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-chart-bar"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Role K/D</span><span
+                            class="gmod-statVal">{$derived.roles.traitor.kd}</span></div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-crown"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Top kills (round)</span><span class="gmod-statVal">{$derived.roles.traitor.topKills}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</xf:macro>
+
+<xf:set var="$derived" value="{$derived}"/>
+
+<div class="grid">
+    <div class="card u-marginBottom0">
+        <div class="card-header">
+            <span><xf:fa icon="fa-user" aria-hidden="true"/> Player</span>
+            <span class="badge badge-primary">{$steamid64}</span>
+        </div>
+        <div class="avatar-container">
+            <xf:if is="$steamAvatarURL">
+                <img class="gmod-avatar" src="{$steamAvatarURL}" alt="{$userName}"/>
+            </xf:if>
+            <div class="username">{$userName}</div>
+        </div>
+
+        <div class="card-content">
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Total Playtime</div>
+                    <div class="info-value">{$totalPlayTime}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Member Since</div>
+                    <div class="info-value">{{ format_date_string($playerStats.first_joined_date, "m/d/Y") }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Total Rounds</div>
+                    <div class="info-value">{$derived.totalRounds}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Win Rate</div>
+                    <div class="info-value">{$derived.winRate}%</div>
+                </div>
+            </div>
+
+            <div class="gmod-kpiRow u-marginTop20">
+                <div class="gmod-kpi">
+                    <div class="gmod-kpiIcon">
+                        <xf:fa icon="fa-crosshairs" aria-hidden="true"/>
+                    </div>
+                    <div class="gmod-kpiValue">{$playerStats.kills}</div>
+                    <div class="gmod-kpiLabel">Kills</div>
+                </div>
+                <div class="gmod-kpi">
+                    <div class="gmod-kpiIcon">
+                        <xf:fa icon="fa-skull" aria-hidden="true"/>
+                    </div>
+                    <div class="gmod-kpiValue">{$playerStats.deaths}</div>
+                    <div class="gmod-kpiLabel">Deaths</div>
+                </div>
+                <div class="gmod-kpi">
+                    <div class="gmod-kpiIcon">
+                        <xf:fa icon="fa-bullseye" aria-hidden="true"/>
+                    </div>
+                    <div class="gmod-kpiValue">{$playerStats.headshots}</div>
+                    <div class="gmod-kpiLabel">Headshots</div>
+                </div>
+                <div class="gmod-kpi">
+                    <div class="gmod-kpiIcon">
+                        <xf:fa icon="fa-percentage" aria-hidden="true"/>
+                    </div>
+                    <div class="gmod-kpiValue">{$derived.headshotPct}%</div>
+                    <div class="gmod-kpiLabel">HS Rate</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card u-marginBottom0">
+        <div class="card-header">
+            <span><xf:fa icon="fa-chart-line" aria-hidden="true"/> Summary</span>
+        </div>
+        <div class="card-content">
+            <xf:macro name="summary_grid" arg-stats="{$playerStats}" arg-derived="{$derived}"/>
+        </div>
+    </div>
+</div>
+
+<xf:macro name="role_grid" arg-derived="{$derived}"/>
+
+<div class="u-marginTop30 u-marginBottom15">
+    <h2 class="gmod-sectionHeader">
+        <xf:fa icon="fa-server" aria-hidden="true" class="u-colorPrimary"/>
+        Server Stats
+    </h2>
+</div>
+
+<div class="server-list">
+    <xf:foreach loop="$playerStatsByServer" value="$row">
+        <div class="accordion">
+            <div class="accordion-header">
+                <div class="accordion-header-content">
+                    <xf:fa icon="fa-server" aria-hidden="true" class="accordion-header-icon"/>
+                    <div>
+                        <div class="accordion-header-title">{$row.server_nice_name}</div>
+                        <div class="accordion-header-subtitle">{$row.server_hostname}</div>
+                    </div>
+                </div>
+                <div class="accordion-header-content accordion-header-content--secondary">
+                    <div class="accordion-header-stats">
+                        <div class="accordion-header-statsLabel">Playtime</div>
+                        <div class="accordion-header-statsValue">{$row.playTime}</div>
+                    </div>
+                    <xf:fa icon="fa-chevron-down" id="chevron" aria-hidden="true"/>
+                </div>
+            </div>
+
+            <div class="accordion-content">
+                <div class="accordion-content-inner">
+                    <div class="grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <span><xf:fa icon="fa-info-circle" aria-hidden="true"/> Session Info</span>
+                            </div>
+                            <div class="card-content">
+                                <div class="info-grid">
+                                    <div class="info-item">
+                                        <div class="info-label">Playtime</div>
+                                        <div class="info-value">{$row.playTime}</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">First Joined</div>
+                                        <div class="info-value">{{ format_date_string($row.first_joined_date, "m/d/Y")
+                                            }}
+                                        </div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Last Seen</div>
+                                        <div class="info-value">{{ format_date_string($row.last_seen_date, "m/d/Y") }}
+                                        </div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Total Rounds</div>
+                                        <div class="info-value">{$row.derived.totalRounds}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <span><xf:fa icon="fa-chart-bar" aria-hidden="true"/> Server Summary</span>
+                            </div>
+                            <div class="card-content">
+                                <xf:macro name="summary_grid" arg-stats="{$row}" arg-derived="{$row.derived}"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="u-marginTop20">
+                        <xf:macro name="role_grid" arg-derived="{$row.derived}"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </xf:foreach>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const accordions = document.querySelectorAll('.accordion-header');
+        accordions.forEach(header => {
+            header.addEventListener('click', function () {
+                const accordion = this.parentElement;
+                accordion.classList.toggle('active');
+            });
+        });
+    });
+</script>

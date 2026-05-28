@@ -1,0 +1,23 @@
+<xf:extension id="header">
+	<h4 class="block-textHeader">
+		<xf:if is="$details.title AND $details.title_link">
+			{{ phrase('pre_registration_action:') }} <a href="{$details.title_link}">{$details.title}</a>
+		<xf:elseif is="$details.title" />
+			{{ phrase('pre_registration_action:') }} {$details.title}
+		<xf:else />
+			{{ phrase('pre_registration_action') }}
+		</xf:if>
+	</h4>
+</xf:extension>
+
+<xf:extension id="content">
+	<div>
+		<xf:if is="$details.bb_code">
+			{{ bb_code($details.bb_code, 'pre_reg', $preRegAction.User) }}
+		<xf:elseif is="$details.text" />
+			{{ structured_text($details.text) }}
+		<xf:else />
+			{{ phrase('no_additional_information_available') }}
+		</xf:if>
+	</div>
+</xf:extension>

@@ -1,0 +1,11 @@
+{
+    "route_type": "public",
+    "route_prefix": "gl",
+    "sub_name": "lottery",
+    "format": "lottery",
+    "build_class": "",
+    "build_method": "",
+    "controller": "PeterSav\\GModInterface:Lottery",
+    "context": "ahgServers",
+    "action_prefix": ""
+}

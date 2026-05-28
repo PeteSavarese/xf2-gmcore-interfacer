@@ -1,0 +1,94 @@
+<xf:title page="{$page}">{{ phrase('featured_content') }}</xf:title>
+
+<xf:css src="message.less" />
+
+<xf:head option="rss">
+	<link rel="alternate" type="application/rss+xml"
+		title="{{ phrase('rss_feed_for_x', {'title': phrase('featured_content')})|for_attr }}"
+		href="{{ link('featured/index.rss') }}" />
+</xf:head>
+
+<xf:wrap template="whats_new_wrapper">
+	<xf:set var="$pageSelected">featured</xf:set>
+</xf:wrap>
+
+<xf:widgetpos id="featured_content_list_above_features" />
+
+<xf:if is="$features is not empty">
+	<div class="block block--articles block--messages block--previews">
+		<xf:if contentcheck="true">
+			<div class="block-outer">
+				<xf:contentcheck>
+					<xf:pagenav link="featured" params="{$filters}"
+						page="{$page}" perpage="{$perPage}" total="{$total}"
+						wrapperclass="block-outer-main" />
+				</xf:contentcheck>
+			</div>
+		</xf:if>
+
+		<div class="block-container">
+			<xf:if is="$displayFilters">
+				<div class="block-filterBar">
+					<div class="filterBar">
+						<ul class="filterBar-filters">
+							<xf:if is="$filters.content_type">
+								<li>
+									<a href="{{ link('featured', null, $filters|replace({'content_type': null})) }}"
+										class="filterBar-filterToggle"
+										data-xf-init="tooltip" title="{{ phrase('remove_this_filter')|for_attr }}">
+
+										<span class="filterBar-filterToggle-label">{{ phrase('content_type:') }}</span>
+										{{ $xf.app.getContentTypePhrase($filters.content_type) ?: $filters.content_type }}
+									</a>
+								</li>
+							</xf:if>
+						</ul>
+
+						<a class="filterBar-menuTrigger" role="button" tabindex="0"
+							data-xf-click="menu" aria-expanded="false" aria-haspopup="true">
+
+							{{ phrase('filters') }}
+						</a>
+
+						<div class="menu menu--wide"
+							data-menu="menu" aria-hidden="true"
+							data-href="{{ link('featured/filters', null, $filters) }}"
+							data-load-target=".js-filterMenuBody">
+
+							<div class="menu-content">
+								<h4 class="menu-header">{{ phrase('show_only:') }}</h4>
+								<div class="js-filterMenuBody">
+									<div class="menu-row">{{ phrase('loading...') }}</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</xf:if>
+
+			<div class="block-body">
+				<xf:foreach loop="$features" value="$feature">
+					{{ $feature.render()|raw }}
+				</xf:foreach>
+			</div>
+		</div>
+
+		<xf:if contentcheck="true">
+			<div class="block-outer block-outer--after">
+				<xf:contentcheck>
+					<xf:pagenav link="featured" params="{$filters}"
+						page="{$page}" perpage="{$perPage}" total="{$total}"
+						wrapperclass="block-outer-main" />
+				</xf:contentcheck>
+			</div>
+		</xf:if>
+	</div>
+<xf:else />
+	<div class="blockMessage">
+		{{ phrase('there_is_not_currently_any_featured_content') }}
+	</div>
+</xf:if>
+
+<xf:widgetpos id="featured_content_list_below_features" />
+
+<xf:widgetpos id="featured_content_list_sidebar" position="sidebar" />

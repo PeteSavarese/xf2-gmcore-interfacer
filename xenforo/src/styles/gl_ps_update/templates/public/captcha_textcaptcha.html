@@ -1,0 +1,13 @@
+<xf:js src="xf/captcha.js" min="1" />
+
+<div data-xf-init="qa-captcha" data-url="{{ link('misc/captcha') }}">
+	<xf:if is="$question.q">
+		<div style="margin-top: 4px;">{$question.q}</div>
+		<div class="u-inputSpacer">
+			<xf:textbox name="captcha_question_answer" placeholder="{{ phrase('please_answer_the_question_above') }}" />
+		</div>
+	<xf:else />
+		{{ phrase('n_a') }}
+	</xf:if>
+	<xf:hiddenval name="captcha_question_hash">{$question.hash}</xf:hiddenval>
+</div>

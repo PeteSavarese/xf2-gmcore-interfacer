@@ -1,0 +1,28 @@
+<xf:title>{{ phrase('members_x_is_following', {'name': $user.username}) }}</xf:title>
+
+<xf:head option="metaNoindex"><meta name="robots" content="noindex" /></xf:head>
+
+<xf:breadcrumb href="{{ link('members', $user) }}">{$user.username}</xf:breadcrumb>
+
+<div class="block">
+	<div class="block-container js-followingList{$user.user_id}">
+		<ol class="block-body">
+			<xf:foreach loop="$following" value="$followingUser">
+				<li class="block-row block-row--separated">
+					<xf:macro id="member_list_macros::item" arg-user="{$followingUser}" />
+				</li>
+			</xf:foreach>
+		</ol>
+		<xf:if is="$hasMore">
+			<div class="block-footer">
+				<span class="block-footer-controls"><xf:button href="{{ link('members/following', $user, {'page': $page + 1}) }}"
+					rel="nofollow"
+					data-xf-click="inserter"
+					data-replace=".js-followingList{$user.user_id}"
+					data-scroll-target="< .overlay">
+					{{ phrase('more...') }}
+				</xf:button></span>
+			</div>
+		</xf:if>
+	</div>
+</div>

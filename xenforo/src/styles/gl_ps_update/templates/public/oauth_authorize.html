@@ -1,0 +1,46 @@
+<xf:page option="template">OAUTH_CONTAINER</xf:page>
+<xf:title>{{ phrase('authorize_client_x', {'title': $client.title}) }}</xf:title>
+<xf:h1></xf:h1>
+
+<xf:css src="oauth.less" />
+<xf:form action="{{ link('oauth2/authorize', null, $linkParams) }}" class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:inforow>
+				{{ phrase('following_application_is_requesting_access_to_your_account:') }}
+
+				<div class="application">
+					<xf:if is="$client.image_url">
+						<img src="{{ base_url($client.image_url) }}" alt="{{ $client.title }}" />
+					</xf:if>
+					<xf:if is="$client.homepage_url">
+						<h2><a href="{$client.homepage_url}" target="_blank">{{ $client.title }}</a></h2>
+					<xf:else />
+						<h2>{$client.title}</h2>
+					</xf:if>
+					<p>{$client.description}</p>
+				</div>
+
+				<p class="u-smaller u-dimmed">{{ phrase('logged_in_as') }} <xf:username user="{$xf.visitor}" target="_blank" />. <a href="{{ link('logout', null, {'t': csrf_token()}) }}">{{ phrase('not_you') }}</a></p>
+
+				<h5 class="app-info">{{ phrase('requested_scopes:') }}</h5>
+				<ul class="listInline listInline--bullet">
+					<xf:foreach loop="$scopes" value="$scope">
+						<li>{{ $scope.getDescription() }}</li>
+					</xf:foreach>
+				</ul>
+
+				<h5 class="app-info">{{ phrase('redirect:') }}</h5>
+				<ul class="listInline listInline--bullet u-muted">
+					<li>{{ phrase('once_authorized_you_will_be_redirected_to') }} {{ $authRequest.getRedirectUriSnippet() }}</li>
+				</ul>
+			</xf:inforow>
+
+		</div>
+		<xf:submitrow submit="{{ phrase('authorize') }}" rowtype="simple">
+			<xf:html>
+				<xf:button href="{{ link('oauth2/deny', null, $linkParams) }}">{{ phrase('deny') }}</xf:button>
+			</xf:html>
+		</xf:submitrow>
+	</div>
+</xf:form>

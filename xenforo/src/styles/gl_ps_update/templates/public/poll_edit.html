@@ -1,0 +1,18 @@
+<xf:title>{{ phrase('edit_poll') }}</xf:title>
+
+<xf:breadcrumb source="$breadcrumbs" />
+
+<xf:form action="{{ $poll.getLink('edit') }}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:macro id="poll_macros::add_edit_inputs" arg-poll="{$poll}"/>
+		</div>
+
+		<xf:redirect url="{$redirect}" />
+		<xf:submitrow icon="save" sticky="true" />
+	</div>
+</xf:form>
+
+<xf:if is="$poll && $poll.canDelete()">
+	<xf:macro id="poll_macros::delete_block" arg-poll="{$poll}" />
+</xf:if>

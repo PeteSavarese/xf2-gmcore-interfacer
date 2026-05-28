@@ -1,0 +1,9 @@
+{
+    "template": "member_about",
+    "description": "Adds link to user's history logs under on the about page of their profile",
+    "execution_order": 10,
+    "enabled": true,
+    "action": "str_replace",
+    "find": "\t\t\t\t\t<xf:macro id=\"custom_fields_macros::custom_fields_view\"\n\t\t\t\t\t\targ-type=\"users\"\n\t\t\t\t\t\targ-group=\"personal\"\n\t\t\t\t\t\targ-set=\"{$user.Profile.custom_fields}\"\n\t\t\t\t\t\targ-additionalFilters=\"{{ ['profile'] }}\" />",
+    "replace": "$0\n<xf:if is=\"{{ $xf.visitor->hasPermission('gmodUserPerms', 'view_hlogs') }}\">\n\t\t\t\t\t\t<dl class=\"pairs pairs--columns pairs--fixedSmall\">\n\t\t\t\t\t\t\t<dt>History Logs</dt>\n\t\t\t\t\t\t\t<dd><a href=\"/gl/hlogs/results?steamid={{user_to_steamid64($user)}}\">History Logs</a></dd>\n\t\t\t\t\t\t</dl>\n</xf:if>"
+}

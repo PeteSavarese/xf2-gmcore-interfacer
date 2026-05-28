@@ -1,0 +1,80 @@
+<xf:sidenav>
+	<div class="block">
+		<div class="block-container">
+			<h3 class="block-header">{{ phrase('your_account') }}</h3>
+			<div class="block-body">
+				<!--[XF:profile_links:top]-->
+				<a class="blockLink" href="{{ link('members', $xf.visitor) }}">{{ phrase('your_profile') }}</a>
+				<a class="blockLink {{ $pageSelected == 'alerts' ? 'is-selected' : '' }}" href="{{ link('account/alerts') }}">
+					{{ phrase('alerts') }}
+				</a>
+				<a class="blockLink {{ $pageSelected == 'reactions' ? 'is-selected' : '' }}" href="{{ link('account/reactions') }}">
+					{{ phrase('reactions_received') }}
+				</a>
+				<xf:if is="$xf.visitor.canViewBookmarks()">
+					<a class="blockLink {{ $pageSelected == 'bookmarks' ? 'is-selected' : '' }}" href="{{ link('account/bookmarks') }}">
+						{{ phrase('bookmarks') }}
+					</a>
+				</xf:if>
+				<!--[XF:profile_links:bottom]-->
+			</div>
+
+			<h3 class="block-minorHeader">{{ phrase('settings') }}</h3>
+			<div class="block-body">
+				<!--[XF:settings_links:top]-->
+				<a class="blockLink {{ $pageSelected == 'account_details' ? 'is-selected' : '' }}" href="{{ link('account/account-details') }}">
+					{{ phrase('account_details') }}
+				</a>
+				<a class="blockLink {{ $pageSelected == 'security' ? 'is-selected' : '' }}" href="{{ link('account/security') }}">
+					{{ phrase('password_and_security') }}
+				</a>
+				<a class="blockLink {{ $pageSelected == 'privacy' ? 'is-selected' : '' }}" href="{{ link('account/privacy') }}">
+					{{ phrase('privacy') }}
+				</a>
+				<a class="blockLink {{ $pageSelected == 'preferences' ? 'is-selected' : '' }}" href="{{ link('account/preferences') }}">
+					{{ phrase('preferences') }}
+				</a>
+				<xf:if is="$xf.visitor.canEditSignature()">
+					<a class="blockLink {{ $pageSelected == 'signature' ? 'is-selected' : '' }}" href="{{ link('account/signature') }}">
+						{{ phrase('signature') }}
+					</a>
+				</xf:if>
+				<xf:if is="$xf.app.userUpgradeCount">
+					<a class="blockLink {{ $pageSelected == 'upgrades' ? 'is-selected' : '' }}" href="{{ link('account/upgrades') }}">
+						{{ phrase('account_upgrades') }}
+					</a>
+				</xf:if>
+				<xf:if is="$xf.app.connectedAccountCount">
+					<a class="blockLink {{ $pageSelected == 'connected_account' ? 'is-selected' : '' }}" href="{{ link('account/connected-accounts') }}">
+						{{ phrase('connected_accounts') }}
+					</a>
+				</xf:if>
+				<xf:if is="$xf.app.oAuthClientCount">
+					<a class="blockLink {{ $pageSelected == 'applications' ? 'is-selected': '' }}" href="{{ link('account/applications') }}">
+						{{ phrase('applications') }}
+					</a>
+				</xf:if>
+				<a class="blockLink {{ $pageSelected == 'following' ? 'is-selected' : '' }}" href="{{ link('account/following') }}">
+					{{ phrase('following') }}
+				</a>
+				<a class="blockLink {{ $pageSelected == 'ignored' ? 'is-selected' : '' }}" href="{{ link('account/ignored') }}">
+					{{ phrase('ignoring') }}
+				</a>
+				<!--[XF:settings_links:bottom]-->
+			</div>
+		</div>
+	</div>
+
+	<div class="block">
+		<div class="block-container">
+			<div class="block-body">
+				<a href="{{ link('logout', null, {'t': csrf_token()}) }}" class="blockLink">{{ phrase('log_out') }}</a>
+			</div>
+		</div>
+	</div>
+</xf:sidenav>
+<xf:page option="sideNavTitle">{{ phrase('your_account') }}</xf:page>
+
+<xf:breadcrumb href="{{ link('account') }}">{{ phrase('your_account') }}</xf:breadcrumb>
+
+{$innerContent|raw}

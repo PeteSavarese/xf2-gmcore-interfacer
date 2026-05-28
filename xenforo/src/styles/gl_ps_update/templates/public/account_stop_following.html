@@ -1,0 +1,12 @@
+<xf:title>{{ phrase('stop_following_x', {'name': $followed.username}) }}</xf:title>
+
+<xf:form action="{{ link('account/stop-following', null, { 'user_id': $followed.user_id }) }}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:inforow rowtype="confirm">
+				{{ phrase('please_confirm_that_you_want_to_stop_following_x', {'name': $followed.username}) }}
+			</xf:inforow>
+		</div>
+		<xf:submitrow submit="{{ phrase('stop_following') }}" rowtype="simple" />
+	</div>
+</xf:form>

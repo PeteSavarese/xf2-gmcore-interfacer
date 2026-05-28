@@ -1,0 +1,18 @@
+{
+    "edit_format": "checkbox",
+    "edit_format_params": "active_players={{ phrase('blacktea_steamauth_active_players') }}\nactive_games={{ phrase('blacktea_steamauth_active_games') }}\nplayed_games={{ phrase('blacktea_steamauth_played_games') }}\nowned_games={{ phrase('blacktea_steamauth_owned_games') }}",
+    "data_type": "array",
+    "sub_options": [
+        "active_players",
+        "active_games",
+        "played_games",
+        "owned_games"
+    ],
+    "validation_class": "",
+    "validation_method": "",
+    "advanced": false,
+    "default_value": "{\"active_players\":true,\"active_games\":true,\"played_games\":true,\"owned_games\":true}",
+    "relations": {
+        "blacktea_steamauth_options": 400
+    }
+}

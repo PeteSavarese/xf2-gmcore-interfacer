@@ -1,0 +1,92 @@
+<xf:title>{{ $active ? $active.title : phrase('notable_members') }}</xf:title>
+
+<xf:wrap template="member_wrapper">
+	<xf:set var="$pageSelected" value="{{ $active ? $active.member_stat_key : 'overview' }}" />
+</xf:wrap>
+
+<xf:macro id="metadata_macros::canonical_url" arg-canonicalUrl="{{ link('canonical:members', null, {'key': $active ? $active.member_stat_key : null }) }}" />
+
+<xf:css src="member.less" />
+
+<xf:if is="$userNotFound">
+	<div class="blockMessage blockMessage--error blockMessage--iconic">{{ phrase('specified_member_cannot_be_found_enter_entire_name') }}</div>
+</xf:if>
+
+<xf:if is="$memberStats is empty">
+	<div class="blockMessage">{{ phrase('no_notable_members_can_currently_be_shown') }}</div>
+<xf:else />
+	<section class="block">
+		<div class="block-container">
+			<xf:if is="$active">
+				<ol class="block-body">
+					<xf:foreach loop="{$resultsData.{$active.member_stat_key}}" key="$userId" value="$data">
+						<li class="block-row block-row--separated">
+							<xf:macro id="member_list_macros::item"
+								arg-user="{$data.user}"
+								arg-extraData="{$data.value}"
+								arg-extraDataBig="{{ true }}" />
+						</li>
+					<xf:else />
+						<li class="block-row">{{ phrase('no_users_match_specified_criteria') }}</li>
+					</xf:foreach>
+				</ol>
+			<xf:else />
+				<div class="block-body">
+					<ol class="memberOverviewBlocks">
+						<xf:foreach loop="$memberStats" key="$key" value="$memberStat">
+							<xf:macro id="overview_block"
+								arg-memberStat="{$memberStat}"
+								arg-results="{$resultsData.{$key}}" />
+						</xf:foreach>
+					</ol>
+				</div>
+			</xf:if>
+		</div>
+	</section>
+</xf:if>
+
+<xf:macro id="overview_block"
+	arg-memberStat="!"
+	arg-results="!"
+	arg-showTitle="{{ true }}"
+	arg-showFooter="{{ true }}">
+
+	<xf:if contentcheck="true">
+		<li class="memberOverviewBlock">
+			<xf:if is="$showTitle">
+				<h3 class="block-textHeader">
+					<a href="{{ link('members', null, {'key': $memberStat.member_stat_key}) }}"
+						class="memberOverViewBlock-title">{$memberStat.title}</a>
+				</h3>
+			</xf:if>
+			<ol class="memberOverviewBlock-list">
+				<xf:contentcheck>
+					<xf:foreach loop="$results" key="$userId" value="$data">
+						<li>
+							<xf:macro id="overview_row" arg-data="{$data}" />
+						</li>
+					</xf:foreach>
+				</xf:contentcheck>
+			</ol>
+			<xf:if is="$showFooter">
+				<div class="memberOverviewBlock-seeMore">
+					<a href="{{ link('members', null, {'key': $memberStat.member_stat_key}) }}">{{ phrase('see_more...') }}</a>
+				</div>
+			</xf:if>
+		</li>
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="overview_row" arg-data="!">
+	<div class="contentRow contentRow--alignMiddle">
+		<div class="contentRow-figure">
+			<xf:avatar user="$data.user" size="xs" />
+		</div>
+		<div class="contentRow-main">
+			<xf:if is="$data.value">
+				<div class="contentRow-extra contentRow-extra--large">{$data.value}</div>
+			</xf:if>
+			<h3 class="contentRow-title"><xf:username user="$data.user" rich="true" /></h3>
+		</div>
+	</div>
+</xf:macro>

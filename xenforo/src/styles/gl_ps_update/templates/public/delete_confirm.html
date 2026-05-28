@@ -1,0 +1,22 @@
+<xf:title>{{ phrase('confirm_action') }}</xf:title>
+
+<xf:form action="{$confirmUrl}" ajax="true" class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:inforow rowtype="confirm">
+				{{ phrase('please_confirm_that_you_want_to_delete_following:') }}
+				<xf:if is="$contentUrl">
+					<strong><a href="{$contentUrl}">{$contentTitle}</a></strong>
+				<xf:else />
+					<strong>{$contentTitle}</strong>
+				</xf:if>
+				<xf:if is="$deletionImportantPhrase">
+					<div class="blockMessage blockMessage--important blockMessage--iconic">
+						{{ phrase_dynamic($deletionImportantPhrase) }}
+					</div>
+				</xf:if>
+			</xf:inforow>
+		</div>
+		<xf:submitrow rowtype="simple" icon="delete" />
+	</div>
+</xf:form>

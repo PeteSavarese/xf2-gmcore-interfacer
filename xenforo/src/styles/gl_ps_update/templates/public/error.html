@@ -1,0 +1,13 @@
+<xf:title>{{ phrase('oops_we_ran_into_some_problems') }}</xf:title>
+
+<div class="blockMessage">
+	<xf:if is="$error">
+		{$error|raw}
+	<xf:else />
+		<ul>
+		<xf:foreach loop="$errors" value="$error">
+			<li>{$error|raw}</li>
+		</xf:foreach>
+		</ul>
+	</xf:if>
+</div>

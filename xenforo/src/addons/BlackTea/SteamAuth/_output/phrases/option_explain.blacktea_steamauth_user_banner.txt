@@ -1,0 +1,3 @@
+This setting controls the display options for the Steam profile banners. These are the little cards that show basic information about the user’s Steam profile (e.g., their avatar, whether or not they are signed-in, and what they are currently playing).
+
+Ticking an option other than “Disable” will result in the profile banner displaying either above or below the user extras respectively. User extras refers to the list of basic profile information typically show on the left-hand side of user posts and private messages (e.g., post count, join date, and location).

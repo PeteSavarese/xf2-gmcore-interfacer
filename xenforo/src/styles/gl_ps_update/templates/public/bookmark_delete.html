@@ -1,0 +1,14 @@
+<xf:title>{{ phrase('confirm_action') }}</xf:title>
+
+<xf:form action="{$confirmUrl}" class="block" ajax="true">
+	<div class="bookmark-delete block-container">
+		<div class="block-body">
+			<xf:inforow rowtype="confirm">
+				{{ phrase('please_confirm_that_you_want_to_delete_your_bookmark_for_following_content:') }}
+				<strong><a href="{$bookmark.content_link}">{$bookmark.content_title}</a></strong>
+			</xf:inforow>
+		</div>
+
+		<xf:submitrow rowtype="simple" name="delete" icon="delete" />
+	</div>
+</xf:form>

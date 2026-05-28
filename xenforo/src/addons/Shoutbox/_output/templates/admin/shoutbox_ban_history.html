@@ -1,0 +1,40 @@
+<xf:title>
+	<xf:if is="$user">Shoutbox ban history: {$user.username}<xf:else />Shoutbox ban history</xf:if>
+</xf:title>
+
+<xf:pageaction>
+	<xf:button href="{{ link('shoutbox-bans') }}">Active bans</xf:button>
+	<xf:button href="{{ link('shoutbox-bans/expired') }}">Expired bans</xf:button>
+</xf:pageaction>
+
+<xf:if is="$history is not empty">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:datalist>
+				<xf:foreach loop="$history" value="$entry">
+					<xf:set var="$userLabel" value="{$entry.User.username}" />
+					<xf:set var="$bannedBy" value="{$entry.BannedBy.username}" />
+					<xf:set var="$unbannedBy" value="{{$entry.UnbannedBy.username ?: 'Cron Job'}}" />
+
+
+					<xf:set var="$reasonText" value="N/A" />
+					<xf:if is="$entry.reason">
+						<xf:set var="$reasonText" value="{$entry.reason}" />
+					</xf:if>
+
+					<xf:datarow
+						label="{$userLabel} - Reason: {$reasonText}"
+						explain="Banned By: {$bannedBy} • Banned: {{ timestamp_format($entry.banned_on) }}\<br>
+            Unbanned by: {$unbannedBy} • Unbanned: {{ timestamp_format($entry.unbanned_on) }}">
+					</xf:datarow>
+				</xf:foreach>
+			</xf:datalist>
+		</div>
+		<div class="block-footer">
+			<span class="block-footer-counter">{{ display_totals($history, $total) }}</span>
+			<xf:pagenav page="$page" perpage="$perPage" total="$total" link="shoutbox-bans/history" wrapperclass="block-footer-pagenav" />
+		</div>
+	</div>
+<xf:else />
+	<div class="blockMessage">No shoutbox ban history found.</div>
+</xf:if>

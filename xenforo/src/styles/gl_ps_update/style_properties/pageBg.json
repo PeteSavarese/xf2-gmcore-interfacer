@@ -1,0 +1,16 @@
+{
+    "group_name": "color",
+    "title": "Page background color",
+    "description": "The background of the page itself, on which all other content rests",
+    "property_type": "value",
+    "css_components": [],
+    "value_type": "color",
+    "value_parameters": "",
+    "has_variations": true,
+    "depends_on": "",
+    "value_group": "contentBackground",
+    "property_value": {
+        "default": "#15202c"
+    },
+    "display_order": 2100
+}

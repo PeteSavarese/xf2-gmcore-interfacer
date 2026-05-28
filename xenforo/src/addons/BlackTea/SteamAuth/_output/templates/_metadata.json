@@ -1,0 +1,92 @@
+{
+    "admin/blacktea_steamauth_actions.html": {
+        "version_id": 10300070,
+        "version_string": "1.3.0",
+        "hash": "e9d2d5937e562a52a80fc3d74404ff31"
+    },
+    "admin/blacktea_steamauth_steam_list.html": {
+        "version_id": 10401070,
+        "version_string": "1.4.1",
+        "hash": "9dd40197eae498c5b3675f5deedbdb85"
+    },
+    "admin/blacktea_steamauth_steam_support.html": {
+        "version_id": 10709070,
+        "version_string": "1.7.9",
+        "hash": "a9b08fd6d6f7acf7ecd71186c294bc8b"
+    },
+    "admin/connected_account_provider_steam.html": {
+        "version_id": 10000010,
+        "version_string": "1.0.0",
+        "hash": "b3b4de0ba76d5eda04ae5e1b79e85fa3"
+    },
+    "admin/connected_account_provider_test_steam.html": {
+        "version_id": 10000010,
+        "version_string": "1.0.0",
+        "hash": "57e4aeef95dc74e1d404721f766a6a41"
+    },
+    "admin/option_template_steamauthUserBannerLocation.html": {
+        "version_id": 10504070,
+        "version_string": "1.5.4",
+        "hash": "d090a89c5c7f65b6835ada2d90bf08d2"
+    },
+    "public/blacktea_steamauth_active_games.html": {
+        "version_id": 10707080,
+        "version_string": "1.7.8",
+        "hash": "886ba77f8ff2a1c54a118ff3f2c2b1f0"
+    },
+    "public/blacktea_steamauth_active_players.html": {
+        "version_id": 10700070,
+        "version_string": "1.7.0",
+        "hash": "b5ee013dfb26672a8d29f4eed2256ddf"
+    },
+    "public/blacktea_steamauth_flags_privacy_view.html": {
+        "version_id": 10501070,
+        "version_string": "1.5.0",
+        "hash": "41aed8688388bd5f3a4e9177fa3e89c7"
+    },
+    "public/blacktea_steamauth_list.less": {
+        "version_id": 10700070,
+        "version_string": "1.7.0",
+        "hash": "ee15c54c15706f24403473a7e9c3bb0b"
+    },
+    "public/blacktea_steamauth_notice_cannot_fetch.html": {
+        "version_id": 10704070,
+        "version_string": "1.7.4",
+        "hash": "b0ae8dfb83d5e2fc3c7bd59175ed6387"
+    },
+    "public/blacktea_steamauth_owned_games.html": {
+        "version_id": 10707080,
+        "version_string": "1.7.8",
+        "hash": "0a905b935331391428660287673a8c85"
+    },
+    "public/blacktea_steamauth_played_games.html": {
+        "version_id": 10707080,
+        "version_string": "1.7.8",
+        "hash": "e75492116e85d9199ad9014a3eaf34dd"
+    },
+    "public/blacktea_steamauth_user_banner.html": {
+        "version_id": 10709070,
+        "version_string": "1.7.9",
+        "hash": "f1871b1bf900d059fa01eeeafc523b7c"
+    },
+    "public/blacktea_steamauth_user_banner.less": {
+        "version_id": 10709070,
+        "version_string": "1.7.9",
+        "hash": "3589de09acd76699fda3ffbb2063833c"
+    },
+    "public/connected_account_associated_steam.html": {
+        "version_id": 10506070,
+        "version_string": "1.5.6",
+        "hash": "30084b4e8c3a9391c5f8d25abc0893c3"
+    },
+    "public/login_steam.less": {
+        "version_id": 10709070,
+        "version_string": "1.7.9",
+        "hash": "6708a98abe22950516b88074860db7ab"
+    },
+    "public/message_macros_steam.less": {
+        "version_id": 10001070,
+        "version_string": "1.1.0",
+        "hash": "e4dc69db88c0054f110d0157fd799063"
+    }
+}

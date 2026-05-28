@@ -1,0 +1,63 @@
+<xf:macro id="your_passkeys" arg-passkeys="!" arg-linkType="{$xf.appType}">
+	<xf:js src="xf/webauthn.js" />
+
+	<div class="block">
+		<div class="block-container">
+			<h3 class="block-header">
+				{{ phrase('your_passkeys') }}
+				<xf:if is="$xf.request.isSecure() || $xf.request.isHostLocal()">
+					<span class="u-pullRight u-jsOnly">
+						<xf:button href="{{ link_type($linkType, 'account/passkey/add') }}" fa="fa-plus" data-xf-click="webauthn-click">{{ phrase('add_passkey') }}</xf:button>
+					</span>
+				</xf:if>
+			</h3>
+			<div class="block-body">
+				<xf:inforow rowtype="close">
+					{{ phrase('passkeys_secure_replacement_for_passwords_allowing_you_to_use') }}
+				</xf:inforow>
+
+				<xf:foreach loop="$passkeys" value="$passkey">
+					<li class="block-row block-row--separated">
+						<div class="contentRow contentRow--alignMiddle">
+							<xf:if is="$passkey.hasIcon()">
+								<div class="contentRow-figure contentRow-figure--fixedSmall">
+									<xf:macro id="style_variation_macros::picture_color_scheme"
+										arg-light="{$passkey.getIcon('light')}"
+										arg-dark="{$passkey.getIcon('dark')}"
+										arg-width="100" arg-height="100"
+										arg-alt="{$passkey.getAuthenticatorName()}"
+										arg-lazy="true" />
+								</div>
+							</xf:if>
+							<div class="contentRow-main">
+								<div class="contentRow-extra">
+									<div class="buttonGroup">
+										<xf:button href="{{ link_type($linkType, 'account/passkeys/edit', $passkey) }}" class="button--link button--smaller" overlay="true">{{ phrase('edit') }}</xf:button>
+										<xf:button href="{{ link_type($linkType, 'account/passkeys/delete', $passkey) }}" class="button--link button--smaller" overlay="true">{{ phrase('delete') }}</xf:button>
+									</div>
+								</div>
+
+								<h2 class="contentRow-title">{$passkey.name}</h2>
+
+								<div class="contentRow-minor contentRow-minor--hideLinks">
+									<ul class="listInline listInline--bullet">
+										<li>
+											{{ phrase('created:') }}
+											<xf:date time="{$passkey.create_date}"/>
+										</li>
+										<xf:if is="$passkey.last_use_date">
+											<li>
+												{{ phrase('last_used:') }}
+												<xf:date time="{$passkey.last_use_date}"/>
+											</li>
+										</xf:if>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</li>
+				</xf:foreach>
+			</div>
+		</div>
+	</div>
+</xf:macro>

@@ -1,0 +1,43 @@
+<xf:title>{{ phrase('search_tags') }}</xf:title>
+
+<xf:breadcrumb href="{{ link('tags') }}">{{ phrase('tags') }}</xf:breadcrumb>
+
+<xf:head option="robots"><meta name="robots" content="noindex" /></xf:head>
+
+<xf:css src="tag.less" />
+
+<xf:form action="{{ link('tags') }}" class="block" ajax="true">
+	<div class="block-container">
+		<xf:if is="$xf.visitor.canSearch()">
+			<h2 class="block-tabHeader tabs hScroller" data-xf-init="h-scroller">
+				<span class="hScroller-scroll">
+					<a href="{{ link('search') }}" class="tabs-tab">{{ phrase('search_everything') }}</a>
+					<xf:foreach loop="$tabs" key="$tabType" value="$tab">
+						<a href="{{ link('search', null, {'type': $tabType}) }}" class="tabs-tab{{ $type == $tabType ? ' is-active' : '' }}">{$tab.title}</a>
+					</xf:foreach>
+					<xf:if is="$xf.options.enableTagging">
+						<a href="{{ link('tags') }}" class="tabs-tab is-active">{{ phrase('search_tags') }}</a>
+					</xf:if>
+				</span>
+			</h2>
+		</xf:if>
+		<div class="block-body">
+			<xf:tokeninputrow name="tags" value="{$tags}" href="{{ link('misc/tag-auto-complete') }}"
+				label="{{ phrase('tags') }}" />
+		</div>
+		<xf:submitrow icon="search" />
+	</div>
+</xf:form>
+
+<xf:if is="$tagCloud">
+	<div class="block">
+		<div class="block-container">
+			<h3 class="block-header">{{ phrase('popular_tags') }}</h3>
+			<div class="block-body block-row tagCloud">
+			<xf:foreach loop="$tagCloud" value="$cloudEntry">
+				<a href="{{ link('tags', $cloudEntry.tag) }}" class="tagCloud-tag tagCloud-tagLevel{$cloudEntry.level}">{$cloudEntry.tag.tag}</a>
+			</xf:foreach>
+			</div>
+		</div>
+	</div>
+</xf:if>

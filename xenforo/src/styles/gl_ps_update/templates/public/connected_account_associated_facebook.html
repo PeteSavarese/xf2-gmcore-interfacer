@@ -1,0 +1,4 @@
+<a href="{{ $providerData.profile_link ?: 'https://www.facebook.com/profile.php?id=' . $connectedAccounts.facebook }}" target="_blank">
+	<img src="https://graph.facebook.com/{$connectedAccounts.facebook}/picture" width="48" alt="" />
+</a>
+<div><a href="{{ $providerData.profile_link ?: 'https://www.facebook.com/profile.php?id=' . $connectedAccounts.facebook }}" target="_blank">{{ $providerData.username ?: phrase('view_account') }}</a></div>

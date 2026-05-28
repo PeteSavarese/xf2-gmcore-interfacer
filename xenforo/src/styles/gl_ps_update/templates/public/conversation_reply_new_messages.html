@@ -1,0 +1,13 @@
+<xf:if is="$firstUnshownMessage">
+	<div class="message">
+		<div class="message-inner">
+			<div class="message-cell message-cell--alert">
+				{{ phrase('there_more_messages_to_display') }} <a href="{{ link('direct-messages/replies', $firstUnshownMessage) }}">{{ phrase('view_them') }}</a>
+			</div>
+		</div>
+	</div>
+</xf:if>
+
+<xf:foreach loop="$messages" value="$message">
+	<xf:macro id="conversation_message_macros::message" arg-message="{$message}" arg-conversation="{$conversation}" />
+</xf:foreach>

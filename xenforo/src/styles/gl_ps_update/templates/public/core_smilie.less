@@ -1,0 +1,66 @@
+.smilie
+{
+	vertical-align: text-bottom;
+	max-width: none;
+
+	img&.smilie--emoji
+	{
+		width: 1.467em;
+	}
+
+	span&.smilie--emoji
+	{
+		display: inline-block;
+		line-height: 1.2;
+		font-size: 1.2em;
+		vertical-align: 0;
+	}
+
+	&.is-clicked
+	{
+		transform: rotate(45deg);
+		transition: all 0.25s;
+	}
+}
+
+.contentRow-figure--emoji
+{
+	font-size: (@xf-fontSizeNormal * 1.2);
+
+	img
+	{
+		max-width: 24px;
+		max-height: 24px;
+		vertical-align: top;
+	}
+
+	img.smilie--emoji
+	{
+		width: 22px;
+	}
+
+	span.smilie--emoji
+	{
+		// the default font-size above accounts for this
+		font-size: 1em;
+	}
+}
+
+<xf:if is="$smilieSprites">
+	<xf:foreach loop="$smilieSprites" key="$smilieId" value="$smilieSprite">
+		<xf:if is="$smilieSprite.sprite_css">
+			.smilie--sprite.smilie--sprite{$smilieId}
+			{
+				{$smilieSprite.sprite_css|raw}
+			}
+		</xf:if>
+	</xf:foreach>
+</xf:if>
+
+.smilie {
+	vertical-align: middle;
+}
+
+.smilieCategory {
+	border-bottom: 1px solid @gl-border;
+}

@@ -1,0 +1,122 @@
+<xf:macro id="spam_log" arg-spamDetails="!">
+	<xf:if is="$spamDetails">
+		<xf:formrow label="{{ phrase('spam_log') }}">
+			{$spamDetails}
+		</xf:formrow>
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="action_row" arg-unapprovedItem="!" arg-handler="!">
+	<xf:formrow label="{{ phrase('action') }}" class="js-approvalQueue-itemControls">
+		<xf:macro id="action_radio" arg-unapprovedItem="{$unapprovedItem}" arg-handler="{$handler}" />
+	</xf:formrow>
+</xf:macro>
+
+<xf:macro id="action_radio" arg-unapprovedItem="!" arg-handler="!">
+	<div class="js-approvalQueue-itemControls">
+		<xf:radio name="queue[{$unapprovedItem.content_type}][{$unapprovedItem.content_id}]">
+
+			<xf:foreach loop="$unapprovedItem.getDefaultActions()" key="$action" value="$label">
+				<xf:option value="{$action}" checked="{{ !$action ? 'checked' : '' }}" data-xf-click="approval-control">{$label}</xf:option>
+			</xf:foreach>
+
+		</xf:radio>
+	</div>
+</xf:macro>
+
+<xf:macro id="item_message_type"
+	arg-content="!"
+	arg-contentDate=""
+	arg-user="!"
+	arg-typePhraseHtml="!"
+	arg-headerPhraseHtml=""
+	arg-spamDetails=""
+	arg-messageHtml="!"
+	arg-unapprovedItem=""
+	arg-handler=""
+	arg-actionsHtml="">
+
+	<div class="message">
+		<xf:css src="message.less" />
+		<div class="message-inner">
+			<div class="message-cell message-cell--user">
+
+				<section class="message-user"
+					itemscope itemtype="https://schema.org/Person"
+					{{ $user ? 'itemid="' . link('canonical:members', $user) . '"' : '' }}>
+
+					<xf:if is="$user">
+						<meta itemprop="url" content="{{ link('canonical:members', $user) }}" />
+					</xf:if>
+
+					<div class="message-avatar">
+						<div class="message-avatar-wrapper">
+							<xf:avatar user="$user" size="m" itemprop="image" />
+						</div>
+					</div>
+					<div class="message-userDetails">
+						<h4 class="message-name"><xf:username user="$user" rich="true" itemprop="name" defaultname="{{ $content.isValidKey('username') ? $content.username : '' }}" /></h4>
+					</div>
+
+					<span class="message-userArrow"></span>
+				</section>
+
+			</div>
+			<div class="message-cell message-cell--main">
+				<div class="message-expandWrapper js-expandWatch">
+					<div class="message-expandContent js-expandContent">
+						<div class="message-main">
+
+					<header class="message-attribution">
+						<span class="message-attribution-main"><xf:date time="{{ $contentDate ?: $content.post_date }}" /></span>
+						<span class="message-attribution-opposite">{$typePhraseHtml|raw}</span>
+					</header>
+
+					<div class="message-content">
+
+						<xf:if contentcheck="true">
+							<xf:contentcheck>
+								<xf:if is="$headerPhraseHtml is not empty">
+									<div class="messageNotice messageNotice--highlighted messageNotice--moderated">
+										{$headerPhraseHtml|raw}
+									</div>
+								</xf:if>
+
+								<xf:if is="$spamDetails is not empty">
+									<div class="messageNotice messageNotice--warning">
+										{$spamDetails}
+									</div>
+								</xf:if>
+
+								<xf:if is="$messageHtml is not empty">
+									<div class="message-userContent">
+										<article class="message-body">{$messageHtml|raw}</article>
+									</div>
+								</xf:if>
+							</xf:contentcheck>
+						<xf:else />
+							<div class="message-userContent">
+								<article class="message-body">
+									<i>{{ phrase('no_additional_information_available') }}</i>
+								</article>
+							</div>
+						</xf:if>
+					</div>
+
+				</div>
+					</div>
+					<div class="message-expandLink js-expandLink"><a role="button" tabindex="0">{{ phrase('click_to_expand') }}</a></div>
+				</div>
+			</div>
+			<div class="message-cell message-cell--extra">
+				<xf:if is="$unapprovedItem AND $handler">
+					<xf:macro id="approval_queue_macros::action_radio"
+						arg-unapprovedItem="{$unapprovedItem}"
+						arg-handler="{$handler}" />
+				<xf:else />
+					{$actionsHtml|raw}
+				</xf:if>
+			</div>
+		</div>
+	</div>
+</xf:macro>

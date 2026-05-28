@@ -1,0 +1,119 @@
+<xf:macro id="block"
+	arg-quotes="!"
+	arg-messages="!"
+	arg-containerRelation="!"
+	arg-dateKey="!"
+	arg-bbCodeContext="!"
+	arg-titleKey="title"
+	arg-userRelation="User"
+	arg-usernameKey="username"
+	arg-messageKey="message">
+
+	<xf:macro id="nestable_macros::setup"
+		arg-includeLess="{{ false }}" />
+
+	<xf:css src="message.less" />
+	<xf:css src="multi_quote_sort.less" />
+
+	<xf:title>{{ phrase('review_selected_messages') }}</xf:title>
+
+	<div class="block">
+		<div class="block-container">
+			<div class="block-row block-row--minor">
+				{{ phrase('drag_icon_to_rearrange_messages') }}
+			</div>
+			<div class="block-body nestable-container" data-xf-init="nestable" data-max-depth="1" data-value-function="serialize">
+				<ol class="nestable-list">
+					<xf:foreach loop="array_keys($quotes)" value="$messageId">
+						<xf:set var="$message" value="{$messages.{$messageId}}" />
+						<xf:if is="$message">
+							<xf:foreach loop="{$quotes.{$messageId}}" key="$key" value="$quote">
+								<li class="nestable-item" data-id="{$messageId}-{$key}">
+									<div class="message message--simple message--bordered message--multiQuoteList message--forceColumns">
+										<div class="message-inner">
+											<div class="message-cell message-cell--closer message-cell--action">
+												<div class="nestable-handle" aria-label="{{ phrase('drag_handle')|for_attr }}">
+													<span class="u-muted"><xf:fa icon="fa-bars fa-2x" /></span>
+												</div>
+											</div>
+											<div class="message-cell message-cell--closer message-cell--main">
+												<div class="message-content">
+													<div class="message-attribution">
+														<div class="contentRow contentRow--alignMiddle">
+															<div class="contentRow-figure">
+																<xf:avatar user="{$message.{$userRelation}}" size="xxs" defaultname="{$message.{$usernameKey}}" href="" />
+															</div>
+															<div class="contentRow-main contentRow-main--close">
+																<ul class="listInline listInline--bullet">
+																	<li><xf:username user="{$message.{$userRelation}}" defaultname="{$message.{$usernameKey}}" href="" /></li>
+																	<li><xf:date time="{$message.{$dateKey}}" /></li>
+																	<li>{$message.{$containerRelation}.{$titleKey}}</li>
+																</ul>
+															</div>
+															<span class="contentRow-extra">
+																<xf:button href="javascript:"
+																	class="button--small button--link js-removeMessage">
+																	{{ phrase('remove') }}
+																</xf:button>
+															</span>
+														</div>
+													</div>
+
+													<article class="message-body">
+														<xf:if is="$quote === true">
+															{{ bb_code($message.{$messageKey}, $bbCodeContext, $message) }}
+														<xf:else />
+															{{ bb_code($quote, $bbCodeContext, $message) }}
+														</xf:if>
+													</article>
+
+													<div class="message-gradient"></div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</li>
+							</xf:foreach>
+						</xf:if>
+					</xf:foreach>
+				</ol>
+				<xf:hiddenval name="message_ids" value="" />
+			</div>
+			<div class="block-footer">
+				<span class="block-footer-controls"><xf:button class="button--primary button--small u-pullRight js-quoteMessages" icon="quote">
+					{{ phrase('quote_messages') }}
+				</xf:button></span>
+			</div>
+		</div>
+	</div>
+</xf:macro>
+
+<xf:macro id="button"
+	arg-href="!"
+	arg-messageSelector="!"
+	arg-storageKey="!"
+	arg-addMessage="{{ phrase('multiquote_add_message') }}"
+	arg-removeMessage="{{ phrase('multiquote_remove_message') }}"
+	arg-row="{{ false }}">
+
+	<xf:js src="xf/action.js, xf/message.js" min="1" />
+	<xf:set var="$button">
+		<xf:button class="button--link button--multiQuote is-hidden"
+			data-xf-init="multi-quote"
+			data-href="{$href}"
+			data-message-selector="{$messageSelector}"
+			data-storage-key="{$storageKey}"
+			data-add-message="{$addMessage}"
+			data-remove-message="{$removeMessage}"
+			icon="quote">
+			{{ phrase('insert_quotes...') }}
+		</xf:button>
+	</xf:set>
+	<xf:if is="$row">
+		<xf:formrow label="">
+			{$button|raw}
+		</xf:formrow>
+	<xf:else />
+		{$button|raw}
+	</xf:if>
+</xf:macro>

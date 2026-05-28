@@ -1,0 +1,321 @@
+<xf:macro id="custom_fields_view"
+	arg-type="!"
+	arg-group="!"
+	arg-set="!"
+	arg-onlyInclude="{{ null }}"
+	arg-additionalFilters="{{ [] }}"
+	arg-wrapperClass=""
+	arg-valueClass="pairs pairs--columns pairs--fixedSmall pairs--customField">
+
+	<xf:if is="$wrapperClass">
+		<xf:if contentcheck="true">
+			<div class="{$wrapperClass}">
+				<xf:contentcheck>
+					<xf:macro name="custom_fields_values"
+						arg-type="{$type}"
+						arg-group="{$group}"
+						arg-set="{$set}"
+						arg-onlyInclude="{$onlyInclude}"
+						arg-additionalFilters="{$additionalFilters}"
+						arg-valueClass="{$valueClass}" />
+				</xf:contentcheck>
+			</div>
+		</xf:if>
+	<xf:else />
+		<xf:if contentcheck="true">
+			<xf:contentcheck>
+				<xf:macro name="custom_fields_values"
+					arg-type="{$type}"
+					arg-group="{$group}"
+					arg-set="{$set}"
+					arg-onlyInclude="{$onlyInclude}"
+					arg-additionalFilters="{$additionalFilters}"
+					arg-valueClass="{$valueClass}" />
+			</xf:contentcheck>
+		</xf:if>
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="custom_fields_values"
+	arg-type="!"
+	arg-group="!"
+	arg-set="!"
+	arg-onlyInclude="{{ null }}"
+	arg-additionalFilters="{{ [] }}"
+	arg-valueClass="pairs pairs--columns pairs--fixedSmall pairs--customField">
+
+	<xf:foreach loop="$xf.app.getCustomFields({$type}, {$group}, {$onlyInclude}, {$additionalFilters})" key="$fieldId" value="$fieldDefinition">
+		<xf:if is="$fieldDefinition.hasValue({$set.{$fieldDefinition.field_id}})">
+			<xf:set var="$fieldValue"><xf:trim><xf:macro id="custom_field_value"
+				arg-definition="{$fieldDefinition}"
+				arg-value="{$set.{$fieldDefinition.field_id}}" />
+				</xf:trim></xf:set>
+
+			<xf:if is="$fieldDefinition.wrapper_template">
+				{$fieldDefinition.getFormattedOutput($fieldValue)|raw}
+			<xf:else />
+				<dl class="{$valueClass}" data-field="{$fieldId}">
+					<dt>{$fieldDefinition.title}</dt>
+					<dd>{$fieldValue}</dd>
+				</dl>
+			</xf:if>
+		</xf:if>
+	</xf:foreach>
+</xf:macro>
+
+<xf:macro id="custom_field_value" arg-definition="!" arg-value="!">
+	<xf:if is="$definition.field_type == 'stars'">
+		<xf:macro id="rating_macros::stars" arg-rating="{$value}" />
+	<xf:else />
+		<xf:if is="$definition.match_type == 'date'">
+			<xf:macro id="custom_field_value_date" arg-date="{$value}" />
+		<xf:elseif is="$definition.match_type == 'color'" />
+			<xf:macro id="custom_field_value_color" arg-color="{$value}" />
+		<xf:else />
+			{$definition.getFormattedValue($value)|raw}
+		</xf:if>
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="custom_field_value_date"
+	arg-date="!">
+
+	{{ date(date_from_format('Y-m-d', $date)) }}
+</xf:macro>
+
+<xf:macro id="custom_field_value_color"
+	arg-color="!">
+
+	<span class="colorChip" data-xf-init="tooltip" title="{$color}">
+		<span class="colorChip-inner" style="background-color: {$color}">
+			<span class="colorChip-value">{$color}</span>
+		</span>
+	</span>
+</xf:macro>
+
+<xf:macro id="custom_fields_edit"
+	arg-type="!"
+	arg-group="{{ null }}"
+	arg-set="!"
+	arg-editMode="user"
+	arg-onlyInclude="{{ null }}"
+	arg-additionalFilters="{{ [] }}"
+	arg-rowType=""
+	arg-rowClass=""
+	arg-namePrefix="custom_fields"
+	arg-requiredOnly="{{ false }}">
+
+	<xf:foreach loop="$xf.app.getCustomFieldsForEdit({$type}, {$set}, {$editMode}, {$group}, {$onlyInclude}, {$additionalFilters})" key="$fieldId" value="$fieldDefinition">
+		<xf:if is="!$requiredOnly OR ($requiredOnly AND $fieldDefinition.required)">
+			<xf:set var="$controlId" value="{{
+				in_array($fieldDefinition.field_type, ['textbox', 'textarea', 'select', 'multiselect', 'date', 'stars', 'color'])
+				? unique_id()
+				: '' }}" />
+			<xf:set var="$labelId" value="{{
+				in_array($fieldDefinition.field_type, ['radio', 'checkbox'])
+				? unique_id()
+				: '' }}" />
+
+			<xf:formrow label="{$fieldDefinition.title}"
+				explain="{$fieldDefinition.description}"
+				hint="{{ $fieldDefinition.isRequired($editMode) ? phrase('required') : '' }}"
+				rowtype="{$rowType} customField {{ in_array($fieldDefinition.field_type, ['textbox', 'textarea', 'bbcode', 'select']) ? 'input' : '' }}"
+				rowclass="{$rowClass}"
+				labelid="{$labelId}"
+				controlid="{$controlId}"
+				data-field="{$fieldDefinition.field_id}">
+
+				<xf:macro id="custom_fields_edit_{$fieldDefinition.field_type}"
+					arg-set="{$set}"
+					arg-definition="{$fieldDefinition}"
+					arg-editMode="{$editMode}"
+					arg-refId="{{ $controlId ?: $labelId }}"
+					arg-namePrefix="{$namePrefix}" />
+			</xf:formrow>
+		</xf:if>
+	</xf:foreach>
+</xf:macro>
+
+<xf:macro id="custom_fields_edit_groups"
+	arg-type="!"
+	arg-groups="!"
+	arg-set="!"
+	arg-editMode="user"
+	arg-onlyInclude="{{ null }}"
+	arg-additionalFilters="{{ [] }}"
+	arg-rowType=""
+	arg-namePrefix="custom_fields"
+	arg-requiredOnly="">
+
+	<xf:foreach loop="$groups" value="$group">
+		<xf:macro id="custom_fields_edit"
+			arg-type="{$type}"
+			arg-group="{$group}"
+			arg-set="{$set}"
+			arg-editMode="{$editMode}"
+			arg-onlyInclude="{$onlyInclude}"
+			arg-additionalFilters="{$additionalFilters}"
+			arg-rowType="{$rowType}"
+			arg-namePrefix="{$namePrefix}"
+			arg-requiredOnly="{$requiredOnly}" />
+	</xf:foreach>
+</xf:macro>
+
+<xf:macro id="custom_fields_edit_textbox" arg-set="!" arg-definition="!" arg-editMode="!" arg-refId="" arg-namePrefix="custom_fields">
+
+	<xf:if is="$definition.match_type == 'date'">
+
+		<xf:dateinput name="{$namePrefix}[{$definition.field_id}]" value="{$set.{$definition.field_id}}"
+			data-field="{$definition.field_id}"
+			maxlength="{{ $definition.max_length ? $definition.max_length : '' }}"
+			required="{{ $definition.isRequired($editMode) ? 'required' : '' }}"
+			id="{$refId}"
+			class="field_{$definition.field_id}" />
+
+	<xf:elseif is="$definition.match_type == 'color'" />
+
+		<xf:macro id="color_picker_macros::color_picker"
+			arg-name="{$namePrefix}[{$definition.field_id}]"
+			arg-value="{$set.{$definition.field_id}}"
+			arg-mapName=""
+			arg-row="{{ false }}"
+			arg-controlId="{$refId}"
+			arg-required="{$definition.isRequired($editMode)}" />
+
+	<xf:elseif is="$definition.match_type == 'number'" />
+
+		<xf:set var="$step" value="1" />
+
+		<xf:if is="$definition.match_params.number_integer">
+			<xf:if is="$definition.match_params.number_min >= 0">
+				<xf:set var="$pattern" value="\d*" />
+			</xf:if>
+		<xf:else />
+			<xf:set var="$step" value="any" />
+		</xf:if>
+		<xf:if is="$definition.match_params.number_min !== ''">
+			<xf:set var="$min" value="{$definition.match_params.number_min}" />
+		</xf:if>
+		<xf:if is="$definition.match_params.number_max !== ''">
+			<xf:set var="$max" value="{$definition.match_params.number_max}" />
+		</xf:if>
+
+		<xf:numberbox name="{$namePrefix}[{$definition.field_id}]" value="{$set.{$definition.field_id}}"
+			maxlength="{{ $definition.max_length ? $definition.max_length : '' }}"
+			pattern="{$pattern}"
+			default=""
+			min="{$min}"
+			max="{$max}"
+			step="{$step}"
+			required="{{ $definition.isRequired($editMode) ? 'required' : '' }}"
+			id="{$refId}"
+			class="field_{$definition.field_id}" />
+
+	<xf:else />
+
+		<xf:if is="in_array($definition.match_type, ['regex', 'alphanumeric'])">
+
+			<xf:set var="$type" value="text" />
+			<xf:set var="$pattern" value="{{ $definition.match_type == 'regex' ? $definition.match_params.regex : '\w+' }}" />
+			<xf:set var="$title">{{ phrase('please_enter_value_that_matches_required_format') }}</xf:set>
+
+		<xf:elseif is="in_array($definition.match_type, ['date', 'email', 'url', 'color'])" />
+
+			<xf:set var="$type" value="{$definition.match_type}" />
+
+		<xf:else />
+
+			<xf:set var="$type" value="text" />
+
+		</xf:if>
+
+		<xf:textbox name="{$namePrefix}[{$definition.field_id}]" value="{$set.{$definition.field_id}}"
+			type="{$type}"
+			maxlength="{{ $definition.max_length ? $definition.max_length : '' }}"
+			pattern="{$pattern}"
+			title="{$title}"
+			min="{$min}"
+			max="{$max}"
+			step="{$step}"
+			required="{{ $definition.isRequired($editMode) ? 'required' : '' }}"
+			id="{$refId}"
+			class="field_{$definition.field_id}" />
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="custom_fields_edit_textarea" arg-set="!" arg-definition="!" arg-editMode="!" arg-refId="" arg-namePrefix="custom_fields">
+
+	<xf:textarea name="{$namePrefix}[{$definition.field_id}]" value="{$set.{$definition.field_id}}"
+		maxlength="{{ $definition.max_length ? $definition.max_length : '' }}"
+		autosize="true"
+		required="{{ $definition.isRequired($editMode) ? 'required' : '' }}"
+		id="{$refId}"
+		class="field_{$definition.field_id}" />
+</xf:macro>
+
+<xf:macro id="custom_fields_edit_bbcode" arg-set="!" arg-definition="!" arg-editMode="!" arg-refId="" arg-namePrefix="custom_fields">
+
+	<xf:editor name="{$namePrefix}[{$definition.field_id}]" value="{$set.{$definition.field_id}}"
+		previewable="0"
+		data-min-height="80"
+		data-attachment-target="false"
+		class="field_{$definition.field_id}" />
+</xf:macro>
+
+<xf:macro id="custom_fields_edit_select" arg-set="!" arg-definition="!" arg-editMode="!" arg-refId="" arg-multi="" arg-namePrefix="custom_fields">
+
+	<xf:select name="{$namePrefix}[{$definition.field_id}]"
+		value="{{ $set.{$definition.field_id} === null ? '' : {$set.{$definition.field_id}} }}"
+		multiple="{$multi}"
+		id="{$refId}"
+		class="field_{$definition.field_id}">
+			<xf:option value="" />
+			<xf:options source="$definition.field_choices" />
+	</xf:select>
+</xf:macro>
+
+<xf:macro id="custom_fields_edit_radio" arg-set="!" arg-definition="!" arg-editMode="!" arg-refId="" arg-namePrefix="custom_fields">
+
+	<xf:radio name="{$namePrefix}[{$definition.field_id}]"
+		value="{{ $set.{$definition.field_id} === null ? '' : {$set.{$definition.field_id}} }}"
+		class="field_{$definition.field_id}"
+		role="radiogroup" aria-labelledby="{$refId}"
+		listclass="listColumns">
+			<xf:if is="!$definition.isRequired($editMode)">
+				<xf:option value="">{{ phrase('no_selection') }}</xf:option>
+			</xf:if>
+			<xf:foreach loop="$definition.field_choices" key="$value" value="$label">
+				<xf:option value="{$value}" required="{{ $definition.isRequired($editMode) ? 'required' : '' }}">{$label}</xf:option>
+			</xf:foreach>
+	</xf:radio>
+</xf:macro>
+
+<xf:macro id="custom_fields_edit_checkbox" arg-set="!" arg-definition="!" arg-editMode="!" arg-refId="" arg-namePrefix="custom_fields">
+
+	<xf:checkbox name="{$namePrefix}[{$definition.field_id}]" value="{$set.{$definition.field_id}}"
+		required="{{ $definition.isRequired($editMode) ? 'required' : '' }}"
+		role="group" aria-labelledby="{$refId}"
+		listclass="field_{$definition.field_id} listColumns">
+			<xf:options source="$definition.field_choices" />
+	</xf:checkbox>
+</xf:macro>
+
+<xf:macro id="custom_fields_edit_multiselect" arg-set="!" arg-definition="!" arg-editMode="!" arg-refId="" arg-namePrefix="custom_fields">
+
+	<xf:macro id="custom_fields_edit_select"
+		arg-set="{$set}"
+		arg-definition="{$definition}"
+		arg-editMode="{$editMode}"
+		arg-refId="{$refId}"
+		arg-multi="1"
+		arg-namePrefix="{$namePrefix}" />
+</xf:macro>
+
+<xf:macro id="custom_fields_edit_stars" arg-set="!" arg-definition="!" arg-editMode="!" arg-refId="" arg-namePrefix="custom_fields">
+	<xf:macro id="rating_macros::rating"
+		arg-name="{$namePrefix}[{$definition.field_id}]"
+		arg-controlId="{$refId}"
+		arg-currentRating="{$set.{$definition.field_id}}"
+		arg-deselectable="{{ $definition.isRequired($editMode) ? 'false' : 'true' }}"
+		arg-row="{{ false }}" />
+</xf:macro>

@@ -1,0 +1,67 @@
+<xf:title page="{$page}">{{ phrase('blacktea_steamauth_active_players') }}</xf:title>
+
+<xf:js src="xf/inline_mod.js" min="1" />
+
+<div class="block" data-xf-init="inline-mod" data-type="active_users" data-href="{{ link('inline-mod') }}">
+	<div class="block-outer">
+		<xf:pagenav
+			page="{$page}" perpage="{$perPage}" total="{$total}"
+			link="steam/active-players"
+			wrapperclass="block-outer-main" />
+	</div>
+
+	<div class="block-container">
+		<div class="block-body">
+			<xf:if is="$userPlaytimes is not empty">
+				<div class="structItemContainer">
+					<xf:foreach loop="$userPlaytimes" value="$userPlaytime">
+						<xf:css src="structured_list.less" />
+						<div class="structItem js-inlineModContainer">
+							<div class="structItem-cell structItem-cell--icon">
+								<div class="structItem-iconContainer">
+									<xf:avatar user="{$users.{$userPlaytime.user_id}}" size="s" />
+								</div>
+							</div>
+							<div class="structItem-cell structItem-cell--main" data-xf-init="touch-proxy">
+								<a href="{{ link('members', $users.{$userPlaytime.user_id}) }}" class="structItem-title">{$users.{$userPlaytime.user_id}.username}</a>
+								<div class="structItem-minor">
+									<ul class="structItem-parts">
+										<li>
+											<ul class="listInline listInline--comma listInline--selfInline">
+												<li>
+													<a href="https://steamcommunity.com/profiles/{$userPlaytime.provider_key}" target="_blank">
+														{$userPlaytime.provider_key}
+													</a>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<div class="structItem-cell structItem-cell--latest structItem-cell--meta">
+								<dl class="pairs pairs--justified">
+									<dt>{{ phrase('blacktea_steamauth_recent_hours') }}</dt>
+									<dd>
+										<a href="https://steamcommunity.com/profiles/{$userPlaytime.provider_key}/games/?tab=recent" target="_blank">
+										{$userPlaytime.recent_hours_formatted} {{ phrase('blacktea_steamauth_hours') }}
+										</a>
+									</dd>
+								</dl>
+								<dl class="pairs pairs--justified structItem-minor">
+									<dt>{{ phrase('blacktea_steamauth_last_updated') }}</dt>
+									<dd><xf:date time="{$userPlaytime.last_updated}" /></dd>
+								</dl>
+							</div>
+						</div>
+					</xf:foreach>
+				</div>
+			<xf:else />
+				<div class="block-row">{{ phrase('blacktea_steamauth_no_active_players') }}</div>
+			</xf:if>
+		</div>
+	</div>
+
+	<xf:pagenav page="{$page}" perpage="{$perPage}" total="{$total}"
+		link="steam/active-players"
+		wrapperclass="block-outer block-outer--after" />
+</div>

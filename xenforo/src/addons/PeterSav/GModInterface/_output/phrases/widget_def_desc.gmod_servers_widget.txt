@@ -1,0 +1,1 @@
+Small widget with servers map, ip address, and join button.

@@ -1,0 +1,47 @@
+{
+    "gmod_interfacer_db_host.json": {
+        "hash": "26e4d17e84c376d8cac3ff2f0c267b1a"
+    },
+    "gmod_interfacer_db_name.json": {
+        "hash": "7799cb3609384455d372b2e0e0c78def"
+    },
+    "gmod_interfacer_db_password.json": {
+        "hash": "21928b543d8167d79ccc82493954593c"
+    },
+    "gmod_interfacer_db_port.json": {
+        "hash": "1c75172fa5691434ac7907480ea5991b"
+    },
+    "gmod_interfacer_db_username.json": {
+        "hash": "6e6d2d8bfdeedf211dc6b4b2061282d2"
+    },
+    "gmod_interfacer_discord_bot_client_id.json": {
+        "hash": "12dda16af1079a351eb1e1a34a9505af"
+    },
+    "gmod_interfacer_discord_bot_client_secret.json": {
+        "hash": "784feb94adc8e7ed8746641e9911bfa4"
+    },
+    "gmod_interfacer_discord_bot_token.json": {
+        "hash": "11ad9392b982acf88e6ed41538733932"
+    },
+    "gmod_interfacer_discord_server_guild.json": {
+        "hash": "270ebfff1b31ef8ae47fd93ce0900278"
+    },
+    "gmod_interfacer_store_active.json": {
+        "hash": "cb6022b17ccbab74d33dea42009221fc"
+    },
+    "gmod_interfacer_store_production_check.json": {
+        "hash": "0e8a1e29db2f40754991c02aacbd70d0"
+    },
+    "gmod_interfacer_store_production_client_id.json": {
+        "hash": "e25ad8b5d8046742c393eed4aa5e1d59"
+    },
+    "gmod_interfacer_store_production_secret_key.json": {
+        "hash": "fd11f103211252b0a5f7e59be3abe128"
+    },
+    "gmod_interfacer_store_sandbox_client_id.json": {
+        "hash": "b8f0d66fc17937c8745f3c5cfe9bcf77"
+    },
+    "gmod_interfacer_store_sandbox_secret_key.json": {
+        "hash": "be338e963060c8f8188b302641472f9e"
+    }
+}

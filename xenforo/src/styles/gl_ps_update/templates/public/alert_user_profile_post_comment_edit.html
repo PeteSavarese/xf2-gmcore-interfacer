@@ -1,0 +1,2 @@
+{{ phrase('your_comment_on_xs_profile_post_was_edited', {'user': '<a href="' . base_url($extra.link) . '" class="fauxBlockLink-blockLink">' . $extra.postUser . '</a>'}) }}
+<xf:if is="$extra.reason">{{ phrase('reason:') }} {$extra.reason}</xf:if>

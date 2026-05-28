@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation>
+  <navigation_entry navigation_id="steamauth" display_order="210" navigation_type_id="basic" enabled="0"><![CDATA[{"link":"{{ link('steam\/active-players') }}","display_condition":"","extra_attributes":[]}]]></navigation_entry>
+  <navigation_entry navigation_id="steamauthActiveGames" parent_navigation_id="steamauth" display_order="200" navigation_type_id="basic" enabled="1"><![CDATA[{"link":"{{ link('steam\/active-games') }}","display_condition":"","extra_attributes":[]}]]></navigation_entry>
+  <navigation_entry navigation_id="steamauthActivePlayers" parent_navigation_id="steamauth" display_order="100" navigation_type_id="basic" enabled="1"><![CDATA[{"link":"{{ link('steam\/active-players') }}","display_condition":"","extra_attributes":[]}]]></navigation_entry>
+  <navigation_entry navigation_id="steamauthOwnedGames" parent_navigation_id="steamauth" display_order="400" navigation_type_id="basic" enabled="1"><![CDATA[{"link":"{{ link('steam\/owned-games') }}","display_condition":"","extra_attributes":[]}]]></navigation_entry>
+  <navigation_entry navigation_id="steamauthPlayedGames" parent_navigation_id="steamauth" display_order="300" navigation_type_id="basic" enabled="1"><![CDATA[{"link":"{{ link('steam\/played-games') }}","display_condition":"","extra_attributes":[]}]]></navigation_entry>
+</navigation>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<permissions>
+  <permission permission_group_id="steamauth" permission_id="changePrivacy" permission_type="flag" interface_group_id="steamauth" display_order="30"/>
+  <permission permission_group_id="steamauth" permission_id="disassociate" permission_type="flag" interface_group_id="steamauth" display_order="40"/>
+  <permission permission_group_id="steamauth" permission_id="viewAnalytics" permission_type="flag" interface_group_id="steamauth" display_order="5"/>
+  <permission permission_group_id="steamauth" permission_id="viewBanner" permission_type="flag" interface_group_id="steamauth" display_order="15"/>
+  <permission permission_group_id="steamauth" permission_id="viewHiddenBanner" permission_type="flag" interface_group_id="steamauth" display_order="25"/>
+  <permission permission_group_id="steamauth" permission_id="viewHiddenProfile" permission_type="flag" interface_group_id="steamauth" display_order="20"/>
+  <permission permission_group_id="steamauth" permission_id="viewProfile" permission_type="flag" interface_group_id="steamauth" display_order="10"/>
+</permissions>

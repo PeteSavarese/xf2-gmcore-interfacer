@@ -1,0 +1,23 @@
+<xf:title>Discord Role Mapping</xf:title>
+
+<xf:pageaction>
+    <xf:button href="/admin.php?discord/edit" icon="add">Add role mapping</xf:button>
+</xf:pageaction>
+
+<div class="block-container">
+    <div class="block-body">
+        <xf:datalist>
+            <xf:foreach loop="$discordRoleMappings" value="$mapping">
+                <xf:set var="$role" value="{$guildRoles.{$mapping.discord_role_id}}"/>
+                <xf:set var="$userGroup" value="{$userGroups.{$mapping.forum_group_id}}"/>
+
+                <xf:datarow
+                        label="{$role.name}"
+                        explain="Discord Role: {$role.name} ({$role.id}) → User Group: {$userGroup}"
+                        href="/admin.php?discord/{$mapping.mapping_id}/edit"
+                        delete="/admin.php?discord/{$mapping.mapping_id}/delete">
+                </xf:datarow>
+            </xf:foreach>
+        </xf:datalist>
+    </div>
+</div>

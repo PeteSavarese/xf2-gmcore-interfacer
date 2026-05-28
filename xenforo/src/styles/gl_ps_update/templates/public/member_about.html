@@ -1,0 +1,158 @@
+<xf:title>{$user.username}</xf:title>
+
+<div class="block">
+	<div class="block-container">
+		<div class="block-body">
+		<xf:if contentcheck="true">
+		<xf:contentcheck>
+			<xf:if is="$user.Profile.about != ''">
+				<div class="block-row block-row--separated">
+					{{ bb_code($user.Profile.about, 'user:about', $user) }}
+				</div>
+			</xf:if>
+
+			<xf:if contentcheck="true">
+				<div class="block-row block-row--separated">
+				<xf:contentcheck>
+					<xf:if contentcheck="true">
+						<dl class="pairs pairs--columns pairs--fixedSmall">
+							<dt>{{ phrase('birthday') }}</dt>
+							<dd>
+								<xf:contentcheck>
+									<xf:if is="$user.Profile.birthday.timeStamp">
+										{{ date($user.Profile.birthday.timeStamp, $user.Profile.birthday.format) }}
+										<xf:if is="$user.Profile.birthday.age">
+											{{ parens(phrase('age:') . ' ' . {$user.Profile.birthday.age}) }}
+										</xf:if>
+									</xf:if>
+								</xf:contentcheck>
+							</dd>
+						</dl>
+					</xf:if>
+
+					<xf:if is="$user.Profile.website">
+						<dl class="pairs pairs--columns pairs--fixedSmall">
+							<dt>{{ phrase('website') }}</dt>
+							<dd>
+								<a href="{$user.Profile.website}" rel="nofollow" target="_blank">{$user.Profile.website|url_display}</a>
+							</dd>
+						</dl>
+					</xf:if>
+
+					<xf:if is="$user.Profile.location">
+						<dl class="pairs pairs--columns pairs--fixedSmall">
+							<dt>{{ phrase('location') }}</dt>
+							<dd>
+								<xf:if is="$xf.options.geoLocationUrl">
+									<a href="{{ link('misc/location-info', '', {'location': $user.Profile.location}) }}" rel="nofollow noreferrer" target="_blank" class="u-concealed">{$user.Profile.location}</a>
+								<xf:else />
+									{$user.Profile.location}
+								</xf:if>
+							</dd>
+						</dl>
+					</xf:if>
+
+					<xf:macro id="custom_fields_macros::custom_fields_view"
+						arg-type="users"
+						arg-group="personal"
+						arg-set="{$user.Profile.custom_fields}"
+						arg-additionalFilters="{{ ['profile'] }}" />
+				</xf:contentcheck>
+				</div>
+			</xf:if>
+
+			<xf:if is="$user.canViewIdentities()">
+				<xf:if contentcheck="true">
+					<div class="block-row block-row--separated">
+						<h4 class="block-textHeader">{{ phrase('contact') }}</h4>
+						<xf:contentcheck>
+							<xf:if is="$xf.visitor.canStartConversationWith($user)">
+								<dl class="pairs pairs--columns pairs--fixedSmall">
+									<dt>{{ phrase('direct_message') }}</dt>
+									<dd><a href="{{ link('direct-messages/add', '', {'to': $user.username}) }}">{{ phrase('send_direct_message') }}</a></dd>
+								</dl>
+							</xf:if>
+
+							<xf:macro id="custom_fields_macros::custom_fields_view"
+								arg-type="users"
+								arg-group="contact"
+								arg-set="{$user.Profile.custom_fields}"
+								arg-additionalFilters="{{ ['profile'] }}" />
+						</xf:contentcheck>
+					</div>
+				</xf:if>
+			</xf:if>
+
+			<xf:if is="$user.Profile.signature != ''">
+				<div class="block-row block-row--separated">
+					<h4 class="block-textHeader">{{ phrase('signature') }}</h4>
+					{{ bb_code($user.Profile.signature, 'user:signature', $user) }}
+				</div>
+			</xf:if>
+
+			<xf:if is="$followingCount">
+				<xf:if contentcheck="true">
+					<div class="block-row block-row--separated">
+						<h4 class="block-textHeader">{{ phrase('member_is_following') }}</h4>
+						<ul class="listHeap">
+							<xf:contentcheck>
+								<xf:foreach loop="$following" value="$followingUser" if="!$xf.visitor.isIgnoring($followingUser.user_id)">
+									<li>
+										<xf:avatar user="$followingUser" size="s" />
+									</li>
+								</xf:foreach>
+							</xf:contentcheck>
+						</ul>
+						<xf:if is="$followingCount > count($following)">
+							<a href="{{ link('members/following', $user) }}" rel="nofollow" data-xf-click="overlay">{{ phrase('ellipsis_and_x_more', {'count': $followingCount - count($following)}) }}</a>
+						</xf:if>
+					</div>
+				</xf:if>
+			</xf:if>
+
+			<xf:if is="$followersCount">
+				<xf:if contentcheck="true">
+					<div class="block-row block-row--separated">
+						<h4 class="block-textHeader">{{ phrase('followers') }}</h4>
+						<ul class="listHeap">
+							<xf:contentcheck>
+								<xf:foreach loop="$followers" value="$followerUser" if="!$xf.visitor.isIgnoring($followerUser.user_id)">
+									<li>
+										<xf:avatar user="$followerUser" size="s" />
+									</li>
+								</xf:foreach>
+							</xf:contentcheck>
+						</ul>
+						<xf:if is="$followersCount > count($followers)">
+							<a href="{{ link('members/followers', $user) }}" rel="nofollow" data-xf-click="overlay">{{ phrase('ellipsis_and_x_more', {'count': $followersCount - count($followers)}) }}</a>
+						</xf:if>
+					</div>
+				</xf:if>
+			</xf:if>
+
+			<xf:if is="$trophies is not empty AND $xf.options.enableTrophies">
+				<div class="block-row block-row--separated">
+					<h4 class="block-textHeader">{{ phrase('trophies') }}</h4>
+					<ol class="listPlain">
+						<xf:foreach loop="$trophies" value="$trophy">
+							<li class="block-row">
+								<div class="contentRow">
+									<span class="contentRow-figure contentRow-figure--text contentRow-figure--fixedSmall">{$trophy.Trophy.trophy_points}</span>
+									<div class="contentRow-main">
+										<span class="contentRow-extra"><xf:date time="{$trophy.award_date}" /></span>
+										<h2 class="contentRow-header">{$trophy.Trophy.title}</h2>
+										<div class="contentRow-minor">{$trophy.Trophy.description|raw}</div>
+									</div>
+								</div>
+							</li>
+						</xf:foreach>
+					</ol>
+				</div>
+			</xf:if>
+		</xf:contentcheck>
+		<xf:else />
+			<div class="block-row block-row--separated">{{ phrase('x_has_not_provided_any_additional_information', {'name': $user.username}) }}</div>
+		</xf:if>
+		</div>
+	</div>
+</div>

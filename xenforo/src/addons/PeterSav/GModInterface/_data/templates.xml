@@ -1,0 +1,4402 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+  <template type="admin" title="gmod_admin_store_delete_confirm" version_id="1011000" version_string="1.1.10"><![CDATA[<xf:title>Delete store rank</xf:title>
+
+<xf:form action="{{ link('gl-store/delete', {'group_id': $group.upgrade_id}) }}" ajax="true" class="block">
+    <div class="block-container">
+        <div class="block-body">
+            <div class="block-row">
+                Are you sure you want to delete the store rank <strong>{$group.title}</strong>?
+            </div>
+        </div>
+        <xf:submitrow submit="Delete" icon="delete" sticky="true" />
+    </div>
+</xf:form>
+]]></template>
+  <template type="admin" title="gmod_admin_store_editgroup" version_id="1011000" version_string="1.1.10"><![CDATA[<xf:title>Add Store Rank</xf:title>
+
+<xf:form action="{{ link('gl-store/save', {'group_id': $group.upgrade_id}) }}" ajax="true" class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:textboxrow name="title" value="{$group.title}"
+				label="Title" />
+
+			<xf:textarearow name="description" value="{$group.description}" autosize="true"
+				label="HTML for Rank" />
+
+			<xf:textboxrow name="rank_image" value="{$group.rank_image}"
+				label="Rank Image"
+				hint="Image must be uploaded to /images/forum/store_ranks/ folder" />
+
+			<xf:macro id="display_order_macros::row" arg-value="{{ $group.rank_priority ?: 1 }}" />
+
+			<xf:formrow rowtype="input"
+				label="{{ phrase('cost') }} (USD)">
+
+				<div class="inputGroup">
+					<xf:textbox name="price" value="{{ $group.price ?: 5 }}" style="width: 120px" />
+				</div>
+			</xf:formrow>
+			<xf:radiorow name="length_type" label="{{ phrase('length') }}">
+				<xf:option value="permanent" selected="$group.length_unit == ''">{{ phrase('permanent') }}</xf:option>
+				<xf:option value="timed" selected="$group.length_unit != ''" label="{{ phrase('for_length:') }}">
+					<xf:dependent>
+						<div class="inputGroup">
+							<xf:numberbox name="length_unit" value="{{ $group.length ?: 1 }}" min="1" />
+							<span class="inputGroup-splitter"></span>
+							<xf:select name="length_unit" value="{{ ($group.length_unit == 'permanent') ? 'months' : $group.length_unit }}" class="input--inline">
+								<xf:option value="day">{{ phrase('days') }}</xf:option>
+								<xf:option value="month">{{ phrase('months') }}</xf:option>
+								<xf:option value="year">{{ phrase('years') }}</xf:option>
+							</xf:select>
+						</div>
+
+					</xf:dependent>
+					<xf:comment>
+						<xf:dependent>
+							<xf:checkbox>
+								<xf:option name="recurring" value="1" selected="$upgrade.recurring"
+									label="{{ phrase('recurring_payments') }}"
+									hint="{{ phrase('recurring_payments_explain') }}" />
+							</xf:checkbox>
+						</xf:dependent>
+					</xf:comment>
+				</xf:option>
+			</xf:radiorow>
+
+			<xf:radiorow name="group_id" label="{{ phrase('additional_user_groups') }}" value="{$group.group_id}">
+				<xf:options source="$userGroups" />
+			</xf:radiorow>
+
+			<xf:checkboxrow>
+				<xf:option name="can_purchase" selected="$group.can_purchase">{{ phrase('can_be_purchased') }}</xf:option>
+			</xf:checkboxrow>
+
+			<xf:submitrow icon="save" sticky="true" />
+		</div>
+	</div>
+</xf:form>]]></template>
+  <template type="admin" title="gmod_admin_store_groups_list" version_id="1011000" version_string="1.1.10"><![CDATA[<xf:title>Manage Store Ranks</xf:title>
+
+<xf:pageaction>
+    <xf:button href="/admin.php?gl-store/add" icon="add">Add store rank</xf:button>
+</xf:pageaction>
+
+<div class="block-container">
+    <div class="block-body">
+        <xf:datalist>
+            <xf:foreach loop="$groups" value="$group">
+                <xf:if is="$group.length != 0">
+                    <xf:set var="$hintPrice" value="{$group.price} per {$group.length_unit}"/>
+                    <xf:else/>
+                    <xf:set var="$hintPrice" value="{$group.price}"/>
+                </xf:if>
+
+                <xf:datarow
+                        label="{$group.title}"
+                        hint="{$hintPrice}"
+                        href="/admin.php?gl-store/{$group.upgrade_id}/editgroup"
+                        delete="{{ link('gl-store/delete', {'group_id': $group.upgrade_id}) }}">
+                </xf:datarow>
+            </xf:foreach>
+        </xf:datalist>
+    </div>
+</div>]]></template>
+  <template type="admin" title="gmod_admin_store_manual_apply" version_id="1011000" version_string="1.1.10"><![CDATA[<xf:title>Manual Rank Apply</xf:title>
+
+<xf:if is="$successMsg">
+    <div class="blockMessage blockMessage--success">{$successMsg}</div>
+</xf:if>
+
+<div class="block">
+    <div class="block-container">
+        <h3 class="block-formSectionHeader">PayPal Lookup</h3>
+        <div class="block-body">
+            <p class="block-row u-muted">Enter a PayPal capture ID to auto-detect the rank before applying.</p>
+
+            <xf:form action="{{ link('gl-store/manualapplyfetch') }}" method="post">
+                <xf:formrow label="PayPal Capture ID" hint="17-char, e.g. 06A21469RJ8606838">
+                    <xf:textbox name="paypal_capture_id" maxlength="20" class="input--wide"
+                        value="{$fetchResult.capture_id}" />
+                </xf:formrow>
+                <xf:submitrow label="Fetch from PayPal" icon="search" />
+            </xf:form>
+
+            <xf:if is="$fetchResult">
+                <div style="margin-top: 12px; padding: 12px; background: #f8f8f8; border: 1px solid #ddd;">
+                    <strong>Capture ID:</strong> {$fetchResult.capture_id}<br>
+                    <strong>custom_id raw:</strong> {$fetchResult.custom_id}<br>
+                    <strong>Detected rank:</strong>
+                    <xf:if is="$fetchResult.rank_group">
+                        {$fetchResult.rank_group.title} (ID: {$fetchResult.rank_id})
+                    <xf:else />
+                        <span style="color:#c00;">Not recognized</span>
+                    </xf:if><br>
+                    <strong>Amount:</strong> <xf:if is="$fetchResult.amount">${$fetchResult.amount}<xf:else />Unknown</xf:if>
+                </div>
+
+                <xf:form action="{{ link('gl-store/manualapplyprocess') }}" method="post" style="margin-top:12px;">
+                    <input type="hidden" name="mode" value="paypal" />
+                    <input type="hidden" name="paypal_capture_id" value="{$fetchResult.capture_id}" />
+
+                    <xf:formrow label="Rank">
+                        <xf:select name="rank_id" class="input--inline">
+                            <xf:foreach loop="$allRanks" value="$rg">
+                                <xf:option value="{$rg.upgrade_id}" selected="$fetchResult.rank_id == $rg.upgrade_id">{$rg.title}</xf:option>
+                            </xf:foreach>
+                        </xf:select>
+                    </xf:formrow>
+                    <xf:formrow label="Purchaser username" hint="Leave blank to use your admin account">
+                        <xf:textbox name="purchaser_username" ac="single" class="input--wide" />
+                    </xf:formrow>
+                    <xf:formrow label="Receiver username">
+                        <xf:textbox name="receiver_username" ac="single" class="input--wide" />
+                    </xf:formrow>
+                    <xf:submitrow label="Apply Rank" icon="save" />
+                </xf:form>
+            </xf:if>
+        </div>
+    </div>
+</div>
+
+<div class="block">
+    <div class="block-container">
+        <h3 class="block-formSectionHeader">Fully Manual Apply</h3>
+        <div class="block-body">
+            <p class="block-row u-muted">Apply a rank with no PayPal lookup. Use this for compensation, corrections, or off-platform purchases.</p>
+
+            <xf:form action="{{ link('gl-store/manualapplyprocess') }}" method="post">
+                <input type="hidden" name="mode" value="manual" />
+
+                <xf:formrow label="Rank">
+                    <xf:select name="rank_id" class="input--inline">
+                        <xf:option value="">-- select rank --</xf:option>
+                        <xf:foreach loop="$allRanks" value="$rg">
+                            <xf:option value="{$rg.upgrade_id}">{$rg.title}</xf:option>
+                        </xf:foreach>
+                    </xf:select>
+                </xf:formrow>
+                <xf:formrow label="Purchaser username" hint="Leave blank to use your admin account">
+                    <xf:textbox name="purchaser_username" class="input--wide" />
+                </xf:formrow>
+                <xf:formrow label="Receiver username">
+                    <xf:textbox name="receiver_username" class="input--wide" />
+                </xf:formrow>
+                <xf:formrow label="PayPal reference (optional)" hint="For audit log only; no PayPal call is made">
+                    <xf:textbox name="paypal_reference" class="input--wide" />
+                </xf:formrow>
+                <xf:submitrow label="Apply Rank" icon="save" />
+            </xf:form>
+        </div>
+    </div>
+</div>
+]]></template>
+  <template type="admin" title="gmod_admin_store_purchases" version_id="1010900" version_string="1.1.9"><![CDATA[<xf:title>Store Rank Transaction Log</xf:title>
+
+<xf:form action="" class="block">
+	<div class="block-outer">
+		<div class="block-container">
+			<div class="block-body">
+				<xf:datalist>
+					<xf:foreach loop="$transactions" value="$transaction">
+						<xf:datarow>
+							<xf:cell class="dataList-cell--min dataList-cell--image dataList-cell--imageSmall" href="{{ link('users/edit', $transaction.user_ent) }}">
+								<xf:avatar user="$transaction.user_ent" size="s" href="" />
+							</xf:cell>
+
+							<xf:main href="/admin.php?gl-store/purchases/view&transaction_id={$transaction.transaction_id}" label="{$transaction.user_ent.username}" hint="{$transaction.user_ent.email}" />
+
+							<xf:if is="$transaction.receiver_user_ent AND $transaction.receiver_user_ent.user_id != $transaction.user_ent.user_id">
+								<xf:cell class="dataList-cell--min dataList-cell--image dataList-cell--imageSmall" href="{{ link('users/edit', $transaction.receiver_user_ent) }}">
+									<xf:avatar user="$transaction.receiver_user_ent" size="s" href="" />
+								</xf:cell>
+								<xf:cell>
+									<div class="u-muted">
+										<xf:fa icon="fa-gift" /> Gift to: <a href="{{ link('users/edit', $transaction.receiver_user_ent) }}">{$transaction.receiver_user_ent.username}</a>
+									</div>
+								</xf:cell>
+							<xf:else />
+								<xf:cell></xf:cell>
+								<xf:cell></xf:cell>
+							</xf:if>
+
+							<xf:cell>
+								<a href="/admin.php?gl-store/purchases/view&transaction_id={$transaction.transaction_id}">{$transaction.transaction_id}</a>
+							</xf:cell>
+
+							<xf:cell>
+								<xf:date time="{$transaction.transaction_time}" />
+							</xf:cell>
+						</xf:datarow>
+					</xf:foreach>
+				</xf:datalist>
+			</div>
+		</div>
+	</div>
+
+	<xf:pagenav
+	page="{$page}"
+	perpage="{$perPage}"
+	total="{$total}"
+	link="gl-store/purchases"
+	wrapperclass="js-filterHide block-outer block-outer--after" />
+</xf:form>
+
+	{{dump($transactions)}}]]></template>
+  <template type="admin" title="gmod_admin_store_purchases_view" version_id="1011000" version_string="1.1.10"><![CDATA[<xf:title>View Store Rank Transaction</xf:title>
+<xf:css>
+.column {
+  float: left;
+  width: 50%;
+}
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+</xf:css>
+<div class="block-container" style="padding:15px">
+	<h1 style="text-align:center">Transaction <code class="u-textSmaller">{$transactionInfoPP.id}</code></h1>
+  <div class="row">
+    <div class="column">
+      <!-- Purchaser -->
+      <div class="contentRow">
+        <span><b>Purchaser</b>:</span>
+        <div class="contentRow-figure" style="margin-left:5px">
+          <xf:avatar user="{{ userid_to_user($transactionInfoDb.purchaser_user_id) }}" size="xs" />
+        </div>
+        <div class="contentRow-main contentRow-main--close">
+          <xf:username user="{{ userid_to_user($transactionInfoDb.purchaser_user_id) }}" rich="true" />
+        </div>
+      </div>
+      <!-- Receiver -->
+      <div class="contentRow">
+        <span><b>Receiver</b>:</span>
+        <div class="contentRow-figure" style="margin-left:5px">
+          <xf:avatar user="{{ userid_to_user($transactionInfoDb.receiver_user_id) }}" size="xs" />
+        </div>
+        <div class="contentRow-main contentRow-main--close">
+          <xf:username user="{{ userid_to_user($transactionInfoDb.receiver_user_id) }}" rich="true" />
+        </div>
+      </div>
+      <!-- Rank -->
+      <xf:if is="$groupInfo">
+        <div class="contentRow">
+          <span><b>Rank Purchased</b>: {$groupInfo.title}</span>
+        </div>
+      </xf:if>
+    </div>
+    <div class="column">
+      <!-- Payment Info -->
+      <div class="contentRow">
+        <span><b>Price</b>: {$transactionLog.amount} {$transactionLog.currency}</span>
+      </div>
+			<xf:if is="$isGift">
+				<div class="contentRow">
+					<span><b>Gifted Purchase</b>: Yes</span>
+				</div>
+			</xf:if>
+			<xf:if is="$discountAmount">
+				<div class="contentRow">
+					<span><b>Discount</b>: Saved {$discountAmount} {$transactionLog.currency}<xf:if is="$discountPercent"> ({$discountPercent}% off)</xf:if></span>
+				</div>
+			</xf:if>
+      <xf:if is="{$transactionInfoPP.seller_receivable_breakdown.net_amount}">
+        <div class="contentRow">
+          <span><b>Net Amount</b>: {$transactionInfoPP.seller_receivable_breakdown.net_amount.value} {$transactionLog.currency}</span>
+        </div>
+      </xf:if>
+      <div class="contentRow">
+        <span><b>Time of Purchase</b>: <xf:date time="{$transactionInfoDb.transaction_time}" /></span>
+      </div>
+      <xf:if is="{$transactionLog.payer_id}">
+        <div class="contentRow">
+			<span><b>PayPal Payer ID</b>: <code class="u-textSmaller">{$transactionLog.payer_id}</code></span>
+        </div>
+      </xf:if>
+    </div>
+  </div>
+</div>
+<xf:if is="{$showDebug}">
+  <h3>Debug Info</h3>
+  <pre>{{ dump($transactionLog) }}</pre>
+  <pre>{{ dump($transactionInfoDb) }}</pre>
+  <pre>{{ dump($transactionInfoPP) }}</pre>
+</xf:if>]]></template>
+  <template type="admin" title="gmod_admin_store_recovery" version_id="1013000" version_string="1.1.30"><![CDATA[<xf:title>Recovery Queue</xf:title>
+
+<xf:form action="{{ link('gl-store/recoveryadd') }}" method="post" class="block">
+    <div class="block-container">
+        <h3 class="block-formSectionHeader">Add Entry to Recovery Queue</h3>
+        <div class="block-body">
+            <xf:formrow label="PayPal Capture ID" hint="17-character capture ID, e.g. 06A21469RJ8606838">
+                <xf:textbox name="paypal_capture_id" maxlength="20" class="input--wide" />
+            </xf:formrow>
+            <xf:formrow label="Payer Email">
+                <xf:textbox name="payer_email" type="email" class="input--wide" />
+            </xf:formrow>
+            <xf:formrow label="Transaction Date" hint="e.g. 2026-02-07 or MM/DD/YYYY | Used for display only">
+                <xf:textbox name="transaction_date" class="input--wide" />
+            </xf:formrow>
+            <xf:submitrow label="Fetch from PayPal &amp; Add" icon="add" />
+        </div>
+    </div>
+</xf:form>
+
+<div class="block">
+    <div class="block-container">
+        <h3 class="block-formSectionHeader">Pending &amp; Processed Entries ({{ count($entries) }})</h3>
+        <div class="block-body">
+            <xf:if is="!$entries">
+                <p class="block-row u-muted">No entries in the recovery queue yet.</p>
+            <xf:else />
+                <xf:foreach loop="$entries" value="$row">
+                    <xf:set var="$entry" value="{$row.entry}" />
+                    <div class="block-row" style="padding: 12px; border-bottom: 1px solid #eee;">
+                        <div style="display:flex; gap: 16px; align-items: flex-start; flex-wrap: wrap;">
+
+                            <div style="min-width: 200px;">
+                                <strong>Capture ID:</strong> {$entry.paypal_capture_id}<br>
+                                <strong>Date:</strong> <xf:date time="{$entry.transaction_date}" /><br>
+                                <strong>Amount:</strong> <xf:if is="$entry.amount">${$entry.amount}<xf:else />Unknown</xf:if><br>
+                                <strong>Payer email:</strong> {$entry.payer_email}
+                            </div>
+
+                            <div style="min-width: 180px;">
+                                <strong>Purchaser:</strong>
+                                <xf:if is="$row.purchaser">
+                                    <a href="{{ link('users/edit', $row.purchaser) }}">{$row.purchaser.username}</a>
+                                <xf:else />
+                                    <span class="u-muted">No match</span>
+                                </xf:if><br>
+                                <strong>Rank:</strong>
+                                <xf:if is="$row.rank_group">
+                                    {$row.rank_group.title}
+                                <xf:else />
+                                    <span style="color: #c00;">Not found</span>
+                                </xf:if>
+                            </div>
+
+                            <div>
+                                <strong>Status:</strong>
+                                <xf:if is="$entry.status == 'applied'">
+                                    <span style="color: green;">Applied</span>
+                                    | Receiver: <xf:if is="$row.receiver"><a href="{{ link('users/edit', $row.receiver) }}">{$row.receiver.username}</a><xf:else />ID {$entry.receiver_user_id}</xf:if>
+                                <xf:elseif is="$entry.status == 'skipped'" />
+                                    <span class="u-muted">Skipped</span>
+                                <xf:else />
+                                    <span style="color: #a60;">Pending</span>
+                                </xf:if>
+                            </div>
+                        </div>
+
+                        <xf:if is="$entry.status == 'pending'">
+                            <xf:form action="{{ link('gl-store/recoveryapply') }}" method="post" style="margin-top: 10px;">
+                                                <input type="hidden" name="entry_id" value="{$entry.id}" />
+                                <div style="display:flex; gap: 12px; flex-wrap: wrap; align-items: flex-end;">
+                                    <xf:if is="!$row.rank_group">
+                                        <xf:formrow label="Override Rank" rowclass="u-noMargin">
+                                            <xf:select name="rank_id_override" class="input--inline">
+                                                <xf:option value="">-- select rank --</xf:option>
+                                                <xf:foreach loop="$allRanks" value="$rg">
+                                                    <xf:option value="{$rg.upgrade_id}">{$rg.title}</xf:option>
+                                                </xf:foreach>
+                                            </xf:select>
+                                        </xf:formrow>
+                                    <xf:else />
+                                        <input type="hidden" name="rank_id_override" value="0" />
+                                    </xf:if>
+
+                                    <xf:if is="!$row.purchaser">
+                                        <xf:formrow label="Purchaser username" rowclass="u-noMargin">
+                                            <xf:textbox name="purchaser_username" ac="single" class="input--inline" style="width: 160px;" />
+                                        </xf:formrow>
+                                    <xf:else />
+                                        <input type="hidden" name="purchaser_username" value="" />
+                                    </xf:if>
+
+                                    <xf:formrow label="Receiver username" rowclass="u-noMargin">
+                                        <xf:textbox name="receiver_username" ac="single" class="input--inline" style="width: 160px;" />
+                                    </xf:formrow>
+
+                                    <div>
+                                        <button type="submit" name="apply_action" value="apply" class="button button--primary">Apply Rank</button>
+                                        <button type="submit" name="apply_action" value="skip" class="button">Skip</button>
+                                    </div>
+                                </div>
+                            </xf:form>
+                        </xf:if>
+                    </div>
+                </xf:foreach>
+            </xf:if>
+        </div>
+    </div>
+</div>
+]]></template>
+  <template type="admin" title="gmod_discord_mapping_edit" version_id="1010900" version_string="1.1.9"><![CDATA[<xf:title>{{ $mapping.mapping_id ? 'Edit Role Mapping' : 'Add Role Mapping' }}</xf:title>
+
+<xf:form action="{{ link('discord/save', {'mapping_id': $mapping.mapping_id}) }}" ajax="true" class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:selectrow name="discord_role_id" value="{$mapping.discord_role_id}"
+				label="Discord Role"
+				explain="Select the Discord role to map to a forum user group">
+				<xf:option value="">{{ phrase('(none)') }}</xf:option>
+				<xf:foreach loop="$guildRoles" key="$roleId" value="$roleData">
+					<xf:option value="{$roleId}">{$roleData.name}</xf:option>
+				</xf:foreach>
+			</xf:selectrow>
+
+			<xf:radiorow name="forum_group_id" label="Forum User Group" value="{$mapping.forum_group_id}"
+				explain="Select the forum user group that will be assigned when a user has this Discord role">
+				<xf:options source="$userGroups" />
+			</xf:radiorow>
+
+			<xf:submitrow icon="save" sticky="true" />
+		</div>
+	</div>
+</xf:form>]]></template>
+  <template type="admin" title="gmod_discord_role_mappings" version_id="1011000" version_string="1.1.10"><![CDATA[<xf:title>Discord Role Mapping</xf:title>
+
+<xf:pageaction>
+    <xf:button href="/admin.php?discord/edit" icon="add">Add role mapping</xf:button>
+</xf:pageaction>
+
+<div class="block-container">
+    <div class="block-body">
+        <xf:datalist>
+            <xf:foreach loop="$discordRoleMappings" value="$mapping">
+                <xf:set var="$role" value="{$guildRoles.{$mapping.discord_role_id}}"/>
+                <xf:set var="$userGroup" value="{$userGroups.{$mapping.forum_group_id}}"/>
+
+                <xf:datarow
+                        label="{$role.name}"
+                        explain="Discord Role: {$role.name} ({$role.id}) → User Group: {$userGroup}"
+                        href="/admin.php?discord/{$mapping.mapping_id}/edit"
+                        delete="/admin.php?discord/{$mapping.mapping_id}/delete">
+                </xf:datarow>
+            </xf:foreach>
+        </xf:datalist>
+    </div>
+</div>]]></template>
+  <template type="admin" title="gmod_store_landing" version_id="1010800" version_string="1.1.8"><![CDATA[<xf:title>After Hours Gaming - Dashboard Configurator</xf:title>
+
+<div class="block-container" style="padding:15px">
+   <ul class="iconicLinks-list">
+      <li>
+         <a href="/admin.php?gl-store/manage">
+            <div class="iconicLinks-icon"><i class="fa--xf far fa-fw fa-money-bill" aria-hidden="true"></i></div>
+            <div class="iconicLinks-title">Manage Store Ranks</div>
+         </a>
+      </li>
+
+      <li>
+         <a href="/admin.php?gl-store/purchases">
+            <div class="iconicLinks-icon"><i class="fa--xf far fa-fw fa-file-invoice" aria-hidden="true"></i></div>
+            <div class="iconicLinks-title">View/Modify Purchases</div>
+         </a>
+      </li>
+   </ul>
+</div>]]></template>
+  <template type="public" title="alert_user_store_giftreceive" version_id="1011000" version_string="1.1.10"><![CDATA[You've been gifted {$extra.rank_banner|raw} by {{ username_link($extra.from_user, false, {'defaultname': $extra.from_username}) }}. Enjoy!]]></template>
+  <template type="public" title="alert_user_store_giftsent" version_id="1011000" version_string="1.1.10"><![CDATA[You have successfully gifted {{ username_link($extra.to_gift_user, false, {'defaultname': $extra.to_gift_username}) }} {$extra.rank_banner|raw}]]></template>
+  <template type="public" title="alert_user_store_processed" version_id="1011000" version_string="1.1.10"><![CDATA[Your {$extra.rank_banner|raw} has been processed and is now available in-game and on the forums.]]></template>
+  <template type="public" title="alert_user_store_rank_expired" version_id="1011000" version_string="1.1.10"><![CDATA[Your {$extra.rank_banner|raw} has expired! You can head to the Rank Store and renew it.]]></template>
+  <template type="public" title="gmod_bans" version_id="1011000" version_string="1.1.10"><![CDATA[<xf:title>TTT Bans</xf:title>
+<xf:css src="gmod_interfacer.less" />
+<xf:js src="//cdn.jsdelivr.net/npm/gridjs@6.2.0/dist/gridjs.umd.js" />
+
+<div class="card">
+	<div class="card-header">
+		<span><xf:fa icon="fa-gavel" aria-hidden="true" /> Bans List</span>
+	</div>
+	<div class="card-content">
+		<div id="bansGrid"></div>
+	</div>
+</div>
+
+<script type="text/javascript">
+function formatCustomDate(unixTimestamp) {
+	const date = new Date(unixTimestamp * 1000);
+	const month = new Intl.DateTimeFormat('en-US', { month: 'long' }).format(date);
+	const day = date.getDate().toString().padStart(2, '0');
+	const year = date.getFullYear();
+	let hour = date.getHours();
+	const minute = date.getMinutes().toString().padStart(2, '0');
+	const ampm = hour >= 12 ? 'pm' : 'am';
+
+  hour = hour % 12;
+	hour = hour === 0 ? 12 : hour;
+
+	return `${month} ${day}, ${year} ${hour}:${minute}${ampm}`;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+	var bansData = {$bansData|raw};
+
+	const grid = new gridjs.Grid({
+		columns: [
+			{ name: 'Username', sort: true },
+			{ name: 'SteamID', sort: false },
+			{
+				name: 'Banned On',
+				sort: true,
+				formatter: function(cell) {
+					return cell ? formatCustomDate(cell) : 'Unknown';
+				}
+			},
+			{
+				name: 'Expires On',
+				sort: true,
+				formatter: function(cell) {
+					return cell === 0 ? 'Permanent' : formatCustomDate(cell);
+				}
+			},
+			{ name: 'Reason', sort: false },
+			{ name: 'Admin', sort: true },
+			{ name: 'Server', sort: true },
+			<xf:if is="{{ $xf.visitor->hasPermission('gmodUserPerms', 'view_hlogs') }}">
+			{
+				name: '',
+				sort: false,
+				formatter: (cell, row) => {
+					const steamid = row.cells[1].data;
+					return gridjs.html(`<a href="/gl/hlogs/results?steamid=${steamid}" class="button button--cta" target="_blank" title="View HLogs for this user"><i class="fa fa-search"></i> View HLogs</a>`);
+				}
+			},
+			</xf:if>
+		],
+		data: bansData,
+		sort: { multiColumn: false },
+		search: {
+			enabled: true,
+			placeholder: 'Search bans...'
+		},
+		pagination: {
+			enabled: true,
+			limit: 25,
+			summary: true
+		},
+		resizable: true,
+		className: {
+			table: 'gmod-grid-table',
+			th: 'gmod-grid-th',
+			td: 'gmod-grid-td',
+			container: 'gmod-grid-container'
+		}
+	});
+
+	grid.render(document.getElementById('bansGrid'));
+}, false);
+</script>
+]]></template>
+  <template type="public" title="gmod_discord_link_error" version_id="1011000" version_string="1.1.10"><![CDATA[<xf:title>Discord Link</xf:title>
+
+<xf:css src="gmod_interfacer.less"/>
+
+<div class="card store-notice">
+    <div class="card-header">
+        <span><xf:fa icon="fa-exclamation-triangle" aria-hidden="true"/> Discord Link Error</span>
+    </div>
+    <div class="card-content">
+        {$errorMsg}
+    </div>
+</div>]]></template>
+  <template type="public" title="gmod_discord_link_landing" version_id="1011000" version_string="1.1.10"><![CDATA[<xf:title>Discord Link</xf:title>
+<xf:css src="gmod_interfacer.less" />
+
+<xf:if is="$notice">
+  <div class="notice notice--{$notice.type}" style="padding:10px 12px;border-radius:8px;margin-bottom:10px;
+	  background: {{ $notice.type == 'success' ? 'var(--gmod-success)' : ($notice.type == 'error' ? 'var(--gmod-danger)' : 'var(--gmod-info-bg)') }};
+	  border: 1px solid rgba(255,255,255,0.15);">
+    <xf:fa
+      icon="{{ $notice.type == 'success' ? 'fa-check-circle' : ($notice.type == 'error' ? 'fa-exclamation-triangle' : 'fa-info-circle') }}"
+      aria-hidden="true" />
+    <span class="color:var(--gmod-text-secondary)" style="margin-left:6px;">{$notice.text}</span>
+  </div>
+</xf:if>
+
+
+<div class="header">
+  <div class="header-content">
+    <div class="header-title">Discord Link</div>
+    <p class="store-subtitle">
+      Link your Discord to join our Discord server, automatically sync your ranks, and hang out with everyone.
+    </p>
+    <div class="header-badges">
+      <span class="header-badge">
+        <xf:fa icon="fa-volume" aria-hidden="true" /> Voice chats
+      </span>
+      <span class="header-badge">
+        <xf:fa icon="fa-bullhorn" aria-hidden="true" /> Announcements
+      </span>
+      <span class="header-badge">
+        <xf:fa icon="fa-users" aria-hidden="true" /> Events & game nights
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="grid">
+  <div style="display:flex;justify-content:center;align-items:flex-start;">
+    <iframe src="https://discord.com/widget?id=999162748401373184&theme=dark" width="350" height="500"
+      allowtransparency="true" frameborder="0"
+      sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts">
+    </iframe>
+  </div>
+
+  <div class="card" style="margin-bottom: 0;">
+    <xf:if is="$discordAccount">
+      <div class="card-header">
+        <span>
+          <xf:fa icon="fa-rotate" aria-hidden="true" /> Discord Link Status
+        </span>
+        <span class="badge badge-primary">Linked</span>
+      </div>
+
+      <div class="card-content">
+        <xf:set var="$__avatarHash" value="{$discordAvatar}" />
+        <xf:if is="!$__avatarHash && $avatar">
+          <xf:set var="$__avatarHash" value="{$avatar}" />
+        </xf:if>
+
+        <xf:if is="$discordAccount">
+          <xf:set var="$__avatarUrl"
+            value="https://cdn.discordapp.com/avatars/{$discordAccount.user.id}/{$discordAccount.user.avatar}.png?size=256" />
+          <xf:else />
+          <xf:set var="$__avatarUrl" value="https://cdn.discordapp.com/embed/avatars/0.png" />
+        </xf:if>
+
+        <div class="avatar-container" style="padding-top:0;">
+          <img src="{$__avatarUrl}" alt="Discord avatar"
+            style="width:90px;height:90px;border-radius:50%;object-fit:cover;border:2px solid var(--gmod-primary);" />
+          <div class="username" style="margin-top:10px;">
+            <xf:if is="{$discordAccount.user.global_name}">
+              <strong>{$discordAccount.user.global_name}
+                <xf:if is="{$discordAccount.user.discriminator}">#{$discriminator}</xf:if>
+              </strong>
+              <xf:else />
+              Linked Account
+            </xf:if>
+          </div>
+        </div>
+
+        <div class="info-grid" style="margin-top:10px;">
+          <div class="info-item" style="align-items:flex-start;">
+            <div class="info-label">Discord ID</div>
+            <div class="info-value">
+              <span class="badge badge-primary" style="font-size:0.95rem;">
+                <xf:fa icon="fa-id-badge" aria-hidden="true" /> <span class="discordId">{$discordAccount.user.id}</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="info-item" style="align-items:flex-start;">
+            <div class="info-label">Roles</div>
+            <div class="info-value">
+              <xf:foreach loop="$discordAccount.roles" value="$roleId">
+                <xf:set var="$role" value="{$guildRoles.{$roleId}}" />
+
+                <xf:if is="$role">
+                  <span class="badge badge-primary"
+                    style="font-size:0.95rem;background-color:{{format_discord_role_bg_color($role.color)}}">
+                    <span style="color:{{format_discord_role_fg_color($role.color)}}">{$role.name}</span>
+                  </span>
+                </xf:if>
+              </xf:foreach>
+            </div>
+          </div>
+
+          <div class="info-item" style="align-items:flex-start;">
+            <div class="info-label">Joined Server</div>
+            <div class="info-value">
+              <span class="badge badge-primary" style="font-size:0.95rem;">
+                <span>{{format_date_string($discordAccount.joined_at, "M j, Y, h:i A")}}</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="rank-description" style="margin-top:15px;">
+          <ul>
+            <li>Store ranks will automatically sync when purchased.</li>
+            <li>Enjoy voice, events, and announcements with the community.</li>
+          </ul>
+        </div>
+
+        <div class="action-bar">
+          <xf:button href="/discord/unlink" class="button--cta" icon="link" rel="nofollow">
+            Unlink Discord
+          </xf:button>
+        </div>
+      </div>
+
+      <xf:else />
+      <div class="card-header">
+        <span>
+          <xf:fa icon="fa-rotate" aria-hidden="true" /> Discord Link Status
+        </span>
+        <span class="badge badge-warning">Not Linked</span>
+      </div>
+
+      <div class="card-content">
+        <div class="empty-state" style="padding:15px 15px 5px 15px;">
+          <xf:fa icon="fa-info-circle" aria-hidden="true" />
+          <p>You haven't linked your Discord account yet.</p>
+        </div>
+
+        <div class="rank-description" style="margin:10px 0 15px 0;">
+          <ul>
+            <li>Access to high quality voice channels</li>
+            <li>Interact with community members across multiple channels</li>
+            <li>Get announcements for events, updates, and more</li>
+            <li>Participate in community-led events and game nights</li>
+          </ul>
+        </div>
+
+        <div class="action-bar">
+          <xf:if is="$xf.visitor.user_id">
+            <xf:button
+              href="https://discord.com/api/oauth2/authorize?client_id={$client_id}&amp;redirect_uri={{ base_url('discord/process', 'full') }}&amp;response_type=code&amp;scope=identify%20guilds.join"
+              class="button--cta" icon="link" rel="nofollow">
+              Link Discord
+            </xf:button>
+            <xf:else />
+            <xf:button href="/login" class="button--cta" icon="log-in" rel="nofollow">
+              Log in to link
+            </xf:button>
+          </xf:if>
+        </div>
+
+        <div class="info-grid">
+          <div class="info-item">
+            <div class="info-label">Why link?</div>
+            <div class="info-value">Linking your Discord account automatically allows us to sync all your
+              roles to Discord! Whether it be store ranks or other forum groups, we have you covered.
+            </div>
+          </div>
+        </div>
+      </div>
+    </xf:if>
+  </div>
+</div>]]></template>
+  <template type="public" title="gmod_hlogs_addnote" version_id="1010700" version_string="1.1.7"><![CDATA[<xf:title>History Logs - Add Note</xf:title>
+<xf:form action="/gl/{$steamId}/notes/add" id="addNoteForm" ajax="true" data-xf-init="ajax-submit">
+    <xf:editorrow
+        name="note"
+        rowclass="formRow--noColon"
+        label="Note"
+        maxlength="250"
+        removebuttons="{$ignoredButtons}"
+        hint="<i>Required</i>" />
+    <xf:selectrow name="visibility" label="Visibility" explain="What is the minimum rank required to view this note?" hint="<i>Required</i>">
+        <xf:option value="mod" selected="true">All Staff</xf:option>
+        <xf:if is="$xf.visitor.isMemberOf(8) OR $xf.visitor.isMemberOf(9) OR $xf.visitor.isMemberOf(5)">
+            <xf:option value="admin">Admin+</xf:option>
+        </xf:if>
+        <xf:if is="$xf.visitor.isMemberOf(9) OR $xf.visitor.isMemberOf(5)">
+            <xf:option value="lead">Lead Admin+</xf:option>
+        </xf:if>
+    </xf:selectrow>
+
+    <xf:submitrow submit="Add Note" class="js-overlayClose" />
+</xf:form>
+
+<xf:js>
+XF.on(document, 'ajax:complete', function(e, data) {
+    if (data.xhr.responseJSON && data.xhr.responseJSON.success) {
+        location.reload();
+    }
+});
+</xf:js>]]></template>
+  <template type="public" title="gmod_hlogs_iphistory" version_id="1010400" version_string="1.1.4"><![CDATA[<div style="padding: 10px;">
+	<ul>
+		<xf:foreach loop="$ipHistory" value="$ip" i="$i">
+			<li>{$ip}</li>
+		</xf:foreach>
+	</ul>
+</div>]]></template>
+  <template type="public" title="gmod_hlogs_results" version_id="1012000" version_string="1.1.20"><![CDATA[<xf:title>History Logs Results</xf:title>
+<xf:css src="gmod_interfacer.less"/>
+
+<xf:if is="$searchQuery">
+    <xf:breadcrumb href="/gl/hlogs/search?q={$searchQuery|urlencode}">History Logs</xf:breadcrumb>
+    <xf:else/>
+    <xf:breadcrumb href="/gl/hlogs/search">History Logs</xf:breadcrumb>
+</xf:if>
+<xf:breadcrumb href="/gl/hlogs/results?steamid={$steamId64}">Results</xf:breadcrumb>
+
+<div class="action-bar u-flexJustifyEnd u-marginBottom20">
+    <xf:form action="/gl/hlogs/search" method="get">
+        <div class="u-flex u-flexAlignItemsCenter u-flexGap10">
+            <xf:textbox name="q" maxlength="64" placeholder="Search SteamID or name"/>
+            <xf:button type="submit" class="button--cta button--icon button--icon--search">
+                Search
+            </xf:button>
+        </div>
+    </xf:form>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <span><xf:fa icon="fa-server" aria-hidden="true"/> Server Overview</span>
+    </div>
+    <div class="card-content">
+        <div class="table-height-scrollable">
+            <table>
+                <thead>
+                <tr>
+                    <th>Server</th>
+                    <th>Playtime</th>
+                    <th>Slain</th>
+                    <th>Kicked</th>
+                    <th>First Joined</th>
+                    <th>Last Seen</th>
+                </tr>
+                </thead>
+                <tbody>
+                <xf:foreach loop="$playerStatsByServer" value="$row">
+                    <tr>
+                        <td>
+                            <p><strong>{$row.server_nice_name}</strong></p>
+                            <p>{$row.server_hostname}</p>
+                        </td>
+                        <td>{$row.playTime}</td>
+                        <td>{$row.slainCount}</td>
+                        <td>{$row.kickCount}</td>
+                        <td>
+                            <xf:if is="{$row.created_on}">
+                                {{ timestamp_format($row.created_on) }}
+                                <xf:else/>
+                                N/A
+                            </xf:if>
+                        </td>
+                        <td>
+                            <xf:if is="{$row.last_seen_on}">
+                                {{ timestamp_format($row.last_seen_on) }}
+                                <xf:else/>
+                                N/A
+                            </xf:if>
+                        </td>
+                    </tr>
+                </xf:foreach>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="grid">
+    <div class="card u-marginBottom0">
+        <div class="card-header">
+            <span><xf:fa icon="fa-user" aria-hidden="true"/> Player Information</span>
+            <span class="badge badge-primary">{$steamId}</span>
+        </div>
+        <div class="avatar-container">
+            <xf:if is="{$forumAccount}">
+                <xf:avatar user="$forumAccount" size="m" img="true"/>
+                <div class="username">
+                    <xf:username user="$forumAccount" rich="true"/>
+                </div>
+                <xf:else/>
+                <div class="empty-state">
+                    <xf:fa icon="fa-check-circle" aria-hidden="true"/>
+                    <p>No forum account has been connected to this player's Steam account</p>
+                </div>
+            </xf:if>
+        </div>
+
+        <div class="card-content">
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">SteamID</div>
+                    <div class="info-value">{$steamId64}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Steam Profile</div>
+                    <div class="info-value">
+                        <a href="https://steamcommunity.com/profiles/{$steamId64}/" target="_blank">
+                            <i class="fab fa-steam"></i> Visit Profile
+                        </a>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Total Play Time</div>
+                    <div class="info-value">
+                        <xf:if is="{$playerStats}">
+                            {{ minutes_to_time($playerStats.total_minutes) }}
+                            <xf:else/>
+                            N/A
+                        </xf:if>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">First Join</div>
+                    <div class="info-value">
+                        <xf:if is="{$playerStats}">
+                            {{ timestamp_format($playerStats.first_join_date, 'm/d/Y') }}
+                            <xf:else/>
+                            N/A
+                        </xf:if>
+                    </div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Last Seen</div>
+                    <div class="info-value">
+                        <xf:if is="{$playerStats}">
+                            {{ timestamp_format($playerStats.last_seen_date, 'm/d/Y g:ia') }}
+                            <xf:else/>
+                            N/A
+                        </xf:if>
+                    </div>
+                </div>
+            </div>
+
+            <div class="u-marginTop20">
+                <div class="info-label">Name History</div>
+                <div class="history-container">
+                    <xf:if is="{$playerData}">
+                        <xf:foreach loop="$playerData.previous_names" value="$name" i="$i">
+                            <div class="history-item">{$name}</div>
+                        </xf:foreach>
+                    </xf:if>
+                </div>
+            </div>
+
+            <xf:if is="$xf.visitor.hasPermission('general', 'viewIps')">
+                <div class="u-marginTop20">
+                    <div class="info-label">IP History</div>
+                    <div class="action-bar">
+                        <xf:button href="/gl/{$steamId64}/ip/requesthistory" class="button--cta" icon="download"
+                                   overlay="true" rel="nofollow">
+                            Request History
+                        </xf:button>
+                    </div>
+                </div>
+            </xf:if>
+        </div>
+    </div>
+
+    <div class="card u-marginBottom0">
+        <div class="card-header">
+            <span><xf:fa icon="fa-gavel" aria-hidden="true"/>  Ban History</span>
+        </div>
+        <div class="card-content">
+            <xf:if is="{$bans}">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Reason</th>
+                            <th>Expires</th>
+                            <th>Staff</th>
+                            <th>Server</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <xf:foreach loop="$bans" value="$ban" i="$i">
+                            <tr>
+                                <td>{{ time($ban.banned_on, 'F d, Y g:ia') }}</td>
+                                <td>{$ban.reason}</td>
+                                <xf:if is="{$ban.unban_time} == 0">
+                                    <td>Never (Permanent)</td>
+                                    <xf:else/>
+                                    <td>{{ time($ban.unban_time, 'F d, Y g:ia') }}</td>
+                                </xf:if>
+                                <td>{$ban.banned_by}</td>
+                                <xf:if is="{$ban.server} == 'Global'">
+                                    <td>Global</td>
+                                    <xf:else/>
+                                    <td>{$ban.niceName}</td>
+                                </xf:if>
+                                <xf:if is="{$ban.void} == 'Y'">
+                                    <xf:set var="$admin" value="{{ userid_to_user($ban.void_user) }}"/>
+                                    <td><span data-xf-init="tooltip" title="{$admin->username} - {$ban.void_reason}"
+                                              class="status status-voided">Void</span></td>
+                                    <xf:elseif is="{$curTime} > {$ban.unban_time} && {$ban.unban_time} != 0"/>
+                                    <td><span class="status status-expired">Expired</span></td>
+                                    <xf:elseif is="{$ban.status} == 0"/>
+                                    <td><span class="status status-expired">Unbanned</span></td>
+                                    <xf:else/>
+                                    <td><span class="status status-active">Active</span></td>
+                                </xf:if>
+                                <td>
+                                    <xf:if is="{$ban.void} == 'Y'">
+                                        <xf:button href="/gl/{$ban.id}/void/remove" class="button--cta" rel="nofollow">
+                                            UnVoid
+                                        </xf:button>
+                                        <xf:else/>
+                                        <xf:button href="/gl/{$ban.id}/void/addpopup" class="button--cta" overlay="true"
+                                                   rel="nofollow">
+                                            Void
+                                        </xf:button>
+                                    </xf:if>
+                                </td>
+                            </tr>
+                        </xf:foreach>
+                        </tbody>
+                    </table>
+                </div>
+                <xf:else/>
+                <div class="empty-state">
+                    <xf:fa icon="fa-check-circle" aria-hidden="true"/>
+                    <p>No ban history found for this player</p>
+                </div>
+            </xf:if>
+
+            <xf:if is="{$altCheckerBansFlat}">
+                <div class="u-marginTop16">
+                    <div class="accordion">
+                        <div class="accordion-header">
+							<span>
+								<xf:fa icon="fa-globe" aria-hidden="true"/>
+								<a href="{$altCheckerUrl}" target="_blank" rel="noopener">
+									AltChecker Bans ({{ count($altCheckerBansFlat) }})
+								</a>
+							</span>
+                            <xf:fa icon="fa-chevron-down" id="chevron" aria-hidden="true"/>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="accordion-content-inner">
+                                <div class="table-container table-height-scrollable">
+                                    <table>
+                                        <thead>
+                                        <tr>
+                                            <th>Community</th>
+                                            <th>Date</th>
+                                            <th>Reason</th>
+                                            <th>Length</th>
+                                            <th>Status</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <xf:foreach loop="$altCheckerBansFlat" value="$ban">
+                                            <tr>
+                                                <td>{$ban.communityName}</td>
+                                                <td>
+                                                    <xf:if is="{$ban.banned}">
+                                                        {{ time($ban.banned, 'F d, Y g:ia') }}
+                                                        <xf:else/>
+                                                        N/A
+                                                    </xf:if>
+                                                </td>
+                                                <td>{$ban.reason}</td>
+                                                <td>
+                                                    <xf:if is="{$ban.perma}">
+                                                        Permanent
+                                                        <xf:elseif is="{$ban.length} > 0"/>
+                                                        {{ minutes_to_time(floor($ban.length / 60)) }}
+                                                        <xf:else/>
+                                                        N/A
+                                                    </xf:if>
+                                                </td>
+                                                <td>
+                                                    <xf:if is="{$ban.unbanned}">
+                                                        <span class="status status-expired">Unbanned</span>
+                                                        <xf:else/>
+                                                        <span class="status status-active">Active</span>
+                                                    </xf:if>
+                                                </td>
+                                            </tr>
+                                        </xf:foreach>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xf:if>
+
+            <xf:if is="{$altCheckerDirectAlts}">
+                <div class="u-marginTop16">
+                    <div class="accordion">
+                        <div class="accordion-header">
+							<span>
+								<xf:fa icon="fa-users" aria-hidden="true"/>
+                <a href="{$altCheckerUrl}" target="_blank" rel="noopener">
+								  Direct Alts ({{ count($altCheckerDirectAlts) }})
+                </a>
+							</span>
+                            <xf:fa icon="fa-chevron-down" id="chevron" aria-hidden="true"/>
+                        </div>
+                        <div class="accordion-content">
+                            <div class="accordion-content-inner">
+                                <div class="table-container table-height-scrollable">
+                                    <table>
+                                        <thead>
+                                        <tr>
+                                            <th>SteamID</th>
+                                            <th>Name</th>
+                                            <th>Steam Account Created</th>
+                                            <th>Servers</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <xf:foreach loop="$altCheckerDirectAlts" value="$alt">
+                                            <tr>
+                                                <td>
+                                                    <a href="/gl/hlogs/results?steamid={$alt.steamid}">{$alt.steamid}</a>
+                                                </td>
+                                                <td>
+                                                    <xf:if is="{$alt.avatar}">
+                                                        <img src="{$alt.avatar}" alt="" width="24" height="24"
+                                                             loading="lazy"
+                                                             class="u-verticalAlignMiddle u-borderRadius50 u-marginRight6"/>
+                                                    </xf:if>
+                                                    {$alt.name}
+                                                </td>
+                                                <td>
+                                                    <xf:if is="{$alt.created}">
+                                                        {{ time($alt.created, 'F d, Y') }}
+                                                        <xf:else/>
+                                                        N/A
+                                                    </xf:if>
+                                                </td>
+                                                <td>
+                                                    <xf:if is="{$alt.servers}">
+                                                        <xf:foreach loop="$alt.servers" value="$srv">
+                                                            <div>{$srv.name}</div>
+                                                        </xf:foreach>
+                                                        <xf:else/>
+                                                        N/A
+                                                    </xf:if>
+                                                </td>
+                                            </tr>
+                                        </xf:foreach>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xf:if>
+        </div>
+    </div>
+</div>
+
+<!-- Punishment History -->
+<div class="card">
+    <div class="card-header">
+        <span><xf:fa icon="fa-exclamation-triangle" aria-hidden="true"/>  Punishment History</span>
+    </div>
+    <div class="card-content">
+        <xf:if is="{$playerPunishments}">
+            <!-- ASlay block -->
+            <xf:if is="{$playerPunishments.ASlay}">
+                <div class="accordion">
+                    <div class="accordion-header">
+                        <span><xf:fa icon="fa-skull" aria-hidden="true"/> ASlay ({{ count($playerPunishments.ASlay) - 1 }})</span>
+                        <xf:fa icon="fa-chevron-down" id="chevron" aria-hidden="true"/>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-content-inner">
+                            <div class="table-container table-height-scrollable">
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th>Staff</th>
+                                        <th>Server</th>
+                                        <th>Date</th>
+                                        <th>Reason</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <xf:foreach loop="$playerPunishments.ASlay" value="$punishment" key="$key">
+                                        <xf:if is="is_array($punishment)">
+                                            <tr>
+                                                <td>{$punishment.admin}</td>
+                                                <td>{$punishment.server_name}</td>
+                                                <td>{{ date('M d, Y', $punishment.added) }}</td>
+                                                <td>{$punishment.reason}</td>
+                                            </tr>
+                                        </xf:if>
+                                    </xf:foreach>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xf:if>
+
+            <!-- Kicks block -->
+            <xf:if is="{$playerPunishments.kick}">
+                <div class="accordion">
+                    <div class="accordion-header">
+                        <span><xf:fa icon="fa-running" aria-hidden="true"/> Kicks ({{ count($playerPunishments.kick) - 1 }})</span>
+                        <xf:fa icon="fa-chevron-down" id="chevron" aria-hidden="true"/>
+                    </div>
+                    <div class="accordion-content">
+                        <div class="accordion-content-inner">
+                            <div class="table-container table-height-scrollable">
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th>Staff</th>
+                                        <th>Server</th>
+                                        <th>Date</th>
+                                        <th>Reason</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <xf:foreach loop="$playerPunishments.kick" value="$kick" key="$kId">
+                                        <xf:if is="is_array($kick)">
+                                            <tr>
+                                                <td>{$kick.admin}</td>
+                                                <td>{$kick.server_name}</td>
+                                                <td>{{ date('M d, Y', $kick.added) }}</td>
+                                                <td>{$kick.reason}</td>
+                                            </tr>
+                                        </xf:if>
+                                    </xf:foreach>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xf:if>
+            <xf:else/>
+            <div class="empty-state">
+                <xf:fa icon="fa-check-circle" aria-hidden="true"/>
+                <p>No punishment history found for this player</p>
+            </div>
+        </xf:if>
+    </div>
+</div>
+
+<!-- Player Notes -->
+<div class="card">
+    <div class="card-header">
+        <span><xf:fa icon="fa-sticky-note" aria-hidden="true"/> Player Notes</span>
+    </div>
+    <div class="card-content">
+        <div class="action-bar">
+            <xf:button href="/gl/{$steamId64}/notes/addpopup" class="button--cta" icon="write" overlay="true"
+                       rel="nofollow">
+                Add Note
+            </xf:button>
+        </div>
+
+        <xf:if is="{$playerNotes}">
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Staff</th>
+                        <th>Date</th>
+                        <th>Note</th>
+                        <th>Visibility</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <xf:foreach loop="$playerNotes" value="$note" key="$key">
+                        <tr>
+                            <td>
+                                <xf:username user="{{ userid_to_user($note.by) }}" rich="true"/>
+                            </td>
+                            <td>{{ time($note.added, 'F d, Y g:ia') }}</td>
+                            <td>{$note.note|raw}</td>
+                            <td>
+                                <xf:if is="{$note.visibility} == 'admin'">
+                                    <span class="badge badge-primary">Admin</span>
+                                    <xf:elseif is="{$note.visibility} == 'lead'"/>
+                                    <span class="badge badge-warning">Lead</span>
+                                    <xf:else/>
+                                    <span class="badge">All Staff</span>
+                                </xf:if>
+                            </td>
+                        </tr>
+                    </xf:foreach>
+                    </tbody>
+                </table>
+            </div>
+            <xf:else/>
+            <div class="empty-state">
+                <xf:fa icon="fa-clipboard" aria-hidden="true"/>
+                <p>No notes have been added for this player</p>
+            </div>
+        </xf:if>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Accordion functionality
+        const accordions = document.querySelectorAll('.accordion-header');
+        accordions.forEach(header => {
+            header.addEventListener('click', function () {
+                const accordion = this.nextElementSibling && this.nextElementSibling.classList.contains('accordion-content')
+                    ? this.parentElement
+                    : this.parentElement; // keep structure
+                accordion.classList.toggle('active');
+            });
+        });
+    });
+</script>]]></template>
+  <template type="public" title="gmod_hlogs_search" version_id="1012000" version_string="1.1.20"><![CDATA[<xf:title>History Logs</xf:title>
+<xf:css src="gmod_interfacer.less"/>
+
+<xf:breadcrumb href="/gl/hlogs/search">History Logs</xf:breadcrumb>
+
+<div class="card">
+    <div class="card-header">
+        <span><xf:fa icon="fa-search" aria-hidden="true"/> Search</span>
+    </div>
+    <div class="card-content">
+        <p>Search players by SteamID or name</p>
+        <xf:form action="/gl/hlogs/search" method="get">
+            <div class="action-bar" style="justify-content: flex-start;">
+                <xf:textbox name="q" value="{$searchQuery}" maxlength="64"
+                            placeholder="SteamID64, STEAM_0:1:12345, or player name"/>
+                <xf:button type="submit" class="button--cta button--icon button--icon--search">
+                    Search
+                </xf:button>
+            </div>
+        </xf:form>
+    </div>
+</div>
+
+<xf:if is="$searchQuery">
+    <div class="card">
+        <div class="card-header">
+            <span><xf:fa icon="fa-search" aria-hidden="true"/> Search results</span>
+        </div>
+        <div class="card-content">
+            <xf:if is="$searchResults is not empty">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Player</th>
+                        <th>SteamID</th>
+                        <th>Matched on</th>
+                        <th>Last seen</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <xf:foreach loop="$searchResults" value="$row">
+                        <tr>
+                            <td><a href="/gl/hlogs/results?steamid={$row.steamid64}&q={$searchQuery|urlencode}">{$row.in_game_name}</a>
+                            </td>
+                            <td><span class="badge badge-primary">{$row.steamid64}</span></td>
+                            <td>
+                                <xf:if is="$row.matchPreviewHtml">{$row.matchPreviewHtml|raw}
+                                    <xf:else/>
+                                    -
+                                </xf:if>
+                            </td>
+                            <td>
+                                <xf:if is="$row.last_seen">{{ date_time($row.last_seen) }}
+                                    <xf:else/>
+                                    -
+                                </xf:if>
+                            </td>
+                        </tr>
+                    </xf:foreach>
+                    </tbody>
+                </table>
+                <xf:else/>
+                <div class="gmod-emptyState">No players matched that name</div>
+            </xf:if>
+        </div>
+    </div>
+</xf:if>]]></template>
+  <template type="public" title="gmod_hlogs_void_popup" version_id="1010700" version_string="1.1.7"><![CDATA[<xf:title>History Logs - Void</xf:title>
+
+<xf:form action="/gl/{$banId}/void/add" id="addVoidForm" ajax="true" data-xf-init="ajax-submit">
+	<xf:textboxrow rowclass="formRow--noColon" label="Void Reason" name="void_reason" hint="<i>Required</i>">
+		<xf:explain>Enter reason for voiding ban. This will be visible when hovering over the "Void" tag on the selected ban.</xf:explain>
+	</xf:textboxrow>
+
+    <xf:submitrow submit="Void Ban" class="js-overlayClose" />
+</xf:form>
+
+<xf:js>
+XF.on(document, 'ajax:complete', function(e, data) {
+    if (data.xhr.responseJSON && data.xhr.responseJSON.success) {
+        location.reload();
+    }
+});
+</xf:js>]]></template>
+  <template type="public" title="gmod_interfacer.less" version_id="1012000" version_string="1.1.20"><![CDATA[.header {
+  position: relative;
+  text-align: center;
+  margin-bottom: 40px;
+  padding: 50px 20px;
+  background: @gl-gradient-header;
+  border-radius: @gl-radius;
+  overflow: hidden;
+  box-shadow: @gl-shadow-lg;
+
+  &-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  &-title {
+    font-size: 2.8rem;
+    margin-bottom: 15px;
+    font-weight: 700;
+    font-family: "Unbounded", "Space Grotesk", "Segoe UI", sans-serif;
+    letter-spacing: 0.5px;
+    position: relative;
+    display: inline-block;
+    background: @gl-gradient;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 3px;
+      background: @gl-accent;
+      border-radius: 3px;
+    }
+  }
+
+  .store-subtitle {
+    font-size: 1.3rem;
+    margin-bottom: 25px;
+    max-width: 700px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.5;
+  }
+
+  &-badges {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+
+  &-badge {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid @gl-border;
+    padding: 8px 18px;
+    border-radius: @gl-radius-pill;
+    font-size: 0.95rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    color: @gl-text-secondary;
+    font-weight: 500;
+
+    &:hover {
+      background: @gl-accent;
+      color: white;
+      transform: translateY(-2px);
+      border-color: @gl-accent;
+      box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+    }
+
+    .fa {
+      color: @gl-accent;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 35px 15px;
+    margin-bottom: 30px;
+
+    &-title {
+      font-size: 2.2rem;
+
+      &::after {
+        bottom: -8px;
+        width: 80px;
+      }
+    }
+
+    .store-subtitle {
+      font-size: 1.1rem;
+    }
+
+    &-badges {
+      gap: 10px;
+    }
+
+    &-badge {
+      padding: 6px 14px;
+      font-size: 0.85rem;
+    }
+  }
+}
+
+.card {
+  background: @gl-bg-card;
+  border-radius: @gl-radius;
+  box-shadow: @gl-shadow-card;
+  margin-bottom: 25px;
+  overflow: hidden;
+}
+
+.card-header {
+  background: @gl-gradient-header;
+  border-bottom: 2px solid @gl-border-accent;
+  border-radius: @gl-radius @gl-radius 0 0;
+  padding: 14px 18px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  font-size: 14px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  > span {
+    font-family: "Unbounded", "Space Grotesk", "Segoe UI", sans-serif;
+    font-weight: 600;
+  }
+}
+
+.card-header i {
+  margin-right: 10px;
+  color: @gl-accent;
+}
+
+.card-content {
+  padding: 20px;
+
+  p {
+    margin-top: 0px;
+  }
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 20px;
+  margin-bottom: 25px;
+}
+
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.info-item {
+  background: @gl-bg-secondary;
+  border: 1px solid @gl-border;
+  border-radius: @gl-radius;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.info-label {
+  font-size: 0.85rem;
+  color: @gl-text-muted;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 5px;
+}
+
+.info-value {
+  font-size: 1.1rem;
+  font-weight: 500;
+  word-break: break-word;
+}
+
+.avatar-container {
+  text-align: center;
+  padding: 15px;
+  border-bottom: 1px solid @gl-border;
+}
+
+.gmod-avatar {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  border: 3px solid @gl-accent;
+  object-fit: cover;
+}
+
+.avatar-container .username {
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.history-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.history-item {
+  background: @gl-bg-secondary;
+  border: 1px solid @gl-border;
+  padding: 5px 10px;
+  border-radius: @gl-radius;
+  font-size: 0.9rem;
+}
+
+
+.table-height-scrollable {
+  overflow-x: auto;
+  overflow-y: auto;
+  max-height: 500px;
+  box-sizing: border-box;
+  padding-bottom: 12px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid @gl-border;
+}
+
+thead {
+  background: @gl-bg-secondary;
+}
+
+th {
+  font-weight: 700;
+  color: @gl-text-muted;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+tbody tr {
+  transition: background 0.2s;
+}
+
+tbody tr:hover {
+  background: rgba(52, 152, 219, 0.04);
+}
+
+tbody tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+tbody tr td p {
+  margin: 0px;
+}
+
+.status {
+  padding: 4px 8px;
+  border-radius: @gl-radius-pill;
+  font-size: 0.85rem;
+  font-weight: 600;
+  display: inline-block;
+}
+
+.status-active {
+  background: rgba(231, 76, 60, 0.2);
+  color: @gl-red;
+}
+
+.status-expired {
+  background: rgba(46, 204, 113, 0.2);
+  color: #2ecc71;
+}
+
+.status-voided {
+  background: rgba(243, 156, 18, 0.2);
+  color: @gl-gold;
+}
+
+.status-unbanned {
+  background: rgba(52, 152, 219, 0.2);
+  color: @gl-accent;
+}
+
+.accordion {
+  width: 100%;
+  background: @gl-bg-card;
+  border-radius: @gl-radius;
+  margin-bottom: 10px;
+  overflow: hidden;
+  border: 1px solid @gl-border;
+}
+
+.accordion-header {
+  background: @gl-bg-secondary;
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.accordion-header #chevron {
+  transition: transform 0.3s ease;
+}
+
+.accordion-content {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.35s ease;
+  background: @gl-bg-card;
+}
+
+.accordion-content-inner {
+  overflow: hidden;
+  padding: 0 20px;
+  transition: padding 0.35s ease;
+}
+
+.accordion.active .accordion-content {
+  grid-template-rows: 1fr;
+}
+
+.accordion.active .accordion-content-inner {
+  padding: 20px;
+}
+
+.accordion.active .accordion-header #chevron {
+  transform: rotate(180deg);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 30px;
+  color: @gl-text-muted;
+}
+
+.empty-state i {
+  font-size: 3rem;
+  margin-bottom: 15px;
+  opacity: 0.5;
+}
+
+.action-bar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 15px;
+  gap: 10px;
+}
+
+.badge {
+  padding: 3px 8px;
+
+  border-radius: @gl-radius-pill;
+  font-family: "Space Grotesk", "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif !important;
+  font-size: 0.75rem;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.badge-primary {
+  background: rgba(52, 152, 219, 0.2);
+  color: @gl-accent;
+}
+
+.badge-warning {
+  background: rgba(243, 156, 18, 0.2);
+  color: @gl-gold;
+}
+
+.gmod-roleBadge.header-badge {
+  border-color: @gl-border;
+}
+
+.gmod-roleBadge--innocent.header-badge {
+  border-color: rgba(46, 204, 113, 0.35);
+}
+
+.gmod-roleBadge--detective.header-badge {
+  border-color: rgba(52, 152, 219, 0.35);
+}
+
+.gmod-roleBadge--traitor.header-badge {
+  border-color: rgba(231, 76, 60, 0.35);
+}
+
+.gmod-roleGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 900px) {
+  .gmod-roleGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.gmod-roleCard .card-header {
+  border-left: 4px solid @gl-border;
+}
+
+.gmod-roleCard--innocent .card-header {
+  border-left-color: #2ecc71;
+}
+
+.gmod-roleCard--innocent .gmod-statIcon {
+  color: #2ecc71;
+}
+
+.gmod-roleCard--detective .card-header {
+  border-left-color: @gl-accent;
+}
+
+.gmod-roleCard--detective .gmod-statIcon {
+  color: @gl-accent;
+}
+
+.gmod-roleCard--traitor .card-header {
+  border-left-color: @gl-red;
+}
+
+.gmod-roleCard--traitor .gmod-statIcon {
+  color: @gl-red;
+}
+
+.gmod-rolePill--innocent {
+  background: rgba(46, 204, 113, 0.18);
+  color: #2ecc71;
+}
+
+.gmod-rolePill--detective {
+  background: rgba(52, 152, 219, 0.18);
+  color: @gl-accent;
+}
+
+.gmod-rolePill--traitor {
+  background: rgba(231, 76, 60, 0.18);
+  color: @gl-red;
+}
+
+.gmod-kpiRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 768px) {
+  .gmod-kpiRow {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.gmod-kpi {
+  background: @gl-bg-secondary;
+  border: 1px solid @gl-border;
+  border-radius: @gl-radius;
+  padding: 12px;
+  text-align: center;
+}
+
+.gmod-kpiIcon {
+  color: @gl-accent;
+  margin-bottom: 6px;
+}
+
+.gmod-kpiValue {
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.gmod-kpiLabel {
+  font-size: 0.8rem;
+  color: @gl-text-muted;
+  margin-top: 2px;
+}
+
+.gmod-statList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.gmod-statLine {
+  display: grid;
+  grid-template-columns: 22px 1fr auto;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 12px;
+  border-radius: @gl-radius;
+  background: @gl-bg-secondary;
+  border: 1px solid @gl-border;
+}
+
+.gmod-statIcon {
+  color: @gl-accent;
+  text-align: center;
+}
+
+.gmod-statKey {
+  color: @gl-text-muted;
+  font-weight: 600;
+}
+
+.gmod-statVal {
+  font-weight: 800;
+}
+
+.gmod-statsHubSearch {
+  margin-top: 22px;
+}
+
+.gmod-statsHubSearchForm {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.gmod-statsHubSearchRow {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .gmod-statsHubSearchRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+.gmod-leaderGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+@media (max-width: 900px) {
+  .gmod-leaderGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.gmod-leaderRank {
+  font-weight: 900;
+  color: @gl-text-muted;
+  width: 48px;
+}
+
+/* Store Container */
+.store-container {
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.store-subtitle {
+  font-size: 1.1rem;
+  margin: 10px 0 0 0;
+}
+
+.store-layout {
+  display: flex;
+  gap: 30px;
+  align-items: flex-start;
+}
+
+.purchase-summary-sidebar {
+  flex: 0 0 320px;
+  position: sticky;
+  top: 70px;
+}
+
+.purchase-summary-card {
+  margin-bottom: 0;
+}
+
+.selected-rank-display {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
+  padding: 20px;
+  background: @gl-bg-secondary;
+  border: 1px solid @gl-border;
+  border-radius: @gl-radius;
+}
+
+.rank-icon-placeholder {
+  flex: 0 0 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rank-icon-placeholder img {
+  width: 60px;
+  height: 60px;
+  border-radius: @gl-radius;
+}
+
+.rank-placeholder-icon {
+  font-size: 2rem;
+  color: @gl-text-muted;
+}
+
+.rank-details {
+  flex: 1;
+}
+
+.rank-name {
+  color: @gl-text;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.rank-price {
+  color: @gl-gold;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.purchase-info {
+  margin-bottom: 25px;
+}
+
+.purchase-actions {
+  text-align: center;
+}
+
+.paypal-container {
+  margin: 20px 0;
+}
+
+.store-main-content {
+  flex: 1;
+}
+
+.store-notice {
+  .card-header span i {
+    color: @gl-red;
+  }
+
+  border-left: 4px solid @gl-red;
+}
+
+.ranks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 25px;
+}
+
+.rank-card {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+
+  &:not(.rank-card-selected):hover {
+    transform: translateY(-2px);
+    box-shadow: @gl-shadow-card-hover;
+  }
+}
+
+.rank-card-selected {
+  border: 2px solid @gl-accent;
+  box-shadow: 0 0 15px rgba(52, 152, 219, 0.3);
+  transform: translateY(-2px);
+}
+
+.rank-card-disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+
+  &:hover {
+    transform: none;
+    box-shadow: @gl-shadow-card;
+  }
+}
+
+.rank-card-owned {
+  position: relative;
+  border: 2px solid #2ecc71;
+  box-shadow: 0 0 20px rgba(46, 204, 113, 0.3);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, transparent 30%, rgba(46, 204, 113, 0.1) 50%, transparent 70%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  &:hover {
+    transform: none;
+    box-shadow: 0 0 25px rgba(46, 204, 113, 0.4);
+  }
+
+  .rank-card-header {
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
+    position: relative;
+
+    &::after {
+      content: '✓';
+      position: absolute;
+      top: 50%;
+      right: 20px;
+      transform: translateY(-50%);
+      font-size: 1.5rem;
+      color: white;
+      font-weight: bold;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+  }
+}
+
+.rank-card-header {
+  background: linear-gradient(135deg, rgb(44, 62, 80), rgb(52, 152, 219));
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.rank-card-selected .rank-card-header {
+  background: @gl-gradient;
+}
+
+.rank-icon {
+  flex: 0 0 60px;
+}
+
+.rank-icon img {
+  width: 60px;
+  height: 60px;
+  border-radius: @gl-radius;
+}
+
+.rank-header-info {
+  flex: 1;
+}
+
+.rank-title {
+  color: @gl-text;
+  font-size: 1.4rem;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+}
+
+.rank-price-display {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.price-amount {
+  color: @gl-gold;
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+.price-period {
+  color: @gl-text-secondary;
+  font-size: 0.9rem;
+}
+
+.rank-description {
+  color: @gl-text;
+  line-height: 1.6;
+}
+
+.rank-description ul {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+.rank-description li {
+  padding: 8px 0;
+  border-bottom: 1px solid @gl-border;
+  position: relative;
+  padding-left: 25px;
+}
+
+.rank-description li:before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: #2ecc71;
+  font-weight: bold;
+}
+
+.rank-description li:last-child {
+  border-bottom: none;
+}
+
+.rank-description .pricingTableContent-header {
+  background: rgba(52, 152, 219, 0.08);
+  border: 1px solid @gl-border-accent;
+  padding: 12px 15px;
+  margin: 15px 0 8px 0;
+  border-radius: @gl-radius;
+  font-weight: 700;
+  font-size: 1rem;
+  color: @gl-accent;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  border-left: 4px solid @gl-accent;
+
+  &:first-child {
+    margin-top: 0;
+  }
+
+  &:before {
+    display: none;
+  }
+
+  strong {
+    color: @gl-accent;
+  }
+}
+
+.rank-description .pricingTableContent-header + li {
+  margin-top: 0;
+  padding-top: 12px;
+}
+
+.rank-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.rank-status {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  border-radius: @gl-radius;
+  font-weight: 600;
+}
+
+.rank-status-owned {
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  color: white;
+  box-shadow: 0 4px 15px rgba(46, 204, 113, 0.3);
+  border: none;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    animation: gl-shimmer 2s infinite;
+  }
+
+  .rank-status-icon {
+    font-size: 1.2rem;
+    margin-right: 8px;
+  }
+
+  .rank-status-text {
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+}
+
+.rank-select-indicator {
+  width: 100%;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+}
+
+.rank-select-indicator.selected {
+  background: @gl-accent;
+}
+
+.rank-select-icon {
+  font-size: 1.1rem;
+}
+
+.gift-action {
+  text-align: center;
+  width: 100%;
+  margin-top: 10px;
+  display: none;
+
+  .gift-button {
+    background: @gl-cta-gradient;
+    color: @gl-text;
+    border: none;
+    width: 100%;
+    display: block;
+    padding: 10px;
+    border-radius: @gl-radius;
+    box-shadow: @gl-shadow-xs, 0 4px 12px rgba(52, 152, 219, 0.2);
+    transition: all 0.3s ease;
+
+    &:hover {
+      text-decoration: none;
+      filter: brightness(1.08);
+      transform: translateY(-2px);
+      box-shadow: @gl-shadow-xs, 0 6px 16px rgba(52, 152, 219, 0.3);
+    }
+
+    i {
+      margin-right: 8px;
+    }
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .store-layout {
+    flex-direction: column;
+  }
+
+  .purchase-summary-sidebar {
+    flex: none;
+    position: static;
+    order: -1;
+    width: 100%;
+  }
+
+  .ranks-grid {
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+  }
+}
+
+@media (max-width: 768px) {
+  .store-container {
+    padding: 10px;
+  }
+
+  .ranks-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .rank-card-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 15px;
+  }
+
+  .selected-rank-display {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .rank-card-owned .rank-card-header::after {
+    right: 15px;
+    font-size: 1.3rem;
+  }
+}
+
+/* Server layout */
+.server-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
+
+.server-info-section {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.server-map-container {
+  flex: 0 0 180px;
+}
+
+.server-map-image {
+  width: 180px;
+  height: 120px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: @gl-radius;
+  background-color: @gl-bg-secondary;
+  border: 1px solid @gl-border;
+}
+
+.server-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.server-actions {
+  display: flex;
+  gap: 10px;
+
+  .button .fa--xf,
+  .button [class*="fa-"] {
+    margin-right: 6px;
+  }
+
+  @media (max-width: 600px) {
+    a.button {
+      display: none;
+    }
+  }
+}
+
+.server-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.players-section-title {
+  margin: 0 0 15px 0;
+  color: @gl-text;
+  font-size: 1.1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.players-section-title i {
+  color: @gl-accent;
+}
+
+.server-players-section .empty-state {
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .server-info-section {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .server-map-image {
+    width: 100%;
+    max-width: 200px;
+    margin: 0 auto;
+  }
+
+  .server-actions {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .server-layout {
+    gap: 20px;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --- Utilities --- */
+
+.u-flex {
+  display: flex;
+}
+
+.u-flexAlignItemsCenter {
+  align-items: center;
+}
+
+.u-flexJustifyEnd {
+  justify-content: flex-end;
+}
+
+.u-flexGap10 {
+  gap: 10px;
+}
+
+.u-flexGap15 {
+  gap: 15px;
+}
+
+.u-flexGap20 {
+  gap: 20px;
+}
+
+.u-marginTop10 {
+  margin-top: 10px;
+}
+
+.u-marginTop16 {
+  margin-top: 16px;
+}
+
+.u-marginTop20 {
+  margin-top: 20px;
+}
+
+.u-marginTop30 {
+  margin-top: 30px;
+}
+
+.u-marginBottom0 {
+  margin-bottom: 0 !important;
+}
+
+.u-marginBottom15 {
+  margin-bottom: 15px;
+}
+
+.u-marginBottom20 {
+  margin-bottom: 20px;
+}
+
+.u-textRight {
+  text-align: right;
+}
+
+.u-textUppercase {
+  text-transform: uppercase;
+}
+
+.u-fontWeight400 {
+  font-weight: 400;
+}
+
+.u-fontWeight700 {
+  font-weight: 700;
+}
+
+.u-colorPrimary {
+  color: @gl-accent;
+}
+
+.u-colorSecondary {
+  color: @gl-text-secondary;
+}
+
+.u-verticalAlignMiddle {
+  vertical-align: middle;
+}
+
+.u-borderRadius50 {
+  border-radius: 50%;
+}
+
+.u-marginRight6 {
+  margin-right: 6px;
+}
+
+.gmod-sectionHeader {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: @gl-text;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.accordion-header {
+  &-content {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+
+    &--secondary {
+      gap: 20px;
+    }
+  }
+
+  &-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+
+  &-subtitle {
+    font-size: 0.85rem;
+    color: @gl-text-muted;
+    font-weight: 400;
+  }
+
+  &-stats {
+    text-align: right;
+    display: none;
+
+    @media (min-width: 600px) {
+      display: block;
+    }
+  }
+
+  &-statsLabel {
+    font-size: 0.75rem;
+    color: @gl-text-muted;
+    text-transform: uppercase;
+  }
+
+  &-statsValue {
+    font-weight: 700;
+  }
+
+  &-icon {
+    color: @gl-accent;
+    font-size: 1.2rem;
+
+    &--large {
+      font-size: 1.5rem;
+    }
+  }
+}
+
+/* gridJs Style */
+.gridjs-container {
+	background: transparent !important;
+	border: none !important;
+	box-shadow: none !important;
+	border-radius: 0 !important;
+	width: 100% !important;
+	max-width: 100% !important;
+	overflow: hidden !important;
+}
+
+.gridjs-wrapper {
+	background: transparent !important;
+	border: none !important;
+	box-shadow: none !important;
+	border-radius: 0 !important;
+	overflow-x: auto !important;
+	width: 100% !important;
+}
+
+.gridjs-head {
+	background: transparent !important;
+	border: none !important;
+	padding: 0 0 12px 0 !important;
+}
+
+.gridjs-search {
+	margin: 0 !important;
+}
+
+.gridjs-search-input {
+	background: @gl-bg-input !important;
+	border: 1px solid @gl-border !important;
+	border-radius: @gl-radius !important;
+	color: @gl-text !important;
+	font-size: 13px !important;
+	padding: 8px 12px !important;
+	width: 280px !important;
+	transition: all 0.2s ease !important;
+	font-family: inherit !important;
+}
+
+.gridjs-search-input::placeholder {
+	color: @gl-text-muted !important;
+}
+
+.gridjs-search-input:focus {
+	outline: none !important;
+	background: #172030 !important;
+	border-color: @gl-accent !important;
+	box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15), inset 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+}
+
+.gridjs-table {
+	width: auto !important;
+	min-width: 100% !important;
+	border-collapse: collapse !important;
+	background: transparent !important;
+}
+
+.gridjs-th {
+	background: @gl-bg-secondary !important;
+	color: @gl-text-muted !important;
+	font-weight: 700 !important;
+	font-size: 0.85rem !important;
+	text-transform: uppercase !important;
+	letter-spacing: 0.5px !important;
+	padding: 0 14px !important;
+	height: 36px !important;
+	vertical-align: middle !important;
+	text-align: left !important;
+	border-bottom: 1px solid @gl-border !important;
+	border-top: none !important;
+	border-left: none !important;
+	border-right: none !important;
+	white-space: nowrap !important;
+	min-width: unset !important;
+	width: auto !important;
+}
+
+.gridjs-th:first-child {
+	border-top-left-radius: @gl-radius !important;
+}
+
+.gridjs-th:last-child {
+	border-top-right-radius: @gl-radius !important;
+}
+
+.gridjs-th.gridjs-resizable {
+	background: none !important;
+	border-bottom: none !important;
+}
+
+.gridjs-resizable {
+	background: @gl-border !important;
+	width: 2px !important;
+	opacity: 0.5;
+}
+
+.gridjs-th-sort {
+	cursor: pointer !important;
+}
+
+.gridjs-th-sort:hover {
+	background: @gl-bg-card-hover !important;
+}
+
+.gridjs-th-content {
+	display: flex !important;
+	align-items: center !important;
+	height: 100% !important;
+	gap: 4px !important;
+	flex-wrap: nowrap !important;
+	overflow: hidden !important;
+}
+
+.gridjs-sort {
+	display: inline-flex !important;
+	flex-shrink: 0 !important;
+	align-items: center !important;
+	background: none !important;
+	border: none !important;
+	padding: 0 !important;
+	cursor: pointer !important;
+	color: @gl-text-muted !important;
+	transition: opacity 0.15s ease, color 0.15s ease !important;
+	font-size: 10px !important;
+}
+
+.gridjs-sort.gridjs-sort-neutral {
+	opacity: 0 !important;
+}
+
+.gridjs-th-sort:hover .gridjs-sort.gridjs-sort-neutral {
+	opacity: 0.5 !important;
+}
+
+.gridjs-sort.gridjs-sort-asc,
+.gridjs-sort.gridjs-sort-desc {
+	opacity: 1 !important;
+	color: @gl-accent !important;
+}
+
+.gridjs-tbody {
+	background: transparent !important;
+}
+
+.gridjs-tr {
+	background: transparent !important;
+	transition: background 0.12s ease !important;
+}
+
+.gridjs-tr:hover {
+	background: @gl-bg-card-hover !important;
+}
+
+.gridjs-td {
+	padding: 11px 14px !important;
+	text-align: left !important;
+	border-bottom: 1px solid rgba(52, 73, 94, 0.2) !important;
+	border-top: none !important;
+	border-left: none !important;
+	border-right: none !important;
+	color: @gl-text !important;
+	background: transparent !important;
+	vertical-align: middle !important;
+}
+
+.gridjs-tr:nth-child(even) {
+	background: rgba(255, 255, 255, 0.02) !important;
+}
+
+.gridjs-tr:last-child .gridjs-td {
+	border-bottom: none !important;
+}
+
+.gridjs-td a.button--cta {
+	background: @gl-gradient !important;
+	border-color: transparent !important;
+	color: #fff !important;
+	white-space: nowrap;
+}
+
+.gridjs-td a.button--cta:hover {
+	filter: brightness(1.1);
+}
+
+.gridjs-footer {
+	background: transparent !important;
+	border: none !important;
+	padding: 12px 0 0 0 !important;
+}
+
+.gridjs-pagination {
+	background: transparent !important;
+	border: none !important;
+	display: flex !important;
+	justify-content: space-between !important;
+	align-items: center !important;
+	flex-wrap: wrap !important;
+	gap: 8px !important;
+}
+
+.gridjs-summary {
+	color: @gl-text-muted !important;
+	font-size: 12px !important;
+}
+
+.gridjs-pages {
+	display: flex !important;
+	gap: 0 !important;
+}
+
+.gridjs-pages button {
+	background: @gl-bg-card !important;
+	border: 1px solid @gl-border !important;
+	color: @gl-text !important;
+	padding: 6px 12px !important;
+	min-height: 32px !important;
+	font-size: 12px !important;
+	font-weight: 600 !important;
+	cursor: pointer !important;
+	transition: all 0.15s ease !important;
+	border-radius: 0 !important;
+	font-family: inherit !important;
+	line-height: 1 !important;
+}
+
+.gridjs-pages button:not(:first-child) {
+	margin-left: -1px !important;
+}
+
+.gridjs-pages button:first-child {
+	border-top-left-radius: @gl-radius !important;
+	border-bottom-left-radius: @gl-radius !important;
+}
+
+.gridjs-pages button:last-child {
+	border-top-right-radius: @gl-radius !important;
+	border-bottom-right-radius: @gl-radius !important;
+}
+
+.gridjs-pages button:hover:not([disabled]):not(.gridjs-currentPage) {
+	background: @gl-bg-card-hover !important;
+	border-color: @gl-border-accent !important;
+	z-index: 1 !important;
+}
+
+.gridjs-pages button[disabled] {
+	opacity: 0.4 !important;
+	cursor: not-allowed !important;
+}
+
+.gridjs-pages button.gridjs-currentPage {
+	background: @gl-gradient !important;
+	border-color: transparent !important;
+	color: @gl-text !important;
+	z-index: 1 !important;
+}
+
+.gridjs-loading {
+	background: transparent !important;
+	color: @gl-text-muted !important;
+	padding: 24px !important;
+	text-align: center !important;
+}
+
+.gridjs-error {
+	background: rgba(231, 76, 60, 0.08) !important;
+	color: #e74c3c !important;
+	border: 1px solid rgba(231, 76, 60, 0.35) !important;
+	border-radius: @gl-radius !important;
+	padding: 14px !important;
+}
+
+@media (max-width: 768px) {
+	.gridjs-search-input {
+		width: 100% !important;
+	}
+
+	.gridjs-pagination {
+		flex-direction: column !important;
+	}
+
+	.gridjs-th,
+	.gridjs-td {
+		padding: 8px 10px !important;
+		font-size: 12px !important;
+	}
+}]]></template>
+  <template type="public" title="gmod_servers" version_id="1013100" version_string="1.1.31"><![CDATA[<xf:title>Server List</xf:title>
+<xf:css src="gmod_interfacer.less" />
+<xf:foreach loop="{$servers}" value="$server">
+	<div class="card">
+		<div class="card-header">
+			<span>
+				<xf:fa icon="fa-server" aria-hidden="true"/>
+				<a href="steam://connect/{$server.serverAddr}" style="color: inherit; text-decoration: none;">{$server.hostName}</a>
+			</span>
+			<div class="server-status">
+				<xf:if is="$server.offline">
+					<span class="status status-voided">Offline</span>
+					<xf:elseif is="{$server.playerCount} >= {$server.maxCount}" />
+					<span class="status status-active">{$server.playerCount}/{$server.maxCount} Players</span>
+					<xf:else />
+					<span class="status status-expired">{$server.playerCount}/{$server.maxCount} Players</span>
+				</xf:if>
+			</div>
+		</div>
+		<div class="card-content">
+			<div class="server-layout">
+				<div class="server-info-section">
+					<div class="server-map-container">
+						<div class="server-map-image" style="background-image: url('/images/maps/{{ remove_trailing_gmod_map($server.currentMap) }}.png')">
+						</div>
+					</div>
+					<div class="server-details">
+						<div class="info-grid">
+							<div class="info-item">
+								<div class="info-label">IP Address</div>
+								<div class="info-value">{$server.serverAddr}</div>
+							</div>
+							<div class="info-item">
+								<div class="info-label">Current Map</div>
+								<div class="info-value">{{ remove_trailing_gmod_map($server.currentMap) }}</div>
+							</div>
+							<div class="info-item">
+								<div class="info-label">Player Count</div>
+								<div class="info-value">
+									<xf:if is="$server.offline">
+										Offline
+										<xf:else />
+										{$server.playerCount}/{$server.maxCount}
+									</xf:if>
+								</div>
+							</div>
+						</div>
+						<div class="server-actions">
+							<xf:if is="!$server.offline">
+								<a class="button button--vibrant" href="steam://connect/{$server.serverAddr}">
+									<xf:fa icon="fa-play" aria-hidden="true"/> Join Server
+								</a>
+								<xf:else />
+								<button class="button button--vibrant is-disabled" disabled>
+									<xf:fa icon="fa-times" aria-hidden="true"/> Server Offline
+								</button>
+							</xf:if>
+						</div>
+					</div>
+				</div>
+				<xf:if is="!empty({$server.playersJSON}) || !$server.offline">
+					<div class="server-players-section">
+						<h4 class="players-section-title">
+							<xf:fa icon="fa-users" aria-hidden="true"/> Current Players
+						</h4>
+						<div class="table-container">
+							<table>
+								<thead>
+								<tr>
+									<th>Name</th>
+									<th>Staff Rank</th>
+									<th>Store Rank</th>
+								</tr>
+								</thead>
+								<tbody>
+								<xf:if is="!empty({$server.playersJSON})">
+									<xf:foreach loop="{$server.playersJSON}" value="$player">
+										<tr>
+											<td>{$player.ingame_name}</td>
+											<td>
+												<xf:if is="{$player.userBannerCode}">
+													{$player.userBannerCode|raw}
+												</xf:if>
+											</td>
+											<td>
+												<xf:if is="{$player.userBannerDonator}">
+													{$player.userBannerDonator|raw}
+												</xf:if>
+											</td>
+										</tr>
+									</xf:foreach>
+									<xf:else />
+									<tr>
+										<td colspan="3">
+											<div class="empty-state" style="padding: 20px;">
+												<xf:fa icon="fa-user-slash" aria-hidden="true"/>
+												<p>No players currently online</p>
+											</div>
+										</td>
+									</tr>
+								</xf:if>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</xf:if>
+			</div>
+		</div>
+	</div>
+</xf:foreach>
+</script>]]></template>
+  <template type="public" title="gmod_servers.css" version_id="1012000" version_string="1.1.20"><![CDATA[.serverInfoLeft {
+	display: inline-block;
+	vertical-align: top;
+	width: 190px;
+	height: 190px;
+}
+
+.serverInfoMiddle {
+	display: inline-block;
+	vertical-align: top;
+	width: 31%;
+}
+
+.serverInfoRight {
+	float: right;
+	display: inline-block;
+	vertical-align: top;
+	width: 43%;
+}
+
+.mapImage {
+	height: 190px;
+	background-size: cover;
+	background-repeat: no-repeat;
+	border-radius: 8px;
+	border: 1px solid rgba(52, 73, 94, 0.5);
+}
+
+.secondaryContent {
+	background-color: rgba(30, 42, 56, 0.6);
+	padding: 10px;
+	border: 1px solid rgba(52, 73, 94, 0.5);
+	border-radius: 8px;
+	margin-bottom: 10px;
+}
+
+/* Tables */
+.tkGmodTable {
+	border-collapse: collapse;
+	border-spacing: 0;
+	width: 100%;
+}
+
+.tkGmodTable > thead {
+	border-bottom: 1px solid rgba(52, 73, 94, 0.5);
+	background: rgba(22, 32, 48, 0.6);
+}
+
+.tkGmodTable > thead > tr > th {
+	text-align: left;
+	padding: 10px 12px;
+	font-weight: 700;
+	font-size: 11px;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	color: #95a5a6;
+}
+
+.tkGmodTable > tbody > tr > td {
+	text-align: left;
+	padding: 10px 12px;
+	border-bottom: 1px solid rgba(52, 73, 94, 0.3);
+}
+
+.tkGmodTable > tbody > tr:nth-child(odd) {
+	background-color: rgba(255, 255, 255, 0.02);
+}
+
+.tkGmodTable > tbody > tr:hover {
+	background-color: rgba(52, 152, 219, 0.04);
+}
+]]></template>
+  <template type="public" title="gmod_servers_widget" version_id="1013100" version_string="1.1.31"><![CDATA[<xf:css src="gmod_servers_widget.css" />
+<div class="block">
+	<div class="block-container">
+		<h3 class="block-minorHeader"><a href="/gl/servers">Server List</a></h3>
+
+		<xf:foreach loop="{$servers}" value="$server">
+			<div class="widget-serverRow">
+				<div class="widget-RowLeftMap">
+					<img class="widget-mapImage" src="/images/maps/{{ remove_trailing_gmod_map($server.currentMap) }}.png">
+				</div>
+				<div class="widget-serverRowMiddle">
+					<span class="widget-niceServerName">{$server.niceName}</span><br>
+					<span>{{ remove_trailing_gmod_map($server.currentMap) }}</span>
+				</div>
+
+				<div class="widget-serverRowRight">
+					<span class="widget-serverCount">
+						<xf:if is="$server.offline">
+							Offline
+						<xf:else />
+							{$server.playerCount}/{$server.maxCount}
+						</xf:if>
+					</span>
+
+					<xf:if is="$server.offline">
+						<xf:else />
+						<a href="steam://connect/{$server.serverAddr}" class="button button--link widget-joinServerButton" style="height: 32px; padding-top: 7px;">
+							<xf:fa icon="fa-sign-in" aria-hidden="true"/>
+						</a>
+					</xf:if>
+				</div>
+			</div>
+		</xf:foreach>
+	</div>
+</div>]]></template>
+  <template type="public" title="gmod_servers_widget.css" version_id="1011000" version_string="1.1.10"><![CDATA[.widget-serverRow {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 10px;
+	border-bottom: 1px solid rgba(52, 73, 94, 0.3);
+	transition: background 0.15s ease;
+}
+.widget-serverRow:hover {
+	background: rgba(52, 152, 219, 0.04);
+}
+.widget-serverRow:last-child {
+	border-bottom: none;
+}
+
+.widget-RowLeftMap {
+	flex-shrink: 0;
+}
+
+.widget-serverRowMiddle {
+	flex: 1;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 2px;
+}
+.widget-serverRowMiddle > span {
+	display: block;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	line-height: 1.3;
+}
+
+.widget-serverRowRight {
+	flex-shrink: 0;
+	display: flex;
+	align-items: center;
+	gap: 4px;
+}
+
+.widget-mapImage {
+	width: 48px;
+	height: 48px;
+	border-radius: 6px;
+	border: 1px solid rgba(52, 73, 94, 0.5);
+	object-fit: cover;
+}
+
+.widget-niceServerName {
+	font-weight: 700;
+	color: #ecf0f1;
+}
+
+.widget-serverCount {
+	padding-right: 0;
+	color: #95a5a6;
+	font-size: 0.85rem;
+}
+
+.widget-joinServerButton {
+	height: 100%;
+}
+
+.widget-serverRowMiddle br {
+	display: none;
+}]]></template>
+  <template type="public" title="gmod_stats" version_id="1011000" version_string="1.1.10"><![CDATA[<xf:title>TTT Stats</xf:title>
+<xf:css src="gmod_interfacer.less"/>
+
+<xf:macro name="summary_grid" arg-stats="!" arg-derived="!">
+    <div class="info-grid">
+        <div class="info-item">
+            <div class="info-label">Kills</div>
+            <div class="info-value">{$stats.kills}</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">Deaths</div>
+            <div class="info-value">{$stats.deaths}</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">Suicides</div>
+            <div class="info-value">{$stats.suicides}</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">Team kills</div>
+            <div class="info-value">{$derived.teamKills}</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">Headshots</div>
+            <div class="info-value">{$stats.headshots}</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">Prop Kills</div>
+            <div class="info-value">{$stats.prop_kills}</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">DNA Kills (Traitors)</div>
+            <div class="info-value">{$stats.killed_traitors_with_dna}</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">Top Kills (Traitors)</div>
+            <div class="info-value">{$stats.highest_kills_on_traitors}</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">Top Kills (Innos)</div>
+            <div class="info-value">{$stats.highest_kills_on_innos}</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">Traitor Contribution</div>
+            <div class="info-value">{$stats.traitor_contribution}</div>
+        </div>
+        <div class="info-item">
+            <div class="info-label">Innocent Contribution</div>
+            <div class="info-value">{$stats.innocent_contribution}</div>
+        </div>
+    </div>
+</xf:macro>
+
+<xf:macro name="role_grid" arg-derived="!">
+    <div class="gmod-roleGrid">
+        <div class="card gmod-roleCard gmod-roleCard--innocent">
+            <div class="card-header">
+                <span><xf:fa icon="fa-user" aria-hidden="true"/> Innocent</span>
+                <span class="badge gmod-rolePill gmod-rolePill--innocent">Rounds: {$derived.roles.innocent.rounds}</span>
+            </div>
+
+            <div class="card-content">
+                <div class="gmod-statList">
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-trophy" aria-hidden="true"/></span><span
+                            class="gmod-statKey">Wins</span><span
+                            class="gmod-statVal">{$derived.roles.innocent.wins}</span></div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-ban"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Losses</span><span class="gmod-statVal">{$derived.roles.innocent.losses}</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-percent" aria-hidden="true"/></span><span
+                            class="gmod-statKey">Win rate</span><span class="gmod-statVal">{$derived.roles.innocent.winRate}%</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-heartbeat"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Survived</span><span class="gmod-statVal">{$derived.roles.innocent.survived}</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-life-ring"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Survival rate</span><span class="gmod-statVal">{$derived.roles.innocent.survivalRate}%</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-skull"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Deaths</span><span class="gmod-statVal">{$derived.roles.innocent.deaths}</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-shield" aria-hidden="true"/></span><span
+                            class="gmod-statKey">Traitors killed</span><span class="gmod-statVal">{$derived.roles.innocent.enemyKills}</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-user-friends"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Team kills</span><span class="gmod-statVal">{$derived.roles.innocent.teamKills}</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-chart-bar"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Role K/D</span><span
+                            class="gmod-statVal">{$derived.roles.innocent.kd}</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card gmod-roleCard gmod-roleCard--detective">
+            <div class="card-header">
+                <span><xf:fa icon="fa-search" aria-hidden="true"/> Detective</span>
+                <span class="badge gmod-rolePill gmod-rolePill--detective">Rounds: {$derived.roles.detective.rounds}</span>
+            </div>
+
+            <div class="card-content">
+                <div class="gmod-statList">
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-trophy" aria-hidden="true"/></span><span
+                            class="gmod-statKey">Wins</span><span
+                            class="gmod-statVal">{$derived.roles.detective.wins}</span></div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-ban"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Losses</span><span class="gmod-statVal">{$derived.roles.detective.losses}</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-percent" aria-hidden="true"/></span><span
+                            class="gmod-statKey">Win rate</span><span class="gmod-statVal">{$derived.roles.detective.winRate}%</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-heartbeat"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Survived</span><span class="gmod-statVal">{$derived.roles.detective.survived}</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-life-ring"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Survival rate</span><span class="gmod-statVal">{$derived.roles.detective.survivalRate}%</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-skull"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Deaths</span><span class="gmod-statVal">{$derived.roles.detective.deaths}</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-shield" aria-hidden="true"/></span><span
+                            class="gmod-statKey">Traitors killed</span><span class="gmod-statVal">{$derived.roles.detective.enemyKills}</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-user-friends"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Team kills</span><span class="gmod-statVal">{$derived.roles.detective.teamKills}</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-chart-bar"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Role K/D</span><span
+                            class="gmod-statVal">{$derived.roles.detective.kd}</span></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card gmod-roleCard gmod-roleCard--traitor">
+            <div class="card-header">
+                <span><xf:fa icon="fa-user-secret" aria-hidden="true"/> Traitor</span>
+                <span class="badge gmod-rolePill gmod-rolePill--traitor">Rounds: {$derived.roles.traitor.rounds}</span>
+            </div>
+
+            <div class="card-content">
+                <div class="gmod-statList">
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-trophy" aria-hidden="true"/></span><span
+                            class="gmod-statKey">Wins</span><span
+                            class="gmod-statVal">{$derived.roles.traitor.wins}</span></div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-ban"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Losses</span><span
+                            class="gmod-statVal">{$derived.roles.traitor.losses}</span></div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-percent" aria-hidden="true"/></span><span
+                            class="gmod-statKey">Win rate</span><span class="gmod-statVal">{$derived.roles.traitor.winRate}%</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-heartbeat"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Survived</span><span class="gmod-statVal">{$derived.roles.traitor.survived}</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-life-ring"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Survival rate</span><span class="gmod-statVal">{$derived.roles.traitor.survivalRate}%</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-skull"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Deaths</span><span
+                            class="gmod-statVal">{$derived.roles.traitor.deaths}</span></div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-crosshairs"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Kills (Innos+Detectives)</span><span class="gmod-statVal">{$derived.roles.traitor.enemyKills}</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-user-friends"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Team kills (Traitors)</span><span class="gmod-statVal">{$derived.roles.traitor.teamKills}</span>
+                    </div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-chart-bar"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Role K/D</span><span
+                            class="gmod-statVal">{$derived.roles.traitor.kd}</span></div>
+                    <div class="gmod-statLine"><span class="gmod-statIcon"><xf:fa icon="fa-crown"
+                                                                                  aria-hidden="true"/></span><span
+                            class="gmod-statKey">Top kills (round)</span><span class="gmod-statVal">{$derived.roles.traitor.topKills}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</xf:macro>
+
+<xf:set var="$derived" value="{$derived}"/>
+
+<div class="grid">
+    <div class="card u-marginBottom0">
+        <div class="card-header">
+            <span><xf:fa icon="fa-user" aria-hidden="true"/> Player</span>
+            <span class="badge badge-primary">{$steamid64}</span>
+        </div>
+        <div class="avatar-container">
+            <xf:if is="$steamAvatarURL">
+                <img class="gmod-avatar" src="{$steamAvatarURL}" alt="{$userName}"/>
+            </xf:if>
+            <div class="username">{$userName}</div>
+        </div>
+
+        <div class="card-content">
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">Total Playtime</div>
+                    <div class="info-value">{$totalPlayTime}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Member Since</div>
+                    <div class="info-value">{{ format_date_string($playerStats.first_joined_date, "m/d/Y") }}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Total Rounds</div>
+                    <div class="info-value">{$derived.totalRounds}</div>
+                </div>
+                <div class="info-item">
+                    <div class="info-label">Win Rate</div>
+                    <div class="info-value">{$derived.winRate}%</div>
+                </div>
+            </div>
+
+            <div class="gmod-kpiRow u-marginTop20">
+                <div class="gmod-kpi">
+                    <div class="gmod-kpiIcon">
+                        <xf:fa icon="fa-crosshairs" aria-hidden="true"/>
+                    </div>
+                    <div class="gmod-kpiValue">{$playerStats.kills}</div>
+                    <div class="gmod-kpiLabel">Kills</div>
+                </div>
+                <div class="gmod-kpi">
+                    <div class="gmod-kpiIcon">
+                        <xf:fa icon="fa-skull" aria-hidden="true"/>
+                    </div>
+                    <div class="gmod-kpiValue">{$playerStats.deaths}</div>
+                    <div class="gmod-kpiLabel">Deaths</div>
+                </div>
+                <div class="gmod-kpi">
+                    <div class="gmod-kpiIcon">
+                        <xf:fa icon="fa-bullseye" aria-hidden="true"/>
+                    </div>
+                    <div class="gmod-kpiValue">{$playerStats.headshots}</div>
+                    <div class="gmod-kpiLabel">Headshots</div>
+                </div>
+                <div class="gmod-kpi">
+                    <div class="gmod-kpiIcon">
+                        <xf:fa icon="fa-percentage" aria-hidden="true"/>
+                    </div>
+                    <div class="gmod-kpiValue">{$derived.headshotPct}%</div>
+                    <div class="gmod-kpiLabel">HS Rate</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card u-marginBottom0">
+        <div class="card-header">
+            <span><xf:fa icon="fa-chart-line" aria-hidden="true"/> Summary</span>
+        </div>
+        <div class="card-content">
+            <xf:macro name="summary_grid" arg-stats="{$playerStats}" arg-derived="{$derived}"/>
+        </div>
+    </div>
+</div>
+
+<xf:macro name="role_grid" arg-derived="{$derived}"/>
+
+<div class="u-marginTop30 u-marginBottom15">
+    <h2 class="gmod-sectionHeader">
+        <xf:fa icon="fa-server" aria-hidden="true" class="u-colorPrimary"/>
+        Server Stats
+    </h2>
+</div>
+
+<div class="server-list">
+    <xf:foreach loop="$playerStatsByServer" value="$row">
+        <div class="accordion">
+            <div class="accordion-header">
+                <div class="accordion-header-content">
+                    <xf:fa icon="fa-server" aria-hidden="true" class="accordion-header-icon"/>
+                    <div>
+                        <div class="accordion-header-title">{$row.server_nice_name}</div>
+                        <div class="accordion-header-subtitle">{$row.server_hostname}</div>
+                    </div>
+                </div>
+                <div class="accordion-header-content accordion-header-content--secondary">
+                    <div class="accordion-header-stats">
+                        <div class="accordion-header-statsLabel">Playtime</div>
+                        <div class="accordion-header-statsValue">{$row.playTime}</div>
+                    </div>
+                    <xf:fa icon="fa-chevron-down" id="chevron" aria-hidden="true"/>
+                </div>
+            </div>
+
+            <div class="accordion-content">
+                <div class="accordion-content-inner">
+                    <div class="grid">
+                        <div class="card">
+                            <div class="card-header">
+                                <span><xf:fa icon="fa-info-circle" aria-hidden="true"/> Session Info</span>
+                            </div>
+                            <div class="card-content">
+                                <div class="info-grid">
+                                    <div class="info-item">
+                                        <div class="info-label">Playtime</div>
+                                        <div class="info-value">{$row.playTime}</div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">First Joined</div>
+                                        <div class="info-value">{{ format_date_string($row.first_joined_date, "m/d/Y")
+                                            }}
+                                        </div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Last Seen</div>
+                                        <div class="info-value">{{ format_date_string($row.last_seen_date, "m/d/Y") }}
+                                        </div>
+                                    </div>
+                                    <div class="info-item">
+                                        <div class="info-label">Total Rounds</div>
+                                        <div class="info-value">{$row.derived.totalRounds}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <span><xf:fa icon="fa-chart-bar" aria-hidden="true"/> Server Summary</span>
+                            </div>
+                            <div class="card-content">
+                                <xf:macro name="summary_grid" arg-stats="{$row}" arg-derived="{$row.derived}"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="u-marginTop20">
+                        <xf:macro name="role_grid" arg-derived="{$row.derived}"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </xf:foreach>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const accordions = document.querySelectorAll('.accordion-header');
+        accordions.forEach(header => {
+            header.addEventListener('click', function () {
+                const accordion = this.parentElement;
+                accordion.classList.toggle('active');
+            });
+        });
+    });
+</script>]]></template>
+  <template type="public" title="gmod_stats.less" version_id="1012000" version_string="1.1.20"><![CDATA[.ttt-player-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: @gl-bg-card;
+    border: 1px solid @gl-border;
+    border-radius: @gl-radius;
+    border-left: 4px solid @gl-accent;
+}
+
+.ttt-player-avatar {
+    margin-right: 20px;
+}
+
+.ttt-player-avatar img {
+    border: 3px solid @gl-accent;
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+}
+
+.ttt-player-info {
+    flex: 1;
+}
+
+.ttt-player-name {
+    color: @gl-text;
+    font-size: 24px;
+    font-weight: 600;
+    margin: 0 0 10px 0;
+}
+
+.ttt-player-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.ttt-player-meta span {
+    color: @gl-text-muted;
+    font-size: 14px;
+}
+
+.ttt-player-meta i {
+    color: @gl-gold;
+    margin-right: 5px;
+}
+
+.ttt-servers-grid {
+    display: grid;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.ttt-server-card {
+    max-width: 750px;
+    background: @gl-bg-card;
+    border: 1px solid @gl-border;
+    border-radius: @gl-radius;
+    padding: 20px;
+    color: @gl-text;
+}
+
+.ttt-server-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid @gl-border;
+}
+
+.ttt-server-header h3 {
+    color: @gl-text;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.ttt-server-status {
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.ttt-server-status--online {
+    color: #27ae60;
+}
+
+.ttt-server-status--online i {
+    color: #27ae60;
+}
+
+.ttt-server-main-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.ttt-stat-item {
+    text-align: left;
+}
+
+.ttt-stat-item .ttt-stat-label {
+    color: @gl-text-muted;
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+
+.ttt-stat-item .ttt-stat-value {
+    color: @gl-text;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.ttt-server-detailed-stats {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.ttt-stat-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 15px;
+    justify-items: center;
+    align-items: center;
+}
+
+.ttt-stat-box {
+    text-align: center;
+    border-radius: @gl-radius;
+    background: @gl-bg-secondary;
+    max-width: 300px;
+    width: 100%;
+}
+
+.ttt-stat-box-header {
+    border-radius: @gl-radius @gl-radius 0px 0px;
+    font-size: 25px;
+    padding: 10px;
+}
+
+.ttt-stat-box--innocent {
+    background: linear-gradient(135deg, #27ae60, #229954);
+}
+
+.ttt-stat-box--traitor {
+    background: linear-gradient(135deg, #e74c3c, #c0392b);
+}
+
+.ttt-stat-box--detective {
+    background: linear-gradient(135deg, #3498db, #2980b9);
+}
+
+.ttt-stat-box--future {
+    background: @gl-bg-secondary;
+    border: 2px dashed @gl-border;
+}
+
+.ttt-stat-box-body {
+    padding: 15px 10px;
+}
+
+.ttt-stat-icon {
+    font-size: 26px;
+    margin-bottom: 5px;
+}
+
+.ttt-stat-number {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.ttt-stat-label {
+    font-size: 11px;
+    color: @gl-text-muted;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+.ttt-overall-performance {
+    background: @gl-bg-card;
+    border: 1px solid @gl-border;
+    border-radius: @gl-radius;
+    padding: 20px;
+    color: @gl-text;
+}
+
+.ttt-overall-performance h3 {
+    color: @gl-text;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0 0 20px 0;
+}
+
+.ttt-performance-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.ttt-performance-stat {
+    text-align: center;
+    padding: 20px;
+    background: @gl-bg-secondary;
+    border: 1px solid @gl-border;
+    border-radius: @gl-radius;
+}
+
+.ttt-performance-icon {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.ttt-performance-icon i {
+    color: @gl-gold;
+}
+
+.ttt-performance-value {
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.ttt-performance-label {
+    font-size: 12px;
+    color: @gl-text-muted;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .ttt-servers-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .ttt-performance-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .ttt-player-header {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .ttt-player-avatar {
+        margin: 0 0 15px 0;
+    }
+
+    .ttt-player-meta {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 800px) {
+    .ttt-stat-row {
+        grid-template-columns: 1fr;
+    }
+
+    .ttt-performance-grid {
+        grid-template-columns: 1fr;
+    }
+}
+]]></template>
+  <template type="public" title="gmod_stats_hub" version_id="1012000" version_string="1.1.20"><![CDATA[<xf:title>TTT Stats</xf:title>
+<xf:css src="gmod_interfacer.less"/>
+
+<div class="header">
+    <div class="header-content">
+        <h1 class="header-title">TTT Stats</h1>
+        <p class="store-subtitle">Search for any player, track stats, and compare how cracked you are with TTT leaderboards.</p>
+
+        <div class="gmod-statsHubSearch">
+            <xf:form action="/gl/stats" method="get" class="gmod-statsHubSearchForm">
+                <div class="gmod-statsHubSearchRow">
+                    <div class="gmod-statsHubSearchInput">
+                        <xf:textbox name="q" value="{$searchQuery}"
+                                    placeholder="SteamID64, STEAM_0:1:12345, or player name"/>
+                    </div>
+                    <div class="gmod-statsHubSearchBtn">
+                        <xf:button type="submit" class="button--cta button--icon button--icon--search">
+                            Search
+                        </xf:button>
+                    </div>
+                </div>
+            </xf:form>
+        </div>
+
+        <div class="header-badges">
+            <div class="header-badge">
+                <xf:fa icon="fa-clock" aria-hidden="true"/>
+                Playtime
+            </div>
+            <div class="header-badge">
+                <xf:fa icon="fa-crosshairs" aria-hidden="true"/>
+                Kills
+            </div>
+            <div class="header-badge">
+                <xf:fa icon="fa-chart-line" aria-hidden="true"/>
+                K/D
+            </div>
+            <div class="header-badge">
+                <xf:fa icon="fa-trophy" aria-hidden="true"/>
+                Win rate
+            </div>
+            <xf:if is="$mySteamId">
+                <a class="header-badge" href="/gl/stats?steamid={$mySteamId}">
+                    <xf:fa icon="fa-user" aria-hidden="true"/>
+                    My stats</a>
+            </xf:if>
+        </div>
+    </div>
+</div>
+
+<xf:if is="$searchQuery">
+    <div class="u-marginTop20">
+        <div class="card">
+            <div class="card-header">
+                <span><xf:fa icon="fa-search" aria-hidden="true"/> Search results</span>
+                <span class="badge badge-primary">{$searchQuery}</span>
+            </div>
+            <div class="card-content">
+                <xf:if is="$searchResults is not empty">
+                    <div class="table-height-scrollable">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>Player</th>
+                                <th>SteamID64</th>
+                                <th>Last seen</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <xf:foreach loop="$searchResults" value="$row">
+                                <tr>
+                                    <td><a href="/gl/stats?steamid={$row.steamid64}">{$row.in_game_name}</a></td>
+                                    <td><span class="badge badge-primary">{$row.steamid64}</span></td>
+                                    <td>
+                                        <xf:if is="$row.last_seen">{{ date_time($row.last_seen) }}
+                                            <xf:else/>
+                                            -
+                                        </xf:if>
+                                    </td>
+                                </tr>
+                            </xf:foreach>
+                            </tbody>
+                        </table>
+                    </div>
+                    <xf:else/>
+                    <div class="gmod-emptyState">
+                        No players matched that name
+                    </div>
+                </xf:if>
+            </div>
+        </div>
+    </div>
+</xf:if>
+
+<xf:if is="$searchResults is empty">
+    <div class="gmod-leaderGrid">
+        <div class="card">
+            <div class="card-header">
+                <span><xf:fa icon="fa-clock" aria-hidden="true"/> Most playtime</span>
+                <span class="badge badge-primary">Top 10</span>
+            </div>
+            <div class="card-content">
+                <div class="table-height-scrollable">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Player</th>
+                            <th>Playtime</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <xf:foreach loop="$leaderboards.mostPlaytime" value="$row">
+                            <tr>
+                                <td class="gmod-leaderRank">{$row.rank}</td>
+                                <td><a href="/gl/stats?steamid={$row.steamid64}">{$row.in_game_name}</a></td>
+                                <td><span class="badge badge-primary">{$row.derived.playTime}</span></td>
+                            </tr>
+                        </xf:foreach>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span><xf:fa icon="fa-crosshairs" aria-hidden="true"/> Most kills</span>
+                <span class="badge badge-primary">Top 10</span>
+            </div>
+            <div class="card-content">
+                <div class="table-height-scrollable">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Player</th>
+                            <th>Kills</th>
+                            <th>HS%</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <xf:foreach loop="$leaderboards.mostKills" value="$row">
+                            <tr>
+                                <td class="gmod-leaderRank">{$row.rank}</td>
+                                <td><a href="/gl/stats?steamid={$row.steamid64}">{$row.in_game_name}</a></td>
+                                <td><span class="badge badge-primary">{$row.kills}</span></td>
+                                <td>{$row.derived.headshotPct}%</td>
+                            </tr>
+                        </xf:foreach>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <xf:comment>
+            <div class="card">
+                <div class="card-header">
+                    <span><xf:fa icon="fa-chart-line" aria-hidden="true"/> Best K/D</span>
+                    <span class="badge badge-primary">Kills &gt;= 250</span>
+                </div>
+                <div class="card-content">
+                    <div class="table-height-scrollable">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Player</th>
+                                <th>K/D</th>
+                                <th>Kills</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <xf:foreach loop="$leaderboards.bestKd" value="$row">
+                                <tr>
+                                    <td class="gmod-leaderRank">{$row.rank}</td>
+                                    <td><a href="/gl/stats?steamid={$row.steamid64}">{$row.in_game_name}</a></td>
+                                    <td><span class="badge badge-primary">{$row.derived.kdRatio}</span></td>
+                                    <td>{$row.kills}</td>
+                                </tr>
+                            </xf:foreach>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span><xf:fa icon="fa-trophy" aria-hidden="true"/> Best win rate</span>
+                    <span class="badge badge-primary">Rounds &gt;= 250</span>
+                </div>
+                <div class="card-content">
+                    <div class="table-height-scrollable">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Player</th>
+                                <th>Win%</th>
+                                <th>Rounds</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <xf:foreach loop="$leaderboards.bestWinRate" value="$row">
+                                <tr>
+                                    <td class="gmod-leaderRank">{$row.rank}</td>
+                                    <td><a href="/gl/stats?steamid={$row.steamid64}">{$row.in_game_name}</a></td>
+                                    <td><span class="badge badge-primary">{$row.derived.winRate}%</span></td>
+                                    <td>{$row.rounds}</td>
+                                </tr>
+                            </xf:foreach>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </xf:comment>
+    </div>
+</xf:if>
+]]></template>
+  <template type="public" title="gmod_store" version_id="1011000" version_string="1.1.10"><![CDATA[<xf:js dev="gmod/store/store.js?t={$xf.time}" prod="gmod/store/store.min.js" min="true"/>
+<xf:css src="gmod_interfacer.less"/>
+
+<xf:title>Server Rank Store</xf:title>
+
+<div class="store-container">
+    <xf:if is="$isSandbox">
+        <div class="card store-notice">
+            <div class="card-header">
+                <span><xf:fa icon="fa-exclamation-triangle" aria-hidden="true"/> SANDBOX MODE</span>
+            </div>
+            <div class="card-content">
+                The rank store environment is set to <b>SANDBOX</b>. Use sandbox credentials.
+            </div>
+        </div>
+    </xf:if>
+
+    <div class="header">
+        <div class="header-background"></div>
+        <div class="header-content">
+            <h1 class="header-title">Server Ranks Store</h1>
+            <p class="store-subtitle">Purchase ranks to unlock exclusive benefits and support our servers and community
+                as we're hard at work delivering the best experiences possible!</p>
+            <div class="header-badges">
+                <span class="header-badge"><xf:fa icon="fa-shield-alt"/> TTT Premium Perks</span>
+                <span class="header-badge"><xf:fa icon="fa-bolt"/> TTT Pointshop Discounts</span>
+                <span class="header-badge"><xf:fa icon="fa-users"/> Community Support</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="store-layout">
+        <!-- Purchase Summary Sidebar -->
+        <div class="purchase-summary-sidebar">
+            <div class="card purchase-summary-card">
+                <div class="card-header">
+                    <span><xf:fa icon="fa-shopping-cart" aria-hidden="true"/> Purchase Summary</span>
+                </div>
+                <div class="card-content">
+                    <div class="selected-rank-display">
+                        <div class="rank-icon-placeholder">
+                            <img id="selectedRank-icon" src="/images/forum/store_ranks/{$upgrade.rank_image}"
+                                 alt="Rank Icon" style="display: none;">
+                            <div id="selectedRank-placeholder" class="rank-placeholder-icon">📦</div>
+                        </div>
+                        <div class="rank-details">
+                            <div class="rank-name" id="selectedPackage-name">No rank selected</div>
+                            <div class="rank-price" id="selectedPackage-price">$0.00</div>
+                        </div>
+                    </div>
+
+                    <div class="info-grid purchase-info">
+                        <div class="info-item">
+                            <div class="info-label">Recipient</div>
+                            <div class="info-value" id="selectedPackage-foruser">{$xf.visitor.username}</div>
+                        </div>
+                    </div>
+
+                    <div class="gift-action" id="gift-action">
+                        <a href="/store/userselect" class="btn btn-small gift-button full-width" id="gift-button"
+                           data-rankid="" data-xf-init="gmod-store-giftpackage">
+                            <i class="fa fa-gift"></i> Gift to Player
+                        </a>
+                        <a href="#" class="btn btn-small btn-alt full-width" id="reset-to-self-button"
+                           style="margin-top: 5px; display: none;">
+                            <xf:fa icon="fa-user"/>
+                            Clear Gift User
+                        </a>
+                    </div>
+
+                    <div class="purchase-actions">
+                        <div id="paypal-button" class="paypal-container" style="display: none;"></div>
+                        <div id="purchase-placeholder" class="empty-state">
+                            <xf:fa icon="fa-shopping-cart" aria-hidden="true"/>
+                            <p>Select a rank to continue</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="store-main-content">
+            <!-- Important Notice -->
+            <div class="card store-notice">
+                <div class="card-header">
+                    <span><xf:fa icon="fa-exclamation-triangle" aria-hidden="true"/> Important Notice</span>
+                </div>
+                <div class="card-content">
+                    All transactions are final due to the instant delivery of our store ranks. Due to this, there is a
+                    no-refund policy unless there are cases of fraud or transactions without your knowledge or consent.
+                </div>
+            </div>
+
+            <!-- Rank Cards Grid -->
+            <div class="ranks-grid">
+                <xf:foreach loop="$allGroups" value="$upgrade">
+                    <xf:if is="{$upgrade.can_purchase} == 1">
+                        <div class="card rank-card" data-rank-id="{$upgrade.upgrade_id}"
+                             data-xf-init="gmod-store-packageselect">
+                            <div class="card-header rank-card-header">
+                                <div class="rank-icon">
+                                    <img class="rank-image" src="/images/forum/store_ranks/{$upgrade.rank_image}"
+                                         alt="{$upgrade.title} Rank" title="{$upgrade.title} Rank">
+                                </div>
+                                <div class="rank-header-info">
+                                    <h2 class="rank-title" id="{$upgrade.upgrade_id}-title">{$upgrade.title|raw}</h2>
+                                    <div class="rank-price-display">
+                                        <span class="price-amount"
+                                              id="{$upgrade.upgrade_id}-price">${$upgrade.price}</span>
+                                        <xf:if is="{$upgrade.length} != 0">
+                                            <span class="price-period">per {$upgrade.length_unit}</span>
+                                        </xf:if>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-content rank-description">
+                                {$upgrade.description|raw}
+                            </div>
+                        </div>
+                    </xf:if>
+                </xf:foreach>
+            </div>
+        </div>
+    </div>
+</div>
+
+<xf:set var="$userHighestPriority" value="0"/>
+<xf:set var="$userCurrentRankPrice" value="0"/>
+<xf:if is="{$xf.visitor.user_id}">
+    <xf:foreach loop="$allGroups" value="$upgrade">
+        <xf:if is="{$xf.visitor.isMemberOf([{$upgrade.group_id}])}">
+            <xf:if is="{$upgrade.rank_priority} > {$userHighestPriority}">
+                <xf:set var="$userHighestPriority" value="{$upgrade.rank_priority}"/>
+                <xf:set var="$userCurrentRankPrice" value="{$upgrade.price}"/>
+            </xf:if>
+        </xf:if>
+    </xf:foreach>
+</xf:if>
+
+<script>
+    window.StoreData = {
+        isLoggedIn: <xf:if is="{$xf.visitor.user_id}">true
+            <xf:else/>
+            false</xf:if>,
+        visitorId: <xf:if is="{$xf.visitor.user_id}">{$xf.visitor.user_id}
+            <xf:else/>
+            0</xf:if>,
+        visitorUsername: <xf:if is="{$xf.visitor.user_id}">"{$xf.visitor.username|escape('js')}"
+            <xf:else/>
+            ""</xf:if>,
+        ipAddress: "{$ipAddress}",
+        clientId: <xf:if is="{$xf.visitor.user_id}">"{$clientId}"
+            <xf:else/>
+            ""</xf:if>,
+        userHighestRankPriority: {$userHighestPriority},
+        userCurrentRankPrice: {$userCurrentRankPrice},
+        upgradeData: <xf:if is="{$xf.visitor.user_id}">{
+            <xf:foreach loop="$allGroups" value="$upgrade" key="$key">
+                <xf:if is="{$upgrade.can_purchase} == 1">
+                    {$upgrade.upgrade_id}: {
+                    price: {$upgrade.price},
+                    title: '{$upgrade.title|escape('js')}',
+                    groupId: {$upgrade.group_id},
+                    rankPriority: {$upgrade.rank_priority},
+                    length: {$upgrade.length},
+                    lengthUnit: '{$upgrade.length_unit}'
+                }
+                    <xf:if is="!$__foreach.upgrade.last">,</xf:if>
+                </xf:if>
+            </xf:foreach>
+        }
+            <xf:else/>
+            {}</xf:if>
+    };
+</script>
+<xf:if is="{$xf.visitor.user_id}">
+    <script src="https://www.paypal.com/sdk/js?client-id={{$clientId}}&currency=USD&commit=true&vault=true"></script>
+</xf:if>
+]]></template>
+  <template type="public" title="gmod_store_closed" version_id="1010400" version_string="1.1.4"><![CDATA[<xf:title>Rank Store</xf:title>
+
+<h2 class="block-header">Store Closed</h2>
+<div class="secondaryContent">
+	<div class="errorBlock">
+    	<span>We apologize but the store is currently closed for scheduled maintenance. Please check back later when the store is open.</span>
+  	</div>
+</div>]]></template>
+  <template type="public" title="gmod_store_giftuser" version_id="1011000" version_string="1.1.10"><![CDATA[<xf:title>Gift Selection</xf:title>
+
+<xf:form action="/store/userselectsearch" id="userSearch">
+    <xf:textboxrow name="username" ac="single" label="{{ phrase('user_name') }}" />
+    <xf:hiddenval name="rank_id" value="{$xf.request.filter('rank_id', 'uint')}" />
+
+    <xf:submitrow submit="Select user" icon="gift" class="js-overlayClose" />
+</xf:form>
+
+<xf:js>
+    var userSearchForm = document.getElementById('userSearch');
+
+    if (userSearchForm) {
+        userSearchForm.addEventListener('submit', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+
+            var formData = new FormData(userSearchForm);
+
+            // Convert FormData to object for XF.ajax
+            var formObject = {};
+            formData.forEach(function(value, key) {
+                formObject[key] = value;
+            });
+
+            XF.ajax('POST', userSearchForm.action, formObject, function(data) {
+                if (data && data.user_id && data.user_name) {
+                    if (window.StoreApp) {
+                        window.StoreApp.recipientRankData = {
+                            userId: data.user_id,
+                            userName: data.user_name,
+                            highestRankPriority: data.highest_rank_priority || 0,
+                            currentRankPrice: data.current_rank_price || 0
+                        };
+                    }
+                    setStoreUser(data.user_id, data.user_name);
+                } else {
+                    console.error('Invalid response data', data);
+                }
+            }, {
+                error: function(error) {
+                    console.error('AJAX error', error);
+                    XF.alert(error.message || 'An error occurred while processing your request.');
+                }
+            });
+        });
+    }
+</xf:js>]]></template>
+  <template type="public" title="gmod_store_processorder" version_id="1011000" version_string="1.1.10"><![CDATA[<xf:title>Process Order</xf:title>
+
+<xf:css>
+.paymentHeaderSuccess {
+	font-size: 2em;
+	display: inline-block;
+}
+
+.paymentHeaderTextSuccess {
+	font-size: 2em;
+	display: inline-block;
+	color: limegreen;
+	padding: 0px 5px 0px 5px;
+}
+
+.paymentHeaderFail {
+	font-size: 2em;
+	display: inline-block;
+}
+
+.paymentHeaderTextFail {
+	font-size: 2em;
+	display: inline-block;
+	color: #c94e4e;
+}
+</xf:css>
+
+<div style="padding:15px;">
+	<xf:if is="{$paymentFound} == false">
+		<center>
+			<span class="paymentHeaderFail">❌</span><h1 class="paymentHeaderTextFail"> Uh oh. There was a payment error! </h1><span class="paymentHeaderFail">❌</span>
+
+			<p>Unfortunately there was a problem prcessing your payment with OrderID <span style="color:#c94e4e;font-weight:700;">{$orderId}</span>. Contact an Owner or Lead Administrator to further investigate this issue as we don't want you to not receive your store rank.</p>
+			<br>
+			<p>We apologize for the difficulties.</p>
+		</center>
+	<xf:else />
+		<center>
+			<span class="paymentHeaderSuccess">🎉</span><h1 class="paymentHeaderTextSuccess"> Success </h1><span class="paymentHeaderSuccess">🎉</span>
+
+			<p>Your payment with OrderID <span style="color:limegreen;font-weight:700;">{$transactionId}</span> was successfully processed!
+				<xf:if is="{$isGift}">
+					The giftee
+				<xf:else />
+					You
+				</xf:if>
+				should receive the rank soon, though rarely this may take a couple of hours. Contact an Owner or Lead Administrator if
+				<xf:if is="{$isGift}">
+					the giftee does
+				<xf:else />
+					you do
+				</xf:if>
+				not receive the rank within 24 hours.</p>
+			<br>
+			<p>Thank you for your purchase!
+				<xf:if is="{$isGift} == false">
+					We hope you enjoy your new rank privileges!
+				</xf:if>
+			</p>
+		</center>
+	</xf:if>
+</div>]]></template>
+</templates>

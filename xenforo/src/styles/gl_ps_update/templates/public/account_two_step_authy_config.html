@@ -1,0 +1,24 @@
+<xf:title>{{ phrase('two_step_verification_setup:') }} {$provider.title}</xf:title>
+
+<xf:wrap template="account_wrapper" />
+
+<xf:form action="{{ link('account/two-step/enable', $provider) }}" class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:if is="$xf.visitor.email">
+				<xf:formrow label="{{ phrase('email') }}" explain="{{ phrase('create_authy_id_current_email_explain') }}">
+					{$xf.visitor.email|email_display}
+				</xf:formrow>
+			<xf:else />
+				<xf:textboxrow label="{{ phrase('email') }}" name="email" explain="{{ phrase('create_authy_id_email_explain') }}" />
+			</xf:if>
+
+			<xf:telboxrow label="{{ phrase('cell_mobile_phone_number') }}"
+				name="user_number" dialcodename="dial_code"
+				intlnumbername="intl_numb" />
+		</div>
+		<xf:submitrow icon="save" />
+	</div>
+
+	<xf:hiddenval name="setup" value="1" />
+</xf:form>

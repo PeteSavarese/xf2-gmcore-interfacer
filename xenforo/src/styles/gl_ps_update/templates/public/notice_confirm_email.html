@@ -1,0 +1,5 @@
+{{ phrase('your_account_is_currently_awaiting_confirmation_confirmation_sent_to_x', {'email': $xf.visitor.email|email_display}) }}
+<xf:if is="$xf.session.hasPreRegActionPending">
+	{{ phrase('once_your_registration_has_been_completed_your_content_will_be_posted') }}
+</xf:if><br />
+<a href="{{ link('account-confirmation/resend') }}" data-xf-click="overlay">{{ phrase('resend_confirmation_email') }}</a>

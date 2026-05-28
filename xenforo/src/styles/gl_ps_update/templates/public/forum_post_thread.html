@@ -1,0 +1,202 @@
+<xf:title>{{ $forum.TypeHandler.getTypeActionPhrase('title') ?: phrase('post_thread') }}</xf:title>
+
+<xf:head option="metaNoindex"><meta name="robots" content="noindex" /></xf:head>
+
+<xf:breadcrumb source="$forum.getBreadcrumbs()" />
+
+<xf:form action="{{ link('forums/post-thread', $forum) }}" ajax="true" class="block" data-xf-init="attachment-manager"
+	draft="{{ link('forums/draft', $forum) }}">
+
+	<div class="block-container">
+		<div class="block-body">
+
+			<xf:set var="$titleFinalHtml"><!--[XF:title_final_html]--></xf:set>
+
+			<xf:prefixinputrow
+				label="{{ phrase('title') }}"
+				prefixes="{$prefixes}"
+				type="thread"
+				rows="1"
+				prefix-value="{{ $forum.draft_thread.prefix_id ?: ($thread.prefix_id ?: $forum.default_prefix_id) }}"
+				textbox-value="{{ $title ?: $thread.title ?: $forum.draft_thread.title }}"
+				textbox-class="input--title"
+				placeholder="{$forum.thread_prompt}"
+				rowtype="fullWidth noLabel"
+				autofocus="autofocus"
+				maxlength="{{ max_length('XF:Thread', 'title') }}"
+				help-href="{{ link('forums/prefix-help', $forum) }}"
+				finalhtml="{$titleFinalHtml}" />
+
+			<!--[XF:after_title]-->
+
+			<xf:macro id="type_chooser"
+				arg-thread="{$thread}"
+				arg-forum="{$forum}"
+				arg-creatableThreadTypes="{$creatableThreadTypes}"
+				arg-defaultThreadType="{$defaultThreadType}" />
+
+			<div class="js-inlineNewPostFields">
+				<xf:editorrow name="message"
+					value="{{ $post.message ?: $forum.draft_thread.message }}"
+					attachments="{{ $attachmentData ? $attachmentData.attachments : [] }}"
+					rowtype="fullWidth noLabel mergePrev"
+					label="{{ phrase('message') }}"
+					data-preview-url="{{ link('forums/thread-preview', $forum) }}" />
+
+				<xf:formrow rowtype="fullWidth noLabel mergePrev noTopPadding">
+					<xf:if is="$attachmentData">
+						<xf:macro id="helper_attach_upload::upload_block"
+							arg-attachmentData="{$attachmentData}"
+							arg-forceHash="{$forum.draft_thread.attachment_hash}" />
+					</xf:if>
+
+					<xf:if is="$xf.options.multiQuote">
+						<xf:macro id="multi_quote_macros::button"
+							arg-href="{{ link('threads/multi-quote', $thread) }}"
+							arg-messageSelector=".js-post"
+							arg-storageKey="multiQuoteThread" />
+					</xf:if>
+				</xf:formrow>
+
+				<xf:macro id="type_fields"
+					arg-thread="{$thread}"
+					arg-forum="{$forum}"
+					arg-creatableThreadTypes="{$creatableThreadTypes}"
+					arg-defaultThreadType="{$defaultThreadType}"
+					arg-draftOverride="{$typeDataDraftOverride}"
+					arg-subContext="full" />
+
+				<xf:if contentcheck="true">
+					<hr class="formRowSep" />
+					<xf:contentcheck>
+						<xf:macro id="custom_fields_macros::custom_fields_edit"
+							arg-type="threads"
+							arg-set="{$thread.custom_fields}"
+							arg-editMode="{{ $thread.getFieldEditMode(true) }}"
+							arg-onlyInclude="{$forum.field_cache}"
+							arg-requiredOnly="{{ $inlineMode ? true : false }}" />
+					</xf:contentcheck>
+				</xf:if>
+
+				<xf:if is="$canEditTags">
+					<hr class="formRowSep" />
+					<xf:tokeninputrow name="tags" value="{{ $thread.tags ? $thread.tags|join(', ') : $forum.draft_thread.tags ?: $tags }}"
+						href="{{ link('misc/tag-auto-complete') }}"
+						min-length="{$xf.options.tagLength.min}"
+						max-length="{$xf.options.tagLength.max}"
+						max-tokens="{$xf.options.maxContentTags}"
+						label="{{ phrase('tags') }}">
+
+						<xf:explain>
+							{{ phrase('multiple_tags_may_be_separated_by_commas') }}
+							<xf:if is="$forum.min_tags">
+								{{ phrase('this_content_must_have_at_least_x_tags', {'min': $forum.min_tags}) }}
+							</xf:if>
+						</xf:explain>
+					</xf:tokeninputrow>
+				</xf:if>
+
+				<hr class="formRowSep" />
+				<xf:if is="!$xf.visitor.user_id AND !$forum.canCreateThreadPreReg()">
+					<xf:textboxrow name="_xfUsername" data-xf-init="guest-username"
+						autocomplete="username"
+						maxlength="{{ max_length($xf.visitor, 'username') }}"
+						label="{{ phrase('name') }}" />
+				<xf:elseif is="$xf.visitor.user_id" />
+					<xf:macro id="helper_thread_options::watch_input" arg-thread="{$thread}" />
+					<xf:macro id="helper_thread_options::thread_status" arg-thread="{$thread}" />
+				</xf:if>
+
+				<xf:captcharow label="{{ phrase('verification') }}" context="xf_post_thread" />
+			</div>
+		</div>
+
+		<xf:submitrow submit="{{ $forum.TypeHandler.getTypeActionPhrase('submit') ?: phrase('post_thread') }}" icon="write" sticky="true" />
+	</div>
+</xf:form>
+
+<xf:macro id="type_chooser"
+	arg-thread="!"
+	arg-forum="!"
+	arg-creatableThreadTypes="!"
+	arg-defaultThreadType="!"
+	arg-rowType="fullWidth noLabel noTopPadding noBottomPadding mergeNext mergePrev">
+
+	<xf:if is="count($creatableThreadTypes) > 1">
+		<xf:css src="input_extended.less" />
+		<xf:formrow rowtype="{$rowType}">
+			<div class="hScroller inputTypesScroller" data-xf-init="h-scroller">
+				<div class="hScroller-scroll">
+					<ul class="inputTypes" role="radiogroup" aria-label="{{ phrase('thread_type')|for_attr }}">
+						<xf:foreach loop="$creatableThreadTypes" key="$threadTypeId" value="$threadType">
+							<li role="none">
+								<label class="inputTypes-type">
+									<input type="radio" name="discussion_type" value="{$threadTypeId}"
+										class="inputTypes-input"
+										data-xf-init="disabler"
+										data-hide="true"
+										data-optional="true"
+										data-autofocus="false"
+										data-container=".js-threadTypeData[data-type-id='{$threadTypeId}']"
+										{{ $threadTypeId == $defaultThreadType ? 'checked="checked"' : '' }}
+									/>
+									<span class="inputTypes-display inputTypes-display--type_{$threadTypeId}">
+										<span class="inputTypes-icon" aria-hidden="true">
+											<xf:set var="$typeIcon" value="{{ $threadType.getTypeIconClass() }}" />
+											<xf:if is="$typeIcon">
+												<xf:fa icon="{$typeIcon}" />
+											<xf:else />
+												<i class="inputTypes-defaultIcon"></i>
+											</xf:if>
+										</span>
+										<span class="inputTypes-title">{{ $threadType.getTypeTitle() }}</span>
+									</span>
+								</label>
+							</li>
+						</xf:foreach>
+					</ul>
+				</div>
+			</div>
+		</xf:formrow>
+	<xf:else />
+		<xf:hiddenval name="discussion_type" value="{$defaultThreadType}" />
+	</xf:if>
+
+</xf:macro>
+
+<xf:macro id="type_fields"
+	arg-thread="!"
+	arg-forum="!"
+	arg-creatableThreadTypes="!"
+	arg-defaultThreadType="!"
+	arg-subContext="!"
+	arg-extraOptions="{{ [] }}"
+	arg-draftOverride="{{ null }}"
+	arg-formRowSepVariant="">
+
+	<xf:if contentcheck="true">
+		<ul class="listPlain">
+		<xf:contentcheck>
+			<xf:foreach loop="$creatableThreadTypes" key="$threadTypeId" value="$threadType">
+				<xf:if contentcheck="true">
+					<li class="js-threadTypeData" data-type-id="{$threadTypeId}" style="{{ $threadTypeId != $defaultThreadType ? 'display:none;' : ''}}">
+						<hr class="formRowSep {$formRowSepVariant}" />
+						<xf:contentcheck>
+							{{ $threadType.renderExtraDataEdit(
+								$thread,
+								'create',
+								$subContext,
+								{
+									'draft': $subContext == 'quick' ? null : $forum->draft_thread,
+									'draftOverride': $draftOverride
+								} + $extraOptions
+							)|raw }}
+						</xf:contentcheck>
+					</li>
+				</xf:if>
+			</xf:foreach>
+		</xf:contentcheck>
+		</ul>
+	</xf:if>
+
+</xf:macro>

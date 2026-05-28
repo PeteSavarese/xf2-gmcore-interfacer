@@ -1,0 +1,1 @@
+Force new users to register using their Steam account. This does not prevent existing users from signing in via standard username and password authentication.

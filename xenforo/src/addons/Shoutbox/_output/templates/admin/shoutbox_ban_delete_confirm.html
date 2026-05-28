@@ -1,0 +1,12 @@
+<xf:title>Remove shoutbox ban</xf:title>
+
+<xf:form action="{{ link('shoutbox-bans/delete', $ban) }}" class="block" ajax="false">
+	<div class="block-container">
+		<div class="block-body">
+			<div class="blockRow" style="padding:6px 10px;">
+				Are you sure you want to remove the shoutbox ban for <strong>{$user.username}</strong>?
+			</div>
+		</div>
+		<xf:submitrow submit="Remove ban" icon="delete" />
+	</div>
+</xf:form>

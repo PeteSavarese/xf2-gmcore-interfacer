@@ -1,0 +1,15 @@
+<xf:if is="$alerts is not empty">
+	<div class="menu-scroller">
+		<ol class="listPlain" data-xf-init="alerts-list">
+			<xf:foreach loop="$alerts" value="$alert">
+				<li class="alert js-alert menu-row menu-row--separated menu-row--clickable {{ $alert.isUnreadInUi() ? 'is-unread' : '' }}" data-alert-id="{$alert.alert_id}">
+					<div class="fauxBlockLink">
+						<xf:macro id="alert_macros::row" arg-alert="{$alert}" />
+					</div>
+				</li>
+			</xf:foreach>
+		</ol>
+	</div>
+<xf:else />
+	<div class="menu-row">{{ phrase('you_have_no_new_alerts') }}</div>
+</xf:if>

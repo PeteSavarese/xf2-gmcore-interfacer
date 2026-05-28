@@ -1,0 +1,16 @@
+<xf:if is="$users is not empty">
+	<div class="block"{{ widget_data($widget) }}>
+		<div class="block-container">
+			<h3 class="block-minorHeader">{$title}</h3>
+			<div class="block-body block-row">
+				<ul class="listHeap">
+					<xf:foreach loop="$users" value="$user">
+						<li>
+							<xf:avatar user="$user" size="s" img="true" />
+						</li>
+					</xf:foreach>
+				</ul>
+			</div>
+		</div>
+	</div>
+</xf:if>

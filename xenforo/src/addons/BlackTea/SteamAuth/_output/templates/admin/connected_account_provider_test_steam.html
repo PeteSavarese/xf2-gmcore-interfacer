@@ -1,0 +1,19 @@
+
+        
+<xf:if is="!$providerData">
+	<xf:macro template="connected_account_provider_test_macros"
+	          name="explain"
+		      arg-providerTitle="{$provider.title}"
+		      arg-keyName="{{ phrase('app_id') }}"
+		      arg-keyValue="{$provider.options.app_id}" />
+<xf:else />
+    <xf:macro template="connected_account_provider_test_macros" name="success" />
+    <xf:macro template="connected_account_provider_test_macros"
+    	      name="display_name"
+    		  arg-name="{$providerData.username}" />
+    <xf:macro template="connected_account_provider_test_macros"
+    	      name="picture"
+    		  arg-url="{$providerData.avatar_url}" />
+</xf:if>
+        
+    

@@ -1,0 +1,44 @@
+<xf:title>{$category.title}</xf:title>
+<xf:description>{$category.description|raw}</xf:description>
+
+<xf:if is="!$category.isSearchEngineIndexable()">
+	<xf:head option="metaNoindex"><meta name="robots" content="noindex" /></xf:head>
+</xf:if>
+
+<xf:macro id="metadata_macros::canonical_url" arg-canonicalUrl="{{ link('canonical:categories', $category) }}" />
+
+<xf:macro id="category_macros::category_page_options" arg-category="{$category}" />
+<xf:breadcrumb source="$category.getBreadcrumbs(false)" />
+
+<xf:if is="$nodeTree">
+	<div class="block">
+		<div class="block-outer"><xf:trim>
+			<xf:if contentcheck="true">
+				<div class="block-outer-opposite">
+					<div class="buttonGroup">
+					<xf:contentcheck>
+						<xf:if is="$xf.visitor.user_id && $hasForumDescendents">
+							<xf:button href="{{ link('categories/mark-read', $category, {'date': $xf.time}) }}"
+								class="button--link" overlay="true">
+								{{ phrase('mark_read') }}
+							</xf:button>
+						</xf:if>
+					</xf:contentcheck>
+					</div>
+				</div>
+			</xf:if>
+		</xf:trim></div>
+		<div class="block-container">
+			<div class="block-body">
+				<xf:macro id="forum_list::node_list"
+					arg-children="{$nodeTree}"
+					arg-extras="{$nodeExtras}"
+					arg-depth="2" />
+			</div>
+		</div>
+	</div>
+<xf:else />
+	<div class="blockMessage">{{ phrase('there_is_nothing_to_display') }}</div>
+</xf:if>
+
+<xf:widgetpos id="category_view_sidebar" context-category="{$category}" position="sidebar" />

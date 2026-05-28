@@ -1,0 +1,23 @@
+<a href="javascript:" class="notice-dismiss js-enablePushDismiss" aria-label="{{ phrase('dismiss_notice')|for_attr }}"></a>
+
+<div data-xf-init="push-cta">
+	<div class="u-alignCenter">
+		<div class="js-initialMessage">
+			{{ phrase('x_would_like_your_permission_to_enable_push_notifications', {'boardTitle': $xf.options.boardTitle, 'link': link('account/preferences')}) }}
+		</div>
+		<div class="js-dismissMessage" style="display: none">
+			{{ phrase('we_strongly_recommend_enabling_push_notifications') }}
+			<ul class="listInline listInline--bullet" style="margin-top: 5px">
+				<li><a href="{{ link('account/preferences') }}" class="js-enablePushLink">{{ phrase('enable_notifications') }}</a></li>
+				<li><a href="javascript:" class="js-dismissTemp">{{ phrase('ask_me_another_time') }}</a></li>
+				<li><a href="javascript:" class="js-dismissPerm">{{ phrase('never_ask_again') }}</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+<xf:js>
+	XF.extendObject(true, XF.config, {
+		skipPushNotificationSubscription: true
+	});
+</xf:js>

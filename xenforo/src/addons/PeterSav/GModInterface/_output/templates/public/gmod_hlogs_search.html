@@ -1,0 +1,67 @@
+<xf:title>History Logs</xf:title>
+<xf:css src="gmod_interfacer.less"/>
+
+<xf:breadcrumb href="/gl/hlogs/search">History Logs</xf:breadcrumb>
+
+<div class="card">
+    <div class="card-header">
+        <span><xf:fa icon="fa-search" aria-hidden="true"/> Search</span>
+    </div>
+    <div class="card-content">
+        <p>Search players by SteamID or name</p>
+        <xf:form action="/gl/hlogs/search" method="get">
+            <div class="action-bar" style="justify-content: flex-start;">
+                <xf:textbox name="q" value="{$searchQuery}" maxlength="64"
+                            placeholder="SteamID64, STEAM_0:1:12345, or player name"/>
+                <xf:button type="submit" class="button--cta button--icon button--icon--search">
+                    Search
+                </xf:button>
+            </div>
+        </xf:form>
+    </div>
+</div>
+
+<xf:if is="$searchQuery">
+    <div class="card">
+        <div class="card-header">
+            <span><xf:fa icon="fa-search" aria-hidden="true"/> Search results</span>
+        </div>
+        <div class="card-content">
+            <xf:if is="$searchResults is not empty">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Player</th>
+                        <th>SteamID</th>
+                        <th>Matched on</th>
+                        <th>Last seen</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <xf:foreach loop="$searchResults" value="$row">
+                        <tr>
+                            <td><a href="/gl/hlogs/results?steamid={$row.steamid64}&q={$searchQuery|urlencode}">{$row.in_game_name}</a>
+                            </td>
+                            <td><span class="badge badge-primary">{$row.steamid64}</span></td>
+                            <td>
+                                <xf:if is="$row.matchPreviewHtml">{$row.matchPreviewHtml|raw}
+                                    <xf:else/>
+                                    -
+                                </xf:if>
+                            </td>
+                            <td>
+                                <xf:if is="$row.last_seen">{{ date_time($row.last_seen) }}
+                                    <xf:else/>
+                                    -
+                                </xf:if>
+                            </td>
+                        </tr>
+                    </xf:foreach>
+                    </tbody>
+                </table>
+                <xf:else/>
+                <div class="gmod-emptyState">No players matched that name</div>
+            </xf:if>
+        </div>
+    </div>
+</xf:if>

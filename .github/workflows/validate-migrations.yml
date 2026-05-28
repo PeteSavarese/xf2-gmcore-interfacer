@@ -1,0 +1,207 @@
+# name: Validate Database Migrations
+
+# on:
+#   pull_request:
+#     paths:
+#       - 'mariadb/flyway/**'
+#       - '.github/workflows/validate-migrations.yml'
+#   push:
+#     branches:
+#       - main
+#       - staging
+#       - prod
+#     paths:
+#       - 'mariadb/flyway/**'
+#   workflow_dispatch:
+
+# jobs:
+#   validate-gl-core-migrations:
+#     name: Validate gmcore_core Migrations
+#     runs-on: ubuntu-latest
+
+#     services:
+#       mariadb:
+#         image: mariadb:latest
+#         env:
+#           MARIADB_ROOT_PASSWORD: test_root_password
+#           MARIADB_DATABASE: gmcore_core
+#           MARIADB_USER: test_user
+#           MARIADB_PASSWORD: test_password
+#         options: >-
+#           --health-cmd="mariadb-admin ping -h 127.0.0.1 -uroot -ptest_root_password"
+#           --health-interval=5s
+#           --health-timeout=3s
+#           --health-retries=20
+#         ports:
+#           - 3306:3306
+
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v4
+
+#       - name: Install MariaDB client
+#         run: |
+#           sudo apt-get update
+#           sudo apt-get install -y mariadb-client
+
+#       - name: Wait for MariaDB to be ready
+#         run: |
+#           echo "Waiting for MariaDB to be ready..."
+#           max_attempts=30
+#           attempt=1
+
+#           while [ $attempt -le $max_attempts ]; do
+#             if mariadb -h 127.0.0.1 -P 3306 -utest_user -ptest_password -e "SELECT 1" gmcore_core 2>/dev/null; then
+#               echo "MariaDB is ready (attempt $attempt)"
+#               exit 0
+#             fi
+
+#             echo "Attempt $attempt/$max_attempts failed, waiting..."
+#             sleep 2
+#             attempt=$((attempt + 1))
+#           done
+
+#           echo "ERROR: MariaDB did not become ready after $max_attempts attempts"
+#           exit 1
+
+#       - name: Validate migration naming convention
+#         run: |
+#           echo "Checking migration file naming convention..."
+
+#           INVALID_FILES=$(find mariadb/flyway/gmcore_core/sql -name "*.sql" ! -name "V*__*.sql" ! -name "U*__*.sql" ! -name "R__*.sql" || true)
+
+#           if [ -n "$INVALID_FILES" ]; then
+#             echo "ERROR: Invalid migration file names found:"
+#             echo "$INVALID_FILES"
+#             echo ""
+#             echo "Migration files must follow the pattern:"
+#             echo "  V<VERSION>__<DESCRIPTION>.sql  (e.g., V2__add_user_email.sql)"
+#             exit 1
+#           fi
+
+#           echo "All migration files follow correct naming convention"
+
+#       - name: Check for duplicate version numbers
+#         run: |
+#           echo "Checking for duplicate version numbers..."
+
+#           VERSIONS=$(ls mariadb/flyway/gmcore_core/sql/V*.sql 2>/dev/null | sed 's/.*V\([0-9.]*\)__.*/\1/' | sort)
+#           DUPLICATES=$(echo "$VERSIONS" | uniq -d)
+
+#           if [ -n "$DUPLICATES" ]; then
+#             echo "ERROR: Duplicate version numbers found:"
+#             echo "$DUPLICATES"
+#             exit 1
+#           fi
+
+#           echo "No duplicate version numbers"
+
+#       - name: Validate SQL syntax
+#         run: |
+#           echo "Validating SQL syntax..."
+
+#           for file in mariadb/flyway/gmcore_core/sql/*.sql; do
+#             echo "Checking: $(basename $file)"
+
+#             # Basic syntax check using mariadb client
+#             if ! mariadb -h 127.0.0.1 -P 3306 -utest_user -ptest_password gmcore_core --execute="SELECT 1" &>/dev/null; then
+#               echo "ERROR: Database connection failed"
+#               exit 1
+#             fi
+#           done
+
+#           echo "SQL syntax validation passed"
+
+#       - name: Run Flyway Info
+#         run: |
+#           docker run --rm \
+#             --network host \
+#             -v "$(pwd)/mariadb/flyway/gmcore_core/sql:/flyway/sql" \
+#             -e FLYWAY_URL="jdbc:mariadb://127.0.0.1:3306/gmcore_core" \
+#             -e FLYWAY_USER="test_user" \
+#             -e FLYWAY_PASSWORD="test_password" \
+#             -e FLYWAY_LOCATIONS="filesystem:/flyway/sql" \
+#             flyway/flyway:latest \
+#             info
+
+#       - name: Apply migrations
+#         run: |
+#           docker run --rm \
+#             --network host \
+#             -v "$(pwd)/mariadb/flyway/gmcore_core/sql:/flyway/sql" \
+#             -e FLYWAY_URL="jdbc:mariadb://127.0.0.1:3306/gmcore_core" \
+#             -e FLYWAY_USER="test_user" \
+#             -e FLYWAY_PASSWORD="test_password" \
+#             -e FLYWAY_LOCATIONS="filesystem:/flyway/sql" \
+#             flyway/flyway:latest \
+#             migrate
+
+#       - name: Run Flyway Validate
+#         run: |
+#           docker run --rm \
+#             --network host \
+#             -v "$(pwd)/mariadb/flyway/gmcore_core/sql:/flyway/sql" \
+#             -e FLYWAY_URL="jdbc:mariadb://127.0.0.1:3306/gmcore_core" \
+#             -e FLYWAY_USER="test_user" \
+#             -e FLYWAY_PASSWORD="test_password" \
+#             -e FLYWAY_LOCATIONS="filesystem:/flyway/sql" \
+#             flyway/flyway:latest \
+#             validate
+
+#       - name: Verify migration history
+#         run: |
+#           echo "Migration history:"
+#           mariadb -h 127.0.0.1 -P 3306 -utest_user -ptest_password gmcore_core \
+#             -e "SELECT version, description, installed_on, success FROM flyway_schema_history ORDER BY installed_rank;"
+
+#       - name: Verify table creation
+#         run: |
+#           echo "Tables created:"
+#           TABLE_COUNT=$(mariadb -h 127.0.0.1 -P 3306 -utest_user -ptest_password gmcore_core \
+#             -N -e "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='gmcore_core' AND table_type='BASE TABLE';")
+
+#           echo "Total tables: $TABLE_COUNT"
+
+#           if [ "$TABLE_COUNT" -lt 1 ]; then
+#             echo "ERROR: No tables created - migration may have failed"
+#             exit 1
+#           fi
+
+#           echo "Migration successfully created $TABLE_COUNT tables"
+
+#       - name: Test migrations are idempotent
+#         run: |
+#           echo "Testing idempotency - running migrations again..."
+
+#           docker run --rm \
+#             --network host \
+#             -v "$(pwd)/mariadb/flyway/gmcore_core/sql:/flyway/sql" \
+#             -e FLYWAY_URL="jdbc:mariadb://127.0.0.1:3306/gmcore_core" \
+#             -e FLYWAY_USER="test_user" \
+#             -e FLYWAY_PASSWORD="test_password" \
+#             -e FLYWAY_LOCATIONS="filesystem:/flyway/sql" \
+#             flyway/flyway:latest \
+#             migrate
+
+#           echo "Migrations are idempotent"
+
+#       - name: Summary
+#         if: always()
+#         run: |
+#           echo "## Migration Validation Summary" >> $GITHUB_STEP_SUMMARY
+#           echo "" >> $GITHUB_STEP_SUMMARY
+#           echo "- **Database:** gmcore_core" >> $GITHUB_STEP_SUMMARY
+#           echo "- **MariaDB Version:** 12.1" >> $GITHUB_STEP_SUMMARY
+#           echo "- **Flyway Version:** 11.20.2" >> $GITHUB_STEP_SUMMARY
+#           echo "" >> $GITHUB_STEP_SUMMARY
+
+#           MIGRATION_COUNT=$(ls -1 mariadb/flyway/gmcore_core/sql/*.sql 2>/dev/null | wc -l || echo "0")
+#           echo "- **Total Migrations:** $MIGRATION_COUNT" >> $GITHUB_STEP_SUMMARY
+
+#           if [ "${{ job.status }}" == "success" ]; then
+#             echo "" >> $GITHUB_STEP_SUMMARY
+#             echo "SUCCESS: All validation checks passed!" >> $GITHUB_STEP_SUMMARY
+#           else
+#             echo "" >> $GITHUB_STEP_SUMMARY
+#             echo "FAILED: Validation failed - please check the logs above" >> $GITHUB_STEP_SUMMARY
+#           fi

@@ -1,0 +1,64 @@
+<xf:css src="code_editor.less" />
+
+<xf:macro id="editor_setup" arg-modeConfig="{$modeConfig}" />
+
+<textarea name="{$name}"
+	class="input input--code codeEditor{{ $extraClasses ? ' ' . $extraClasses : '' }} js-codeEditor u-jsOnly"
+	dir="ltr"
+	rows="{$rows}"
+	data-xf-init="code-editor"
+	data-mode="{{ $modeConfig.mime ?: $modeConfig.modes|first }}"
+	data-lang="{$lang}"
+	data-config="{$modeConfig.config|json}"
+	{{ $readOnly ? 'readonly="readonly"' : '' }}
+	style="display: none;" {$attrsHtml|raw}>{$value}</textarea>
+<noscript>
+	<textarea name="{$name}" class="input input--code" dir="ltr" rows="{$rows}" {{ $readOnly ? 'readonly="readonly"' : '' }}>{$value}</textarea>
+</noscript>
+
+<xf:macro id="editor_setup" arg-modeConfig="!">
+	<script class="js-codeEditorLanguage" type="application/json">
+		{
+			"All": "{{ phrase('all')|escape('json') }}",
+			"Identical text collapsed. Click to expand.": "{{ phrase('identical_text_collapsed')|escape('json') }}",
+			"Jump to line:": "{{ phrase('jump_to_line:')|escape('json') }}",
+			"No": "{{ phrase('no')|escape('json') }}",
+			"Push to left": "{{ phrase('push_to_left')|escape('json') }}",
+			"Replace all:": "{{ phrase('replace_all:')|escape('json') }}",
+			"Replace with:": "{{ phrase('replace_with:')|escape('json') }}",
+			"Replace:": "{{ phrase('replace:')|escape('json') }}",
+			"Replace?": "{{ phrase('replace_question')|escape('json') }}",
+			"Revert chunk": "{{ phrase('revert_chunk')|escape('json') }}",
+			"Search:": "{{ phrase('search:')|escape('json') }}",
+			"Stop": "{{ phrase('stop')|escape('json') }}",
+			"Toggle locked scrolling": "{{ phrase('toggle_locked_scrolling')|escape('json') }}",
+			"(Use /re/ syntax for regexp search)": "{{ phrase('use_re_syntax')|escape('json') }}",
+			"(Use line:column or scroll% syntax)": "{{ phrase('use_line_column_or_scroll_syntax')|escape('json') }}",
+			"With:": "{{ phrase('with:')|escape('json') }}",
+			"Yes": "{{ phrase('yes')|escape('json') }}"
+		}
+	</script>
+	<xf:js src="vendor/codemirror/codemirror.min.js" />
+
+	<xf:if is="$modeConfig.addons">
+		<xf:if is="is_array($modeConfig.addons)">
+			<xf:foreach loop="$modeConfig.addons" value="$addon">
+				<xf:js src="vendor/codemirror/addon/{$addon}.min.js" />
+			</xf:foreach>
+		<xf:else />
+			<xf:js src="vendor/codemirror/addon/{$modeConfig.addons}.min.js" />
+		</xf:if>
+	</xf:if>
+
+	<xf:if is="$modeConfig.modes">
+		<xf:if is="is_array($modeConfig.modes)">
+			<xf:foreach loop="$modeConfig.modes" value="$mode">
+				<xf:js src="vendor/codemirror/mode/{$mode}/{$mode}.min.js" />
+			</xf:foreach>
+		<xf:else />
+			<xf:js src="vendor/codemirror/mode/{$modeConfig.modes}/{$modeConfig.modes}.min.js" />
+		</xf:if>
+	</xf:if>
+
+	<xf:js src="xf/code_editor.js" min="1" />
+</xf:macro>

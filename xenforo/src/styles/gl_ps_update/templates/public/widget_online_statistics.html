@@ -1,0 +1,24 @@
+<div class="block"{{ widget_data($widget) }}>
+	<div class="block-container">
+		<h3 class="block-minorHeader">{$title}</h3>
+		<div class="block-body block-row">
+			<dl class="pairs pairs--justified">
+				<dt>{{ phrase('members_online') }}</dt>
+				<dd>{$counts.members|number}</dd>
+			</dl>
+
+			<dl class="pairs pairs--justified">
+				<dt>{{ phrase('guests_online') }}</dt>
+				<dd>{$counts.guests|number}</dd>
+			</dl>
+
+			<dl class="pairs pairs--justified">
+				<dt>{{ phrase('total_visitors') }}</dt>
+				<dd>{$counts.total|number}</dd>
+			</dl>
+		</div>
+		<div class="block-footer">
+			{{ phrase('totals_may_include_hidden_visitors') }}
+		</div>
+	</div>
+</div>

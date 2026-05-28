@@ -1,0 +1,17 @@
+{
+    "steamauth.json": {
+        "hash": "19afd2aa71fee7fb42b9d1d20a1b084d"
+    },
+    "steamauthActiveGames.json": {
+        "hash": "e19ae5f9a34d0150899e16c752129a0e"
+    },
+    "steamauthActivePlayers.json": {
+        "hash": "36c2c863710f8fa029dcacab92b7f43d"
+    },
+    "steamauthOwnedGames.json": {
+        "hash": "ce1e93ea2afbdad5934126eaf8a65459"
+    },
+    "steamauthPlayedGames.json": {
+        "hash": "03fc5274cc889a9b047a0aa58a12ff22"
+    }
+}

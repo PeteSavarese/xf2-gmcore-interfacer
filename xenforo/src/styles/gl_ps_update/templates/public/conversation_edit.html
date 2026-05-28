@@ -1,0 +1,23 @@
+<xf:title>{{ phrase('edit_direct_message') }}</xf:title>
+
+<xf:breadcrumb href="{{ link('direct-messages') }}">{{ phrase('direct_messages') }}</xf:breadcrumb>
+<xf:breadcrumb href="{{ link('direct-messages', $conversation) }}">{$conversation.title}</xf:breadcrumb>
+
+<xf:form action="{{ link('direct-messages/edit', $conversation) }}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:textboxrow name="title" value="{$conversation}"
+				label="{{ phrase('title') }}" />
+
+			<xf:checkboxrow>
+				<xf:option name="open_invite" checked="{{ $conversation.open_invite ? 'checked' : '' }}"
+					label="{{ phrase('allow_anyone_in_direct_message_to_invite_others') }}" />
+
+				<xf:option name="conversation_locked" checked="{{ $conversation.conversation_open ? '' : 'checked' }}"
+					label="{{ phrase('lock_direct_message') }}"
+					hint="{{ phrase('no_responses_will_be_allowed') }}" />
+			</xf:checkboxrow>
+		</div>
+		<xf:submitrow icon="save" />
+	</div>
+</xf:form>

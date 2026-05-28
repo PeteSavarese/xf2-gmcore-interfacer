@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<option_groups>
+  <group group_id="gmod_interfacer_discord" icon="fab fa-goodreads-g" display_order="0" debug_only="0"/>
+  <group group_id="gmod_interfacer_settings" icon="fab fa-goodreads-g" display_order="0" debug_only="1"/>
+  <group group_id="gmod_interfacer_store_options" icon="fab fa-goodreads-g" display_order="0" debug_only="0"/>
+</option_groups>

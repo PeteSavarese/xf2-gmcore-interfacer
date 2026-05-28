@@ -1,0 +1,159 @@
+<xf:macro id="article">
+	<xf:if contentcheck="true">
+		<xf:css src="message.less" />
+
+		<article class="message message--article message--articlePreview">
+			<xf:contentcheck>
+				<xf:if contentcheck="true">
+					<div class="articlePreview-main">
+						<xf:contentcheck>
+							<xf:if contentcheck="true">
+								<xf:contentcheck>
+									<xf:extension id="image" />
+								</xf:contentcheck>
+							</xf:if>
+
+							<xf:if contentcheck="true">
+								<div class="articlePreview-text">
+									<xf:contentcheck>
+										<xf:if contentcheck="true">
+											<div class="articlePreview-headline">
+												<h2 class="articlePreview-title">
+													<xf:contentcheck>
+														<xf:extension id="title" />
+													</xf:contentcheck>
+												</h2>
+											</div>
+										</xf:if>
+
+										<xf:if contentcheck="true">
+											<div class="articlePreview-content">
+												<div class="message-content">
+													<div class="message-userContent">
+														<article class="message-body">
+															<xf:contentcheck>
+																<xf:extension id="snippet" />
+															</xf:contentcheck>
+														</article>
+													</div>
+												</div>
+											</div>
+										</xf:if>
+
+										<xf:if contentcheck="true">
+											<div class="articlePreview-links">
+												<xf:contentcheck>
+													<xf:extension id="links" />
+												</xf:contentcheck>
+											</div>
+										</xf:if>
+									</xf:contentcheck>
+								</div>
+							</xf:if>
+						</xf:contentcheck>
+					</div>
+				</xf:if>
+
+				<xf:if contentcheck="true">
+					<footer class="articlePreview-footer">
+						<ul class="articlePreview-meta listPlain">
+							<xf:contentcheck>
+								<xf:extension id="meta" />
+							</xf:contentcheck>
+						</ul>
+					</footer>
+				</xf:if>
+
+				<xf:extension id="metadata" />
+			</xf:contentcheck>
+		</article>
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="simple">
+	<xf:if contentcheck="true">
+		<div class="contentRow">
+			<xf:contentcheck>
+				<xf:if contentcheck="true">
+					<div class="contentRow-figure">
+						<xf:contentcheck>
+							<xf:extension id="image" />
+						</xf:contentcheck>
+					</div>
+				</xf:if>
+
+				<xf:if contentcheck="true">
+					<div class="contentRow-main contentRow-main--close">
+						<xf:contentcheck>
+							<xf:extension id="title" />
+
+							<xf:if contentcheck="true">
+								<div class="contentRow-minor contentRow-minor--hideLinks">
+									<ul class="listInline listInline--bullet">
+										<xf:contentcheck>
+											<xf:extension id="meta" />
+										</xf:contentcheck>
+									</ul>
+								</div>
+							</xf:if>
+
+							<xf:extension id="extra" />
+						</xf:contentcheck>
+					</div>
+				</xf:if>
+
+				<xf:extension id="metadata" />
+			</xf:contentcheck>
+		</div>
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="carousel">
+	<xf:if contentcheck="true">
+		<div class="contentRow">
+			<xf:contentcheck>
+				<xf:if contentcheck="true">
+					<div class="contentRow-figure">
+						<xf:contentcheck>
+							<xf:extension id="image" />
+						</xf:contentcheck>
+					</div>
+				</xf:if>
+
+				<xf:if contentcheck="true">
+					<div class="contentRow-main">
+						<xf:contentcheck>
+							<xf:if contentcheck="true">
+								<h4 class="contentRow-title">
+									<xf:contentcheck>
+										<xf:extension id="title" />
+									</xf:contentcheck>
+								</h4>
+							</xf:if>
+
+							<xf:if contentcheck="true">
+								<div class="contentRow-lesser">
+									<xf:contentcheck>
+										<xf:extension id="snippet" />
+									</xf:contentcheck>
+								</div>
+							</xf:if>
+
+							<xf:if contentcheck="true">
+								<div class="contentRow-minor contentRow-minor--smaller contentRow-minor--hideLinks">
+									<ul class="listInline listInline--bullet">
+										<xf:contentcheck>
+											<xf:extension id="meta" />
+										</xf:contentcheck>
+									</ul>
+								</div>
+							</xf:if>
+						</xf:contentcheck>
+					</div>
+				</xf:if>
+
+				<xf:extension id="metadata" />
+			</xf:contentcheck>
+		</div>
+	</xf:if>
+</xf:macro>

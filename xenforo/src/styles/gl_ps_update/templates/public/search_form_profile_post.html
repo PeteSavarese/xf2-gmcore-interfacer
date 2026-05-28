@@ -1,0 +1,11 @@
+<xf:title>{{ phrase('search_profile_posts') }}</xf:title>
+
+<xf:macro id="search_form_macros::keywords" arg-input="{$input}" arg-canTitleLimit="{{ false }}" />
+
+<xf:macro id="search_form_macros::user" arg-input="{$input}" />
+
+<xf:textboxrow name="c[profile_users]" value="{$input.c.profile_users}" ac="true"
+	label="{{ phrase('posted_on_the_profile_of_member') }}"
+	explain="{{ phrase('separate_names_with_comma') }}" />
+
+<xf:macro id="search_form_macros::date" arg-input="{$input}" />

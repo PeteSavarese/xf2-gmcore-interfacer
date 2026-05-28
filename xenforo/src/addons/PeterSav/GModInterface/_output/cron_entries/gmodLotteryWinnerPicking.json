@@ -1,0 +1,17 @@
+{
+    "cron_class": "PeterSav\\GModInterface\\Cron\\Lottery",
+    "cron_method": "run",
+    "run_rules": {
+        "day_type": "dom",
+        "dom": [
+            -1
+        ],
+        "hours": [
+            3
+        ],
+        "minutes": [
+            59
+        ]
+    },
+    "active": true
+}

@@ -1,0 +1,3 @@
+Once enabled, this will replace the standard profile link text shown in messages with the user’s Steam 64-bit ID. This only replaces the text within the link; it does not remove the profile hyperlink itself.
+
+Note that this requires the above setting to be enabled before this takes effect.

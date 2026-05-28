@@ -1,0 +1,21 @@
+{
+    "group_name": "headerNav",
+    "title": "Navigation row - tab",
+    "description": "Controls the styling of individual tab elements within the navigation row",
+    "property_type": "css",
+    "css_components": [
+        "text",
+        "background",
+        "extra"
+    ],
+    "value_type": "",
+    "value_parameters": "",
+    "has_variations": false,
+    "depends_on": "",
+    "value_group": "",
+    "property_value": {
+        "color": "rgb(243, 240, 234)",
+        "text-decoration": "none"
+    },
+    "display_order": 20200
+}

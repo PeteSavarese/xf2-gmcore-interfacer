@@ -1,0 +1,467 @@
+<xf:macro id="post"
+	arg-post="!"
+	arg-thread="!"
+	arg-highlightedPosts="{{ [] }}">
+
+	<xf:set var="$includeMicrodata" value="{{ !$post.isFirstPost() }}" />
+	<xf:css src="message.less" />
+
+	<xf:extension id="before"></xf:extension>
+
+	<xf:extension id="extra_classes" value="message--post" />
+	<article class="message {{ extension_value('extra_classes') }} js-post js-inlineModContainer {{ $post.isIgnored() ? 'is-ignored' : '' }} {{ $post.isUnread() ? ' is-unread' : '' }}"
+		data-author="{{ $post.User.username ?: $post.username }}"
+		data-content="post-{$post.post_id}"
+		id="js-post-{$post.post_id}"
+		{{ $includeMicrodata ? 'itemscope itemtype="https://schema.org/' . $thread.getReplyMicrodataType() . '" itemid="' . $post.getContentUrl(true) . '"' : '' }}>
+
+		<xf:if is="$includeMicrodata">
+			<meta itemprop="parentItem" itemscope itemid="{{ link('canonical:threads', $thread) }}" />
+			<meta itemprop="name" content="{{ phrase('post_x', {'position': number($post.position + 1)}) }}" />
+		</xf:if>
+
+		<span class="u-anchorTarget" id="post-{$post.post_id}"></span>
+
+		<xf:extension id="full_body">
+			<div class="message-inner">
+				<xf:extension id="user_cell">
+					<div class="message-cell message-cell--user">
+						<xf:macro id="message_macros::user_info" arg-user="{$post.User}"
+							arg-fallbackName="{$post.username}"
+							arg-includeMicrodata="{$includeMicrodata}"
+							arg-itemProp="author" />
+					</div>
+				</xf:extension>
+
+				<xf:extension id="main_cell">
+					<div class="message-cell message-cell--main">
+					<xf:extension id="main_cell_inner">
+						<div class="message-main js-quickEditTarget">
+
+							<xf:extension id="attribution">
+								<xf:macro id="post_attribution" arg-post="{$post}" arg-thread="{$thread}" />
+							</xf:extension>
+
+<div class="message-content js-messageContent">
+							<xf:extension id="content">
+
+								<xf:extension id="notices">
+									<xf:macro id="post_notices" arg-post="{$post}" arg-thread="{$thread}" />
+								</xf:extension>
+
+								<xf:extension id="user_content">
+									<xf:macro id="post_user_content" arg-post="{$post}" arg-thread="{$thread}" />
+								</xf:extension>
+
+								<xf:extension id="after_content">
+									<xf:macro id="post_last_edit" arg-post="{$post}" />
+								</xf:extension>
+
+								<xf:extension id="signature">
+									<xf:macro id="message_macros::signature" arg-user="{$post.User}" />
+								</xf:extension>
+
+							</xf:extension>
+							</div>
+
+							<xf:extension id="footer">
+								<xf:macro id="post_footer" arg-post="{$post}" arg-thread="{$thread}" />
+							</xf:extension>
+						</div>
+
+					</xf:extension>
+					</div>
+				</xf:extension>
+			</div>
+		</xf:extension>
+	</article>
+
+	<xf:extension id="after"></xf:extension>
+	<xf:ad position="post_below_container" arg-post="{$post}" />
+</xf:macro>
+
+<xf:macro id="post_attribution"
+	arg-post="!"
+	arg-thread="!"
+	arg-showPosition="{{ true }}"
+	arg-showUser="{{ false }}"
+	arg-showThreadUnreadIndicator="{{ false }}"
+	arg-showReplyCount="{{ false }}"
+	arg-repliesPhrase="{{ phrase('replies:') }}"
+	arg-showThreadStateIcons="{{ false }}"
+	arg-mainClass=""
+	arg-oppositeClass="">
+
+	<xf:set var="$includeMicrodata" value="{{ !$post.isFirstPost() }}" />
+
+	<header class="message-attribution message-attribution--split">
+		<ul class="message-attribution-main listInline {$mainClass}">
+			<xf:if is="$showThreadStateIcons">
+				<xf:if is="{$xf.visitor.user_id} AND {$thread.Watch.{$xf.visitor.user_id}}">
+					<li>
+						<xf:fa icon="fa-bell" title="{{ phrase('thread_watched')|for_attr }}" />
+						<span class="u-srOnly">{{ phrase('thread_watched') }}</span>
+					</li>
+				</xf:if>
+
+				<xf:if is="$thread.sticky">
+					<li>
+						<xf:fa icon="fa-thumbtack" title="{{ phrase('sticky')|for_attr }}" />
+						<span class="u-srOnly">{{ phrase('sticky') }}</span>
+					</li>
+				</xf:if>
+			</xf:if>
+			<xf:if is="$showUser">
+				<xf:set var="$username"><xf:username user="{$post.User}" defaultname="{$post.username}" /></xf:set>
+				<li class="u-concealed message-attribution-user--top">{{ phrase('by_user_x', {'name':$username}) }}</li>
+			</xf:if>
+			<li class="u-concealed">
+				<a href="{{ link('threads/post', $thread, {'post_id': $post.post_id}) }}" rel="nofollow" {{ $includeMicrodata ? 'itemprop="url"' : '' }}>
+					<xf:date time="{$post.post_date}" itemprop="{{ $includeMicrodata ? 'datePublished' : '' }}" />
+				</a>
+			</li>
+			<xf:if is="$showReplyCount && $thread.reply_count">
+				<li class="u-concealed">
+					<a href="{{ link('threads', $thread) }}#posts">
+						<xf:fa icon="fa-comment" class="u-spaceAfter" />{$repliesPhrase|raw} {$thread.reply_count|number}
+					</a>
+				</li>
+			</xf:if>
+		</ul>
+
+		<ul class="message-attribution-opposite message-attribution-opposite--list {$oppositeClass}">
+			<xf:if is="$post.isUnread()">
+				<li><span class="message-newIndicator">{{ phrase('new') }}</span></li>
+			<xf:elseif is="$thread.isUnread() && $showThreadUnreadIndicator" />
+				<li><span class="message-newIndicator" title="{{ phrase('new_replies')|for_attr }}">{{ phrase('new') }}</span></li>
+			</xf:if>
+			<li>
+				<a href="{{ link('threads/post', $thread, {'post_id': $post.post_id}) }}"
+					class="message-attribution-gadget"
+					data-xf-init="share-tooltip"
+					data-href="{{ link('posts/share', $post) }}"
+					aria-label="{{ phrase('share')|for_attr }}"
+					rel="nofollow">
+					<xf:fa icon="fa-share-alt" />
+				</a>
+			</li>
+			<xf:if is="$xf.options.embedCodeShare AND method_exists($post, 'getEmbedCodeHtml')">
+				<li class="u-hidden js-embedCopy">
+					<xf:macro id="share_page_macros::share_clipboard_text"
+						arg-text="{$post.getEmbedCodeHtml()}"
+						arg-successText="{{ phrase('embed_code_html_copied_to_clipboard') }}" />
+				</li>
+			</xf:if>
+			<xf:if contentcheck="true">
+				<li>
+					<xf:contentcheck>
+						<xf:macro id="bookmark_macros::link"
+							arg-content="{$post}"
+							arg-class="message-attribution-gadget bookmarkLink--highlightable"
+							arg-confirmUrl="{{ link('posts/bookmark', $post) }}"
+							arg-showText="{{ false }}"/>
+					</xf:contentcheck>
+				</li>
+			</xf:if>
+			<xf:if is="$showPosition">
+				<li>
+					<a href="{{ link('threads/post', $thread, {'post_id': $post.post_id}) }}" rel="nofollow">
+						#{{ number($post.position + 1) }}
+					</a>
+				</li>
+			</xf:if>
+		</ul>
+	</header>
+</xf:macro>
+
+<xf:macro id="post_notices" arg-post="!" arg-thread="!">
+	<xf:if is="$post.message_state == 'deleted'">
+		<div class="messageNotice messageNotice--deleted">
+			<xf:macro id="deletion_macros::notice" arg-log="{$post.DeletionLog}" />
+		</div>
+	<xf:elseif is="$post.message_state == 'moderated'" />
+		<div class="messageNotice messageNotice--moderated">
+			{{ phrase('this_message_is_awaiting_moderator_approval_and_is_invisible_to_normal') }}
+		</div>
+	</xf:if>
+	<xf:if is="$post.warning_message">
+		<div class="messageNotice messageNotice--warning">
+			{$post.warning_message}
+		</div>
+	</xf:if>
+	<xf:if is="$post.isIgnored()">
+		<div class="messageNotice messageNotice--ignored">
+			{{ phrase('you_are_ignoring_content_by_this_member') }}
+			<xf:showignored />
+		</div>
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="post_user_content" arg-post="!" arg-thread="!" arg-snippet="{{ false }}" arg-displayAds="{{ true }}">
+	<xf:set var="$includeMicrodata" value="{{ !$post.isFirstPost() }}" />
+
+	<div class="message-userContent lbContainer js-lbContainer {{ $post.isIgnored() ? 'is-ignored' : '' }}"
+		data-lb-id="post-{$post.post_id}"
+		data-lb-caption-desc="{{ $post.User ? $post.User.username : $post.username }} &middot; {{ date_time($post.post_date) }}">
+
+		<xf:if is="$post.isFirstPost()">
+			<xf:macro id="custom_fields_macros::custom_fields_view"
+				arg-type="threads"
+				arg-group="before"
+				arg-onlyInclude="{$thread.Forum.field_cache}"
+				arg-set="{$thread.custom_fields}"
+				arg-wrapperClass="message-fields message-fields--before" />
+		</xf:if>
+
+		<article class="message-body js-selectToQuote">
+			<xf:if is="$displayAds">
+				<xf:ad position="post_above_content" arg-post="{$post}" />
+			</xf:if>
+
+			<div {{ $includeMicrodata ? 'itemprop="text"' : '' }}>
+				<xf:if is="$snippet">
+					{{ bb_code_snippet($post.message, 'post', $post, $snippet) }}
+				<xf:else />
+					{{ bb_code($post.message, 'post', $post) }}
+				</xf:if>
+			</div>
+
+			<div class="js-selectToQuoteEnd">&nbsp;</div>
+			<xf:if is="$displayAds">
+				<xf:ad position="post_below_content" arg-post="{$post}" />
+			</xf:if>
+		</article>
+
+		<xf:if is="$post.isFirstPost()">
+			<xf:macro id="custom_fields_macros::custom_fields_view"
+				arg-type="threads"
+				arg-group="after"
+				arg-onlyInclude="{$thread.Forum.field_cache}"
+				arg-set="{$thread.custom_fields}"
+				arg-wrapperClass="message-fields message-fields--after" />
+		</xf:if>
+
+		<xf:if is="$post.attach_count">
+			<xf:macro id="message_macros::attachments"
+				arg-attachments="{$post.Attachments}"
+				arg-message="{$post}"
+				arg-canView="{{ $thread.canViewAttachments() }}" />
+		</xf:if>
+	</div>
+</xf:macro>
+
+<xf:macro id="post_last_edit" arg-post="!">
+	<xf:set var="$includeMicrodata" value="{{ !$post.isFirstPost() }}" />
+
+	<xf:if is="$post.last_edit_date">
+		<div class="message-lastEdit">
+			<xf:if is="$post.user_id == $post.last_edit_user_id">
+				{{ phrase('last_edited:') }} <xf:date time="{$post.last_edit_date}" itemprop="{{ $includeMicrodata ? 'dateModified' : '' }}" />
+			<xf:else />
+				{{ phrase('last_edited_by_moderator:') }} <xf:date time="{$post.last_edit_date}" itemprop="{{ $includeMicrodata ? 'dateModified' : '' }}" />
+			</xf:if>
+		</div>
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="post_footer" arg-post="!" arg-thread="!">
+	<xf:set var="$includeMicrodata" value="{{ !$post.isFirstPost() }}" />
+
+	<footer class="message-footer">
+		<xf:if is="$includeMicrodata">
+			<div class="message-microdata" itemprop="interactionStatistic" itemtype="https://schema.org/InteractionCounter" itemscope>
+				<meta itemprop="userInteractionCount" content="{{ $post.isContentVotingSupported() ? $post.vote_score : $post.reaction_score }}" />
+				<meta itemprop="interactionType" content="https://schema.org/LikeAction" />
+			</div>
+		</xf:if>
+
+		<xf:if contentcheck="true">
+			<div class="message-actionBar actionBar">
+				<xf:contentcheck>
+					<xf:macro id="post_action_bar" arg-post="{$post}" arg-thread="{$thread}" />
+				</xf:contentcheck>
+			</div>
+		</xf:if>
+
+		<div class="reactionsBar js-reactionsList {{ $post.reactions ? 'is-active' : '' }}">
+			<xf:reactions content="{$post}" link="posts/reactions" />
+		</div>
+
+		<div class="js-historyTarget message-historyTarget toggleTarget" data-href="trigger-href"></div>
+	</footer>
+</xf:macro>
+
+<xf:macro id="post_action_bar" arg-post="!" arg-thread="!">
+	<xf:if contentcheck="true">
+		<div class="actionBar-set actionBar-set--external">
+		<xf:contentcheck>
+			<xf:react content="{$post}" link="posts/react" list="< .js-post | .js-reactionsList" />
+
+			<xf:if is="$thread.canReply() OR $thread.canReplyPreReg()">
+				<xf:set var="$quoteLink">{{ link('threads/reply', $thread, {'quote': $post.post_id}) }}</xf:set>
+
+				<xf:if is="$xf.options.multiQuote AND $xf.visitor.user_id">
+					<a href="{$quoteLink}"
+						class="actionBar-action actionBar-action--mq u-jsOnly js-multiQuote"
+						title="{{ phrase('toggle_multi_quote_tooltip')|for_attr }}"
+						rel="nofollow"
+						data-message-id="{$post.post_id}"
+						data-mq-action="add">{{ phrase('quote') }}</a>
+				</xf:if>
+
+				<a href="{$quoteLink}"
+					class="actionBar-action actionBar-action--reply"
+					title="{{ phrase('reply_quoting_this_message')|for_attr }}"
+					rel="nofollow"
+					data-xf-click="quote"
+					data-quote-href="{{ link('posts/quote', $post) }}">{{ phrase('reply') }}</a>
+			</xf:if>
+		</xf:contentcheck>
+		</div>
+	</xf:if>
+
+	<xf:if contentcheck="true">
+		<div class="actionBar-set actionBar-set--internal">
+		<xf:contentcheck>
+			<xf:if is="$post.canUseInlineModeration()">
+				<span class="actionBar-action actionBar-action--inlineMod">
+					<xf:checkbox standalone="true">
+						<xf:option value="{$post.post_id}" class="js-inlineModToggle"
+							data-xf-init="tooltip"
+							title="{{ phrase('select_for_moderation') }}"
+							label="{{ phrase('select_for_moderation') }}"
+							hiddenlabel="true" />
+					</xf:checkbox>
+				</span>
+			</xf:if>
+
+			<xf:if is="$post.canReport()">
+				<a href="{{ link('posts/report', $post) }}"
+					class="actionBar-action actionBar-action--report"
+					data-xf-click="overlay" data-cache="false">{{ phrase('report_verb') }}</a>
+			</xf:if>
+
+			<xf:set var="$hasActionBarMenu" value="{{ false }}" />
+			<xf:if is="$post.canEdit()">
+				<xf:js src="xf/action.js, xf/message.js" min="1" />
+				<a href="{{ link('posts/edit', $post) }}"
+					class="actionBar-action actionBar-action--edit actionBar-action--menuItem"
+					data-xf-click="quick-edit"
+					data-editor-target="#js-post-{$post.post_id} .js-quickEditTarget"
+					data-menu-closer="true">{{ phrase('edit') }}</a>
+
+				<xf:set var="$hasActionBarMenu" value="{{ true }}" />
+			</xf:if>
+			<xf:if is="$post.edit_count && $post.canViewHistory()">
+				<a href="{{ link('posts/history', $post) }}"
+					class="actionBar-action actionBar-action--history actionBar-action--menuItem"
+					data-xf-click="toggle"
+					data-target="#js-post-{$post.post_id} .js-historyTarget"
+					data-menu-closer="true">{{ phrase('history') }}</a>
+
+				<xf:set var="$hasActionBarMenu" value="{{ true }}" />
+			</xf:if>
+			<xf:if is="$post.canDelete('soft')">
+				<a href="{{ link('posts/delete', $post) }}"
+					class="actionBar-action actionBar-action--delete actionBar-action--menuItem"
+					data-xf-click="overlay">{{ phrase('delete') }}</a>
+
+				<xf:set var="$hasActionBarMenu" value="{{ true }}" />
+			</xf:if>
+			<xf:if is="$post.message_state == 'deleted' AND $post.canUndelete()">
+				<a href="{{ link('posts/undelete', $post) }}"
+					class="actionBar-action actionBar-action--undelete actionBar-action--menuItem"
+					data-xf-click="overlay">{{ phrase('undelete') }}</a>
+
+				<xf:set var="$hasActionBarMenu" value="{{ true }}" />
+			</xf:if>
+			<xf:if is="$post.canCleanSpam()">
+				<a href="{{ link('spam-cleaner', $post) }}"
+					class="actionBar-action actionBar-action--spam actionBar-action--menuItem"
+					data-xf-click="overlay">{{ phrase('spam') }}</a>
+
+				<xf:set var="$hasActionBarMenu" value="{{ true }}" />
+			</xf:if>
+			<xf:if is="$xf.visitor.canViewIps() && $post.ip_id">
+				<a href="{{ link('posts/ip', $post) }}"
+					class="actionBar-action actionBar-action--ip actionBar-action--menuItem"
+					data-xf-click="overlay">{{ phrase('ip') }}</a>
+
+				<xf:set var="$hasActionBarMenu" value="{{ true }}" />
+			</xf:if>
+			<xf:if is="$post.canWarn()">
+
+				<a href="{{ link('posts/warn', $post) }}"
+					class="actionBar-action actionBar-action--warn actionBar-action--menuItem">{{ phrase('warn') }}</a>
+
+				<xf:set var="$hasActionBarMenu" value="{{ true }}" />
+			<xf:elseif is="$post.warning_id && $xf.visitor.canViewWarnings()" />
+				<a href="{{ link('warnings', {'warning_id': $post.warning_id}) }}"
+					class="actionBar-action actionBar-action--warn actionBar-action--menuItem"
+					data-xf-click="overlay">{{ phrase('view_warning') }}</a>
+				<xf:set var="$hasActionBarMenu" value="{{ true }}" />
+			</xf:if>
+
+			<xf:if is="$hasActionBarMenu">
+				<a class="actionBar-action actionBar-action--menuTrigger"
+					data-xf-click="menu"
+					title="{{ phrase('more_options')|for_attr }}"
+					role="button"
+					tabindex="0"
+					aria-expanded="false"
+					aria-haspopup="true">&#8226;&#8226;&#8226;</a>
+
+				<div class="menu" data-menu="menu" aria-hidden="true" data-menu-builder="actionBar">
+					<div class="menu-content">
+						<h4 class="menu-header">{{ phrase('more_options') }}</h4>
+						<div class="js-menuBuilderTarget"></div>
+					</div>
+				</div>
+			</xf:if>
+		</xf:contentcheck>
+		</div>
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="post_deleted" arg-post="!" arg-thread="!">
+	<xf:set var="$includeMicrodata" value="{{ !$post.isFirstPost() }}" />
+
+	<xf:css src="message.less" />
+	<div class="message message--deleted message--post{{ $post.isIgnored() ? ' is-ignored' : '' }}{{ $post.isUnread() ? ' is-unread' : '' }} js-post js-inlineModContainer"
+		data-author="{{ $post.User.username ?: $post.username }}"
+		data-content="post-{$post.post_id}">
+
+		<span class="u-anchorTarget" id="post-{$post.post_id}"></span>
+		<div class="message-inner">
+			<div class="message-cell message-cell--user">
+				<xf:macro template="message_macros" name="user_info_simple" arg-user="{$post.User}" arg-fallbackName="{$post.username}" arg-includeMicrodata="{$includeMicrodata}" arg-itemProp="author" />
+			</div>
+			<div class="message-cell message-cell--main">
+				<div class="message-attribution">
+					<ul class="listInline listInline--bullet message-attribution-main">
+						<li><a href="{{ link('threads/post', $thread, {'post_id': $post.post_id}) }}" class="u-concealed" rel="nofollow"><xf:date time="{$post.post_date}" /></a></li>
+						<li><xf:username user="{$post.User}" defaultname="{$post.username}" class="u-concealed" /></li>
+					</ul>
+				</div>
+
+				<div class="messageNotice messageNotice--deleted">
+					<xf:macro id="deletion_macros::notice" arg-log="{$post.DeletionLog}" />
+
+					<a href="{{ link('posts/show', $post) }}" class="u-jsOnly" data-xf-click="inserter" data-replace="[data-content=post-{$post.post_id}]">{{ phrase('show...') }}</a>
+
+					<xf:if is="$post.canUseInlineModeration()">
+						<span style="display: none">
+							<!-- this can be actioned on the full post -->
+							<xf:checkbox standalone="true">
+								<xf:option value="{$post.post_id}" class="js-inlineModToggle"
+									hiddenlabel="true" />
+							</xf:checkbox>
+						</span>
+					</xf:if>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<xf:ad position="post_below_container" arg-post="{$post}" />
+</xf:macro>

@@ -1,0 +1,13 @@
+<xf:title>{{ phrase('mark_forum_read') }}</xf:title>
+
+<xf:form action="{{ link('categories/mark-read', $category, {'date': $date}) }}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:inforow rowtype="confirm">
+				{{ phrase('you_sure_you_want_to_mark_this_forum_read') }}
+				<strong><a href="{{ link('categories', $category) }}">{$category.title}</a></strong>
+			</xf:inforow>
+		</div>
+		<xf:submitrow submit="{{ phrase('mark_forum_read') }}" rowtype="simple" icon="markRead" />
+	</div>
+</xf:form>

@@ -1,0 +1,117 @@
+<xf:form action="{{ link('forums/post-thread', $forum) }}" draft="{{ link('forums/draft', $forum) }}">
+
+	<div class="js-quickThreadFields" data-xf-init="attachment-manager">
+
+		<xf:if is="$forum.draft_thread.exists()">
+			<xf:formrow rowtype="fullWidth noGutter noLabel mergeNext">
+				<div class="block-rowMessage block-rowMessage--important block-rowMessage--small">
+					<a href="{{ link('forums/post-thread', $forum) }}">{{ phrase('you_have_saved_draft_click_to_load') }}</a>
+				</div>
+			</xf:formrow>
+		</xf:if>
+
+		<xf:macro id="forum_post_thread::type_chooser"
+			arg-thread="{$thread}"
+			arg-forum="{$forum}"
+			arg-creatableThreadTypes="{$creatableThreadTypes}"
+			arg-defaultThreadType="{$defaultThreadType}"
+			arg-rowType="fullWidth noGutter noBottomPadding noLabel mergeNext" />
+
+		<xf:editorrow name="message" value="{$post.message}" rows="3" rowtype="fullWidth noGutter noLabel mergeNext"
+			data-min-height="100"
+			data-max-height="300"
+			placeholder="{{ phrase('message...') }}"
+			label="{{ phrase('message') }}"
+			data-preview-url="{{ link('forums/thread-preview', $forum) }}" />
+
+		<xf:macro id="forum_post_thread::type_fields"
+			arg-thread="{$thread}"
+			arg-forum="{$forum}"
+			arg-creatableThreadTypes="{$creatableThreadTypes}"
+			arg-defaultThreadType="{$defaultThreadType}"
+			arg-subContext="quick"
+			arg-formRowSepVariant="formRowSep--noGutter" />
+
+		<xf:macro id="custom_fields_macros::custom_fields_edit"
+			arg-type="threads"
+			arg-set="{$thread.custom_fields}"
+			arg-editMode="{{ $thread.getFieldEditMode(true) }}"
+			arg-onlyInclude="{$forum.field_cache}"
+			arg-rowType="fullWidth noGutter"
+			arg-requiredOnly="{{ $inlineMode ? true : false }}" />
+
+		<xf:if is="$canEditTags && $forum.min_tags">
+			<hr class="formRowSep" />
+			<xf:tokeninputrow name="tags"
+				href="{{ link('misc/tag-auto-complete') }}"
+				min-length="{$xf.options.tagLength.min}"
+				max-length="{$xf.options.tagLength.max}"
+				max-tokens="{$xf.options.maxContentTags}"
+				rowtype="fullWidth noGutter"
+				label="{{ phrase('tags') }}">
+
+				<xf:explain>
+					{{ phrase('multiple_tags_may_be_separated_by_commas') }}
+					<xf:if is="$forum.min_tags">
+						{{ phrase('this_content_must_have_at_least_x_tags', {'min': $forum.min_tags}) }}
+					</xf:if>
+				</xf:explain>
+			</xf:tokeninputrow>
+		</xf:if>
+
+		<xf:if is="!$xf.visitor.user_id && !$forum.canCreateThreadPreReg()">
+			<xf:textboxrow name="_xfUsername" data-xf-init="guest-username" rowtype="fullWidth noGutter"
+				autocomplete="username"
+				maxlength="{{ max_length($xf.visitor, 'username') }}"
+				label="{{ phrase('name') }}" />
+		<xf:elseif is="$xf.visitor.user_id" />
+			<xf:macro id="helper_thread_options::watch_input"
+				arg-thread="{$thread}"
+				arg-rowType="fullWidth noGutter noLabel"
+				arg-visible="{{ false }}" />
+		</xf:if>
+
+		<xf:captcharow label="{{ phrase('verification') }}" rowtype="fullWidth noGutter noLabel" context="xf_post_quick_thread" />
+
+		<xf:if is="$attachmentData">
+			<xf:macro id="helper_attach_upload::uploaded_files_list"
+				arg-attachments="{$attachmentData.attachments}" />
+		</xf:if>
+
+		<div class="formButtonGroup">
+			<div class="formButtonGroup-primary">
+				<xf:button type="submit" class="button--primary" icon="write">
+					{{ $forum.TypeHandler.getTypeActionPhrase('submit') ?: phrase('post_thread') }}
+				</xf:button>
+
+				<xf:button type="submit" formnovalidate="formnovalidate" name="more-options" value="1"
+					title="{{ phrase('show_full_post_thread_editor') }}"
+					data-prevent-ajax="true"
+					data-xf-init="tooltip">{{ phrase('more_options...') }}</xf:button>
+
+				<xf:button type="reset" class="button--iconOnly" icon="cancel"
+					title="{{ phrase('button.cancel') }}"
+					data-xf-init="tooltip">
+					<span class="u-srOnly">{{ phrase('button.cancel') }}</span>
+				</xf:button>
+			</div>
+			<xf:if contentcheck="true">
+				<div class="formButtonGroup-extra">
+					<xf:contentcheck>
+						<xf:if is="$attachmentData">
+							<xf:macro id="helper_attach_upload::upload_link_from_data"
+								arg-attachmentData="{$attachmentData}" />
+						</xf:if>
+
+						<xf:if is="$xf.options.multiQuote">
+							<xf:macro id="multi_quote_macros::button"
+								arg-href="{{ link('threads/multi-quote', $thread) }}"
+								arg-messageSelector=".js-post"
+								arg-storageKey="multiQuoteThread" />
+						</xf:if>
+					</xf:contentcheck>
+				</div>
+			</xf:if>
+		</div>
+	</div>
+</xf:form>

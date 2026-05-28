@@ -1,0 +1,29 @@
+{
+    "public/steamauth_account_privacy.json": {
+        "hash": "493020974624fd78a041e2143ceb6c56"
+    },
+    "public/steamauth_connected_account_macros_css.json": {
+        "hash": "e3dcbc0977104c43cb9eeff39f4153c6"
+    },
+    "public/steamauth_connected_account_macros_disassociate.json": {
+        "hash": "520cd67ab7bc6761d406f2fa375276ad"
+    },
+    "public/steamauth_connected_register_form.json": {
+        "hash": "1ceb75a1dccf47e0f91873a9ba1f4b90"
+    },
+    "public/steamauth_connected_register_form_css.json": {
+        "hash": "8abc1f60a039ee02c49bb9b40e448ce0"
+    },
+    "public/steamauth_connected_register_form_registration.json": {
+        "hash": "b3a108292f1c9bc69cec8df1692cdd05"
+    },
+    "public/steamauth_login_css.json": {
+        "hash": "936f39379685be311ae857eee711fb37"
+    },
+    "public/steamauth_message_macros_banner_above.json": {
+        "hash": "409b415a753a604eb27a343a8b88957f"
+    },
+    "public/steamauth_message_macros_banner_below.json": {
+        "hash": "8249a0042e4e0529171b4153b0b6a5fa"
+    }
+}

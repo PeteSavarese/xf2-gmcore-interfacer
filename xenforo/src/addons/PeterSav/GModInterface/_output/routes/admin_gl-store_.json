@@ -1,0 +1,11 @@
+{
+    "route_type": "admin",
+    "route_prefix": "gl-store",
+    "sub_name": "",
+    "format": ":int<group_id>/",
+    "build_class": "",
+    "build_method": "",
+    "controller": "PeterSav\\GModInterface:Store",
+    "context": "",
+    "action_prefix": ""
+}

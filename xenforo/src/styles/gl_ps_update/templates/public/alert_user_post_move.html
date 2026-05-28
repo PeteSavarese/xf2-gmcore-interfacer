@@ -1,0 +1,16 @@
+<xf:if is="$extra.wasVisible && $extra.isVisible">
+	{{ phrase('your_post_in_thread_x_was_moved_to_y', {
+		'title': $extra.sourceTitle,
+		'target': '<a href="' . base_url($extra.targetLink) . '" class="fauxBlockLink-blockLink">' . prefix('thread', $extra.prefix_id) . $extra.title . '</a>'
+	}) }}
+<xf:elseif is="$extra.wasVisible" />
+	{{ phrase('your_post_in_thread_x_was_moved_to_another_thread', {
+		'title': $extra.sourceTitle
+	}) }}
+<xf:elseif is="$extra.isVisible" />
+	{{ phrase('your_post_in_another_thread_was_moved_to_y', {
+		'target': '<a href="' . base_url($extra.targetLink) . '" class="fauxBlockLink-blockLink">' . prefix('thread', $extra.prefix_id) . $extra.title . '</a>'
+	}) }}
+</xf:if>
+
+<xf:if is="$extra.reason">{{ phrase('reason:') }} {$extra.reason}</xf:if>

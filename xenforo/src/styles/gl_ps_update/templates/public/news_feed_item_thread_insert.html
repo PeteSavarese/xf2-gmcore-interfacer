@@ -1,0 +1,15 @@
+<div class="contentRow-title">
+	{{ phrase('news_feed_thread_insert', {
+		'username': username_link($user, false, {'defaultname': $newsFeed.username}),
+		'threadTitle': '<a href="' . link('threads', $content) . '">' . prefix('thread', $content) . $content.title . '</a>',
+		'forumTitle': '<a href="' . link('forums', $content.Forum) . '">' . $content.Forum.title . '</a>'
+	}) }}
+</div>
+
+<div class="contentRow-snippet">{{ snippet($content.FirstPost.message, $xf.options.newsFeedMessageSnippetLength, {'stripQuote': true}) }}</div>
+<xf:if is="{$content.FirstPost.attach_count}">
+	<xf:macro id="news_feed_attached_images::attached_images"
+		arg-attachments="{$content.FirstPost.Attachments}" arg-link="{{ link('threads', $content) }}" />
+</xf:if>
+
+<div class="contentRow-minor"><xf:date time="{$newsFeed.event_date}" /></div>

@@ -1,0 +1,34 @@
+// ################## IGNORED USERS / CONTENT ##########################
+
+.is-ignored
+{
+	display: none !important;
+}
+
+.showIgnoredLink
+{
+	&.is-hidden
+	{
+		display: none !important;
+	}
+}
+
+.block-outer .showIgnoredLink,
+.showIgnoredLink.showIgnoredLink--subtle
+{
+	font-size: @xf-fontSizeSmall;
+	color: @xf-textColorMuted;
+
+	&:hover
+	{
+		color: @xf-textColorDimmed;
+	}
+}
+
+.is-ignored {
+    opacity: 0.5;
+    transition: opacity 0.2s ease;
+}
+.is-ignored:hover {
+    opacity: 0.8;
+}

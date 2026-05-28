@@ -1,0 +1,123 @@
+<xf:macro id="message" arg-message="!" arg-conversation="!" arg-position="" arg-lastRead="{{ null }}">
+	<xf:css src="message.less" />
+	<article class="message message--conversationMessage {{ $message.isIgnored() ? ' is-ignored' : '' }} {{ $message.isUnread($lastRead) ? 'is-unread' : '' }} js-message" data-author="{{ $message.User.username ?: $message.username }}">
+		<span class="u-anchorTarget" id="convMessage-{$message.message_id}"></span>
+		<div class="message-inner">
+			<div class="message-cell message-cell--user">
+				<xf:macro id="message_macros::user_info" arg-user="{$message.User}" arg-fallbackName="{$message.username}" />
+			</div>
+			<div class="message-cell message-cell--main">
+				<div class="message-main js-quickEditTarget">
+					<div class="message-content">
+						<header class="message-attribution">
+							<a href="{{ link('direct-messages/replies', $message) }}" class="message-attribution-main u-concealed" rel="nofollow">
+								<xf:date time="{$message.message_date}" />
+							</a>
+							<span class="message-attribution-opposite">
+								<xf:if is="$message.isUnread($lastRead)">
+									<span class="message-newIndicator">{{ phrase('new') }}</span>
+								</xf:if>
+								<xf:if is="$position">#{$position|number}</xf:if>
+							</span>
+						</header>
+
+						<xf:if is="$message.isIgnored()">
+							<div class="messageNotice messageNotice--ignored">
+								{{ phrase('you_are_ignoring_content_by_this_member') }}
+							</div>
+						</xf:if>
+
+						<div class="message-userContent lbContainer js-lbContainer"
+							data-lb-id="message-{$message.message_id}"
+							data-lb-caption-title="{{ $message.User ? $message.User.username : $message.username }}"
+							data-lb-caption-desc="{{ date_time($message.message_date) }}">
+
+							<article class="message-body js-selectToQuote">
+								{{ bb_code($message.message, 'conversation_message', $message) }}
+								<div class="js-selectToQuoteEnd">&nbsp;</div>
+							</article>
+
+							<xf:if is="$message.attach_count">
+								<xf:macro id="message_macros::attachments"
+									arg-attachments="{$message.Attachments}"
+									arg-message="{$message}"
+									arg-canView="{{ true }}" />
+							</xf:if>
+						</div>
+
+						<xf:macro id="message_macros::signature" arg-user="{$message.User}" />
+					</div>
+
+					<footer class="message-footer">
+						<xf:if contentcheck="true">
+							<div class="message-actionBar actionBar">
+								<xf:contentcheck>
+									<xf:if contentcheck="true">
+										<div class="actionBar-set actionBar-set--external">
+											<xf:contentcheck>
+												<xf:react content="{$message}" link="direct-messages/replies/react" list="< .js-message | .js-reactionsList" />
+
+												<xf:if is="$conversation.canReply()">
+													<xf:set var="$quoteLink">{{ link('direct-messages/reply', $conversation, {'quote': $message.message_id}) }}</xf:set>
+													<xf:if is="$xf.options.multiQuote">
+														<a href="{$quoteLink}"
+															class="actionBar-action actionBar-action--mq u-jsOnly js-multiQuote"
+															title="{{ phrase('toggle_multi_quote_tooltip')|for_attr }}"
+															data-message-id="{$message.message_id}"
+															data-mq-action="add">
+															{{ phrase('quote') }}
+														</a>
+													</xf:if>
+													<a href="{$quoteLink}"
+														class="actionBar-action actionBar-action--reply"
+														title="{{ phrase('reply_quoting_this_message')|for_attr }}"
+														data-xf-click="quote"
+														data-quote-href="{{ link('direct-messages/replies/quote', $message) }}">{{ phrase('reply') }}</a>
+
+												</xf:if>
+											</xf:contentcheck>
+										</div>
+									</xf:if>
+
+									<xf:if contentcheck="true">
+										<div class="actionBar-set actionBar-set--internal">
+											<xf:contentcheck>
+												<xf:if is="$message.canReport()">
+													<a href="{{ link('direct-messages/replies/report', $message) }}" class="actionBar-action actionBar-action--report" data-xf-click="overlay" data-cache="false">{{ phrase('report_verb') }}</a>
+												</xf:if>
+
+												<xf:if is="$message.canEdit()">
+													<xf:js src="xf/action.js, xf/message.js" min="1" />
+													<a href="{{ link('direct-messages/replies/edit', $message) }}"
+														class="actionBar-action actionBar-action--edit"
+														data-xf-click="quick-edit"
+														data-editor-target="< .js-quickEditTarget">{{ phrase('edit') }}</a>
+												</xf:if>
+
+												<xf:if is="$message.canCleanSpam()">
+													<a href="{{ link('spam-cleaner', $message) }}"
+														class="actionBar-action actionBar-action--spam actionBar-action--menuItem"
+														data-xf-click="overlay">{{ phrase('spam') }}</a>
+												</xf:if>
+
+												<xf:if is="$xf.visitor.canViewIps() && $message.ip_id">
+													<a href="{{ link('direct-messages/replies/ip', $message) }}"
+														class="actionBar-action actionBar-action--ip"
+														data-xf-click="overlay">{{ phrase('ip') }}</a>
+												</xf:if>
+											</xf:contentcheck>
+										</div>
+									</xf:if>
+								</xf:contentcheck>
+							</div>
+						</xf:if>
+
+						<div class="reactionsBar js-reactionsList {{ $message.reactions ? 'is-active' : '' }}">
+							<xf:reactions content="{$message}" link="direct-messages/replies/reactions" />
+						</div>
+					</footer>
+				</div>
+			</div>
+		</div>
+	</article>
+</xf:macro>

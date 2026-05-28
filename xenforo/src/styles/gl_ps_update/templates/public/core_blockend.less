@@ -1,0 +1,44 @@
+// This contains rules that apply to various block and block-related systems. This file should be included
+// after all of the primary definitions to ensure the rules override.
+
+.blockMessage,
+.blockStatus,
+.block-row
+{
+	p:first-child
+	{
+		margin-top: 0;
+	}
+
+	p:last-child
+	{
+		margin-bottom: 0;
+	}
+}
+
+@media (max-width: @xf-responsiveEdgeSpacerRemoval)
+{
+	.block-container,
+	.blockMessage
+	{
+		margin-left: (@xf-pageEdgeSpacer * -1);
+		margin-right: (@xf-pageEdgeSpacer * -1);
+		border-radius: 0;
+		border-left: none;
+		border-right: none;
+	}
+
+	.blockStatus
+	{
+		margin-left: (@xf-pageEdgeSpacer * -1);
+		margin-right: (@xf-pageEdgeSpacer * -1);
+		border-radius: 0;
+		border-right: none;
+	}
+
+	.blockMessage.blockMessage--none
+	{
+		margin-left: 0;
+		margin-right: 0;
+	}
+}

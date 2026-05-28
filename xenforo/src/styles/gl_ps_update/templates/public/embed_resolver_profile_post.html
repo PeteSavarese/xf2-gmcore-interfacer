@@ -1,0 +1,43 @@
+<div class="embed-container contentRow contentRow--alignMiddle">
+	<div class="contentRow-figure">
+		<xf:avatar user="$content.User" size="s" defaultname="{$content.username}"/>
+	</div>
+	<div class="contentRow-main">
+		<h3 class="contentRow-header">
+			<a href="{$content.getContentUrl()}" class="fauxBlockLink-blockLink u-cloaked">
+				<xf:if is="$content.user_id == $content.ProfileUser.user_id">
+					{{ $content.getContentTitle() }}
+				<xf:else />
+					{{ phrase('xs_message_on_ys_profile', {
+						'usernamePoster': $content.User.username,
+						'usernameReceiver': $content.ProfileUser.username
+					}) }}
+				</xf:if>
+			</a>
+		</h3>
+
+		<div class="contentRow-minor contentRow-minor--hideLinks">
+			<xf:date time="{$content.post_date}"/>
+		</div>
+	</div>
+</div>
+
+<div class="embed-preview">
+	{{ snippet($content.message, 300, {"stripQuote": true, 'withinEmbedResolver': true}) }}
+</div>
+
+<div class="embed-footer">
+	<div class="embed-footer-main">
+		<ul class="listInline listInline--bullet">
+			<li>
+				<xf:username user="{$content.User}" defaultname="{$content.username}"/>
+			</li>
+			<li>
+				{{ phrase('comments:') }} {$content.comment_count|number}
+			</li>
+		</ul>
+	</div>
+	<div class="embed-footer-opposite">
+		<xf:reactions summary="true" reactions="{$content.reactions}"/>
+	</div>
+</div>

@@ -1,0 +1,36 @@
+<xf:title>{{ phrase('search_direct_messages') }}</xf:title>
+
+<xf:macro id="search_form_macros::keywords"
+	arg-input="{$input}" />
+
+<xf:macro id="search_form_macros::user" 
+	arg-input="{$input}" />
+
+<xf:textboxrow name="c[recipients]" value="{$input.c.recipients}" ac="true"
+	label="{{ phrase('received_by') }}"
+	explain="{{ phrase('separate_names_with_comma') }}" />
+
+<xf:macro id="search_form_macros::date"
+	arg-input="{$input}" />
+
+<xf:numberboxrow name="c[min_reply_count]" value="{$input.c.min_reply_count|default(0)}" min="0"
+	label="{{ phrase('minimum_number_of_replies') }}" />
+
+<xf:if is="$input.c.conversation">
+	<xf:checkboxrow>
+		<xf:option name="c[conversation]" value="{$input.c.conversation}" selected="true">
+			{{ phrase('restrict_search_to_specified_direct_message') }}
+		</xf:option>
+	</xf:checkboxrow>
+</xf:if>
+
+<xf:macro template="search_form_macros" name="order"
+	arg-isRelevanceSupported="{$isRelevanceSupported}"
+	arg-options="{{ {
+		'replies': phrase('most_replies')
+	} }}"
+	arg-input="{$input}" />
+
+<xf:macro id="search_form_macros::grouped" 
+	arg-label="{{ phrase('display_results_as_direct_messages') }}"
+	arg-input="{$input}" />

@@ -1,0 +1,51 @@
+<xf:macro id="debug" arg-controller="!" arg-action="!" arg-template="!" arg-link="{{ true }}" arg-classInfo="{{ true }}">
+	<xf:if is="{$xf.debug}">
+		<ul class="listInline listInline--bullet listInline--selfInline">
+			<li><dl class="pairs pairs--inline debugResolution" title="{{ phrase('responsive_width')|for_attr }}">
+				<dt class="debugResolution-label">{{ phrase('width') }}</dt>
+				<dd class="debugResolution-output"></dd>
+			</dl></li>
+			<li><dl class="pairs pairs--inline">
+				<dt>{{ phrase('total_queries') }}</dt>
+				<dd><!--XF:QUERIES--></dd>
+			</dl></li>
+			<li><dl class="pairs pairs--inline">
+				<xf:if is="$link">
+					<dt>{{ phrase('total_time') }}</dt>
+					<dd><a href="{{ debug_url() }}" rel="nofollow"><!--XF:PAGE_TIME-->s</a></dd>
+				<xf:else />
+					<dt>{{ phrase('total_time') }}</dt>
+					<dd><!--XF:PAGE_TIME-->s</dd>
+				</xf:if>
+			</dl></li>
+			<li><dl class="pairs pairs--inline">
+				<dt>{{ phrase('max_memory') }}</dt>
+				<dd><!--XF:MEMORY_PEAK--></dd>
+			</dl></li>
+			<xf:if is="$classInfo">
+				<li class="cog-info">
+					<xf:macro id="class_info"
+						arg-controller="{$controller}"
+						arg-action="{$action}"
+						arg-template="{$template}" />
+				</li>
+			</xf:if>
+		</ul>
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="class_info" arg-controller="!" arg-action="!" arg-template="!">
+	<a data-xf-init="tooltip" data-click-hide="false"
+		data-trigger="hover focus click"
+		title="{$controller} :: {$action} &middot; {$template}"
+		role="button" tabindex="0" aria-label="{{ phrase('class_information')|for_attr }}"><xf:fa icon="fa-cog" /></a>
+</xf:macro>
+
+<xf:macro id="debug_resolution">
+	<xf:if is="{$xf.debug}">
+		<span class="debugResolution" title="{{ phrase('responsive_width')|for_attr }}">
+			<span class="debugResolution-label">{{ phrase('responsive_width:') }}</span>
+			<span class="debugResolution-output"></span>
+		</span>
+	</xf:if>
+</xf:macro>

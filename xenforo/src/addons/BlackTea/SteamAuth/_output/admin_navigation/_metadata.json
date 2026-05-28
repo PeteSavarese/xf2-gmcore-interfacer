@@ -1,0 +1,17 @@
+{
+    "blacktea_steamauth.json": {
+        "hash": "26ace36ea5927953ce924496777f2dc0"
+    },
+    "steam_list.json": {
+        "hash": "fa258a8a68645a23a67f81cb72adacc6"
+    },
+    "steam_settings.json": {
+        "hash": "f0f0d69526def2b54ad2c63b26e1f457"
+    },
+    "steam_setup.json": {
+        "hash": "3da83f88389a84e62d15323121119875"
+    },
+    "steam_support.json": {
+        "hash": "4e8d9d9a0d47c540b28c9f342aedfcb9"
+    }
+}

@@ -1,0 +1,13 @@
+{
+    "edit_format": "template",
+    "edit_format_params": "blacktea_steamauth_actions",
+    "data_type": "string",
+    "sub_options": [],
+    "validation_class": "",
+    "validation_method": "",
+    "advanced": false,
+    "default_value": "",
+    "relations": {
+        "blacktea_steamauth_options": 0
+    }
+}

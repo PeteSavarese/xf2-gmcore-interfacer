@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html id="XF" lang="{$xf.language.language_code}" dir="{$xf.language.text_direction}"
+	data-app="public"
+	{{ ($xf.style.isVariationsEnabled() && $xf.visitor.style_variation) ? 'data-variation="' . $xf.visitor.style_variation . '"' : '' }}
+	{{ ($xf.style.isVariationsEnabled() && $xf.visitor.style_variation) ? 'data-color-scheme="' . property_variation('styleType', $xf.visitor.style_variation) . '"' : '' }}
+	data-template="{$template}"
+	class="has-no-js p-embed-container {{ $template ? 'template-' . $template : '' }}">
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+	<base target="_blank">
+
+	<title>{{ $embeddedContent ? $embeddedContent.getContentTitle() : phrase('error') }}</title>
+
+	<xf:macro name="public:helper_js_global::head" arg-app="public" />
+</head>
+<body>
+{$content|raw}
+<xf:macro name="public:helper_js_global::body" arg-app="public" />
+</body>
+</html>

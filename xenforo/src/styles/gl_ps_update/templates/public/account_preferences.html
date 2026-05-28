@@ -1,0 +1,158 @@
+<xf:title>{{ phrase('preferences') }}</xf:title>
+
+<xf:wrap template="account_wrapper" />
+
+<xf:form action="{{ link('account/preferences') }}" ajax="true" class="block" data-force-flash-message="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:if is="$xf.visitor.canChangeStyle()">
+
+				<xf:selectrow name="user[style_id]" value="{$xf.visitor}"
+					label="{{ phrase('style') }}"
+					data-xf-init="style-variation-input">
+
+					<xf:option value="0">{{ phrase('use_default_style:') }} {$defaultStyle.title}</xf:option>
+					<xf:foreach loop="$styles" value="$style">
+						<xf:option value="{$style.style_id}">{$style.title}{{ !$style.user_selectable ? ' *' : '' }}</xf:option>
+					</xf:foreach>
+				</xf:selectrow>
+			<xf:else />
+				<xf:hiddenval name="user[style_id]">{$xf.visitor.style_id}</xf:hiddenval>
+			</xf:if>
+
+			<div class="js-variationContainer">
+				<xf:macro name="style_variation_macros::variation_input"
+					arg-style="{$xf.style}" />
+			</div>
+
+			<xf:if is="$xf.visitor.canChangeLanguage()">
+				<xf:selectrow name="user[language_id]" value="{$xf.visitor}"
+					label="{{ phrase('language') }}">
+
+					<xf:foreach loop="$languages" value="$language">
+						<xf:option value="{$language.language_id}">{$language.title}{{ !$language.user_selectable ? ' *' : '' }}</xf:option>
+					</xf:foreach>
+				</xf:selectrow>
+			<xf:else />
+				<xf:hiddenval name="user[language_id]">{{ $xf.visitor.language_id ?: $xf.options.defaultLanguageId }}</xf:hiddenval>
+			</xf:if>
+
+			<xf:selectrow name="user[timezone]" value="{$xf.visitor}"
+				label="{{ phrase('time_zone') }}">
+
+				<xf:options source="$timeZones" />
+			</xf:selectrow>
+
+			<xf:macro id="helper_account::email_options_row" arg-showConversationOption="{{ true }}" />
+
+			<xf:checkboxrow label="{{ phrase('content_options') }}">
+				<xf:option value="watch_no_email" name="option[creation_watch_state]" checked="{{ $xf.visitor.Option.creation_watch_state ? true : false  }}"
+					label="{{ phrase('automatically_watch_content_you_create...') }}">
+					<xf:checkbox>
+						<xf:option value="watch_email" name="option[creation_watch_state]" checked="{{ $xf.visitor.Option.creation_watch_state == 'watch_email' }}"
+							label="{{ phrase('and_receive_email_notifications') }}" />
+					</xf:checkbox>
+				</xf:option>
+				<xf:option value="watch_no_email" name="option[interaction_watch_state]" checked="{{ $xf.visitor.Option.interaction_watch_state ? true : false  }}"
+					label="{{ phrase('automatically_watch_content_you_interact_with...') }}">
+					<xf:checkbox>
+						<xf:option value="watch_email" name="option[interaction_watch_state]" checked="{{ $xf.visitor.Option.interaction_watch_state == 'watch_email' }}"
+							label="{{ phrase('and_receive_email_notifications') }}" />
+					</xf:checkbox>
+				</xf:option>
+				<xf:option name="option[content_show_signature]" checked="{$xf.visitor.Option.content_show_signature}"
+					label="{{ phrase('show_peoples_signatures_with_their_messages') }}" />
+			</xf:checkboxrow>
+
+			<xf:macro id="helper_account::activity_privacy_row" />
+
+			<xf:if is="$xf.visitor.is_moderator">
+				<xf:checkboxrow label="{{ phrase('moderator_options') }}">
+					<xf:option name="moderator[notify_report]" checked="{$xf.visitor.Moderator.notify_report}"
+						label="{{ phrase('receive_email_when_content_is_reported') }}" />
+					<xf:option name="moderator[notify_approval]" checked="{$xf.visitor.Moderator.notify_approval}"
+						label="{{ phrase('receive_email_when_content_is_pending_approval') }}" />
+				</xf:checkboxrow>
+			</xf:if>
+
+			<xf:macro id="custom_fields_macros::custom_fields_edit" arg-type="users" arg-group="preferences" arg-set="{$xf.visitor.Profile.custom_fields}" />
+
+			<xf:if is="$xf.options.enableNotices && (count($xf.session.dismissedNotices) > 0)">
+				<hr class="formRowSep" />
+
+				<xf:checkboxrow>
+					<xf:option name="restore_notices"
+						label="{{ phrase('restore_dismissed_notices') }}"
+						hint="{{ phrase('restore_dismissed_notices_hint') }}" />
+				</xf:checkboxrow>
+			</xf:if>
+
+			<xf:if is="$xf.visitor.canUsePushNotifications()">
+				<xf:formrow label="{{ phrase('push_notifications') }}" rowtype="button" explain="{{ phrase('enable_push_explain') }}">
+					<xf:button class="is-disabled" data-xf-init="push-toggle">
+						{{ phrase('push_checking_device_capabilities...') }}
+					</xf:button>
+				</xf:formrow>
+
+				<xf:checkboxrow label="">
+					<xf:option name="option[push_on_conversation]" checked="{$xf.visitor.Option.push_on_conversation}"
+						label="{{ phrase('receive_push_notification_when_new_direct_message_is_received') }}" />
+				</xf:checkboxrow>
+
+				<xf:js>
+					XF.extendObject(true, XF.config, {
+						skipPushNotificationSubscription: true,
+						skipPushNotificationCta: true
+					});
+
+					XF.extendObject(XF.phrases, {
+						push_enable_label: "{{ phrase('push_enable_label')|escape('js') }}",
+						push_disable_label: "{{ phrase('push_disable_label')|escape('js') }}",
+						push_not_supported_label: "{{ phrase('push_not_supported_label')|escape('js') }}",
+						push_blocked_label: "{{ phrase('push_blocked_label')|escape('js') }}"
+					});
+				</xf:js>
+			<xf:else />
+				<xf:hiddenval name="option[push_on_conversation]">{$xf.visitor.Option.push_on_conversation}</xf:hiddenval>
+			</xf:if>
+		</div>
+
+		<xf:if is="$alertOptOuts is not empty">
+			<xf:css src="notification_opt_out.less" />
+			<h2 class="block-formSectionHeader"><span class="block-formSectionHeader-aligner">{{ phrase('receive_notification_when_someone...') }}</span></h2>
+			<div class="block-body">
+				<xf:set var="$canPush" value="{{ $xf.visitor.canUsePushNotifications() }}" />
+				<xf:foreach loop="$alertOptOuts" key="$contentType" value="$options">
+					<xf:foreach loop="$options" key="$action" value="$label">
+						<xf:formrow label="{$label}" data-content-type="{$contentType}" data-action="{$action}">
+							<ul class="notificationChoices">
+								<li class="notificationChoices-choice notificationChoices-choice--alert">
+									<xf:checkbox standalone="true">
+										<xf:option name="alert[{$contentType}_{$action}]"
+											data-xf-init="{{ $canPush ? 'disabler' : '' }}" data-container="< .notificationChoices | .notificationChoices-choice--push"
+											checked="{{ $xf.visitor.Option.doesReceiveAlert($contentType, $action) }}"
+											label="{{ phrase('alert') }}" />
+									</xf:checkbox>
+								</li>
+								<xf:if is="$canPush">
+									<li class="notificationChoices-choice notificationChoices-choice--push">
+										<xf:checkbox standalone="true">
+											<xf:option name="push[{$contentType}_{$action}]"
+												checked="{{ $xf.visitor.Option.doesReceivePush($contentType, $action) }}"
+												label="{{ phrase('push') }}" />
+										</xf:checkbox>
+										<xf:hiddenval name="push_shown[{$contentType}_{$action}]">1</xf:hiddenval>
+									</li>
+								</xf:if>
+							</ul>
+						</xf:formrow>
+					</xf:foreach>
+					<hr class="formRowSep" />
+				</xf:foreach>
+
+			</div>
+		</xf:if>
+
+		<xf:submitrow icon="save" sticky="true" />
+	</div>
+</xf:form>

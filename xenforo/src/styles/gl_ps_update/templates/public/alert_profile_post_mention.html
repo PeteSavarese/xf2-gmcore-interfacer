@@ -1,0 +1,5 @@
+{{ phrase('x_mentioned_you_message_on_ys_profile', {
+	'name': username_link($user, false, {'defaultname': $alert.username}),
+	'post_attributes': 'href="' . link('profile-posts', $content) . '" class="fauxBlockLink-blockLink"',
+	'profile': $content.ProfileUser.username
+}) }}

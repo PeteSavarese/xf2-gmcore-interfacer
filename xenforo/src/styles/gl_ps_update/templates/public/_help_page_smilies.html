@@ -1,0 +1,40 @@
+<xf:css src="help_page_smilies.less" />
+
+<div class="ps--help-page-smilies block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:datalist data-xf-init="responsive-data-list">
+				<xf:datarow rowtype="header">
+					<xf:cell class="dataList-cell--min">{{ phrase('image') }}</xf:cell>
+					<xf:cell>{{ phrase('title') }}</xf:cell>
+					<xf:cell>{{ phrase('text') }}</xf:cell>
+				</xf:datarow>
+				<xf:foreach loop="$smilieCategories" key="$smilieCategoryId" value="$smilieCategory">
+					<xf:if is="$smilieCategoryId">
+						<xf:datarow rowclass="dataList-row--subSection dataList-row--noHover">
+							<xf:cell colspan="3">{$smilieCategory.title}</xf:cell>
+						</xf:datarow>
+					</xf:if>
+					<xf:foreach loop="$smilieCategory.smilies" value="$smilie">
+						<xf:datarow rowclass="dataList-row--noHover">
+							<xf:cell class="dataList-cell--min dataList-cell--alt">
+								{{ smilie($smilie.smilie_text_options.0) }}
+							</xf:cell>
+							<xf:main label="{$smilie.title}" />
+							<xf:cell>
+								<span>
+								<xf:foreach loop="$smilie.smilie_text_options" value="$smilieText">
+									<span class="smilieText">{$smilieText}</span>
+								</xf:foreach>
+								</span>
+							</xf:cell>
+						</xf:datarow>
+					</xf:foreach>
+				</xf:foreach>
+			</xf:datalist>
+		</div>
+		<div class="block-footer">
+			{{ phrase('smilies_provided_free_by_emojione') }}
+		</div>
+	</div>
+</div>

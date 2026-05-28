@@ -1,0 +1,11 @@
+{
+    "parent_navigation_id": "petersav_gmodinterfacer",
+    "display_order": 100,
+    "link": "options/groups/gmod_interfacer_settings/",
+    "icon": "",
+    "admin_permission_id": "gmod_db_options",
+    "debug_only": false,
+    "development_only": false,
+    "super_admin_only": false,
+    "hide_no_children": false
+}

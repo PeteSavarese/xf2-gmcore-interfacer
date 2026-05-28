@@ -1,0 +1,48 @@
+<xf:title>Gift Selection</xf:title>
+
+<xf:form action="/store/userselectsearch" id="userSearch">
+    <xf:textboxrow name="username" ac="single" label="{{ phrase('user_name') }}" />
+    <xf:hiddenval name="rank_id" value="{$xf.request.filter('rank_id', 'uint')}" />
+    
+    <xf:submitrow submit="Select user" icon="gift" class="js-overlayClose" />
+</xf:form>
+
+<xf:js>
+    var userSearchForm = document.getElementById('userSearch');
+    
+    if (userSearchForm) {
+        userSearchForm.addEventListener('submit', function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+	
+            var formData = new FormData(userSearchForm);
+            
+            // Convert FormData to object for XF.ajax
+            var formObject = {};
+            formData.forEach(function(value, key) {
+                formObject[key] = value;
+            });
+            
+            XF.ajax('POST', userSearchForm.action, formObject, function(data) {
+                if (data && data.user_id && data.user_name) {
+                    if (window.StoreApp) {
+                        window.StoreApp.recipientRankData = {
+                            userId: data.user_id,
+                            userName: data.user_name,
+                            highestRankPriority: data.highest_rank_priority || 0,
+                            currentRankPrice: data.current_rank_price || 0
+                        };
+                    }
+                    setStoreUser(data.user_id, data.user_name);
+                } else {
+                    console.error('Invalid response data', data);
+                }
+            }, {
+                error: function(error) {
+                    console.error('AJAX error', error);
+                    XF.alert(error.message || 'An error occurred while processing your request.');
+                }
+            });
+        });
+    }
+</xf:js>

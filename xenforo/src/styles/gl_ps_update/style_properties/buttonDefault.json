@@ -1,0 +1,22 @@
+{
+    "group_name": "button",
+    "title": "Button - default",
+    "description": "Most buttons use this styling, except for primary form submit buttons",
+    "property_type": "css",
+    "css_components": [
+        "text",
+        "background",
+        "extra"
+    ],
+    "value_type": "",
+    "value_parameters": "",
+    "has_variations": false,
+    "depends_on": "",
+    "value_group": "",
+    "property_value": {
+        "color": "@xf-paletteColor1",
+        "background-color": "#3498db",
+        "extra": "border-color: rgba(0,0,0,0) !important;"
+    },
+    "display_order": 20100
+}

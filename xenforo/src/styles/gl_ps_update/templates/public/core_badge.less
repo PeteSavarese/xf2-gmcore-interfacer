@@ -1,0 +1,40 @@
+// #################################################### BADGES ###########################
+
+.badge,
+.badgeContainer:after
+{
+	display: inline-block;
+	padding: 2px 4px;
+	margin: -2px 0;
+	font-size: 80%;
+	line-height: 1;
+	font-weight: @xf-fontWeightNormal;
+	.xf-badge();
+}
+
+.badgeContainer
+{
+	&:after
+	{
+		content: attr(data-badge);
+		display: none;
+	}
+
+	&.badgeContainer--visible:after
+	{
+		display: inline-block;
+	}
+}
+
+.badge.badge--highlighted,
+.badgeContainer.badgeContainer--highlighted:after
+{
+	display: inline-block;
+	.xf-badgeHighlighted();
+}
+
+.badge--highlighted {
+    background: linear-gradient(90deg, rgba(52,152,219,.9), rgba(35,163,147,0.9));
+    font-weight: 700;
+    box-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+}

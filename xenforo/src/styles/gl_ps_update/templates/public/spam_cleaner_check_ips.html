@@ -1,0 +1,6 @@
+<xf:title>{{ phrase('spam_cleaner_ip_address_check') }}</xf:title>
+
+<xf:breadcrumb href="{{ link('full:members', $user) }}">{$user.username}</xf:breadcrumb>
+<xf:breadcrumb href="{{ link('full:spam-cleaner', $user) }}">{{ phrase('spam_cleaner') }}</xf:breadcrumb>
+
+<xf:macro id="member_shared_ips_list::shared_block" arg-user="{$spammer}" arg-shared="{$shared}" />

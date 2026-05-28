@@ -1,0 +1,110 @@
+<xf:title>Server List</xf:title>
+<xf:css src="gmod_interfacer.less" />
+<xf:foreach loop="{$servers}" value="$server">
+	<div class="card">
+		<div class="card-header">
+			<span>
+				<xf:fa icon="fa-server" aria-hidden="true"/>
+				<a href="steam://connect/{$server.serverAddr}" style="color: inherit; text-decoration: none;">{$server.hostName}</a>
+			</span>
+			<div class="server-status">
+				<xf:if is="$server.offline">
+					<span class="status status-voided">Offline</span>
+					<xf:elseif is="{$server.playerCount} >= {$server.maxCount}" />
+					<span class="status status-active">{$server.playerCount}/{$server.maxCount} Players</span>
+					<xf:else />
+					<span class="status status-expired">{$server.playerCount}/{$server.maxCount} Players</span>
+				</xf:if>
+			</div>
+		</div>
+		<div class="card-content">
+			<div class="server-layout">
+				<div class="server-info-section">
+					<div class="server-map-container">
+						<div class="server-map-image" style="background-image: url('/images/maps/{{ remove_trailing_gmod_map($server.currentMap) }}.png')">
+						</div>
+					</div>
+					<div class="server-details">
+						<div class="info-grid">
+							<div class="info-item">
+								<div class="info-label">IP Address</div>
+								<div class="info-value">{$server.serverAddr}</div>
+							</div>
+							<div class="info-item">
+								<div class="info-label">Current Map</div>
+								<div class="info-value">{{ remove_trailing_gmod_map($server.currentMap) }}</div>
+							</div>
+							<div class="info-item">
+								<div class="info-label">Player Count</div>
+								<div class="info-value">
+									<xf:if is="$server.offline">
+										Offline
+										<xf:else />
+										{$server.playerCount}/{$server.maxCount}
+									</xf:if>
+								</div>
+							</div>
+						</div>
+						<div class="server-actions">
+							<xf:if is="!$server.offline">
+								<a class="button button--vibrant" href="steam://connect/{$server.serverAddr}">
+									<xf:fa icon="fa-play" aria-hidden="true"/> Join Server
+								</a>
+								<xf:else />
+								<button class="button button--vibrant is-disabled" disabled>
+									<xf:fa icon="fa-times" aria-hidden="true"/> Server Offline
+								</button>
+							</xf:if>
+						</div>
+					</div>
+				</div>
+				<xf:if is="!empty({$server.playersJSON}) || !$server.offline">
+					<div class="server-players-section">
+						<h4 class="players-section-title">
+							<xf:fa icon="fa-users" aria-hidden="true"/> Current Players
+						</h4>
+						<div class="table-container">
+							<table>
+								<thead>
+								<tr>
+									<th>Name</th>
+									<th>Staff Rank</th>
+									<th>Store Rank</th>
+								</tr>
+								</thead>
+								<tbody>
+								<xf:if is="!empty({$server.playersJSON})">
+									<xf:foreach loop="{$server.playersJSON}" value="$player">
+										<tr>
+											<td>{$player.ingame_name}</td>
+											<td>
+												<xf:if is="{$player.userBannerCode}">
+													{$player.userBannerCode|raw}
+												</xf:if>
+											</td>
+											<td>
+												<xf:if is="{$player.userBannerDonator}">
+													{$player.userBannerDonator|raw}
+												</xf:if>
+											</td>
+										</tr>
+									</xf:foreach>
+									<xf:else />
+									<tr>
+										<td colspan="3">
+											<div class="empty-state" style="padding: 20px;">
+												<xf:fa icon="fa-user-slash" aria-hidden="true"/>
+												<p>No players currently online</p>
+											</div>
+										</td>
+									</tr>
+								</xf:if>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</xf:if>
+			</div>
+		</div>
+	</div>
+</xf:foreach>

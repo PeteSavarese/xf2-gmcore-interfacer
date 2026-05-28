@@ -1,0 +1,17 @@
+{
+    "group_name": "color",
+    "title": "Content background color",
+    "description": "Most normal content will sit on this background",
+    "property_type": "value",
+    "css_components": [],
+    "value_type": "color",
+    "value_parameters": "",
+    "has_variations": true,
+    "depends_on": "",
+    "value_group": "contentBackground",
+    "property_value": {
+        "default": "#1e2a38",
+        "alternate": "#223344"
+    },
+    "display_order": 2000
+}

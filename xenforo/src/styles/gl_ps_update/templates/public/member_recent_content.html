@@ -1,0 +1,34 @@
+<xf:title>{{ phrase('recent_content_by_x', {'name': $user.username}) }}</xf:title>
+
+<xf:head option="metaNoindex"><meta name="robots" content="noindex" /></xf:head>
+
+<xf:breadcrumb href="{{ link('members', $user) }}">{$user.username}</xf:breadcrumb>
+
+<xf:css src="search_results.less" />
+
+<xf:if is="$resultCount">
+	<div class="block">
+		<div class="block-container">
+			<ol class="block-body">
+				<xf:foreach loop="$results" value="$result">
+					{{ $result.render()|raw }}
+				</xf:foreach>
+			</ol>
+			<xf:if is="$xf.visitor.canSearch()">
+				<div class="block-footer">
+					<span class="block-footer-controls"><xf:button href="{{ link('search/member', null, {'user_id': $user.user_id, 'content': 'post'}) }}" rel="nofollow">
+						{{ phrase('see_more') }}
+					</xf:button></span>
+				</div>
+			</xf:if>
+		</div>
+
+		<div class="block-outer block-outer--after">
+			<div class="block-outer-opposite">
+				<xf:showignored />
+			</div>
+		</div>
+	</div>
+<xf:else />
+	<div class="blockMessage">{{ phrase('x_has_not_posted_any_content_recently', {'name': $user.username}) }}</div>
+</xf:if>

@@ -1,0 +1,26 @@
+<xf:title>{{ phrase('ip_addresses_logged_for_x', {'name': $user.username}) }}</xf:title>
+
+<div class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:datalist data-xf-init="responsive-data-list">
+				<xf:datarow rowtype="header">
+					<xf:cell>{{ phrase('ip') }}</xf:cell>
+					<xf:cell>{{ phrase('total') }}</xf:cell>
+					<xf:cell>{{ phrase('earliest') }}</xf:cell>
+					<xf:cell>{{ phrase('latest') }}</xf:cell>
+					<xf:cell>&nbsp;</xf:cell>
+				</xf:datarow>
+				<xf:foreach loop="$ips" value="$ip">
+					<xf:datarow rowclass="dataList-row--noHover">
+						<xf:cell href="{{ link('misc/ip-info', null, {'ip': $ip.ip|ip}) }}" target="_blank">{$ip.ip|ip}</xf:cell>
+						<xf:cell>{$ip.total|number}</xf:cell>
+						<xf:cell><xf:date time="{$ip.first_date}" /></xf:cell>
+						<xf:cell><xf:date time="{$ip.last_date}" /></xf:cell>
+						<xf:action href="{{ link('members/ip-users', null, {'ip': $ip.ip|ip}) }}" overlay="true">{{ phrase('more_users') }}</xf:action>
+					</xf:datarow>
+				</xf:foreach>
+			</xf:datalist>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,12 @@
+<xf:title>{{ phrase('stop_ignoring_x', {'name': $ignored.username}) }}</xf:title>
+
+<xf:form action="{{ link('account/stop-ignoring', null, { 'user_id': $ignored.user_id }) }}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:inforow rowtype="confirm">
+				{{ phrase('please_confirm_that_you_want_to_stop_ignoring_x', {'name': $ignored.username}) }}
+			</xf:inforow>
+		</div>
+		<xf:submitrow submit="{{ phrase('stop_ignoring') }}" rowtype="simple" />
+	</div>
+</xf:form>

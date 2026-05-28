@@ -1,0 +1,13 @@
+<xf:macro id="approval_queue_macros::item_message_type"
+	arg-content="{$content}"
+	arg-contentDate="{$content.comment_date}"
+	arg-user="{$content.User}"
+	arg-messageHtml="{{ bb_code($content.message, 'profile_post_comment', $content) }}"
+	arg-typePhraseHtml="{{ phrase('profile_post_comment') }}"
+	arg-spamDetails="{$spamDetails}"
+	arg-unapprovedItem="{$unapprovedItem}"
+	arg-handler="{$handler}"
+	arg-headerPhraseHtml="{{ phrase('posted_on_profile_post_by_x', {
+		'commentLink': link('profile-posts/comments', $content),
+		'user': $content.ProfilePost.username})
+	}}"/>

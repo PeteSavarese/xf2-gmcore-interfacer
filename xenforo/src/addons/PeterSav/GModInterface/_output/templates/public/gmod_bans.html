@@ -1,0 +1,87 @@
+<xf:title>TTT Bans</xf:title>
+<xf:css src="gmod_interfacer.less" />
+<xf:js src="//cdn.jsdelivr.net/npm/gridjs@6.2.0/dist/gridjs.umd.js" />
+
+<div class="card">
+	<div class="card-header">
+		<span><xf:fa icon="fa-gavel" aria-hidden="true" /> Bans List</span>
+	</div>
+	<div class="card-content">
+		<div id="bansGrid"></div>
+	</div>
+</div>
+
+<script type="text/javascript">
+function formatCustomDate(unixTimestamp) {
+	const date = new Date(unixTimestamp * 1000);
+	const month = new Intl.DateTimeFormat('en-US', { month: 'long' }).format(date);
+	const day = date.getDate().toString().padStart(2, '0');
+	const year = date.getFullYear();
+	let hour = date.getHours();
+	const minute = date.getMinutes().toString().padStart(2, '0');
+	const ampm = hour >= 12 ? 'pm' : 'am';
+
+  hour = hour % 12;
+	hour = hour === 0 ? 12 : hour;
+
+	return `${month} ${day}, ${year} ${hour}:${minute}${ampm}`;
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+	var bansData = {$bansData|raw};
+
+	const grid = new gridjs.Grid({
+		columns: [
+			{ name: 'Username', sort: true },
+			{ name: 'SteamID', sort: false },
+			{
+				name: 'Banned On',
+				sort: true,
+				formatter: function(cell) {
+					return cell ? formatCustomDate(cell) : 'Unknown';
+				}
+			},
+			{
+				name: 'Expires On',
+				sort: true,
+				formatter: function(cell) {
+					return cell === 0 ? 'Permanent' : formatCustomDate(cell);
+				}
+			},
+			{ name: 'Reason', sort: false },
+			{ name: 'Admin', sort: true },
+			{ name: 'Server', sort: true },
+			<xf:if is="{{ $xf.visitor->hasPermission('gmodUserPerms', 'view_hlogs') }}">
+			{
+				name: '',
+				sort: false,
+				formatter: (cell, row) => {
+					const steamid = row.cells[1].data;
+					return gridjs.html(`<a href="/gl/hlogs/results?steamid=${steamid}" class="button button--cta" target="_blank" title="View HLogs for this user"><i class="fa fa-search"></i> View HLogs</a>`);
+				}
+			},
+			</xf:if>
+		],
+		data: bansData,
+		sort: { multiColumn: false },
+		search: {
+			enabled: true,
+			placeholder: 'Search bans...'
+		},
+		pagination: {
+			enabled: true,
+			limit: 25,
+			summary: true
+		},
+		resizable: true,
+		className: {
+			table: 'gmod-grid-table',
+			th: 'gmod-grid-th',
+			td: 'gmod-grid-td',
+			container: 'gmod-grid-container'
+		}
+	});
+
+	grid.render(document.getElementById('bansGrid'));
+}, false);
+</script>

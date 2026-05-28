@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<admin_navigation>
+    <admin_navigation_entry navigation_id="shoutboxBans" display_order="5" icon="fa-comment-slash"
+                            admin_permission_id="ban" debug_only="0" development_only="0" hide_no_children="0"/>
+    <admin_navigation_entry navigation_id="shoutbox_bans_active" parent_navigation_id="shoutboxBans" display_order="100"
+                            link="shoutbox-bans" admin_permission_id="ban" debug_only="0" development_only="0"
+                            hide_no_children="0"/>
+    <admin_navigation_entry navigation_id="shoutbox_bans_expired" parent_navigation_id="shoutboxBans"
+                            display_order="200" link="shoutbox-bans/expired" admin_permission_id="ban" debug_only="0"
+                            development_only="0" hide_no_children="0"/>
+    <admin_navigation_entry navigation_id="shoutbox_bans_history" parent_navigation_id="shoutboxBans" display_order="1"
+                            link="shoutbox-bans/history" admin_permission_id="ban" debug_only="0" development_only="0"
+                            hide_no_children="0"/>
+</admin_navigation>

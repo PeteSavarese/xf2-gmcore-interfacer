@@ -1,0 +1,9 @@
+<div class="block-row block-row--separated">
+	{{ bb_code($report.content_info.message, 'post', $content ?: $report.User) }}
+</div>
+<div class="block-row block-row--separated block-row--minor">
+	<dl class="pairs pairs--inline">
+		<dt>{{ phrase('forum') }}</dt>
+		<dd><a href="{{ link('forums', $report.content_info) }}">{$report.content_info.node_title}</a></dd>
+	</dl>
+</div>

@@ -1,0 +1,73 @@
+<xf:title page="{$page}">{{ phrase('watched_threads') }}</xf:title>
+
+<xf:if is="$threads is not empty">
+	<xf:form action="{{ link('watched/threads/update') }}" ajax="true" class="block" autocomplete="off">
+		<div class="block-outer">
+			<xf:pagenav
+				page="{$page}" perpage="{$perPage}" total="{$total}"
+				link="watched/threads"
+				wrapperclass="block-outer-main" />
+			<div class="block-outer-opposite">
+				<xf:button class="button--link menuTrigger" data-xf-click="menu" aria-expanded="false" aria-haspopup="true">{{ phrase('manage_watched_threads') }}</xf:button>
+				<div class="menu" data-menu="menu" aria-hidden="true">
+					<div class="menu-content">
+						<h3 class="menu-header">{{ phrase('manage_watched_threads') }}</h3>
+						<!--[XF:manage_menu:top]-->
+						<a href="{{ link('watched/threads/manage', null, {'state': 'watch_no_email'}) }}" data-xf-click="overlay" class="menu-linkRow">{{ phrase('disable_email_notification') }}</a>
+						<a href="{{ link('watched/threads/manage', null, {'state': 'delete'}) }}" data-xf-click="overlay" class="menu-linkRow">{{ phrase('stop_watching_threads') }}</a>
+						<!--[XF:manage_menu:bottom]-->
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="block-container">
+			<div class="block-body">
+				<div class="structItemContainer">
+					<xf:foreach loop="$threads" value="$thread">
+						<xf:set var="$extra" value="{{ {$thread.Watch.{$xf.visitor.user_id}.email_subscribe} ? phrase('email') : '' }}" />
+						<xf:macro id="thread_list_macros::item"
+							arg-thread="{$thread}"
+							arg-chooseName="thread_ids"
+							arg-showWatched="{{ false }}"
+							arg-extraInfo="{$extra}"
+							arg-allowEdit="{{ false }}" />
+					</xf:foreach>
+				</div>
+			</div>
+			<div class="block-footer block-footer--split">
+				<span class="block-footer-counter"></span>
+				<span class="block-footer-select"><xf:checkbox standalone="true"><xf:option check-all="< .block-container" label="{{ phrase('select_all') }}" /></xf:checkbox></span>
+				<span class="block-footer-controls">
+						<xf:select name="state" class="input--inline">
+						<xf:option>{{ phrase('with_selected...') }}</xf:option>
+						<!--[XF:action_menu:top]-->
+							<xf:option value="watch_email">{{ phrase('enable_email_notification') }}</xf:option>
+							<xf:option value="watch_no_email">{{ phrase('disable_email_notification') }}</xf:option>
+							<xf:option value="delete">{{ phrase('stop_watching') }}</xf:option>
+						<!--[XF:action_menu:bottom]-->
+					</xf:select>
+					<xf:button type="submit">{{ phrase('go') }}</xf:button>
+				</span>
+			</div>
+		</div>
+
+		<xf:pagenav link="watched/threads" page="{$page}" perpage="{$perPage}" total="{$total}"
+			wrapperclass="block-outer block-outer--after" />
+
+		<xf:showignored wrapperclass="block-outer block-outer-opposite block-outer--after" />
+	</xf:form>
+<xf:else />
+	<div class="blockMessage">
+		<xf:if is="$page > 1">
+			{{ phrase('there_no_threads_to_display') }}
+		<xf:else />
+			<p>{{ phrase('you_not_watching_any_threads') }}</p>
+			<div>{{ phrase('show_all:') }}</div>
+			<ul>
+				<li><a href="{{ link('find-threads/started') }}">{{ phrase('threads_youve_started') }}</a></li>
+				<li><a href="{{ link('find-threads/contributed') }}">{{ phrase('threads_in_which_youve_participated') }}</a></li>
+			</ul>
+		</xf:if>
+	</div>
+</xf:if>

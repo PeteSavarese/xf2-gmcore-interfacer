@@ -1,0 +1,11 @@
+<xf:if is="$content.isFirstPost()">
+	{{ phrase('x_started_thread_y_may_be_more', {
+		'name': username_link($user, false, {'defaultname': $alert.username}),
+		'title': '<a href="' . link('threads', $content.Thread) . '" class="fauxBlockLink-blockLink">' . prefix('thread', $content.Thread) . $content.Thread.title . '</a>'
+	}) }}
+<xf:else />
+	{{ phrase('x_replied_to_thread_y_may_be_more', {
+		'name': username_link($user, false, {'defaultname': $alert.username}),
+		'title': '<a href="' . link('posts', $content) . '" class="fauxBlockLink-blockLink">' . prefix('thread', $content.Thread) . $content.Thread.title . '</a>'
+	}) }}
+</xf:if>

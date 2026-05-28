@@ -1,0 +1,35 @@
+<xf:if is="$isWatched">
+	<xf:title>{{ phrase('unwatch_thread') }}</xf:title>
+<xf:else />
+	<xf:title>{{ phrase('watch_thread') }}</xf:title>
+</xf:if>
+
+<xf:breadcrumb source="$thread.getBreadcrumbs()" />
+
+<xf:form action="{{ link('threads/watch', $thread) }}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:if is="$isWatched">
+				<xf:inforow rowtype="confirm">
+					{{ phrase('you_sure_you_want_to_unwatch_this_thread') }}
+				</xf:inforow>
+
+				<xf:hiddenval name="stop">1</xf:hiddenval>
+			<xf:else />
+				<xf:radiorow name="email_subscribe"
+					value="{{ $xf.visitor.Option.interaction_watch_state == 'watch_email' ? 1 : 0}}"
+					rowtype="noColon"
+					label="{{ phrase('watch_this_thread...') }}">
+
+					<xf:option value="1">{{ phrase('and_receive_email_notifications') }}</xf:option>
+					<xf:option value="0">{{ phrase('without_receiving_email_notifications') }}</xf:option>
+				</xf:radiorow>
+			</xf:if>
+		</div>
+		<xf:if is="$isWatched">
+			<xf:submitrow submit="{{ phrase('unwatch') }}" rowtype="simple" />
+		<xf:else />
+			<xf:submitrow submit="{{ phrase('watch') }}" />
+		</xf:if>
+	</div>
+</xf:form>

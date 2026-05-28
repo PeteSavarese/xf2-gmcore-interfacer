@@ -1,0 +1,23 @@
+<li class="block-row block-row--separated {{ $message.isIgnored() ? 'is-ignored' : '' }}" data-author="{{ $message.User.username ?: $message.username }}">
+	<div class="contentRow">
+		<span class="contentRow-figure">
+			<xf:avatar user="{$message.User}" size="s" defaultname="{$message.username}" />
+		</span>
+
+		<div class="contentRow-main">
+			<h3 class="contentRow-title">
+				<a href="{{ link('direct-messages/replies', $message) }}">{{ highlight($message.Conversation.title, $options.term) }}</a>
+			</h3>
+
+			<div class="contentRow-snippet">{{ snippet($message.message, 300, {'term': $options.term, 'stripQuote': true}) }}</div>
+
+			<div class="contentRow-minor contentRow-minor--hideLinks">
+				<ul class="listInline listInline--bullet">
+					<li><xf:username user="{$message.User}" defaultname="{$message.username}" /></li>
+					<li>{{ phrase('direct_message_reply') }}</li>
+					<li><xf:date time="{$message.message_date}" /></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</li>

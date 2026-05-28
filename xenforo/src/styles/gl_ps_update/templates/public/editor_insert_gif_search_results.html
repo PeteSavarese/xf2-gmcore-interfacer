@@ -1,0 +1,25 @@
+<xf:css src="editor_insert_gif.less" />
+
+<xf:if is="$results">
+	<div class="gifContainer js-gifContainer">
+		<xf:foreach loop="$results" value="$image" key="$id">
+			<a class="gifContainer-item js-gif">
+				<span class="gifContainer-cover">
+					<xf:fa icon="fa-spinner-third fa-3x" />
+				</span>
+				<img src="{$image.thumb}" data-id="{$id}"
+					data-src="{$image.src}"
+					data-insert="{$image.insert}"
+					alt="{$image.title}" title="{$image.title}" />
+			</a>
+		</xf:foreach>
+
+		<a class="gifContainer-item js-gifLoadMore is-loading" data-href="{{ link('editor/insert-gif/search', null, {'q': $q, 'offset': $nextOffset}) }}">
+		<span class="gifContainer-cover">
+			<xf:fa icon="fa-spinner-third fa-3x" />
+		</span>
+		</a>
+	</div>
+<xf:else />
+	{{ phrase('no_results_found') }}
+</xf:if>

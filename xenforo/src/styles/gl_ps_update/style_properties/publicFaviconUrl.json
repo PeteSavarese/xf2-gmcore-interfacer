@@ -1,0 +1,14 @@
+{
+    "group_name": "basic",
+    "title": "Favicon URL (32x32)",
+    "description": "Path to the small logo that is associated with bookmarks pointing to your site. This is expected to be a 32x32 PNG image.",
+    "property_type": "value",
+    "css_components": [],
+    "value_type": "string",
+    "value_parameters": "asset=logo",
+    "has_variations": false,
+    "depends_on": "",
+    "value_group": "logo",
+    "property_value": "images/forum/logo/favicon-32x32.png",
+    "display_order": 400
+}

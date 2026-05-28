@@ -1,0 +1,37 @@
+<xf:title>{{ phrase('closed_reports_x_y', {'from': date($timeFrame.0), 'to': date($timeFrame.1)}) }}</xf:title>
+
+<xf:breadcrumb href="{{ link('reports') }}">{{ phrase('reports') }}</xf:breadcrumb>
+
+<div class="block">
+	<div class="block-outer">
+		<div class="block-outer-opposite">
+			<xf:button class="button--link menuTrigger" data-xf-click="menu" aria-expanded="false" aria-haspopup="true">{{ phrase('find_reports') }}</xf:button>
+			<xf:macro id="report_list_macros::search_menu" />
+		</div>
+	</div>
+	<div class="block-container">
+		<h2 class="block-tabHeader tabs">
+			<a href="{{ link('reports') }}" class="tabs-tab">{{ phrase('active_reports') }}</a>
+			<a href="{{ link('reports/closed') }}" class="tabs-tab is-active">{{ phrase('closed_reports') }}</a>
+		</h2>
+		<div class="block-body">
+			<xf:if is="$reports is not empty">
+				<div class="structItemContainer">
+					<xf:foreach loop="$reports" value="$report">
+						<xf:macro id="report_list_macros::item" arg-report="{$report}" />
+					</xf:foreach>
+				</div>
+			<xf:else />
+				<div class="block-row">{{ phrase('no_reports_have_been_closed_during_this_period') }}</div>
+			</xf:if>
+		</div>
+		<div class="block-footer">
+			<span class="block-footer-controls">
+				<xf:button href="{{ link('reports/closed', null, {'page': $page + 1}) }}">&larr; {{ phrase('older') }}</xf:button>
+				<xf:if is="$page > 1">
+					<xf:button href="{{ link('reports/closed', null, {'page': $page - 1}) }}">{{ phrase('newer') }} &rarr;</xf:button>
+				</xf:if>
+			</span>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,52 @@
+.bbCodeDemoBlock
+{
+	.m-clearFix();
+	padding: .25em 0;
+}
+
+.bbCodeDemoBlock-item
+{
+	width: 50%;
+	margin: 0;
+	padding: 0;
+	padding-left: 8px;
+	float: left;
+
+	&:first-child
+	{
+		padding-left: 0;
+	}
+
+	> dt
+	{
+		font-size: @xf-fontSizeSmall;
+		color: @xf-textColorMuted;
+	}
+
+	> dd
+	{
+		margin: 0;
+		.xf-minorBlockContent();
+		padding: @xf-paddingMedium;
+		zoom: 1;
+	}
+}
+
+.helpBbCodes-item {
+    border: 1px solid rgba(52, 73, 94, 0.7);
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+    transition: border-color 0.2s ease;
+}
+.helpBbCodes-item:hover {
+    border-color: rgba(52, 152, 219, 0.45);
+}
+.helpBbCodes-tag {
+    font-family: 'JetBrains Mono', monospace;
+    background: rgba(52, 73, 94, 0.3);
+    border: 1px solid rgba(52, 73, 94, 0.5);
+    border-radius: 6px;
+    padding: 2px 8px;
+    color: #5dade2;
+}

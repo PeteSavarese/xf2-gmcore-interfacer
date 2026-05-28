@@ -1,0 +1,22 @@
+<xf:title>{{ $isUnread ? phrase('mark_read') : phrase('mark_unread') }}</xf:title>
+
+<xf:breadcrumb href="{{ link('direct-messages') }}">{{ phrase('direct_messages') }}</xf:breadcrumb>
+<xf:breadcrumb href="{{ link('direct-messages', $conversation) }}">{$conversation.title}</xf:breadcrumb>
+
+<xf:form action="{{ link('direct-messages/mark-unread', $userConv) }}" ajax="true" class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:inforow rowtype="confirm">
+				<xf:if is="$isUnread">
+					{{ phrase('please_confirm_that_you_wish_to_mark_following_direct_message_read:') }}
+				<xf:else />
+					{{ phrase('please_confirm_that_you_wish_to_mark_following_direct_message_unread:') }}
+				</xf:if>
+				<strong><a href="{{ link('direct-messages', $conversation) }}">{$conversation.title}</a></strong>
+			</xf:inforow>
+		</div>
+		<xf:submitrow submit="{{ $isUnread ? phrase('mark_read') : phrase('mark_unread') }}" rowtype="simple" />
+	</div>
+
+	<xf:redirect url="{$redirect}" />
+</xf:form>

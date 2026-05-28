@@ -1,0 +1,30 @@
+<li class="block-row block-row--separated {{ $post.isIgnored() ? 'is-ignored' : '' }} js-inlineModContainer" data-author="{{ $post.User.username ?: $post.username }}">
+	<div class="contentRow {{ !$post.isVisible() ? 'is-deleted' : '' }}">
+		<span class="contentRow-figure">
+			<xf:avatar user="{$post.User}" size="s" defaultname="{$post.username}" />
+		</span>
+		<div class="contentRow-main">
+			<h3 class="contentRow-title">
+				<a href="{{ link('threads/post', $post.Thread, {'post_id': $post.post_id}) }}">{{ prefix('thread', $post.Thread) . highlight($post.Thread.title, $options.term) }}</a>
+			</h3>
+
+			<div class="contentRow-snippet">{{ snippet($post.message, 300, {'term': $options.term, 'stripQuote': true}) }}</div>
+
+			<div class="contentRow-minor contentRow-minor--hideLinks">
+				<ul class="listInline listInline--bullet">
+					<xf:if is="$options.mod == 'post' && $post.canUseInlineModeration()">
+						<li><xf:checkbox standalone="true">
+							<xf:option value="{$post.post_id}" class="js-inlineModToggle"
+								data-xf-init="tooltip"
+								title="{{ phrase('select_for_moderation') }}" />
+						</xf:checkbox></li>
+					</xf:if>
+					<li><xf:username user="{$post.User}" defaultname="{$post.username}" /></li>
+					<li>{{ phrase('post_x', {'position': number($post.position + 1)}) }}</li>
+					<li><xf:date time="{$post.post_date}" /></li>
+					<li>{{ phrase('forum:') }} <a href="{{ link('forums', $post.Thread.Forum) }}">{$post.Thread.Forum.title}</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</li>

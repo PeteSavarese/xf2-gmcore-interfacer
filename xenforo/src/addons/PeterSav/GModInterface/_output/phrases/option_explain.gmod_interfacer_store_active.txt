@@ -1,0 +1,1 @@
+If checked, users can view store ranks and check out. If not checked, the page will display a message stating the store is not open due to work/modifications.

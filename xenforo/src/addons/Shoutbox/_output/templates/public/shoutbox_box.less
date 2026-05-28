@@ -1,0 +1,166 @@
+.shoutbox_box_main {
+  width: 100%;
+}
+
+.block-body-shoutbox {
+  padding: 5px 5px 0px 5px;
+}
+
+.shoutbox-messages-box {
+  border: none;
+  height: 350px;
+  margin-bottom: 5px;
+  overflow-y: scroll;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.shoutbox-enter-bbcode-holders {
+  display: table;
+  width: 100%;
+  margin: 10px;
+}
+
+.shoutbox-input-container {
+  padding: 10px 0px 10px 0px;
+}
+
+.shoutbox-input-message-holder {
+  width: 100%;
+  display: inline-flex;
+
+  dl > dd {
+    padding: 0px !important;
+
+    .fr-element.fr-view {
+      min-height: 40px !important;
+    }
+  }
+}
+
+.shoutbox-input-message {
+  width: 100%;
+}
+
+.shoutbox-bbcode-button {
+  margin-left: 5px;
+  padding: 6px 12px !important;
+  height: auto !important;
+}
+
+.shoutbox-entries {
+  padding: 5px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.shoutbox-messageMenu {
+  float: none;
+  display: inline-block;
+  vertical-align: middle;
+  padding: 0;
+  background: none;
+  line-height: 1;
+  margin-right: 6px;
+  color: inherit;
+}
+
+.shoutbox-messageContent {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.shoutbox_box_main .block-header {
+  background: @gl-gradient !important;
+  border-bottom: 2px solid @gl-border-accent !important;
+  border-radius: @gl-radius @gl-radius 0 0 !important;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  font-size: 14px;
+  position: relative;
+  color: white;
+
+  > .block-desc {
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 18px;
+    right: 18px;
+    height: 2px;
+    background: linear-gradient(90deg, @gl-accent, rgba(52, 73, 94, 0.7));
+    border-radius: @gl-radius-pill;
+    opacity: 0.85;
+  }
+}
+
+.shoutbox-messageContent {
+  .fa-discord,
+  .avatar,
+  .shoutbox-messageDate,
+  time {
+    margin-right: 6px;
+  }
+
+  .bbImageWrapper {
+    display: inline-block;
+    max-width: 100%;
+  }
+
+  .bbImage {
+    max-width: 100%;
+    height: auto;
+    max-height: 180px;
+    vertical-align: text-bottom;
+  }
+}
+
+ol > li {
+  list-style: none;
+  margin-bottom: 5px;
+
+  time {
+    font-size: 12px;
+  }
+
+  span > .bbWrapper {
+    display: inline;
+  }
+}
+
+#shoutbox_send_msg_button {
+  background: @gl-cta-gradient;
+  color: @gl-text;
+  border: none;
+  font-weight: 600;
+
+  &:hover {
+    filter: brightness(1.08);
+    box-shadow: @gl-shadow-sm, 0 6px 16px rgba(52, 152, 219, 0.25);
+    transform: none;
+  }
+}
+
+.button--iconOnly.shoutbox-bbcode-button {
+  background: @gl-bg-card;
+  color: @gl-text-secondary;
+  border: 1px solid @gl-border;
+
+  &:hover {
+    background: @gl-bg-card-hover;
+    color: @gl-text;
+    border-color: @gl-border-accent;
+    transform: none;
+  }
+}
+
+.shoutbox-discordEmoji {
+  height: 1.4em;
+  width: auto;
+  vertical-align: text-bottom;
+  margin: 0 1px;
+}

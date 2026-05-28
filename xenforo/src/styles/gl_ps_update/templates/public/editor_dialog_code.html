@@ -1,0 +1,39 @@
+<xf:title>{{ phrase('insert_code') }}</xf:title>
+
+<form class="block" id="editor_code_form">
+	<div class="block-container">
+		<div class="block-body" data-xf-init="code-editor-switcher-container">
+			<xf:selectrow id="editor_code_type" class="js-codeEditorSwitcher"
+				label="{{ phrase('language_code') }}">
+
+				<xf:optgroup label="{{ phrase('non_language_specific') }}">
+					<xf:option value="">{{ phrase('code_language.general') }}</xf:option>
+					<xf:option value="rich">{{ phrase('code_language.rich') }}</xf:option>
+				</xf:optgroup>
+
+				<xf:optgroup label="{{ phrase('common_languages') }}">
+					<xf:foreach loop="$languages" key="$key" value="$language">
+						<xf:if is="$language.common">
+							<xf:option value="{$key}">{$language.phrase}</xf:option>
+						</xf:if>
+					</xf:foreach>
+				</xf:optgroup>
+
+				<xf:optgroup label="{{ phrase('other_languages') }}">
+					<xf:foreach loop="$languages" key="$key" value="$language">
+						<xf:option value="{$key}">{$language.phrase}</xf:option>
+					</xf:foreach>
+				</xf:optgroup>
+
+			</xf:selectrow>
+
+			<xf:codeeditorrow
+				id="editor_code_code"
+				class="codeEditor--short"
+				rowtype="fullWidth noLabel"
+				rowclass="js-codeEditorContainer"
+				label="{{ phrase('code') }}" />
+		</div>
+		<xf:submitrow submit="{{ phrase('continue') }}" id="editor_code_submit" />
+	</div>
+</form>

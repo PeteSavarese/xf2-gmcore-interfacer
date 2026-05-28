@@ -1,0 +1,57 @@
+<xf:css src="embed_resolver.less" />
+
+<div class="embed fauxBlockLink" data-embed-content="{$content.getEntityContentTypeId()}" data-embed-content-url="{$contentUrl}">
+	{$content.renderEmbed()|raw}
+</div>
+
+<script{{ $xf.request.isRocketLoaderDisabled() ? ' data-cfasync="false"' : ''}}>
+	window.addEventListener('message', receiveMessage, false);
+
+	function receiveMessage(event)
+	{
+		if (event.data.type !== 'getHeight')
+		{
+			return;
+		}
+
+		let allImages = document.querySelectorAll('img');
+
+		if (allImages.length)
+		{
+			let loaded = 0;
+
+			for (let i = 0; i < allImages.length; i++)
+			{
+				// remove lazy loading in a lazy way...
+				allImages[i].removeAttribute('loading');
+
+				if (allImages[i].complete)
+				{
+					loaded++;
+					if (loaded === allImages.length)
+					{
+						const height = document.body.scrollHeight;
+						event.source.postMessage({ messageId: event.data.messageId, height: height }, event.origin);
+					}
+				}
+				else
+				{
+					allImages[i].onload = function()
+					{
+						loaded++;
+						if (loaded === allImages.length)
+						{
+							const height = document.body.scrollHeight;
+							event.source.postMessage({ messageId: event.data.messageId, height: height }, event.origin);
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			const height = document.body.scrollHeight;
+			event.source.postMessage({ messageId: event.data.messageId, height: height }, event.origin);
+		}
+	}
+</script>

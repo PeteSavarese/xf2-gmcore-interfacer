@@ -1,0 +1,2 @@
+{{ phrase('alert_user_following', {'username': username_link($user, false, {'defaultname': $alert.username})}) }}
+<xf:if is="$user"><a href="{{ link('members', $user) }}" class="fauxBlockLink-blockLink"></a></xf:if>

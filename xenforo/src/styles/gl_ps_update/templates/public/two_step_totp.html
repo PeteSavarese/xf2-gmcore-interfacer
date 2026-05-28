@@ -1,0 +1,22 @@
+<xf:if is="$context == 'setup'">
+	<xf:js src="vendor/kjua/kjua.min.js" />
+	<xf:formrow label="{{ phrase('setup') }}">
+		{{ phrase('totp_recieve_codes_via_app_desc') }}
+		<div style="text-align: center; margin: 10px 0px;"><span id="js-totpQrCode" style="display: inline-block; background: white; padding: 12px"></span></div>
+		{{ phrase('totp_enter_secret_into_app_x', {'secret': $secret}) }}
+	</xf:formrow>
+	<xf:js>
+		const el = document.querySelector('#js-totpQrCode')
+		const qr = kjua({
+			text: '{$otpUrl|escape('js')}',
+			render: 'img',
+		})
+		el.innerHTML = ''
+		el.append(qr)
+	</xf:js>
+<xf:else />
+	<xf:inforow>{{ phrase('please_enter_code_generated_by_app_on_phone') }}</xf:inforow>
+</xf:if>
+
+<xf:textboxrow name="code" autofocus="autofocus" inputmode="numeric" pattern="[0-9]*"
+	autocomplete="one-time-code" label="{{ phrase('verification_code') }}" />

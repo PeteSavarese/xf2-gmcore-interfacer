@@ -1,0 +1,13 @@
+<xf:if is="$content.ProfilePost.ProfileUser.user_id == $content.ProfilePost.user_id">
+	{{ phrase('x_also_commented_on_ys_status', {
+		'name': username_link($user, false, {'defaultname': $alert.username}),
+		'poster_params': 'href="' . link('profile-posts/comments', $content) . '" class="fauxBlockLink-blockLink"',
+		'poster': $content.ProfilePost.username
+	}) }}
+<xf:else />
+	{{ phrase('x_also_commented_on_ys_profile_post', {
+		'name': username_link($user, false, {'defaultname': $alert.username}),
+		'poster_params': 'href="' . link('profile-posts/comments', $content) . '" class="fauxBlockLink-blockLink"',
+		'poster': $content.ProfilePost.username
+	}) }}
+</xf:if>

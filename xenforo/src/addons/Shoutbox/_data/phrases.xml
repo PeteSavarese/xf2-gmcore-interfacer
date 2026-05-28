@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phrases>
+  <phrase title="admin_navigation.shoutboxBans" version_id="1000100" version_string="1.0.1"><![CDATA[
+        Shoutbox]]></phrase>
+  <phrase title="admin_navigation.shoutbox_bans_active" version_id="1000100" version_string="1.0.1"><![CDATA[
+        Active bans]]></phrase>
+  <phrase title="admin_navigation.shoutbox_bans_expired" version_id="1000100" version_string="1.0.1"><![CDATA[
+        Expired bans]]></phrase>
+  <phrase title="admin_navigation.shoutbox_bans_history" version_id="1000100" version_string="1.0.1"><![CDATA[
+        User bans]]></phrase>
+  <phrase title="api_scope.shoutbox_read" version_id="1000100" version_string="1.0.1"><![CDATA[
+        Can read shoutbox contents]]></phrase>
+  <phrase title="api_scope.shoutbox_write" version_id="1000100" version_string="1.0.1"><![CDATA[
+        Can write to shoutbox]]></phrase>
+  <phrase title="cron_entry.shoutboxDiscordEmojiSync" version_id="1010000" version_string="1.1.0"><![CDATA[Shoutbox: Sync Discord emojis]]></phrase>
+  <phrase title="cron_entry.shoutboxUnbanExpired" version_id="1000100" version_string="1.0.1"><![CDATA[
+        Check expired shoutbox bans]]></phrase>
+  <phrase title="mod_log.user_shoutbox_ban" version_id="1000100" version_string="1.0.1"><![CDATA[
+        Banned from shoutbox ({reason})]]></phrase>
+  <phrase title="option.shoutbox_discord_channel_id" version_id="1000100" version_string="1.0.1"><![CDATA[
+        Discord Shoutbox Channel ID]]></phrase>
+  <phrase title="option_explain.shoutbox_discord_channel_id" version_id="1000100" version_string="1.0.1"><![CDATA[
+        Discord channel ID where shoutbox messages should be sent. Enable Developer Mode in Discord, right-click the channel → Copy Channel ID]]></phrase>
+  <phrase title="option_group.shoutbox_settings" version_id="1000100" version_string="1.0.1"><![CDATA[
+        Shoutbox Settings]]></phrase>
+  <phrase title="option_group_description.shoutbox_settings" version_id="1000100" version_string="1.0.1"><![CDATA[
+        Configure Discord integration]]></phrase>
+  <phrase title="permission.shoutbox_can_ban_user" version_id="1000100" version_string="1.0.1"><![CDATA[
+        Can ban user]]></phrase>
+  <phrase title="permission.shoutbox_can_delete_messages" version_id="1000100" version_string="1.0.1"><![CDATA[
+        Can delete messages]]></phrase>
+  <phrase title="permission.shoutbox_force_update" version_id="1000100" version_string="1.0.1"><![CDATA[
+        Can force shoutbox file update]]></phrase>
+  <phrase title="permission_interface.shoutbox" version_id="1000100" version_string="1.0.1"><![CDATA[
+        Shoutbox]]></phrase>
+  <phrase title="this_user_is_already_banned_from_shoutbox" version_id="1000100" version_string="1.0.1"><![CDATA[
+        This user is already banned from the shoutbox]]></phrase>
+  <phrase title="user_has_been_banned_from_shoutbox" version_id="1000100" version_string="1.0.1"><![CDATA[
+        User has been banned from shoutbox.]]></phrase>
+  <phrase title="widget_def.shoutbox_full" version_id="1000100" version_string="1.0.1"><![CDATA[
+        Shoutbox Full]]></phrase>
+  <phrase title="widget_def_desc.shoutbox_full" version_id="1000100" version_string="1.0.1"><![CDATA[
+        Full shoutbox, placed above the node list]]></phrase>
+</phrases>

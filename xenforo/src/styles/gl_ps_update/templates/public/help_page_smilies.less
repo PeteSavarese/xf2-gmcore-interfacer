@@ -1,0 +1,33 @@
+.smilieText
+{
+	display: inline-block;
+	padding: 2px 3px;
+	min-width: 16px;
+	text-align: center;
+	vertical-align: text-bottom;
+	border-radius: @xf-borderRadiusMedium;
+	font-size: @xf-fontSizeSmallest;
+	.xf-chip();
+
+	&:hover
+	{
+		.xf-chipHover();
+	}
+}
+
+.helpSmilies {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    gap: 8px;
+}
+.helpSmilies-item {
+    border: 1px solid rgba(52, 73, 94, 0.7);
+    border-radius: 12px;
+    padding: 8px;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+.helpSmilies-item:hover {
+    border-color: rgba(52, 152, 219, 0.45);
+    background: rgba(52, 152, 219, 0.04);
+}

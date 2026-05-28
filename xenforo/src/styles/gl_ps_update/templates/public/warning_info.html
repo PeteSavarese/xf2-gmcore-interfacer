@@ -1,0 +1,90 @@
+<xf:title>{{ phrase('warning_for_x', {'name': $user.username}) }}</xf:title>
+
+<div class="form block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:if is="$canViewContent">
+				<xf:formrow label="{{ phrase('content') }}">
+					<xf:if is="{$contentUrl}">
+						<a href="{$contentUrl}">{$warning.display_title}</a>
+					<xf:else />
+						{$warning.display_title}
+					</xf:if>
+				</xf:formrow>
+			</xf:if>
+
+			<xf:formrow label="{{ phrase('given_by') }}">
+				<ul class="listInline listInline--bullet">
+					<li><xf:username user="{$warning.WarnedBy}" /></li>
+					<li><xf:date time="{$warning.warning_date}" /></li>
+				</ul>
+			</xf:formrow>
+
+			<xf:formrow label="{{ phrase('details_of_warning') }}">
+				{$warning.title}
+				<xf:if is="{$warning.notes}"><div class="u-muted">{{ structured_text($warning.notes) }}</div></xf:if>
+			</xf:formrow>
+
+			<xf:formrow label="{{ phrase('warning_points') }}">
+				{$warning.points|number}
+				<xf:if is="$warning.is_expired">
+					<span class="u-muted">{{ phrase('(expired)') }}</span>
+				<xf:elseif is="$warning.expiry_date" />
+					<span class="u-muted">{{ phrase('(expires_x)', {'date': date($warning.expiry_date)}) }}</span>
+				</xf:if>
+			</xf:formrow>
+		</div>
+		<xf:if is="$warning.canDelete() AND $warning.canEditExpiry()">
+			<h2 class="block-tabHeader tabs" data-xf-init="tabs" role="tablist">
+				<a class="tabs-tab is-active" role="tab" tabindex="0" aria-controls="{{ unique_id('warningDelete') }}">{{ phrase('delete_warning') }}</a>
+				<a class="tabs-tab is-active" role="tab" tabindex="0" aria-controls="{{ unique_id('warningUpdate') }}">{{ phrase('update_warning') }}</a>
+			</h2>
+			<ul class="tabPanes">
+				<li class="is-active" role="tabpanel" id="{{ unique_id('warningDelete') }}">
+					<xf:macro id="delete" arg-warning="{$warning}" />
+				</li>
+				<li role="tabpanel" id="{{ unique_id('warningUpdate') }}">
+					<xf:macro id="expire" arg-warning="{$warning}" />
+				</li>
+			</ul>
+		<xf:elseif is="$warning.canDelete()" />
+			<xf:macro id="delete" arg-warning="{$warning}" />
+		<xf:elseif is="$warning.canEditExpiry()" />
+			<xf:macro id="expire" arg-warning="{$warning}" />
+		</xf:if>
+	</div>
+</div>
+
+<xf:macro id="delete" arg-warning="!" arg-redirect="">
+	<xf:form action="{{ link('warnings/delete', $warning) }}">
+		<xf:checkboxrow>
+			<xf:option name="confirm" value="1">{{ phrase('confirm_deletion') }}</xf:option>
+		</xf:checkboxrow>
+		<xf:submitrow icon="delete" />
+		<xf:redirect url="{$redirect}" />
+	</xf:form>
+</xf:macro>
+
+<xf:macro id="expire" arg-warning="!" arg-redirect="">
+	<xf:form action="{{ link('warnings/expire', $warning) }}">
+		<xf:radiorow name="expire" value="now">
+			<xf:option value="now">{{ phrase('expire_now') }}</xf:option>
+			<xf:option value="future" label="{{ phrase('expire_in_time:') }}">
+				<xf:dependent>
+					<div class="inputGroup">
+						<xf:numberbox name="expiry_value" value="1" min="0" />
+						<span class="inputGroup-splitter"></span>
+						<xf:select name="expiry_unit" value="days" class="input--inline">
+							<xf:option value="days">{{ phrase('days') }}</xf:option>
+							<xf:option value="weeks">{{ phrase('weeks') }}</xf:option>
+							<xf:option value="months">{{ phrase('months') }}</xf:option>
+							<xf:option value="years">{{ phrase('years') }}</xf:option>
+						</xf:select>
+					</div>
+				</xf:dependent>
+			</xf:option>
+		</xf:radiorow>
+		<xf:submitrow icon="save" />
+		<xf:redirect url="{$redirect}" />
+	</xf:form>
+</xf:macro>

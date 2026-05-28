@@ -1,0 +1,16 @@
+{
+    "group_name": "color",
+    "title": "Feature text color",
+    "description": "",
+    "property_type": "value",
+    "css_components": [],
+    "value_type": "color",
+    "value_parameters": "",
+    "has_variations": true,
+    "depends_on": "",
+    "value_group": "textOther",
+    "property_value": {
+        "default": "#ecf0f1"
+    },
+    "display_order": 3000
+}

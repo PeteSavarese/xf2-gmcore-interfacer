@@ -1,0 +1,1 @@
+If unchecked, the store page and processing will run in PayPal Sandbox. If checked, the store will run on PayPal production with real funds and transactions

@@ -1,0 +1,354 @@
+<xf:macro id="article"
+	arg-post="!"
+	arg-thread="!"
+	arg-forum="{{ null }}"
+	arg-isExpanded="{{ true }}"
+	arg-isListItem="{{ false }}">
+
+
+	<xf:css src="message.less" />
+	<article class="message message--article js-post js-inlineModContainer
+		{{ $thread.discussion_state == 'moderated' ? 'is-moderated' : '' }}
+		{{ $thread.discussion_state == 'deleted' ? 'is-deleted' : '' }}"
+		data-author="{{ $post.User.username ?: $post.username }}"
+		data-content="post-{$post.post_id}"
+		id="js-post-{$post.post_id}">
+
+		<span class="u-anchorTarget" id="post-{$post.post_id}"></span>
+		<div class="message-inner">
+			<div class="message-cell message-cell--main">
+				<div class="message-expandWrapper js-expandWatch {{ $isExpanded ? 'is-expanded' : ''}}">
+					<div class="message-expandContent js-expandContent">
+						<div class="message-main js-quickEditTarget">
+
+							<xf:if is="$isListItem">
+								<h2 class="article-title">
+									<xf:if is="$thread.discussion_state == 'moderated'">
+										<xf:fa icon="fa-shield" class="structItem-status--moderated" aria-hidden="true" title="{{ phrase('awaiting_approval')|for_attr }}" />
+										<span class="u-srOnly">{{ phrase('awaiting_approval') }}</span>
+									<xf:elseif is="$thread.discussion_state == 'deleted'" />
+										<i class="structItem-status structItem-status--deleted" aria-hidden="true" title="{{ phrase('deleted')|for_attr }}"></i>
+										<span class="u-srOnly">{{ phrase('deleted') }}</span>
+									</xf:if>
+									<xf:if is="$thread.prefix_id">
+										<xf:if is="$forum">
+											<a href="{{ link('forums', $forum, {'prefix_id': $thread.prefix_id}) }}" class="labelLink" rel="nofollow">{{ prefix('thread', $thread, 'html', '') }}</a>
+										<xf:else />
+											{{ prefix('thread', $thread, 'html', '') }}
+										</xf:if>
+									</xf:if>
+									<a href="{{ link('threads' . (($thread.isUnread() AND !$forceRead) ? '/unread' : ''), $thread) }}">{$thread.title}</a>
+								</h2>
+							</xf:if>
+
+							<xf:macro id="post_macros::post_attribution"
+								arg-post="{$post}"
+								arg-thread="{$thread}"
+								arg-mainClass="listInline--bullet"
+								arg-showPosition="{{ false }}"
+								arg-showReplyCount="{{ $isListItem ? false : true }}"
+								arg-showUser="{$isListItem}"
+								arg-showThreadUnreadIndicator="{$isListItem}"
+								arg-showThreadStateIcons="{$isListItem}" />
+
+							<xf:macro id="post_macros::post_notices" arg-post="{$post}" arg-thread="{$thread}" />
+
+							<div class="message-content js-messageContent">
+								<xf:macro id="post_macros::post_user_content"
+									arg-post="{$post}"
+									arg-thread="{$thread}"
+									arg-snippet="{{ $isListItem ? $thread.Forum.type_config.expanded_snippet : false }}"
+									arg-displayAds="{{ !$isListItem }}" />
+
+								<xf:macro id="post_macros::post_last_edit" arg-post="{$post}" />
+							</div>
+
+							<xf:if is="$isListItem">
+								<xf:macro id="list_item_footer"
+									arg-post="{$post}"
+									arg-thread="{$thread}"
+									arg-snippet="{$thread.Forum.type_config.expanded_snippet}" />
+							<xf:else />
+								<xf:macro id="post_macros::post_footer" arg-post="{$post}" arg-thread="{$thread}" />
+							</xf:if>
+
+						</div>
+					</div>
+					<div class="message-expandLink js-expandLink"><a role="button" tabindex="0">{{ phrase('click_to_expand') }}</a></div>
+				</div>
+			</div>
+		</div>
+
+		<xf:if is="!$isListItem">
+			<aside class="message-articleUserInfo">
+				<div class="message-cell">
+					<xf:macro id="author_info" arg-user="{$post.User}" arg-fallbackName="{$post.username}" />
+				</div>
+			</aside>
+		</xf:if>
+
+	</article>
+
+	<xf:if is="!$isListItem">
+		<xf:ad position="post_below_container" arg-post="{$post}" />
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="list_item_footer"
+	arg-post="!"
+	arg-thread="!"
+	arg-snippet="{{ false }}">
+
+	<xf:set var="$link" value="{{ link('threads', $thread) }}" />
+	<xf:set var="$linkUnread" value="{{ link('threads' . ($thread.isUnread() ? '/unread' : ''), $thread) }}" />
+
+	<footer class="message-footer">
+		<div class="message-actionBar actionBar">
+			<xf:if contentcheck="true">
+				<div class="actionBar-set actionBar-set--external">
+					<xf:contentcheck>
+						<xf:if is="$thread.reply_count">
+							<a href="{$linkUnread}" class="actionBar-action actionBar-action--replies">
+								<xf:fa icon="fa-comment" class="u-spaceAfter" />{{ phrase('replies:') }} {$thread.reply_count|number}</a>
+						</xf:if>
+						<xf:if is="$thread.canUseInlineModeration()">
+							<span class="actionBar-action actionBar-action--inlineMod"><xf:checkbox standalone="true">
+								<xf:option value="{$thread.thread_id}" class="js-inlineModToggle"
+									data-xf-init="tooltip"
+									title="{{ phrase('select_for_moderation') }}"
+									label="{{ phrase('select_for_moderation') }}"
+									hiddenlabel="true"/>
+							</xf:checkbox></span>
+						</xf:if>
+					</xf:contentcheck>
+				</div>
+			</xf:if>
+			<xf:if contentcheck="true">
+				<div class="actionBar-set actionBar-set--internal">
+					<xf:contentcheck>
+						<xf:if is="$snippet">
+							<a href="{$link}" class="actionBar-action actionBar-action--threadLink">
+								{{ phrase('view_full_article') }} &raquo;</a>
+						</xf:if>
+					</xf:contentcheck>
+				</div>
+			</xf:if>
+		</div>
+	</footer>
+</xf:macro>
+
+<xf:macro id="author_info" arg-user="!" arg-fallbackName="">
+	<div class="contentRow">
+		<div class="contentRow-figure">
+			<xf:avatar user="$user" size="m" defaultname="{$fallbackName}" />
+		</div>
+		<div class="contentRow-main">
+
+			<div class="message-articleUserFirstLine">
+				<div class="message-articleWrittenBy u-srOnly">{{ phrase('article_written_by') }}</div>
+				<h3 class="message-articleUserName">
+					<xf:username user="$user" rich="true" defaultname="{$fallbackName}" />
+				</h3>
+
+				<xf:if contentcheck="true">
+					<div class="message-articleUserBlurb">
+						<xf:contentcheck>
+							<xf:userblurb user="$user" tag="div" />
+						</xf:contentcheck>
+					</div>
+				</xf:if>
+			</div>
+
+			<xf:if contentcheck="true">
+				<div class="message-articleUserAbout">
+					<xf:contentcheck>
+						<xf:if is="$user.Profile.about != ''">
+							{{ bb_code($user.Profile.about, 'user:about', $user) }}
+						</xf:if>
+					</xf:contentcheck>
+				</div>
+			</xf:if>
+
+			<xf:if contentcheck="true">
+				<div class="message-articleUserBanners">
+					<xf:contentcheck><xf:userbanners user="$user" /></xf:contentcheck>
+				</div>
+			</xf:if>
+
+			<div class="message-articleUserStats">
+				<ul class="listInline listInline--bullet">
+					<!--[XF:stats:start]-->
+					<li><dl class="pairs pairs--inline">
+						<dt>{{ phrase('messages') }}</dt>
+						<dd>{$user.message_count|number}</dd>
+					</dl></li>
+					<!--[XF:stats:after_messages]-->
+					<li><dl class="pairs pairs--inline">
+						<dt>{{ phrase('reaction_score') }}</dt>
+						<dd>{$user.reaction_score|number}</dd>
+					</dl></li>
+					<!--[XF:stats:after_likes]-->
+					<!--[XF:stats:after_reactions]-->
+					<xf:if is="$xf.options.enableTrophies">
+						<li><dl class="pairs pairs--inline">
+							<dt>{{ phrase('points') }}</dt>
+							<dd>{$user.trophy_points|number}</dd>
+						</dl></li>
+					</xf:if>
+					<!--[XF:stats:end]-->
+				</ul>
+			</div>
+		</div>
+	</div>
+</xf:macro>
+
+<xf:macro id="article_preview"
+	arg-thread="!"
+	arg-post="!"
+	arg-forum="!"
+	arg-allowInlineMod="{{ true }}">
+
+	<xf:set var="$link" value="{{ link('threads', $thread) }}" />
+	<xf:set var="$linkUnread" value="{{ link('threads' . ($thread.isUnread() ? '/unread' : ''), $thread) }}" />
+	<xf:set var="$username"><xf:username user="{$thread.User}" defaultname="{$thread.username}" class="u-concealed" /></xf:set>
+
+	<article class="message message--article message--articlePreview {{
+		$thread.discussion_state == 'moderated' ? 'is-moderated' : '' }}{{
+		$thread.discussion_state == 'deleted' ? 'is-deleted' : ''
+		}} js-inlineModContainer js-threadListItem-{$thread.thread_id}">
+		<div class="articlePreview-main">
+			<xf:if is="$thread.cover_image">
+				<a href="{$linkUnread}" class="articlePreview-image" tabindex="-1">
+					<img src="{$thread.cover_image}" alt="{$thread.title}" loading="lazy" />
+				</a>
+			</xf:if>
+			<div class="articlePreview-text">
+				<div class="articlePreview-headline">
+					<h2 class="articlePreview-title">
+						<xf:if is="$thread.discussion_state == 'moderated'">
+							<i class="structItem-status structItem-status--moderated" aria-hidden="true" title="{{ phrase('awaiting_approval')|for_attr }}"></i>
+							<span class="u-srOnly">{{ phrase('awaiting_approval') }}</span>
+						<xf:elseif is="$thread.discussion_state == 'deleted'" />
+							<i class="structItem-status structItem-status--deleted" aria-hidden="true" title="{{ phrase('deleted')|for_attr }}"></i>
+							<span class="u-srOnly">{{ phrase('deleted') }}</span>
+						</xf:if>
+						<xf:if is="$thread.prefix_id">
+							<xf:if is="$forum">
+								<a href="{{ link('forums', $forum, {'prefix_id': $thread.prefix_id}) }}" class="labelLink" rel="nofollow">{{ prefix('thread', $thread, 'html', '') }}</a>
+								<xf:else />
+								{{ prefix('thread', $thread, 'html', '') }}
+							</xf:if>
+						</xf:if>
+						<a href="{$linkUnread}">{$thread.title}</a>
+					</h2>
+				</div>
+				<div class="articlePreview-content">
+					<div class="message-content js-messageContent" data-xf-init="lightbox">
+						<div class="message-userContent lbContainer js-lbContainer"
+							data-lb-id="post-{$post.post_id}"
+							data-lb-caption-desc="{{ $post.User ? $post.User.username : $post.username }} &middot; {{ date_time($post.post_date) }}">
+							<article class="message-body">
+								{{ snippet($post.message, 750, {
+									'stripQuote': true,
+									'bbWrapper': true
+								}) }}
+							</article>
+						</div>
+					</div>
+				</div>
+				<div class="articlePreview-links">
+					<ul class="articlePreview-statuses">
+						<xf:extension id="status_new">
+							<xf:if is="$thread.isUnread()">
+								<li><span class="message-newIndicator" title="{{ !$post.isUnread() ? phrase('new_replies') : '' }}">{{ phrase('new') }}</span></li>
+							</xf:if>
+						</xf:extension>
+
+						<xf:extension id="status_watch">
+							<xf:if is="{$xf.visitor.user_id} AND {$thread.Watch.{$xf.visitor.user_id}}">
+								<li>
+									<i class="structItem-status structItem-status--watched" aria-hidden="true" title="{{ phrase('thread_watched')|for_attr }}"></i>
+									<span class="u-srOnly">{{ phrase('thread_watched') }}</span>
+								</li>
+								<xf:elseif is="!$forum AND {$thread.Forum.Watch.{$xf.visitor.user_id}}" />
+								<li>
+									<i class="structItem-status structItem-status--watched" aria-hidden="true" title="{{ phrase('forum_watched')|for_attr }}"></i>
+									<span class="u-srOnly">{{ phrase('forum_watched') }}</span>
+								</li>
+							</xf:if>
+						</xf:extension>
+
+						<xf:extension id="status_state">
+							<xf:if is="$thread.discussion_state == 'moderated'">
+								<li>
+									<i class="structItem-status structItem-status--moderated" aria-hidden="true" title="{{ phrase('awaiting_approval')|for_attr }}"></i>
+									<span class="u-srOnly">{{ phrase('awaiting_approval') }}</span>
+								</li>
+							</xf:if>
+							<xf:if is="$thread.discussion_state == 'deleted'">
+								<li>
+									<i class="structItem-status structItem-status--deleted" aria-hidden="true" title="{{ phrase('deleted')|for_attr }}"></i>
+									<span class="u-srOnly">{{ phrase('deleted') }}</span>
+								</li>
+							</xf:if>
+							<xf:if is="!$thread.discussion_open">
+								<li>
+									<i class="structItem-status structItem-status--locked" aria-hidden="true" title="{{ phrase('locked')|for_attr }}"></i>
+									<span class="u-srOnly">{{ phrase('locked') }}</span>
+								</li>
+							</xf:if>
+						</xf:extension>
+
+						<xf:extension id="status_sticky">
+							<xf:if is="$thread.sticky">
+								<li>
+									<i class="structItem-status structItem-status--sticky" aria-hidden="true" title="{{ phrase('sticky')|for_attr }}"></i>
+									<span class="u-srOnly">{{ phrase('sticky') }}</span>
+								</li>
+							</xf:if>
+						</xf:extension>
+					</ul>
+
+					<a href="{$link}">{{ phrase('view_full_article') }} &raquo;</a>
+				</div>
+			</div>
+		</div>
+		<footer class="articlePreview-footer">
+			<ul class="articlePreview-meta listPlain">
+				<li><xf:avatar user="{$thread.User}" size="xxs" defaultname="{$thread.username}"/></li>
+				<li class="articlePreview-by">{{ phrase('by_user_x', {'name':$username}) }}</li>
+				<li><a href="{$link}" class="u-concealed" rel="nofollow"><xf:date time="{$thread.post_date}"/></a></li>
+				<li><a href="{{ link('threads/post', $thread, {'post_id': $post.post_id}) }}"
+					class="u-concealed"
+					data-xf-init="share-tooltip"
+					data-href="{{ link('posts/share', $post) }}"
+					aria-label="{{ phrase('share')|for_attr }}"
+					rel="nofollow">
+					<xf:fa icon="fa-share-alt"/>
+				</a></li>
+				<xf:if is="$xf.options.embedCodeShare AND method_exists($post, 'getEmbedCodeHtml')">
+					<li class="u-hidden js-embedCopy">
+						<xf:macro id="share_page_macros::share_clipboard_text"
+							arg-class="u-concealed"
+							arg-text="{$post.getEmbedCodeHtml()}"
+							arg-successText="{{ phrase('embed_code_html_copied_to_clipboard') }}" />
+					</li>
+				</xf:if>
+				<xf:if is="$thread.reply_count">
+					<li class="articlePreview-replies"><a href="{$linkUnread}"
+						title="{{ phrase('replies:') }} {$thread.reply_count|number}">
+						<xf:fa icon="fa-comment" class="u-spaceAfter" /><span class="articlePreview-repliesLabel">{{ phrase('replies:') }} </span>{$thread.reply_count|number}</a></li>
+				</xf:if>
+				<xf:if is="$allowInlineMod AND $thread.canUseInlineModeration()">
+					<li><xf:checkbox standalone="true">
+						<xf:option value="{$thread.thread_id}" class="js-inlineModToggle"
+							data-xf-init="tooltip"
+							title="{{ phrase('select_for_moderation') }}"
+							label="{{ phrase('select_for_moderation') }}"
+							hiddenlabel="true"/>
+					</xf:checkbox></li>
+				</xf:if>
+			</ul>
+		</footer>
+	</article>
+</xf:macro>

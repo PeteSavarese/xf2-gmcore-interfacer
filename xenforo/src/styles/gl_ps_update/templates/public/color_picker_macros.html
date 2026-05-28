@@ -1,0 +1,177 @@
+<xf:macro id="color_picker"
+	arg-name="!"
+	arg-value=""
+	arg-mapVariation="default"
+	arg-mapName=""
+	arg-allowPalette="false"
+	arg-label=""
+	arg-hint=""
+	arg-explain=""
+	arg-html=""
+	arg-row="{{ true }}"
+	arg-rowClass=""
+	arg-rowtype=""
+	arg-colorData=""
+	arg-required="{{ false }}"
+	arg-controlId=""
+	arg-includeScripts="{{ true }}"
+	arg-showTxt="{{ false }}">
+
+	<xf:css src="public:color_picker.less" />
+	<xf:js src="xf/color_picker.js" min="1" />
+
+	<xf:if is="$row AND !$controlId">
+		<xf:set var="$controlId" value="{{ unique_id() }}" />
+	</xf:if>
+
+	<xf:set var="$picker_orig">
+		<div class="inputGroup inputGroup--joined inputGroup--color"
+			data-xf-init="color-picker"
+			data-allow-palette="{$allowPalette}"
+			data-palette-variation="{$mapVariation}"
+			data-palette-name="{$mapName}">
+
+			<xf:textbox name="{$name}" value="{$value}" required="{$required}" id="{$controlId}" dir="ltr" />
+			<div class="inputGroup-text"><span class="colorPickerBox js-colorPickerTrigger"></span></div>
+			<xf:if is="{$showTxt}">
+				<div class="inputGroup-text inputGroup-text--hslTxt"><span class="js-hslTxt-h"></span></div>
+				<div class="inputGroup-text inputGroup-text--hslTxt"><span class="js-hslTxt-s"></span></div>
+				<div class="inputGroup-text inputGroup-text--hslTxt"><span class="js-hslTxt-l"></span></div>
+			</xf:if>
+		</div>
+	</xf:set>
+
+	<xf:set var="$picker">
+		<div class="inputGroup inputGroup---joined inputGroup--color {{ $showTxt ? 'inputGroup--color--showTxt' : '' }}"
+			data-xf-init="color-picker"
+			data-allow-palette="{$allowPalette}"
+			data-palette-variation="{$mapVariation}"
+			data-palette-name="{$mapName}">
+
+			<xf:textbox name="{$name}" value="{$value}" required="{$required}" id="{$controlId}" dir="ltr" />
+			<div class="inputGroup-text"><span class="colorPickerBox js-colorPickerTrigger"></span></div>
+			<xf:if is="{$showTxt}">
+				<div class="inputGroup-text inputGroup-text--hslTxt"><span class="js-hslTxt-h"></span></div>
+				<div class="inputGroup-text inputGroup-text--hslTxt"><span class="js-hslTxt-s"></span></div>
+				<div class="inputGroup-text inputGroup-text--hslTxt"><span class="js-hslTxt-l"></span></div>
+			</xf:if>
+		</div>
+	</xf:set>
+
+	<xf:if is="$row">
+		<xf:formrow rowtype="{$rowtype}"
+			rowclass="formRow--input {$rowClass}"
+			controlid="{$controlId}"
+			label="{$label}"
+			hint="{$hint}"
+			explain="{$explain}"
+			html="{$html}">
+
+			{$picker|raw}
+		</xf:formrow>
+	<xf:else />
+		{$picker|raw}
+	</xf:if>
+
+	<xf:if is="{$includeScripts}">
+		<xf:macro id="color_picker_scripts" arg-colorData="{$colorData}" />
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="color_picker_scripts" arg-colorData="">
+	<xf:head option="js-colorPicker">
+		<script type="text/template" id="xfColorPickerMenuTemplate">
+			<xf:macro id="color_picker_menu" />
+		</script>
+
+		<xf:if is="$colorData">
+			<script class="js-colorPickerData" type="application/json">
+				{$colorData|json|raw}
+			</script>
+		</xf:if>
+	</xf:head>
+</xf:macro>
+
+<xf:macro id="color_picker_menu">
+	<div class="menu menu--colorPicker menu--medium" data-menu="menu" aria-hidden="true">
+		<div class="menu-content colorPicker">
+			<h4 class="menu-tabHeader tabs hScroller" data-xf-init="tabs h-scroller" role="tablist">
+				<span class="hScroller-scroll">
+					<xf:mustache name="#palette">
+						<a class="tabs-tab" role="tab" tabindex="0">{{ mustache('title') }}</a>
+					</xf:mustache>
+
+					<a class="tabs-tab" role="tab" tabindex="0">{{ phrase('picker') }}</a>
+				</span>
+			</h4>
+
+			<ul class="tabPanes">
+				<xf:mustache name="#palette">
+					<li role="tabpanel">
+						<div class="colorPicker-palette">
+							<xf:mustache name="#colors">
+								<div class="colorPicker-palette-color" data-name="{{ mustache('name') }}">
+									<span class="colorPicker-palette-color-preview {{ mustache('className') }}">
+										<span class="color-sample" style="background: {{ mustache('background') }};"></span>
+									</span>
+
+									<div class="colorPicker-palette-color-meta">
+										<div class="colorPicker-palette-color-title">{{ mustache('title') }}</div>
+										<div class="colorPicker-palette-color-name">{{ mustache('name') }}</div>
+									</div>
+								</div>
+							</xf:mustache>
+						</div>
+					</li>
+				</xf:mustache>
+
+				<li role="tabpanel">
+					<div class="colorPicker-sliders" dir="ltr">
+						<div class="colorPicker-sliders-gradient">
+							<div class="colorPicker-sliders-gradient-grid">
+								<div class="colorPicker-sliders-gradient-saturation"></div>
+								<div class="colorPicker-sliders-gradient-value"></div>
+								<span class="colorPicker-sliders-gradient-indicator"></span>
+							</div>
+						</div>
+
+						<div class="colorPicker-sliders-hue">
+							<div class="colorPicker-sliders-hue-bar">
+								<span class="colorPicker-sliders-hue-indicator"></span>
+							</div>
+						</div>
+
+						<div class="colorPicker-sliders-alpha">
+							<div class="colorPicker-sliders-alpha-bar">
+								<span class="colorPicker-sliders-alpha-indicator"></span>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+
+			<div class="colorPicker-inputs">
+				<div class="colorPicker-inputs-input">
+					<input type="text" class="input colorPicker-input" dir="ltr">
+				</div>
+
+				<div class="colorPicker-inputs-save">
+					<div class="colorPicker-preview">
+						<span class="colorPicker-preview-original"></span>
+						<span class="colorPicker-preview-current"></span>
+					</div>
+
+					<div class="colorPicker-buttons">
+						<button class="button colorPicker-reset">
+							<span class="button-text">{{ phrase('reset') }}</span>
+						</button>
+
+						<button class="button button--primary colorPicker-save">
+							<span class="button-text">{{ phrase('update') }}</span>
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</xf:macro>

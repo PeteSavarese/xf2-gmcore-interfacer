@@ -1,0 +1,22 @@
+<xf:title>{{ phrase('language_chooser') }}</xf:title>
+
+<xf:head option="metaNoindex"><meta name="robots" content="noindex" /></xf:head>
+
+<div class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<ul class="listPlain listColumns">
+				<xf:foreach loop="$languages" value="$language">
+					<li>
+						<a href="{{ link('misc/language', null, {'language_id': $language.language_id, '_xfRedirect': $redirect, 't': csrf_token()}) }}"
+							class="menu-linkRow {{ $language.language_id == $xf.visitor.language_id ? 'is-selected' : '' }}"
+							dir="auto">
+
+							{$language.title}{{ !$language.user_selectable ? ' *' : '' }}
+						</a>
+					</li>
+				</xf:foreach>
+			</ul>
+		</div>
+	</div>
+</div>

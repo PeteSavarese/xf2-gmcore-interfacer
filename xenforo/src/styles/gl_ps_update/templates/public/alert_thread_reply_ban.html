@@ -1,0 +1,6 @@
+<xf:if is="$extra.expiry">
+	{{ phrase('you_unable_reply_to_thread_x_until_expiry_y', {'title': '<a href="' . link('threads', $content) . '" class="fauxBlockLink-blockLink">' . prefix('thread', $content) . $content.title . '</a>', 'expiry': date($extra.expiry)}) }}
+<xf:else />
+	{{ phrase('you_are_no_longer_able_to_reply_thread_x', {'title': '<a href="' . link('threads', $content) . '" class="fauxBlockLink-blockLink">' . prefix('thread', $content) . $content.title . '</a>'}) }}
+</xf:if>
+<xf:if is="$extra.reason">{{ phrase('reason:') }} {$extra.reason}</xf:if>

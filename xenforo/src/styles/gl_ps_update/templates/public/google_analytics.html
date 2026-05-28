@@ -1,0 +1,17 @@
+<xf:if is="$xf.cookieConsent.isThirdPartyConsented('google_analytics') && $xf.options.googleAnalyticsWebPropertyId">
+	<script async src="https://www.googletagmanager.com/gtag/js?id={$xf.options.googleAnalyticsWebPropertyId}"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+		gtag('config', '{$xf.options.googleAnalyticsWebPropertyId|escape("js")}', {
+			// <!--[XF:ga:config_start]-->
+			<xf:if is="$xf.cookie.domain">
+				'cookie_domain': '{$xf.cookie.domain}',
+			</xf:if>
+			<xf:if is="$xf.options.googleAnalyticsAnonymize">
+				'anonymize_ip': true,
+			</xf:if>
+		});
+	</script>
+</xf:if>

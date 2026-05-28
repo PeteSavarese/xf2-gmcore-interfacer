@@ -1,0 +1,84 @@
+<xf:macro id="select"
+	arg-prefixes="!"
+	arg-type="!"
+	arg-selected=""
+	arg-name="prefix_id"
+	arg-noneLabel="{{ phrase('(no_prefix)') }}"
+	arg-multiple="{{ false }}"
+	arg-includeAny="{{ false }}"
+	arg-class=""
+	arg-href=""
+	arg-controlId=""
+	arg-listenTo="">
+
+	<xf:select name="{$name}" value="{$selected}" multiple="{$multiple}" class="{$class}"
+		data-xf-init="{{ ($href AND $listenTo) ? 'prefix-loader' : '' }}"
+		data-href="{$href}"
+		data-listen-to="{$listenTo}"
+		id="{$controlId}"
+		title="{{ phrase('prefix') }}">
+
+		<xf:if is="$includeAny">
+			<xf:option value="-1" label="{{ phrase('(any)') }}" />
+		</xf:if>
+		<xf:option value="0" label="{$noneLabel}" />
+		<xf:foreach loop="array_keys($prefixes)" value="$groupId">
+			<xf:if is="$groupId > 0">
+				<xf:optgroup label="{{ prefix_group($type, $groupId) }}">
+					<xf:foreach loop="{$prefixes.{$groupId}}" key="$prefixId" value="$prefix">
+						<xf:option value="{$prefixId}"
+							label="{{ prefix_title($type, $prefixId) }}"
+							data-prefix-class="{$prefix.css_class}"
+							data-has-help="{$prefix.has_usage_help}" />
+					</xf:foreach>
+				</xf:optgroup>
+			<xf:else />
+				<xf:foreach loop="{$prefixes.{$groupId}}" key="$prefixId" value="$prefix">
+					<xf:option value="{$prefixId}"
+						label="{{ prefix_title($type, $prefixId) }}"
+						data-prefix-class="{$prefix.css_class}"
+						data-has-help="{$prefix.has_usage_help}" />
+				</xf:foreach>
+			</xf:if>
+		</xf:foreach>
+	</xf:select>
+</xf:macro>
+
+<xf:macro id="row"
+	arg-prefixes="!"
+	arg-type="!"
+	arg-label="{{ phrase('prefix') }}"
+	arg-explain=""
+	arg-selected=""
+	arg-name="prefix_id"
+	arg-noneLabel="{{ phrase('(no_prefix)') }}"
+	arg-multiple="{{ false }}"
+	arg-includeAny="{{ false }}"
+	arg-class="">
+
+	<xf:set var="$controlId" value="{{ unique_id() }}" />
+
+	<xf:formrow rowtype="input" label="{$label}" controlid="{$controlId}">
+		<xf:macro id="select"
+			arg-prefixes="{$prefixes}"
+			arg-type="{$type}"
+			arg-selected="{$selected}"
+			arg-name="{$name}"
+			arg-noneLabel="{$noneLabel}"
+			arg-multiple="{$multiple}"
+			arg-includeAny="{$includeAny}"
+			arg-controlId="{$controlId}"
+			arg-class="{$class}" />
+		<xf:if is="$explain">
+			<div class="formRow-explain">{$explain|raw}</div>
+		</xf:if>
+	</xf:formrow>
+</xf:macro>
+
+<xf:macro id="usage_help" arg-prefix="!" arg-contentType="!">
+	<xf:if contentcheck="true">
+		<div class="formRow-explain formRow-prefixHelp">
+			<xf:contentcheck>{{ prefix_usage_help($contentType, $prefix->prefix_id) }}</xf:contentcheck>
+		</div>
+	</xf:if>
+</xf:macro>

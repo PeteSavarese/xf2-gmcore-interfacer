@@ -1,0 +1,14 @@
+<xf:macro id="item" extends="thread_list_macros::item">
+	<xf:extension id="meta_cell">
+		<div class="structItem-cell structItem-cell--meta" title="{{ phrase('first_message_reaction_score:')|for_attr }} {$thread.first_post_reaction_score|number}">
+			<dl class="pairs pairs--justified">
+				<dt>{{ phrase('answers') }}</dt>
+				<dd>{{ $thread.discussion_type == 'redirect' ? '&ndash;' : $thread.reply_count|number_short }}</dd>
+			</dl>
+			<dl class="pairs pairs--justified structItem-minor">
+				<dt>{{ phrase('views') }}</dt>
+				<dd>{{ $thread.discussion_type == 'redirect' ? '&ndash;' : ($thread.view_count > $thread.reply_count ? $thread.view_count|number_short : number_short($thread.reply_count+1)) }}</dd>
+			</dl>
+		</div>
+	</xf:extension>
+</xf:macro>

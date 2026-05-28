@@ -1,0 +1,22 @@
+<li class="block-row block-row--separated {{ $comment.isIgnored() ? 'is-ignored' : '' }}" data-author="{{ $comment.User.username ?: $comment.username }}">
+	<div class="contentRow {{ !$comment.isVisible() ? 'is-deleted' : '' }}">
+		<span class="contentRow-figure">
+			<xf:avatar user="{$comment.User}" size="s" defaultname="{$comment.username}" />
+		</span>
+		<div class="contentRow-main">
+			<h3 class="contentRow-title">
+				<a href="{{ link('profile-posts/comments', $comment) }}">{{ snippet($comment.message, 100, {'term': $options.term, 'stripQuote': true, 'fromStart': true, 'hideUnviewable': false}) }}</a>
+			</h3>
+
+			<div class="contentRow-snippet">{{ snippet($comment.message, 300, {'term': $options.term, 'stripQuote': true}) }}</div>
+
+			<div class="contentRow-minor contentRow-minor--hideLinks">
+				<ul class="listInline listInline--bullet">
+					<li><xf:username user="{$comment.User}" defaultname="{$comment.username}" /></li>
+					<li>{{ phrase('profile_post_comment') }}</li>
+					<li><xf:date time="{$comment.comment_date}" /></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</li>

@@ -1,0 +1,14 @@
+{
+    "group_name": "basic",
+    "title": "Public logo height",
+    "description": "If you specify the height of your logo here, you can avoid a costly re-flow of your page layout once the logo loads.",
+    "property_type": "value",
+    "css_components": [],
+    "value_type": "number",
+    "value_parameters": "",
+    "has_variations": false,
+    "depends_on": "",
+    "value_group": "logo",
+    "property_value": "",
+    "display_order": 120
+}

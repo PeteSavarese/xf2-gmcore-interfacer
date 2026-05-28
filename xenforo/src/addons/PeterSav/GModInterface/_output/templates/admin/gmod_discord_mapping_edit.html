@@ -1,0 +1,23 @@
+<xf:title>{{ $mapping.mapping_id ? 'Edit Role Mapping' : 'Add Role Mapping' }}</xf:title>
+
+<xf:form action="{{ link('discord/save', {'mapping_id': $mapping.mapping_id}) }}" ajax="true" class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:selectrow name="discord_role_id" value="{$mapping.discord_role_id}"
+				label="Discord Role"
+				explain="Select the Discord role to map to a forum user group">
+				<xf:option value="">{{ phrase('(none)') }}</xf:option>
+				<xf:foreach loop="$guildRoles" key="$roleId" value="$roleData">
+					<xf:option value="{$roleId}">{$roleData.name}</xf:option>
+				</xf:foreach>
+			</xf:selectrow>
+			
+			<xf:radiorow name="forum_group_id" label="Forum User Group" value="{$mapping.forum_group_id}"
+				explain="Select the forum user group that will be assigned when a user has this Discord role">
+				<xf:options source="$userGroups" />
+			</xf:radiorow>
+
+			<xf:submitrow icon="save" sticky="true" />
+		</div>
+	</div>
+</xf:form>

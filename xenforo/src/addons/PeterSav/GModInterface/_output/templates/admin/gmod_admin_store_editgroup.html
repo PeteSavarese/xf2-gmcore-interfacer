@@ -1,0 +1,63 @@
+<xf:title>Add Store Rank</xf:title>
+
+<xf:form action="{{ link('gl-store/save', {'group_id': $group.upgrade_id}) }}" ajax="true" class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:textboxrow name="title" value="{$group.title}"
+				label="Title" />
+
+			<xf:textarearow name="description" value="{$group.description}" autosize="true"
+				label="HTML for Rank" />
+			
+			<xf:textboxrow name="rank_image" value="{$group.rank_image}"
+				label="Rank Image"
+				hint="Image must be uploaded to /images/forum/store_ranks/ folder" />
+			
+			<xf:macro id="display_order_macros::row" arg-value="{{ $group.rank_priority ?: 1 }}" />
+			
+			<xf:formrow rowtype="input"
+				label="{{ phrase('cost') }} (USD)">
+
+				<div class="inputGroup">
+					<xf:textbox name="price" value="{{ $group.price ?: 5 }}" style="width: 120px" />
+				</div>
+			</xf:formrow>
+			<xf:radiorow name="length_type" label="{{ phrase('length') }}">
+				<xf:option value="permanent" selected="$group.length_unit == ''">{{ phrase('permanent') }}</xf:option>
+				<xf:option value="timed" selected="$group.length_unit != ''" label="{{ phrase('for_length:') }}">
+					<xf:dependent>
+						<div class="inputGroup">
+							<xf:numberbox name="length_unit" value="{{ $group.length ?: 1 }}" min="1" />
+							<span class="inputGroup-splitter"></span>
+							<xf:select name="length_unit" value="{{ ($group.length_unit == 'permanent') ? 'months' : $group.length_unit }}" class="input--inline">
+								<xf:option value="day">{{ phrase('days') }}</xf:option>
+								<xf:option value="month">{{ phrase('months') }}</xf:option>
+								<xf:option value="year">{{ phrase('years') }}</xf:option>
+							</xf:select>
+						</div>
+
+					</xf:dependent>
+					<xf:comment>
+						<xf:dependent>
+							<xf:checkbox>
+								<xf:option name="recurring" value="1" selected="$upgrade.recurring"
+									label="{{ phrase('recurring_payments') }}"
+									hint="{{ phrase('recurring_payments_explain') }}" />
+							</xf:checkbox>
+						</xf:dependent>
+					</xf:comment>
+				</xf:option>
+			</xf:radiorow>
+			
+			<xf:radiorow name="group_id" label="{{ phrase('additional_user_groups') }}" value="{$group.group_id}">
+				<xf:options source="$userGroups" />
+			</xf:radiorow>
+			
+			<xf:checkboxrow>
+				<xf:option name="can_purchase" selected="$group.can_purchase">{{ phrase('can_be_purchased') }}</xf:option>
+			</xf:checkboxrow>
+
+			<xf:submitrow icon="save" sticky="true" />
+		</div>
+	</div>
+</xf:form>

@@ -1,0 +1,39 @@
+<li class="block-row block-row--separated {{ $thread.isIgnored() ? 'is-ignored' : '' }} js-inlineModContainer" data-author="{{ $thread.User.username ?: $thread.username }}">
+	<div class="contentRow {{ !$thread.isVisible() ? 'is-deleted' : '' }}">
+		<span class="contentRow-figure">
+			<xf:avatar user="{$thread.User}" size="s" defaultname="{$thread.username}" />
+		</span>
+		<div class="contentRow-main">
+			<h3 class="contentRow-title">
+				<a href="{{ link('threads', $thread) }}">{{ prefix('thread', $thread) . highlight($thread.title, $options.term) }}</a>
+			</h3>
+
+			<div class="contentRow-snippet">{{ snippet($thread.FirstPost.message, 300, {'term': $options.term, 'stripQuote': true}) }}</div>
+
+			<div class="contentRow-minor contentRow-minor--hideLinks">
+				<ul class="listInline listInline--bullet">
+					<xf:if is="$options.mod == 'thread' && $thread.canUseInlineModeration()">
+						<li><xf:checkbox standalone="true">
+							<xf:option value="{$thread.thread_id}" class="js-inlineModToggle"
+								data-xf-init="tooltip"
+								title="{{ phrase('select_for_moderation') }}" />
+						</xf:checkbox></li>
+					</xf:if>
+					<li><xf:username user="{$thread.User}" defaultname="{$thread.username}" /></li>
+					<li>{{ phrase('thread') }}</li>
+					<li><xf:date time="{$thread.post_date}" /></li>
+					<xf:if is="$xf.options.enableTagging && $thread.tags">
+						<li>
+							<xf:macro id="tag_macros::simple_list"
+								arg-tags="{$thread.tags}"
+								arg-containerClass="contentRow-minor"
+								arg-highlightTerm="{{ $options.tag ?: $options.term}}" />
+						</li>
+					</xf:if>
+					<li>{{ phrase('replies:') }} {$thread.reply_count|number}</li>
+					<li>{{ phrase('forum:') }} <a href="{{ link('forums', $thread.Forum) }}">{$thread.Forum.title}</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</li>

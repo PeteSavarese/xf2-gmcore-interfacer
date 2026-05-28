@@ -1,0 +1,10 @@
+<xf:if is="$purchaseRequest.Purchasable.isCancelled($purchaseRequest)">
+	<div class="block-rowMessage block-rowMessage--important">
+		{{ phrase('this_purchase_has_been_cancelled_successfully_and_will_expire') }}
+	</div>
+<xf:else />
+	<xf:button href="{{ link('purchase/cancel-recurring', null, {'request_key': $purchaseRequest.request_key}) }}"
+		overlay="true">
+		{{ phrase('button.cancel') }}
+	</xf:button>
+</xf:if>

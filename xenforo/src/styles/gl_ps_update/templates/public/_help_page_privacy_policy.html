@@ -1,0 +1,12 @@
+{{ phrase('privacy_policy_text', {'board_title': $xf.options.boardTitle, 'contactUrl': $xf.contactUrl, 'cookieHelp': link('help/cookies/')}) }}
+
+<!--[XF:captcha_after_policy_text]-->
+
+<xf:if is="$captcha && $xf.options.includeCaptchaPrivacyPolicy">
+	<xf:if contentcheck="true">
+		<h2>{{ phrase('captcha_privacy_policy') }}</h2>
+		<xf:contentcheck>{$captcha.getPrivacyPolicy()}</xf:contentcheck>
+	</xf:if>
+</xf:if>
+
+<!--[XF:captcha_after_captcha]-->

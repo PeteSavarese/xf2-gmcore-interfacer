@@ -1,0 +1,1 @@
+Go to <a href="https://discord.com/developers/applications" target=”_blank”> Discord developer applications</a>, open bot, go to "Bot" and click "Reset Token" to get tokenn.

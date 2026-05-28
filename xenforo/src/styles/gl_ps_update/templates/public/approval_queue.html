@@ -1,0 +1,77 @@
+<xf:title>{{ phrase('approval_queue') }}</xf:title>
+
+<xf:css src="approval_queue.less" />
+<xf:js src="xf/approval_queue.js" />
+
+<xf:set var="$sortOrders" value="{{ {
+	'content_date': phrase('content_date')
+} }}" />
+
+<div class="block">
+	<div class="block-container block-container--none">
+		<div class="block-filterBar block-filterBar--standalone">
+			<div class="filterBar">
+				<xf:if contentcheck="true">
+					<ul class="filterBar-filters">
+						<xf:contentcheck>
+							<xf:if is="$filters.content_type">
+								<li><a href="{{ link('approval-queue', null, $filters|replace({'content_type': null})) }}"
+									class="filterBar-filterToggle" data-xf-init="tooltip" title="{{ phrase('remove_this_filter')|for_attr }}">
+									<span class="filterBar-filterToggle-label">{{ phrase('content_type:') }}</span>
+									{{ $xf.app.getContentTypePhrase($filters.content_type) ?: $filters.content_type }}
+								</a></li>
+							</xf:if>
+							<xf:if is="$filters.order AND {$sortOrders.{$filters.order}}">
+								<li><a href="{{ link('approval-queue', null, $filters|replace({'order': null, 'direction': null})) }}"
+									class="filterBar-filterToggle" data-xf-init="tooltip" title="{{ phrase('return_to_default_order')|for_attr }}">
+									<span class="filterBar-filterToggle-label">{{ phrase('sort_by:') }}</span>
+									{$sortOrders.{$filters.order}}
+									<xf:fa icon="{{ $filters.direction == 'asc' ? 'fa-angle-up' : 'fa-angle-down' }}" />
+									<span class="u-srOnly"><xf:if is="$filters.direction == 'asc'">{{ phrase('ascending') }}<xf:else />{{ phrase('descending') }}</xf:if></span>
+								</a></li>
+							</xf:if>
+						</xf:contentcheck>
+					</ul>
+				</xf:if>
+
+				<a class="filterBar-menuTrigger" data-xf-click="menu" role="button" tabindex="0" aria-expanded="false" aria-haspopup="true">{{ phrase('filters') }}</a>
+				<div class="menu menu--wide" data-menu="menu" aria-hidden="true"
+					data-href="{{ link('approval-queue/filters', null, $filters) }}"
+					data-load-target=".js-filterMenuBody">
+					<div class="menu-content">
+						<h4 class="menu-header">{{ phrase('show_only:') }}</h4>
+						<div class="js-filterMenuBody">
+							<div class="menu-row">{{ phrase('loading...') }}</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<xf:if is="$unapprovedItems is not empty">
+	<xf:form action="{{ link('approval-queue/process') }}" ajax="true" class="js-stickyParent approvalQueue">
+		<div class="blocks">
+			<xf:foreach loop="$unapprovedItems" value="$unapprovedItem" i="$i" count="$count">
+				<div class="block">
+					<div class="block-container approvalQueue-item js-approvalQueue-item">
+						<div class="block-body">
+							{$unapprovedItem.getHandler().render($unapprovedItem)|raw}
+						</div>
+					</div>
+				</div>
+			</xf:foreach>
+
+			<div class="block">
+				<div class="block-container block-container--none">
+					<xf:submitrow icon="save" sticky=".js-stickyParent" rowtype="standalone" />
+				</div>
+			</div>
+		</div>
+	</xf:form>
+<xf:elseif is="$filters" />
+	<div class="blockMessage">{{ phrase('no_items_matched_your_filter') }}</div>
+<xf:else />
+	<div class="blockMessage">{{ phrase('there_is_no_content_currently_awaiting_approval') }}</div>
+</xf:if>

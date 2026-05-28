@@ -1,0 +1,26 @@
+<xf:title>{{ phrase('help') }}</xf:title>
+
+<xf:macro id="metadata_macros::canonical_url" arg-canonicalUrl="{{ link('canonical:help') }}" />
+
+<xf:wrap template="help_wrapper" />
+
+<xf:if is="$pages is not empty">
+	<div class="block">
+		<div class="block-container">
+			<div class="block-body">
+				<xf:foreach loop="$pages" value="$page">
+					<xf:if is="($page.page_id == 'trophies' AND $xf.options.enableTrophies) OR $page.page_id != 'trophies'">
+						<div class="block-row block-row--separated">
+							<h3 class="block-textHeader">
+								<a href="{$page.public_url}">{$page.title}</a>
+							</h3>
+							{$page.description}
+						</div>
+					</xf:if>
+				</xf:foreach>
+			</div>
+		</div>
+	</div>
+<xf:else />
+	<div class="blockMessage">{{ phrase('no_items_have_been_created_yet') }}</div>
+</xf:if>

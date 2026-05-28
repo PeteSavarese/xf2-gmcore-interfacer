@@ -1,0 +1,71 @@
+.serverInfoLeft {
+	display: inline-block;
+	vertical-align: top;
+	width: 190px;
+	height: 190px;
+}
+
+.serverInfoMiddle {
+	display: inline-block;
+	vertical-align: top;
+	width: 31%;
+}
+
+.serverInfoRight {
+	float: right;
+	display: inline-block;
+	vertical-align: top;
+	width: 43%;
+}
+
+.mapImage {
+	height: 190px;
+	background-size: cover;
+	background-repeat: no-repeat;
+	border-radius: 8px;
+	border: 1px solid rgba(52, 73, 94, 0.5);
+}
+
+.secondaryContent {
+	background-color: rgba(30, 42, 56, 0.6);
+	padding: 10px;
+	border: 1px solid rgba(52, 73, 94, 0.5);
+	border-radius: 8px;
+	margin-bottom: 10px;
+}
+
+/* Tables */
+.tkGmodTable {
+	border-collapse: collapse;
+	border-spacing: 0;
+	width: 100%;
+}
+
+.tkGmodTable > thead {
+	border-bottom: 1px solid rgba(52, 73, 94, 0.5);
+	background: rgba(22, 32, 48, 0.6);
+}
+
+.tkGmodTable > thead > tr > th {
+	text-align: left;
+	padding: 10px 12px;
+	font-weight: 700;
+	font-size: 11px;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	color: #95a5a6;
+}
+
+.tkGmodTable > tbody > tr > td {
+	text-align: left;
+	padding: 10px 12px;
+	border-bottom: 1px solid rgba(52, 73, 94, 0.3);
+}
+
+.tkGmodTable > tbody > tr:nth-child(odd) {
+	background-color: rgba(255, 255, 255, 0.02);
+}
+
+.tkGmodTable > tbody > tr:hover {
+	background-color: rgba(52, 152, 219, 0.04);
+}

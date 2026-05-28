@@ -1,0 +1,17 @@
+<div class="contentRow-title">
+	<xf:if is="$user.user_id == $content.ProfileUser.user_id">
+		{{ phrase('news_feed_profile_post_insert_status', {
+			'username': username_link($user, false, {'defaultname': $newsFeed.username}),
+			'href': link('profile-posts', $content)
+		}) }}
+	<xf:else />
+		{{ phrase('news_feed_profile_post_insert', {
+			'usernamePoster': username_link($user, false, {'defaultname': $newsFeed.username}),
+			'usernameReceiver': '<a href="' . link('profile-posts', $content) . '">' . $content.ProfileUser.username . '</a>'
+		}) }}
+	</xf:if>
+</div>
+
+<div class="contentRow-snippet">{{ snippet($content.message, $xf.options.newsFeedMessageSnippetLength, {'stripQuote': true}) }}</div>
+
+<div class="contentRow-minor"><xf:date time="{$newsFeed.event_date}" /></div>

@@ -1,0 +1,10 @@
+<div class="contentRow-title">
+	{{ phrase('news_feed_profile_post_comment_insert', {
+		'usernamePoster': username_link($user, false, {'defaultname': $newsFeed.username}),
+		'usernameReceiver': '<a href="' . link('profile-posts/comments', $content) . '">' . $content.ProfilePost.username . '</a>'
+	}) }}
+</div>
+
+<div class="contentRow-snippet">{{ snippet($content.message, $xf.options.newsFeedMessageSnippetLength, {'stripQuote': true}) }}</div>
+
+<div class="contentRow-minor"><xf:date time="{$newsFeed.event_date}" /></div>

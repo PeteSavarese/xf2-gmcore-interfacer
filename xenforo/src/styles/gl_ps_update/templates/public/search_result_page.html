@@ -1,0 +1,21 @@
+<li class="block-row block-row--separated">
+	<div class="contentRow">
+		<span class="contentRow-figure">
+			<xf:avatar user="{{ null }}" size="s" />
+		</span>
+		<div class="contentRow-main">
+			<h3 class="contentRow-title">
+				<a href="{{ link('pages', $page) }}">{{ highlight($page.title, $options.term) }}</a>
+			</h3>
+
+			<div class="contentRow-snippet">{{ snippet($page.MasterTemplate.template, 300, {'term': $options.term, 'stripHtml': true}) }}</div>
+
+			<div class="contentRow-minor contentRow-minor--hideLinks">
+				<ul class="listInline listInline--bullet">
+					<li>{{ phrase('page') }}</li>
+					<li><xf:date time="{$page.modified_date}" /></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</li>

@@ -1,0 +1,4 @@
+{
+    "api_scope_id": "discord:write",
+    "usable_with_oauth_clients": true
+}

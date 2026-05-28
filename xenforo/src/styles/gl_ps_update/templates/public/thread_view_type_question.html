@@ -1,0 +1,75 @@
+<xf:extends template="thread_view" />
+
+<xf:extension id="structured_data_extra_params" value="{{ {
+	'highlightedPosts': $highlightedPosts,
+	'suggestedSolutions': $suggestedSolutions
+} }}" />
+
+<xf:extension id="pinned_block_classes" value="{{ $thread.type_data.solution_post_id ? 'block--close' : '' }}" />
+
+<xf:extension id="above_messages_below_pinned">
+	<xf:if is="$thread.type_data.solution_post_id AND {$highlightedPosts.{$thread.type_data.solution_post_id}}">
+		<div class="block" id="js-solutionHighlightBlock">
+			<div class="block-container">
+				<div class="block-body">
+					<xf:macro id="solution"
+						arg-post="{$highlightedPosts.{$thread.type_data.solution_post_id}}"
+						arg-thread="{$thread}" />
+				</div>
+			</div>
+		</div>
+	</xf:if>
+</xf:extension>
+
+<xf:macro id="solution" arg-post="!" arg-thread="!">
+	<article class="message message--simple">
+		<div class="message-inner js-solutionHeader">
+			<div class="message-cell message-cell--solutionHeader">
+				{{ phrase('solution') }}
+			</div>
+		</div>
+		<div class="message-inner">
+			<div class="message-cell message-cell--user">
+				<xf:macro id="message_macros::user_info_simple" arg-user="{$post.User}"  arg-fallbackName="{$post.username}" />
+			</div>
+			<div class="message-cell message-cell--main">
+				<header class="message-attribution message-attribution--plain">
+					<ul class="listInline listInline--bullet">
+						<li class="message-attribution-user">
+							<xf:avatar user="$post.User" size="xxs" />
+							<h4 class="attribution"><xf:username user="$post.User" rich="true" defaultname="{$post.username}" /></h4>
+						</li>
+						<li>
+							<a href="{{ link('threads/post', $thread, {'post_id': $post.post_id}) }}"
+								class="u-concealed"
+								data-xf-click="attribution"
+								data-content-selector="#post-{$post.post_id}"
+								rel="nofollow"><xf:date time="$post.post_date" /></a>
+						</li>
+					</ul>
+				</header>
+
+				<article class="message-body">
+					<div class="message-expandWrapper js-expandWatch">
+						<div class="message-expandContent message-expandContent--small js-expandContent">
+							{{ bb_code_snippet($post.message, 'post', $post, 750) }}
+						</div>
+						<div class="message-expandLink"></div>
+					</div>
+				</article>
+
+				<footer class="message-footer">
+					<div class="message-actionBar actionBar">
+						<div class="actionBar-set actionBar-set--internal">
+							<a href="{{ link('threads/post', $thread, {'post_id': $post.post_id}) }}"
+								class="actionBar-action actionBar-action--view"
+								data-xf-click="attribution"
+								data-content-selector="#post-{$post.post_id}"
+								rel="nofollow">{{ phrase('view_full_post') }}</a>
+						</div>
+					</div>
+				</footer>
+			</div>
+		</div>
+	</article>
+</xf:macro>

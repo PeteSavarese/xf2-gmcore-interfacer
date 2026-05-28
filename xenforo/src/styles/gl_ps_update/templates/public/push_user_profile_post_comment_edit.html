@@ -1,0 +1,5 @@
+{{ phrase('your_comment_on_xs_profile_post_was_edited', {
+	'user': $extra.postUser
+}) }}
+<xf:if is="$extra.reason">{{ phrase('reason:') }} {$extra.reason}</xf:if>
+<push:url>{{ base_url($extra.link, 'canonical') }}</push:url>

@@ -1,0 +1,22 @@
+<xf:title>{{ phrase('invite_members_to_direct_message') }}</xf:title>
+
+<xf:breadcrumb href="{{ link('direct-messages') }}">{{ phrase('direct_messages') }}</xf:breadcrumb>
+<xf:breadcrumb href="{{ link('direct-messages', $conversation) }}">{$conversation.title}</xf:breadcrumb>
+
+<xf:form action="{{ link('direct-messages/invite', $conversation) }}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:tokeninputrow name="recipients" href="{{ link('members/find') }}"
+				min-length="1"
+				max-tokens="{{ ($remainingRecipients > -1) ? $remainingRecipients : null }}"
+				label="{{ phrase('invite_members') }}">
+
+				<xf:explain>
+					<xf:if is="$remainingRecipients > 1">{{ phrase('separate_names_with_comma') }}</xf:if> {{ phrase('invited_members_see_entire_direct_message') }}
+					<xf:if is="$remainingRecipients > 0">{{ phrase('you_may_invite_up_to_x_members', {'number': $remainingRecipients|number}) }}</xf:if>
+				</xf:explain>
+			</xf:tokeninputrow>
+		</div>
+		<xf:submitrow submit="{{ phrase('invite') }}" />
+	</div>
+</xf:form>

@@ -1,0 +1,44 @@
+<xf:macro id="dob_edit" arg-dobData="{{ [] }}" arg-row="{{ true }}" arg-labelId="{{ null }}" arg-required="{{ false }}">
+	<xf:if is="$row AND !$labelId">
+		<xf:set var="$labelId" value="{{ unique_id() }}" />
+	</xf:if>
+	<xf:set var="$labelAttr"><xf:if is="$labelId"> aria-labelledby="{$labelId}"</xf:if></xf:set>
+	<xf:set var="$inputGroup">
+		<div class="inputGroup inputGroup--auto" role="group"{$labelAttr}>
+			<xf:select name="dob_month" value="{{ $dobData.dob_month ?: 0 }}" aria-label="{{ phrase('month')|for_attr }}">
+				<xf:option value="0"></xf:option>
+				<xf:option value="1">{{ phrase('month_1') }}</xf:option>
+				<xf:option value="2">{{ phrase('month_2') }}</xf:option>
+				<xf:option value="3">{{ phrase('month_3') }}</xf:option>
+				<xf:option value="4">{{ phrase('month_4') }}</xf:option>
+				<xf:option value="5">{{ phrase('month_5') }}</xf:option>
+				<xf:option value="6">{{ phrase('month_6') }}</xf:option>
+				<xf:option value="7">{{ phrase('month_7') }}</xf:option>
+				<xf:option value="8">{{ phrase('month_8') }}</xf:option>
+				<xf:option value="9">{{ phrase('month_9') }}</xf:option>
+				<xf:option value="10">{{ phrase('month_10') }}</xf:option>
+				<xf:option value="11">{{ phrase('month_11') }}</xf:option>
+				<xf:option value="12">{{ phrase('month_12') }}</xf:option>
+			</xf:select>
+			<span class="inputGroup-splitter"></span>
+			<xf:textbox name="dob_day" value="{{ $dobData.dob_day ?: '' }}" pattern="\d*" size="4" maxlength="2"
+				aria-label="{{ phrase('day')|for_attr }}"
+				placeholder="{{ phrase('day') }}" />
+			<span class="inputGroup-splitter"></span>
+			<xf:textbox name="dob_year" value="{{ $dobData.dob_year ?: '' }}" pattern="\d*" size="6" maxlength="4"
+				aria-label="{{ phrase('year')|for_attr }}"
+				placeholder="{{ phrase('year') }}" />
+		</div>
+	</xf:set>
+	<xf:if is="$row">
+		<xf:formrow rowtype="input"
+			label="{{ phrase('date_of_birth') }}"
+			labelid="{$labelId}"
+			hint="{{ $required ? phrase('required') : '' }}">
+
+			{$inputGroup|raw}
+		</xf:formrow>
+	<xf:else />
+		{$inputGroup|raw}
+	</xf:if>
+</xf:macro>

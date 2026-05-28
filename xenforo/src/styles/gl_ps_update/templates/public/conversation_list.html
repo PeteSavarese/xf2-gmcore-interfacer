@@ -1,0 +1,118 @@
+<xf:title page="{$page}">{{ phrase('direct_messages') }}</xf:title>
+
+<xf:js src="xf/inline_mod.js" min="1" />
+
+<xf:macro id="conversation_list_macros::conversation_page_options" />
+
+<xf:pageaction if="$xf.visitor.canStartConversation()">
+	<xf:button href="{{ link('direct-messages/add') }}" class="button--cta" icon="write">{{ phrase('send_direct_message') }}</xf:button>
+</xf:pageaction>
+
+<div class="block" data-xf-init="inline-mod" data-type="conversation" data-href="{{ link('inline-mod') }}">
+	<div class="block-outer">
+		<xf:pagenav
+			page="{$page}" perpage="{$perPage}" total="{$total}"
+			link="direct-messages" params="{$filters}"
+			wrapperclass="block-outer-main" />
+		<div class="block-outer-opposite">
+			<div class="buttonGroup">
+				<xf:macro id="inline_mod_macros::button"
+					arg-variant="inlineModButton--withLabel"
+					arg-label="{{ phrase('selected') }}"
+					arg-tooltip="{{ false }}" />
+			</div>
+		</div>
+	</div>
+
+	<div class="block-container">
+		<div class="block-filterBar">
+			<div class="filterBar">
+				<xf:if contentcheck="true">
+					<ul class="filterBar-filters">
+					<xf:contentcheck>
+						<xf:if is="$filters.starter_id AND $starterFilter">
+							<li><a href="{{ link('direct-messages', null, $filters|replace('starter_id', null)) }}"
+								class="filterBar-filterToggle" data-xf-init="tooltip" title="{{ phrase('remove_this_filter')|for_attr }}">
+								{{ phrase('started_by_x', {'name': $starterFilter.username}) }}</a></li>
+						</xf:if>
+						<xf:if is="$filters.receiver_id AND $receiverFilter">
+							<li><a href="{{ link('direct-messages', null, $filters|replace('receiver_id', null)) }}"
+								class="filterBar-filterToggle" data-xf-init="tooltip" title="{{ phrase('remove_this_filter')|for_attr }}">
+								{{ phrase('received_by_x', {'name': $receiverFilter.username}) }}</a></li>
+						</xf:if>
+						<xf:if is="$filters.starred">
+							<li><a href="{{ link('direct-messages', null, $filters|replace('starred', null)) }}"
+								class="filterBar-filterToggle" data-xf-init="tooltip" title="{{ phrase('remove_this_filter')|for_attr }}">
+								<span class="filterBar-filterToggle-label">{{ phrase('show_only:') }}</span>
+								{{ phrase('starred') }}</a></li>
+						</xf:if>
+						<xf:if is="$filters.unread">
+							<li><a href="{{ link('direct-messages', null, $filters|replace('unread', null)) }}"
+								class="filterBar-filterToggle" data-xf-init="tooltip" title="{{ phrase('remove_this_filter')|for_attr }}">
+								<span class="filterBar-filterToggle-label">{{ phrase('show_only:') }}</span>
+								{{ phrase('filter_unread') }}</a></li>
+						</xf:if>
+					</xf:contentcheck>
+					</ul>
+				</xf:if>
+
+				<a class="filterBar-menuTrigger" data-xf-click="menu" role="button" tabindex="0" aria-expanded="false" aria-haspopup="true">{{ phrase('filters') }}</a>
+				<div class="menu" data-menu="menu" aria-hidden="true">
+					<div class="menu-content">
+						<h4 class="menu-header">{{ phrase('show_only:') }}</h4>
+						<xf:form action="{{ link('direct-messages/filters') }}">
+							<div class="menu-row menu-row--separated">
+								<xf:radio name="filter_type">
+									<xf:option value="" selected="{{ !$starterFilter AND !$receiverFilter }}">{{ phrase('show_all_direct_messages') }}</xf:option>
+									<xf:option value="started" selected="{{ $starterFilter ? true : false }}" data-hide="true"
+										label="{{ phrase('started_by...') }}">
+
+										<xf:textbox name="starter" value="{{ $starterFilter ? $starterFilter.username : '' }}" ac="single"
+											maxlength="{{ max_length($xf.visitor, 'username') }}"/>
+									</xf:option>
+									<xf:option value="received" selected="{{ $receiverFilter ? true : false }}" data-hide="true"
+										label="{{ phrase('received_by...') }}">
+
+										<xf:textbox name="receiver" value="{{ $receiverFilter ? $receiverFilter.username : '' }}" ac="single"
+											maxlength="{{ max_length($xf.visitor, 'username') }}" />
+									</xf:option>
+								</xf:radio>
+							</div>
+							<div class="menu-row menu-row--separated">
+								<xf:checkbox>
+									<xf:option name="starred" selected="{$filters.starred}" label="{{ phrase('starred_direct_messages') }}" />
+									<xf:option name="unread" selected="{$filters.unread}" label="{{ phrase('unread_direct_messages') }}" />
+								</xf:checkbox>
+							</div>
+
+							<div class="menu-footer">
+								<span class="menu-footer-controls">
+									<xf:button type="submit" class="button--primary">{{ phrase('filter') }}</xf:button>
+								</span>
+							</div>
+							<xf:hiddenval name="apply">1</xf:hiddenval>
+						</xf:form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="block-body">
+			<xf:if is="$userConvs is not empty">
+				<div class="structItemContainer">
+					<xf:foreach loop="$userConvs" value="$userConv">
+						<xf:macro id="conversation_list_macros::item" arg-userConv="{$userConv}" />
+					</xf:foreach>
+				</div>
+			<xf:else />
+				<div class="block-row">{{ phrase('there_no_direct_messages_to_display') }}</div>
+			</xf:if>
+		</div>
+	</div>
+
+	<xf:pagenav page="{$page}" perpage="{$perPage}" total="{$total}"
+		link="direct-messages" params="{$filters}"
+		wrapperclass="block-outer block-outer--after" />
+</div>
+
+<xf:widgetpos id="conversation_list_sidebar" position="sidebar" />

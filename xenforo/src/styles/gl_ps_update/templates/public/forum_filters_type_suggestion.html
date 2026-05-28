@@ -1,0 +1,31 @@
+<xf:extends template="forum_filters" />
+
+<xf:extension id="before_started_by">
+	<xf:if is="$forum.type_config.implemented_prefix_ids OR $forum.type_config.closed_prefix_ids">
+		<div class="menu-row menu-row--separated">
+			{{ phrase('suggestion_status') }}:
+			<div class="u-inputSpacer">
+				<xf:select name="suggestion_state" value="{$filters.suggestion_state}">
+					<xf:option value="">{{ phrase('any') }}</xf:option>
+					<xf:option value="open">{{ phrase('open') }}</xf:option>
+					<xf:if is="$forum.type_config.implemented_prefix_ids">
+						<xf:option value="implemented">{{ phrase('implemented') }}</xf:option>
+					</xf:if>
+					<xf:if is="$forum.type_config.closed_prefix_ids">
+						<xf:option value="closed">{{ phrase('closed') }}</xf:option>
+					</xf:if>
+				</xf:select>
+			</div>
+		</div>
+	</xf:if>
+</xf:extension>
+
+<xf:extension id="before_date_limit">
+	<xf:if is="$xf.visitor.user_id">
+		<div class="menu-row menu-row--separated">
+			<xf:checkbox>
+				<xf:option name="your_votes" selected="{$filters.your_votes}" label="{{ phrase('only_show_suggestions_youve_voted_on') }}" />
+			</xf:checkbox>
+		</div>
+	</xf:if>
+</xf:extension>

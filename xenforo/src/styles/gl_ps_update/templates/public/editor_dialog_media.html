@@ -1,0 +1,27 @@
+<xf:title>{{ phrase('insert_media') }}</xf:title>
+
+<xf:head option="metaNoindex"><meta name="robots" content="noindex" /></xf:head>
+
+<form class="block" id="editor_media_form">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:textboxrow id="editor_media_url" type="url"
+				label="{{ phrase('enter_media_url') }}"/>
+
+			<xf:formrow
+				label="{{ phrase('approved_sites') }}"
+				hint="{{ phrase('you_may_insert_media_from_these_sources') }}">
+
+				<ul class="listInline listInline--comma u-smaller">
+					<xf:foreach loop="$sites" key="$siteId" value="$site" if="$site.supported">
+						<li><a href="{$site.site_url}" target="_blank">{$site.site_title}</a></li>
+					</xf:foreach>
+				</ul>
+				<div class="formRow-explain">
+					<a href="{{ link('help', {'page_name': 'bb-codes'}) }}#media" target="_blank">{{ phrase('help') }}</a>
+				</div>
+			</xf:formrow>
+		</div>
+		<xf:submitrow submit="{{ phrase('continue') }}" id="editor_media_submit" />
+	</div>
+</form>

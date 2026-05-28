@@ -1,0 +1,16 @@
+<xf:title>{{ phrase('resend_account_confirmation') }}</xf:title>
+
+<xf:form action="{$confirmUrl}" class="block" ajax="true" data-redirect="off" data-reset-complete="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:inforow rowtype="confirm">
+				{{ phrase('sure_you_want_to_resend_account_confirmation_email', {'email': $user.email|email_display}) }}
+			</xf:inforow>
+
+			<xf:if is="$needsCaptcha">
+				<xf:captcharow label="{{ phrase('verification') }}" force="true" context="xf_account_confirm_resend" />
+			</xf:if>
+		</div>
+		<xf:submitrow submit="{{ phrase('resend_email') }}" rowtype="simple" />
+	</div>
+</xf:form>

@@ -1,0 +1,10 @@
+<xf:form action="{{ link('members') }}" class="block" attributes="{{ widget_data($widget, true) }}">
+	<div class="block-container">
+		<h3 class="block-minorHeader">{$title}</h3>
+		<div class="block-body block-row">
+			<xf:textbox name="username" ac="single" data-autosubmit="true"
+				maxlength="{{ max_length($xf.visitor, 'username') }}"
+				placeholder="{{ phrase('name...') }}" />
+		</div>
+	</div>
+</xf:form>

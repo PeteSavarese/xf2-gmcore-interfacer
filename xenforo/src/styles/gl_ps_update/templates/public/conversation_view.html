@@ -1,0 +1,180 @@
+<xf:title page="{$page}">{$conversation.title}</xf:title>
+
+<xf:description meta="false">
+	<ul class="listInline listInline--bullet">
+		<li>
+			<xf:fa icon="fa-users" title="{{ phrase('participants')|for_attr }}" />
+			<span class="u-srOnly">{{ phrase('participants') }}</span>
+
+			<ul class="listInline listInline--selfInline listInline--comma">
+				<li><xf:username user="$conversation.Starter" defaultname="{$conversation.username}" title="{{ phrase('direct_message_starter') }}" href="" /></li><xf:trim>
+				</xf:trim><xf:foreach loop="$conversation.recipients" value="$recipient" if="{$recipient.user_id} != {$conversation.user_id} AND $i < 4" i="$i"><xf:trim>
+					<li><xf:username user="{$recipient}" defaultname="{{ phrase('unknown_member') }}" href="" /></li>
+				</xf:trim></xf:foreach>
+			</ul>
+			<xf:if is="$conversation.recipient_count > 5">
+				{{ phrase('ellipsis_and_x_more', {'count': ($conversation.recipient_count - 5)|number}) }}
+			</xf:if>
+		</li>
+		<li>
+			<xf:fa icon="fa-clock" title="{{ phrase('start_date')|for_attr }}" />
+			<span class="u-srOnly">{{ phrase('start_date') }}</span>
+
+			<a href="{{ link('direct-messages', $conversation) }}" class="u-concealed"><xf:date time="{$conversation.start_date}" /></a>
+		</li>
+	</ul>
+</xf:description>
+
+<xf:macro id="conversation_list_macros::conversation_page_options"
+	arg-conversation="{$conversation}" />
+
+<xf:breadcrumb href="{{ link('direct-messages') }}">{{ phrase('direct_messages') }}</xf:breadcrumb>
+
+<xf:sidebar key="conversationInfo">
+	<div class="block">
+		<div class="block-container">
+			<h3 class="block-minorHeader">{{ phrase('direct_message_info') }}</h3>
+			<div class="block-body block-row block-row--minor">
+				<dl class="pairs pairs--justified"><dt>{{ phrase('participants') }}</dt> <dd>{$conversation.recipient_count|number}</dd></dl>
+				<dl class="pairs pairs--justified"><dt>{{ phrase('replies') }}</dt> <dd>{$conversation.reply_count|number}</dd></dl>
+				<dl class="pairs pairs--justified"><dt>{{ phrase('last_reply_date') }}</dt> <dd><xf:date time="$conversation.last_message_date" /></dd></dl>
+				<dl class="pairs pairs--justified"><dt>{{ phrase('last_reply_from') }}</dt> <dd><xf:username user="$conversation.LastMessageUser" /></dd></dl>
+			</div>
+		</div>
+	</div>
+</xf:sidebar>
+
+<xf:sidebar key="conversationParticipants">
+	<div class="block">
+		<div class="block-container">
+			<h3 class="block-minorHeader">{{ phrase('direct_message_participants') }}</h3>
+			<ol class="block-body">
+				<xf:foreach loop="$recipients" value="$recipient">
+					<li class="block-row">
+						<div class="contentRow">
+							<xf:if is="$recipient.User">
+								<div class="contentRow-figure">
+									<xf:avatar user="$recipient.User" size="xs" />
+								</div>
+								<div class="contentRow-main">
+									<xf:username user="$recipient.User" rich="true" />
+									<div class="contentRow-minor"><xf:usertitle user="$recipient.User" /></div>
+								</div>
+							<xf:else />
+								<div class="contentRow-figure">
+									<xf:avatar user="{{ null }}" size="xs" />
+								</div>
+								<div class="contentRow-main">
+									{{ phrase('unknown_member') }}
+								</div>
+							</xf:if>
+						</div>
+					</li>
+				</xf:foreach>
+			</ol>
+			<xf:if is="$conversation.canInvite()">
+				<div class="block-footer">
+					<span class="block-footer-controls">
+						<a href="{{ link('direct-messages/invite', $conversation) }}" data-xf-click="overlay">{{ phrase('invite_more') }}</a>
+					</span>
+				</div>
+			</xf:if>
+		</div>
+	</div>
+</xf:sidebar>
+
+<div class="block block--messages">
+	<div class="block-outer">
+		<xf:pagenav
+			page="{$page}" perpage="{$perPage}" total="{{ $conversation.reply_count + 1 }}"
+			link="direct-messages" data="{$conversation}"
+			wrapperclass="block-outer-main" />
+		<div class="block-outer-opposite">
+			<div class="buttonGroup">
+				<xf:if is="$conversation.canEdit()">
+					<xf:button href="{{ link('direct-messages/edit', $conversation) }}" class="button--link"
+						icon="edit" overlay="true" />
+				</xf:if>
+				<xf:button href="{{ link('direct-messages/star', $conversation) }}" class="button--link"
+					data-xf-click="switch"
+					data-sk-star="{{ phrase('star') }}"
+					data-sk-unstar="{{ phrase('unstar') }}">
+					{{ {$userConv.is_starred} ? phrase('unstar') : phrase('star') }}
+				</xf:button>
+				<xf:button href="{{ link('direct-messages/mark-unread', $conversation) }}" class="button--link"
+					data-xf-click="switch"
+					data-sk-read="{{ phrase('mark_read') }}"
+					data-sk-unread="{{ phrase('mark_unread') }}">
+					{{ {$userConv.is_unread} ? phrase('mark_read') : phrase('mark_unread') }}
+				</xf:button>
+				<xf:button href="{{ link('direct-messages/leave', $conversation) }}" class="button--link" overlay="true">
+					{{ phrase('leave') }}
+				</xf:button>
+			</div>
+		</div>
+	</div>
+
+	<div class="block-container lbContainer"
+		data-xf-init="lightbox{{ $xf.options.selectQuotable ? ' select-to-quote' : '' }}"
+		data-message-selector=".js-message"
+		data-lb-id="conversation-{$conversation.conversation_id}"
+		data-lb-universal="{$xf.options.lightBoxUniversal}">
+
+		<div class="block-body js-replyNewMessageContainer">
+			<xf:foreach loop="$messages" value="$message">
+				<xf:macro id="conversation_message_macros::message"
+					arg-message="{$message}" arg-conversation="{$conversation}"
+					arg-lastRead="{$lastRead}" />
+			</xf:foreach>
+		</div>
+	</div>
+
+	<div class="block-outer block-outer--after">
+		<xf:pagenav
+			page="{$page}" perpage="{$perPage}" total="{{ $conversation.reply_count + 1 }}"
+			link="direct-messages" data="{$conversation}"
+			wrapperclass="block-outer-main" />
+		<xf:showignored wrapperclass="block-outer-opposite" />
+	</div>
+
+	<xf:if is="!$conversation.conversation_open">
+		<div class="block-outer block-outer--after">
+			<dl class="blockStatus">
+				<dt>{{ phrase('status') }}</dt>
+				<dd class="blockStatus-message blockStatus-message--locked">
+					{{ phrase('this_direct_message_is_closed_for_new_replies') }}
+				</dd>
+			</dl>
+		</div>
+	</xf:if>
+</div>
+
+<xf:if is="$conversation.canReply()">
+	<xf:form action="{{ link('direct-messages/add-reply', $conversation) }}"
+		ajax="true"
+		draft="{{ link('direct-messages/draft', $conversation) }}"
+		class="block js-quickReply"
+		data-xf-init="attachment-manager quick-reply">
+
+		<xf:js src="xf/action.js, xf/message.js" min="1" />
+		<xf:set var="$lastMessage" value="{$messages|last}" />
+
+		<div class="block-container">
+			<div class="block-body">
+				<xf:macro id="quick_reply_macros::body"
+					arg-message="{$conversation.draft_reply.message}"
+					arg-attachmentData="{$attachmentData}"
+					arg-forceHash="{$conversation.draft_reply.attachment_hash}"
+					arg-messageSelector=".js-message"
+					arg-supportsMultiQuote="{$xf.options.multiQuote}"
+					arg-multiQuoteHref="{{ link('direct-messages/multi-quote', $conversation) }}"
+					arg-multiQuoteStorageKey="multiQuoteConversation"
+					arg-lastItemId="{$lastMessage.message_id}"
+					arg-lastDate="{$lastMessage.message_date}"
+					arg-previewUrl="{{ link('direct-messages/reply-preview', $conversation) }}" />
+			</div>
+		</div>
+	</xf:form>
+</xf:if>
+
+<xf:widgetpos id="conversation_view_sidebar" context-conversation="{$conversation}" position="sidebar" />

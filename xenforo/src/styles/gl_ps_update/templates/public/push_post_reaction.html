@@ -1,0 +1,8 @@
+{{ phrase('x_reacted_to_your_post_in_the_thread_y', {
+	'name': $user.username ?: $alert.username,
+	'posterParams': '',
+	'reaction': reaction_title($extra.reaction_id),
+	'title': prefix('thread', $content.Thread, 'plain') . $content.Thread.title
+}) }}
+<push:url>{{ link('canonical:posts', $content) }}</push:url>
+<push:tag>post_reaction_{$content.post_id}_{$extra.reaction_id}</push:tag>

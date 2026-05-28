@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<widget_definitions>
+  <widget_definition definition_id="shoutbox_full" definition_class="Shoutbox\Widget\Shoutbox"/>
+</widget_definitions>

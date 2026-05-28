@@ -1,0 +1,2 @@
+
+        Can read shoutbox contents

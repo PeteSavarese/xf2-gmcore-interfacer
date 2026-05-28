@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html id="XF" lang="{$xf.language.language_code}" dir="{$xf.language.text_direction}"
+	data-app="public"
+	{{ ($xf.style.isVariationsEnabled() && $xf.visitor.style_variation) ? 'data-variation="' . $xf.visitor.style_variation . '"' : '' }}
+	{{ ($xf.style.isVariationsEnabled() && $xf.visitor.style_variation) ? 'data-color-scheme="' . property_variation('styleType', $xf.visitor.style_variation) . '"' : '' }}
+	data-template="{$template}"
+	data-container-key="{$containerKey}"
+	data-content-key="{$contentKey}"
+	data-logged-in="{{ $xf.visitor.user_id ? 'true' : 'false' }}"
+	data-cookie-prefix="{$xf.cookie.prefix}"
+	class="offline-container {{ $template ? 'template-' . $template : '' }}">
+
+	<head>
+		<meta charset="utf-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+		<title><xf:title formatter="%s | %s" fallback="{$xf.options.boardTitle}" page="{$pageNumber}" /></title>
+		<xf:set var="$description"><xf:description /></xf:set>
+
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Unbounded:wght@500;700&display=swap" rel="stylesheet">
+
+		<xf:if is="$xf.style.isVariationsEnabled()">
+			<xf:if is="$xf.visitor.style_variation">
+				<meta name="theme-color" content="{{ parse_less_color(property_variation('metaThemeColor', $xf.visitor.style_variation)) }}" />
+			<xf:else />
+				<xf:if is="$xf.style.hasAlternateStyleTypeVariation()">
+					<meta name="theme-color" media="(prefers-color-scheme: {{ $xf.style.getDefaultStyleType() }})" content="{{ parse_less_color(property_variation('metaThemeColor', 'default')) }}" />
+					<meta name="theme-color" media="(prefers-color-scheme: {{ $xf.style.getAlternateStyleType() }})" content="{{ parse_less_color(property_variation('metaThemeColor', $xf.style.getAlternateStyleTypeVariation())) }}" />
+				<xf:else />
+					<meta name="theme-color" content="{{ parse_less_color(property_variation('metaThemeColor', 'default')) }}" />
+				</xf:if>
+			</xf:if>
+		<xf:else />
+			<meta name="theme-color" content="{{ parse_less_color(property_variation('metaThemeColor', 'default')) }}" />
+		</xf:if>
+
+		<xf:foreach loop="$head" value="$headTag">
+			{$headTag}
+		</xf:foreach>
+
+		<xf:if is="$css">
+			<style>
+				{$css|raw}
+			</style>
+		</xf:if>
+	</head>
+
+	<body data-template="{$template}" class="offline-body">
+		<div class="offline-card">
+			<div class="offline-card-header">
+				<h1 class="p-offline-header"><xf:h1 fallback="{$xf.options.boardTitle}" /></h1>
+			</div>
+			<div class="offline-card-content">
+				{$content|raw}
+			</div>
+		</div>
+	</body>
+</html>

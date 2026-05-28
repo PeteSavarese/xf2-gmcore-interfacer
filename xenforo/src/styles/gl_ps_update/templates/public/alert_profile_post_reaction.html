@@ -1,0 +1,14 @@
+<xf:if is="$xf.visitor.user_id == $content.ProfileUser.user_id">
+	{{ phrase('x_reacted_to_your_status', {
+		'name': username_link($user, false, {'defaultname': $alert.username}),
+		'reaction': alert_reaction($extra.reaction_id)|preescaped,
+		'status_attributes': 'href="' . link('profile-posts', $content) . '" class="fauxBlockLink-blockLink"'
+	}) }}
+<xf:else />
+	{{ phrase('x_reacted_to_your_post_on_ys_profile', {
+		'name': username_link($user, false, {'defaultname': $alert.username}),
+		'post_attributes': 'href="' . link('profile-posts', $content) . '" class="fauxBlockLink-blockLink"',
+		'reaction': alert_reaction($extra.reaction_id)|preescaped,
+		'profile': $content.ProfileUser.username
+	}) }}
+</xf:if>

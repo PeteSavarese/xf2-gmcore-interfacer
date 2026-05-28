@@ -1,0 +1,68 @@
+
+
+<xf:if is="$context == 'setup'">
+	<xf:inforow>
+		{{ phrase('two_step_authy_setup_info') }}
+	</xf:inforow>
+
+	<xf:textboxrow name="code" type="number" autofocus="autofocus" label="{{ phrase('verification_code') }}" />
+<xf:else />
+	<xf:inforow rowclass="js-authyLoginApprovalRow">
+		{{ phrase('two_step_authy_login_info', {'logout': link('logout', null, {'t': csrf_token()})}) }}
+
+		<xf:hiddenval name="uuid" value="{$uuid}" />
+	</xf:inforow>
+
+	<xf:js>
+		XF.extendObject(XF.phrases, {
+			authy_no_uuid: "{{ phrase('authy_no_uuid')|escape('js') }}",
+			authy_no_approval_request: "{{ phrase('authy_no_approval_request')|escape('js') }}",
+			authy_denied: "{{ phrase('authy_denied')|escape('js') }}",
+			authy_success: "{{ phrase('authy_success')|escape('js') }}"
+		});
+	</xf:js>
+
+	<xf:js>
+		const form = document.querySelector('.js-authyLoginApprovalRow').closest('form')
+		const formData = XF.getDefaultFormData(form)
+
+		const formSubmitRow = form.querySelector('.formSubmitRow')
+		formSubmitRow.style.display = 'none'
+
+		const interval = setInterval(() =>
+		{
+			XF.ajax('post', form.getAttribute('action'), formData, (data) =>
+			{
+				if (data.errors)
+				{
+					const error = data.errors[0]
+
+					switch (error)
+					{
+						case 'authy_no_uuid':
+						case 'authy_no_approval_request':
+							clearInterval(interval)
+							XF.alert(XF.phrase(error, null, 'An unexpected error occurred.'))
+							break
+
+						case 'authy_denied':
+							clearInterval(interval)
+							XF.flashMessage(XF.phrase(error), 3000, () =>
+							{
+								XF.redirect(XF.canonicalizeUrl(''))
+							})
+							break
+					}
+				}
+				else if (data.redirect)
+				{
+					clearInterval(interval)
+					XF.flashMessage(XF.phrase('authy_success'), 3000, () =>
+					{
+						XF.redirect(data.redirect)
+					})
+				}
+			}, { skipDefault: true })
+		}, 1000)
+	</xf:js>
+</xf:if>

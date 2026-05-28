@@ -1,0 +1,25 @@
+<xf:if is="!$newUnreadStatus">
+	<xf:title>{{ phrase('mark_alert_read') }}</xf:title>
+<xf:else />
+	<xf:title>{{ phrase('mark_alert_unread') }}</xf:title>
+</xf:if>
+
+<xf:wrap template="account_wrapper" />
+
+<xf:form action="{{ link('account/alert-toggle', null, {'alert_id': $alert.alert_id}) }}" ajax="true" class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:inforow rowtype="confirm">
+				<xf:if is="!$newUnreadStatus">
+					{{ phrase('please_confirm_that_you_want_to_mark_this_alert_read') }}
+				<xf:else />
+					{{ phrase('please_confirm_that_you_want_to_mark_this_alert_unread') }}
+				</xf:if>
+			</xf:inforow>
+		</div>
+		<xf:submitrow submit="{{ !$newUnreadStatus ? phrase('mark_read') : phrase('mark_unread') }}" rowtype="simple" />
+	</div>
+
+	<xf:redirect url="{$redirect}" />
+	<xf:hiddenval name="unread">{{ $newUnreadStatus ? 1 : 0 }}</xf:hiddenval>
+</xf:form>

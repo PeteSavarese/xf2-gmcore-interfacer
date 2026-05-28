@@ -1,0 +1,2 @@
+
+        Discord channel ID where shoutbox messages should be sent. Enable Developer Mode in Discord, right-click the channel → Copy Channel ID

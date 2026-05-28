@@ -1,0 +1,26 @@
+<div class="block"{{ widget_data($widget) }}>
+	<div class="block-container">
+		<h3 class="block-minorHeader">{$title}</h3>
+		<div class="block-body block-row">
+			<dl class="pairs pairs--justified count--threads">
+				<dt>{{ phrase('threads') }}</dt>
+				<dd>{$forumStatistics.threads|number}</dd>
+			</dl>
+
+			<dl class="pairs pairs--justified count--messages">
+				<dt>{{ phrase('messages') }}</dt>
+				<dd>{$forumStatistics.messages|number}</dd>
+			</dl>
+
+			<dl class="pairs pairs--justified count--users">
+				<dt>{{ phrase('members') }}</dt>
+				<dd>{$forumStatistics.users|number}</dd>
+			</dl>
+
+			<dl class="pairs pairs--justified">
+				<dt>{{ phrase('latest_member') }}</dt>
+				<dd><xf:username user="{$forumStatistics.latestUser}" /></dd>
+			</dl>
+		</div>
+	</div>
+</div>

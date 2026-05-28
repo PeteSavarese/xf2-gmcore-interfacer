@@ -1,0 +1,31 @@
+<xf:title>{{ phrase('search') }}</xf:title>
+
+<xf:head option="robots"><meta name="robots" content="noindex" /></xf:head>
+
+<xf:if is="$type">
+	<xf:breadcrumb href="{{ link('full:search') }}">{{ phrase('search') }}</xf:breadcrumb>
+</xf:if>
+
+<xf:form action="{{ link('search/search') }}" class="block" ajax="true">
+	<div class="block-container">
+		<h2 class="block-tabHeader tabs hScroller" data-xf-init="h-scroller">
+			<span class="hScroller-scroll">
+				<a href="{{ link('search') }}" class="tabs-tab{{ !$type ? ' is-active' : '' }}">{{ phrase('search_everything') }}</a>
+				<xf:foreach loop="$tabs" key="$tabType" value="$tab">
+					<a href="{{ link('search', null, {'type': $tabType}) }}" class="tabs-tab{{ $type == $tabType ? ' is-active' : '' }}">{$tab.title}</a>
+				</xf:foreach>
+				<xf:if is="$xf.options.enableTagging">
+					<a href="{{ link('tags') }}" class="tabs-tab">{{ phrase('search_tags') }}</a>
+				</xf:if>
+			</span>
+		</h2>
+
+		<div class="block-body">
+			<xf:include template="{$formTemplateName}" />
+		</div>
+
+		<xf:submitrow icon="search" sticky="true" />
+	</div>
+
+	<xf:hiddenval name="search_type">{$type}</xf:hiddenval>
+</xf:form>

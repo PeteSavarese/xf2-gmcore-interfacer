@@ -1,0 +1,34 @@
+<xf:title>{{ phrase('inline_moderation_merge_posts') }}</xf:title>
+
+<xf:form action="{{ link('inline-mod') }}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:inforow rowtype="confirm">{{ phrase('you_sure_you_want_to_merge_x_posts_together', {'count': $total}) }}</xf:inforow>
+
+			<xf:selectrow name="target_post_id" value="{$first.post_id}"
+				label="{{ phrase('merge_into_post') }}">
+
+				<xf:foreach loop="$posts" key="$postId" value="$post">
+					<xf:option value="{$postId}">{{ $post.User.username ?: $post.username }} &middot; {{ date_time($post.post_date) }}</xf:option>
+				</xf:foreach>
+			</xf:selectrow>
+
+			<xf:textarearow name="message" value="{$message}" rows="5" autosize="true"
+				label="{{ phrase('preview') }}"
+				maxlength="{$xf.options.messageMaxLength}" />
+
+			<xf:macro id="helper_action::author_alert" arg-selected="{{ $total == 1 }}" />
+		</div>
+		<xf:submitrow icon="merge" />
+	</div>
+
+	<xf:foreach loop="$posts" value="$post">
+		<xf:hiddenval name="ids[]">{$post.post_id}</xf:hiddenval>
+	</xf:foreach>
+
+	<xf:hiddenval name="type">post</xf:hiddenval>
+	<xf:hiddenval name="action">merge</xf:hiddenval>
+	<xf:hiddenval name="confirmed">1</xf:hiddenval>
+
+	<xf:redirect url="{$redirect}" />
+</xf:form>

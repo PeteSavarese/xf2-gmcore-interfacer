@@ -1,0 +1,3 @@
+[submodule "gmcore-pointshop"]
+	path = gmcore-pointshop
+	url = https://github.com/ORGANIZATION/gmcore-pointshop.git

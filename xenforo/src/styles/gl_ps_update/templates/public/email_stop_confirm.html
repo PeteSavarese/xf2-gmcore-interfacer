@@ -1,0 +1,27 @@
+<xf:title>{{ phrase('stop_email_notifications') }}</xf:title>
+
+<xf:head option="robots"><meta name="robots" content="noindex" /></xf:head>
+
+<xf:form action="{{ link('email-stop', $user) }}" class="block">
+	<div class="block-container">
+		<xf:if is="$actions">
+			<div class="block-body">
+				<xf:radiorow name="stop" value="{{ $defaultAction ?: 'all' }}" label="{{ phrase('confirm_action') }}">
+					<xf:options source="$actions" />
+					<xf:option value="all">{{ phrase('stop_all_emails_from_x', {'title': $xf.options.boardTitle}) }}</xf:option>
+				</xf:radiorow>
+			</div>
+			<xf:submitrow submit="{{ phrase('stop_emails') }}" />
+		<xf:else />
+			<div class="block-body">
+				<xf:inforow rowtype="confirm">
+					{{ phrase('you_sure_you_want_to_stop_all_emails_from_x', {'board_title': $xf.options.boardTitle}) }}
+				</xf:inforow>
+			</div>
+			<xf:submitrow rowtype="simple" submit="{{ phrase('stop_emails') }}" icon="notificationsOff" />
+			<xf:hiddenval name="stop">all</xf:hiddenval>
+		</xf:if>
+	</div>
+
+	<xf:hiddenval name="c">{$confirmKey}</xf:hiddenval>
+</xf:form>

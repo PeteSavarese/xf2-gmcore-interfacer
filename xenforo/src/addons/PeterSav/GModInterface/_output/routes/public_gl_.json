@@ -1,0 +1,11 @@
+{
+    "route_type": "public",
+    "route_prefix": "gl",
+    "sub_name": "",
+    "format": ":int<message_id>/",
+    "build_class": "",
+    "build_method": "",
+    "controller": "PeterSav\\GModInterface:Index",
+    "context": "ahgServers",
+    "action_prefix": ""
+}

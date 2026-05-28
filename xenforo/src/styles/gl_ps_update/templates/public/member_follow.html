@@ -1,0 +1,21 @@
+<xf:title>{{ $isFollowing ? phrase('stop_following_x', {'name': $user.username}) : phrase('follow_x', {'name': $user.username}) }}</xf:title>
+
+<xf:breadcrumb href="{{ link('members', $user) }}">{$user.username}</xf:breadcrumb>
+
+<xf:form action="{{ link('members/follow', $user) }}" ajax="true" class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:inforow rowtype="confirm">
+				<xf:if is="$isFollowing">
+					{{ phrase('please_confirm_that_you_wish_to_stop_following_this_user:') }}
+				<xf:else />
+					{{ phrase('please_confirm_that_you_wish_to_start_following_this_user:') }}
+				</xf:if>
+				<strong><a href="{{ link('members', $user) }}">{$user.username}</a></strong>
+			</xf:inforow>
+		</div>
+		<xf:submitrow submit="{{ $isFollowing ? phrase('unfollow') : phrase('follow') }}" rowtype="simple" />
+	</div>
+
+	<xf:redirect />
+</xf:form>

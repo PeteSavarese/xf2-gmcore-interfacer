@@ -1,0 +1,10 @@
+<xf:macro id="prism_macros::setup" />
+
+<div class="bbCodeBlock bbCodeBlock--screenLimited bbCodeBlock--code">
+	<div class="bbCodeBlock-title">
+		{{ $config.phrase ?: phrase('code') }}{$xf.language.label_separator}
+	</div>
+	<div class="bbCodeBlock-content" dir="ltr">
+		<pre class="bbCodeCode" dir="ltr" data-xf-init="code-block" data-lang="{{ $language ?: '' }}"><code>{$content}</code></pre>
+	</div>
+</div>

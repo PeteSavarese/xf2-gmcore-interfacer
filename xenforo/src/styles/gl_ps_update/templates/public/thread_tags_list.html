@@ -1,0 +1,4 @@
+<xf:macro id="tag_macros::list"
+	arg-tags="{$thread.tags}"
+	arg-tagList="tagList--thread-{$thread.thread_id}"
+	arg-editLink="{{ $thread.canEditTags() ? link('threads/tags', $thread) : '' }}" />

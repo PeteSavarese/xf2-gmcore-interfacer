@@ -1,0 +1,85 @@
+<xf:title>{{ phrase('avatar') }}</xf:title>
+
+<xf:css src="account_avatar.less" />
+<xf:js src="xf/crop_box.js, xf/avatar.js" min="1" />
+
+<xf:wrap template="account_wrapper" />
+
+<xf:form action="{{ link('account/avatar') }}" upload="true" ajax="true" class="block" data-xf-init="avatar-upload">
+	<div class="block-container">
+		<ul class="block-body">
+			<li class="block-row block-row--separated avatarControl">
+				<div class="avatarControl-preview">
+					<div class="avatarCropper" style="width: {$maxSize}px; height: {$maxSize}px;">
+						<xf:avatar user="$xf.visitor" size="o"
+							href=""
+							style="{$maxDimension}: {$maxSize}px; left: -{$x}px; top: -{$y}px;"
+							data-x="{$x}" data-y="{$y}" data-size="{$maxSize}"
+							class="js-avatar js-avatarCropper"
+							innerclass="js-croppedAvatar"
+							forcetype="custom"
+							data-xf-init="avatar-cropper" />
+						<xf:hiddenval name="avatar_crop_x" class="js-avatarX">{$x}</xf:hiddenval>
+						<xf:hiddenval name="avatar_crop_y" class="js-avatarY">{$y}</xf:hiddenval>
+					</div>
+				</div>
+				<div class="avatarControl-inputs">
+					<xf:radio name="use_custom" id="useCustom">
+						<xf:option value="1" selected="!{$xf.visitor.gravatar}"
+							label="{{ phrase('use_custom_avatar') }}"
+							hint="{{ phrase('drag_this_image_to_crop_it_then_click_update_avatar_to_confirm') }}">
+							<xf:dependent>
+								<label>{{ phrase('upload_new_custom_avatar:') }}</label>
+								<xf:upload name="upload" class="js-uploadAvatar" accept=".gif,.jpeg,.jpg,.jpe,.png,.webp" />
+								<dfn class="inputChoices-explain">
+									{{ phrase('it_is_recommended_that_you_use_image_that_is_at_least_x_pixels', {
+									'width': 400,
+									'height': 400
+									}) }}
+								</dfn>
+							</xf:dependent>
+						</xf:option>
+					</xf:radio>
+				</div>
+			</li>
+			<xf:if is="$xf.options.gravatarEnable">
+				<li class="block-row block-row--separated avatarControl">
+					<div class="avatarControl-preview">
+						<span class="avatar avatar--m">
+							<img src="{{ gravatar_url($xf.visitor, 'm') }}" class="js-gravatarPreview" />
+						</span>
+					</div>
+					<div class="avatarControl-inputs">
+						<xf:radio name="use_custom">
+							<xf:option value="0" selected="{$xf.visitor.gravatar}"
+								label="{{ phrase('use_gravatar') }}">
+								<xf:dependent>
+									<div class="inputGroup">
+										<xf:textbox name="gravatar" value="{{ $xf.visitor.gravatar ?: $xf.visitor.email }}"
+											type="email" autocomplete="email"
+											maxlength="{{ max_length($xf.visitor, 'gravatar') }}"
+											class="js-gravatar" />
+										<div class="inputGroup-text u-jsOnly">
+											<xf:button type="submit" name="test_gravatar" value="1">
+												{{ phrase('test') }}
+											</xf:button>
+										</div>
+									</div>
+									<dfn class="inputChoices-explain">
+										{{ phrase('enter_email_address_of_gravatar_you_want_to_use') }}
+										<div><a href="https://gravatar.com" rel="nofollow" target="_blank">{{ phrase('whats_gravatar') }}</a></div>
+									</dfn>
+								</xf:dependent>
+							</xf:option>
+						</xf:radio>
+					</div>
+				</li>
+			</xf:if>
+		</ul>
+		<xf:submitrow submit="{{ phrase('okay') }}" rowtype="simple" class="js-overlayClose">
+			<xf:html>
+				<xf:button type="submit" name="delete_avatar" value="1" class="js-deleteAvatar" icon="delete" />
+			</xf:html>
+		</xf:submitrow>
+	</div>
+</xf:form>

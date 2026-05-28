@@ -1,0 +1,9 @@
+{
+    "event_id": "entity_post_save",
+    "execute_order": 10,
+    "callback_class": "PeterSav\\GModInterface\\Listener\\DiscordSync",
+    "callback_method": "userEntityPostSave",
+    "active": true,
+    "hint": "XF\\Entity\\User",
+    "description": "Sync Discord roles when a user's primary or secondary groups change."
+}

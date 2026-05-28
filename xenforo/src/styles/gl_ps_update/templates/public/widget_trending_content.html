@@ -1,0 +1,43 @@
+<xf:if is="$content is not empty">
+	<xf:if is="$style == 'simple'">
+		<div class="block" {{ widget_data($widget) }}>
+			<div class="block-container">
+				<h3 class="block-minorHeader">{{ $title ?: phrase('trending_content') }}</h3>
+
+				<ul class="block-body">
+					<xf:foreach loop="$content" value="$item">
+						<li class="block-row">
+							{{ $result.renderContent($item, 'simple', $snippetLength)|raw }}
+						</li>
+					</xf:foreach>
+				</ul>
+			</div>
+		</div>
+	<xf:elseif is="$style == 'carousel'" />
+		<xf:macro name="carousel_macros::setup" />
+
+		<div class="carousel" {{ widget_data($widget) }}>
+			<ul class="carousel-body carousel-body--show2" data-xf-init="carousel">
+				<xf:foreach loop="$content" value="$item">
+					<li class="carousel-container">
+						<div class="carousel-item">
+							{{ $result.renderContent($item, 'carousel', $snippetLength)|raw }}
+						</div>
+					</li>
+				</xf:foreach>
+			</ul>
+		</div>
+	<xf:else />
+		<xf:css src="message.less" />
+
+		<div class="block block--articles block--messages block--previews" {{ widget_data($widget) }}>
+			<div class="block-container">
+				<div class="block-body">
+					<xf:foreach loop="$content" value="$item">
+						{{ $result.renderContent($item, 'article', $snippetLength)|raw }}
+					</xf:foreach>
+				</div>
+			</div>
+		</div>
+	</xf:if>
+</xf:if>

@@ -1,0 +1,120 @@
+<xf:macro id="article" extends="trending_content_item::article"
+	arg-result="!"
+	arg-content="!"
+	arg-snippetLength="{{ 0 }}">
+
+	<xf:extension id="image">
+		<xf:extensionparent />
+
+		<xf:if is="$content.getCoverImage()">
+			<a href="{{ $content.getContentUrl() }}" class="articlePreview-image" tabindex="-1">
+				<img src="{{ $content.getCoverImage() }}" alt="{{ $content.getContentTitle() }}" loading="lazy" />
+			</a>
+		</xf:if>
+	</xf:extension>
+
+	<xf:extension id="snippet">
+		<xf:extensionparent />
+
+		<div class="bbWrapper">
+			{{ snippet($content.FirstPost.message, $snippetLength, {'stripQuote': true}) }}
+		</div>
+	</xf:extension>
+
+	<xf:extension id="links">
+		<xf:extensionparent />
+		<a href="{{ $content.getContentUrl() }}">{{ phrase('view_full_post') }} &raquo;</a>
+	</xf:extension>
+
+	<xf:extension id="meta">
+		<xf:extensionparent />
+
+		<xf:set var="$username"><xf:username user="{$content.User}" defaultname="{$content.username}" class="u-concealed" /></xf:set>
+		<xf:set var="$post" value="{$content.FirstPost}" />
+
+		<li><xf:avatar user="{$content.User}" size="xxs" defaultname="{$content.username}"/></li>
+		<li class="articlePreview-by">{{ phrase('by_user_x', {'name': $username}) }}</li>
+		<li><a href="{{ $content.getContentUrl() }}" class="u-concealed" rel="nofollow"><xf:date time="{{ $content.getContentDate() }}"/></a></li>
+
+		<li>
+			<a href="{{ link('threads/post', $content, {'post_id': $post.post_id}) }}" class="u-concealed" rel="nofollow"
+				aria-label="{{ phrase('share')|for_attr }}"
+				data-xf-init="share-tooltip" data-href="{{ link('posts/share', $post) }}">
+
+				<xf:fa icon="fa-share-alt" />
+			</a>
+		</li>
+
+		<xf:if is="$xf.options.embedCodeShare AND method_exists($post, 'getEmbedCodeHtml')">
+			<li class="u-hidden js-embedCopy">
+				<xf:macro id="share_page_macros::share_clipboard_text"
+					arg-class="u-concealed"
+					arg-text="{$content.getEmbedCodeHtml()}"
+					arg-successText="{{ phrase('embed_code_html_copied_to_clipboard') }}" />
+			</li>
+		</xf:if>
+
+		<xf:if is="$content.reply_count">
+			<li class="articlePreview-replies">
+				<a href="{{ $content.getContentUrl() }}" title="{{ phrase('replies:')|for_attr }} {$content.reply_count|number}">
+					<xf:fa icon="fa-comment" class="u-spaceAfter" /><span class="articlePreview-repliesLabel">{{ phrase('replies:') }} </span>{$content.reply_count|number}
+				</a>
+			</li>
+		</xf:if>
+	</xf:extension>
+</xf:macro>
+
+<xf:macro id="simple" extends="trending_content_item::simple"
+	arg-result="!"
+	arg-content="!"
+	arg-snippetLength="{{ 0 }}">
+
+	<xf:extension id="image">
+		<xf:extensionparent />
+		<xf:avatar user="$content.User" size="xxs" defaultname="{$content.username}" />
+	</xf:extension>
+
+	<xf:extension id="meta">
+		<xf:extensionparent />
+
+		<li>{{ $content.User.username ?: $content.username }}</li>
+		<li><xf:date time="{{ $content.getContentDate() }}" /></li>
+	</xf:extension>
+
+	<xf:extension id="extra">
+		<xf:extensionparent />
+
+		<div class="contentRow-minor contentRow-minor--hideLinks">
+			{{ phrase('replies:') }} {$content.reply_count|number_short}
+		</div>
+	</xf:extension>
+</xf:macro>
+
+<xf:macro id="carousel" extends="trending_content_item::carousel"
+	arg-result="!"
+	arg-content="!"
+	arg-snippetLength="{{ 0 }}">
+
+	<xf:extension id="image">
+		<xf:extensionparent />
+		<xf:avatar user="$content.User" size="m" defaultname="{$content.username}" notooltip="true" />
+	</xf:extension>
+
+	<xf:extension id="snippet">
+		<xf:extensionparent />
+
+		<xf:if is="$snippetLength">
+			{{ snippet($content.FirstPost.message, $snippetLength, {'stripQuote': true}) }}
+		<xf:else />
+			{{ snippet($content.FirstPost.message, max_length($content.FirstPost, 'message'), {'stripQuote': true}) }}
+		</xf:if>
+	</xf:extension>
+
+	<xf:extension id="meta">
+		<xf:extensionparent />
+
+		<li><xf:username user="{$content.User}" defaultname="{$content.username}" /></li>
+		<li><xf:date time="{{ $content.getContentDate() }}" /></li>
+		<li>{{ phrase('replies:') }} {$content.reply_count|number}</li>
+	</xf:extension>
+</xf:macro>

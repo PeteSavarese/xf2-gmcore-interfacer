@@ -1,0 +1,81 @@
+<xf:if is="$search.search_query">
+	<xf:title page="{$page}">{{ phrase('search_results_for_query:') }} {$search.search_query}</xf:title>
+	<xf:h1>{{ phrase('search_results_for_query:') }} <a href="{{ link('search', $search, {'searchform': '1'}) }}"><em>{$search.search_query}</em></a></xf:h1>
+<xf:else />
+	<xf:title page="{$page}">{{ phrase('search_results') }}</xf:title>
+</xf:if>
+
+<xf:css src="search_results.less" />
+
+<xf:breadcrumb href="{{ link('full:search') }}">{{ phrase('search') }}</xf:breadcrumb>
+
+<xf:head option="robots"><meta name="robots" content="noindex" /></xf:head>
+
+<xf:if is="$activeModType">
+	<xf:js src="xf/inline_mod.js" min="1" />
+</xf:if>
+
+<div class="block" data-xf-init="{{ $activeModType ? 'inline-mod' : '' }}" data-type="{$activeModType}" data-href="{{ link('inline-mod') }}">
+	<xf:if is="$search.warnings">
+		<div class="block-outer">
+			<ol class="listPlain blockMessage blockMessage--warning blockMessage--close">
+				<xf:foreach loop="$search.warnings" value="$warning">
+					<li>{$warning}</li>
+				</xf:foreach>
+			</ol>
+		</div>
+	</xf:if>
+	<xf:if is="$modTypes">
+		<div class="block-outer">
+			<div class="block-outer-opposite">
+				<div class="buttonGroup">
+					<xf:if is="$activeModType">
+						<xf:macro id="inline_mod_macros::button" />
+					</xf:if>
+					<div class="buttonGroup-buttonWrapper">
+						<xf:button class="button--link menuTrigger" data-xf-click="menu" aria-expanded="false" aria-haspopup="true">{{ phrase('enable_moderation') }}</xf:button>
+						<div class="menu" data-menu="menu" aria-hidden="true">
+							<div class="menu-content">
+								<h3 class="menu-header">{{ phrase('enable_moderation') }}</h3>
+								<xf:foreach loop="$modTypes" key="$type" value="$text">
+									<a href="{{ link('search', $search, {'mod': $type,  'page': ($page > 1 ? $page : '')}) }}" class="menu-linkRow {{ $activeModType == $type ? 'is-selected' : '' }}">{$text}</a>
+								</xf:foreach>
+								<xf:if is="$activeModType">
+									<hr class="menu-separator" />
+									<a href="{{ link('search', $search, {'page': ($page > 1 ? $page : '')}) }}" class="menu-linkRow">{{ phrase('disable') }}</a>
+								</xf:if>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</xf:if>
+
+	<div class="block-container">
+		<ol class="block-body">
+			<xf:foreach loop="$results" value="$result">
+				{{ $result.render({'mod': $activeModType})|raw }}
+			</xf:foreach>
+		</ol>
+		<xf:if is="{$getOlderResultsDate}">
+			<div class="block-footer">
+				<span class="block-footer-controls"><xf:button href="{{ link('search/older', $search, {'before': $getOlderResultsDate}) }}" class="button--link">
+					{{ phrase('view_older_results') }}
+				</xf:button></span>
+			</div>
+		</xf:if>
+	</div>
+
+	<div class="block-outer block-outer--after">
+		<xf:pagenav
+			page="{$page}" perpage="{$perPage}" total="{$search.result_count}"
+			link="search" data="{$search}" params="{{ {'mod': $activeModType} }}"
+			wrapperclass="block-outer-main" />
+		<xf:showignored wrapperclass="block-outer-opposite" />
+	</div>
+</div>
+
+<xf:if is="$activeModType">
+	<xf:js src="xf/inline_mod.js" min="1" />
+</xf:if>

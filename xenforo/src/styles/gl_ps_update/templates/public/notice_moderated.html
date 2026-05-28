@@ -1,0 +1,4 @@
+{{ phrase('your_account_is_currently_awaiting_approval_by_administrator') }}
+<xf:if is="$xf.session.hasPreRegActionPending">
+	{{ phrase('once_your_registration_has_been_completed_your_content_will_be_posted') }}
+</xf:if>

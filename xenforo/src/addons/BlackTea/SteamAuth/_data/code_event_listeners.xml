@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<code_event_listeners>
+  <listener event_id="navigation_setup" execute_order="10" callback_class="BlackTea\SteamAuth\Listener\NavigationSetup" callback_method="run" active="1"/>
+  <listener event_id="notices_setup" execute_order="10" callback_class="BlackTea\SteamAuth\Listener\NoticeSetup" callback_method="run" active="1"/>
+  <listener event_id="user_delete_clean_init" execute_order="10" callback_class="BlackTea\SteamAuth\Listener\UserDeleteClean" callback_method="run" active="1"/>
+</code_event_listeners>

@@ -1,0 +1,16 @@
+<xf:head option="metaNoindex"><meta name="robots" content="noindex" /></xf:head>
+
+<xf:if is="$loadMore">
+	<div class="message-responseRow js-commentLoader">
+		<a href="{{ link('profile-posts/load-previous', $profilePost, {'before': $firstCommentDate}) }}"
+			data-xf-click="comment-loader"
+			data-container=".js-commentLoader"
+			rel="nofollow">{{ phrase('view_previous_comments...') }}</a>
+	</div>
+</xf:if>
+
+<xf:foreach loop="$comments" value="$comment">
+	<xf:macro id="profile_post_macros::comment"
+		arg-comment="{$comment}"
+		arg-profilePost="{$profilePost}" />
+</xf:foreach>

@@ -1,0 +1,4 @@
+{{ phrase('x_marked_your_answer_to_question_y_as_a_solution', {
+	'name': username_link($user, false, { 'defaultname': $alert.username }),
+	'title': '<a href="' . link('posts', $content) . '" class="fauxBlockLink-blockLink">' . prefix('thread', $content.Thread) . $content.Thread.title . '</a>'
+}) }}

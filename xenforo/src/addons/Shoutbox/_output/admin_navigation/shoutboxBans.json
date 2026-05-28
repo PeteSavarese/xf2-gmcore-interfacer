@@ -1,0 +1,11 @@
+{
+    "parent_navigation_id": "",
+    "display_order": 5,
+    "link": "",
+    "icon": "fa-comment-slash",
+    "admin_permission_id": "ban",
+    "debug_only": false,
+    "development_only": false,
+    "super_admin_only": false,
+    "hide_no_children": false
+}

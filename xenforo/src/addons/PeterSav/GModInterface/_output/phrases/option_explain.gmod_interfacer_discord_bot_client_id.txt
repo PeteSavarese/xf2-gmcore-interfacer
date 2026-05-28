@@ -1,0 +1,1 @@
+Go to <a href="https://discord.com/developers/applications" target=”_blank”> Discord developer applications</a>, open bot, and copy "Application ID" from the "General Information" page.

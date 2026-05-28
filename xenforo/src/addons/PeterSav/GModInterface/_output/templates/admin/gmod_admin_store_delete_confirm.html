@@ -1,0 +1,12 @@
+<xf:title>Delete store rank</xf:title>
+
+<xf:form action="{{ link('gl-store/delete', {'group_id': $group.upgrade_id}) }}" ajax="true" class="block">
+    <div class="block-container">
+        <div class="block-body">
+            <div class="block-row">
+                Are you sure you want to delete the store rank <strong>{$group.title}</strong>?
+            </div>
+        </div>
+        <xf:submitrow submit="Delete" icon="delete" sticky="true" />
+    </div>
+</xf:form>

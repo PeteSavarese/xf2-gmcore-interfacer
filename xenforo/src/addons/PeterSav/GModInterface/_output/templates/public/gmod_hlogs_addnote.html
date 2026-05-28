@@ -1,0 +1,29 @@
+<xf:title>History Logs - Add Note</xf:title>
+<xf:form action="/gl/{$steamId}/notes/add" id="addNoteForm" ajax="true" data-xf-init="ajax-submit">
+    <xf:editorrow
+        name="note"
+        rowclass="formRow--noColon" 
+        label="Note"
+        maxlength="250"
+        removebuttons="{$ignoredButtons}"
+        hint="<i>Required</i>" />
+    <xf:selectrow name="visibility" label="Visibility" explain="What is the minimum rank required to view this note?" hint="<i>Required</i>">
+        <xf:option value="mod" selected="true">All Staff</xf:option>
+        <xf:if is="$xf.visitor.isMemberOf(8) OR $xf.visitor.isMemberOf(9) OR $xf.visitor.isMemberOf(5)">
+            <xf:option value="admin">Admin+</xf:option>
+        </xf:if>
+        <xf:if is="$xf.visitor.isMemberOf(9) OR $xf.visitor.isMemberOf(5)">
+            <xf:option value="lead">Lead Admin+</xf:option>
+        </xf:if>
+    </xf:selectrow>
+    
+    <xf:submitrow submit="Add Note" class="js-overlayClose" />
+</xf:form>
+
+<xf:js>
+XF.on(document, 'ajax:complete', function(e, data) {
+    if (data.xhr.responseJSON && data.xhr.responseJSON.success) {
+        location.reload();
+    }
+});
+</xf:js>

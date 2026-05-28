@@ -1,0 +1,38 @@
+<xf:title>{{ phrase('reply_to_direct_message') }}</xf:title>
+
+<xf:breadcrumb href="{{ link('direct-messages') }}">{{ phrase('direct_messages') }}</xf:breadcrumb>
+<xf:breadcrumb href="{{ link('direct-messages', $conversation) }}">{$conversation.title}</xf:breadcrumb>
+
+<xf:form action="{{ link('direct-messages/add-reply', $conversation) }}" class="block" ajax="true"
+	draft="{{ link('direct-messages/draft', $conversation) }}"
+	data-xf-init="attachment-manager">
+
+	<div class="block-container">
+		<div class="block-body">
+			<xf:editorrow name="message"
+				value="{$defaultMessage}"
+				attachments="{{ $attachmentData ? $attachmentData.attachments : [] }}"
+				rowtype="fullWidth noLabel"
+				placeholder="{{ phrase('reply_placeholder') }}"
+				label="{{ phrase('message') }}"
+				data-preview-url="{{ link('direct-messages/reply-preview', $conversation) }}" />
+
+			<xf:formrow rowtype="fullWidth noLabel">
+				<xf:if is="$attachmentData">
+					<xf:macro id="helper_attach_upload::upload_block"
+						arg-attachmentData="{$attachmentData}"
+						arg-forceHash="{$conversation.draft_reply.attachment_hash}" />
+				</xf:if>
+
+				<xf:if is="$xf.options.multiQuote">
+					<xf:macro id="multi_quote_macros::button"
+						arg-href="{{ link('direct-messages/multi-quote', $conversation) }}"
+						arg-messageSelector=".js-message"
+						arg-storageKey="multiQuoteConversation" />
+				</xf:if>
+			</xf:formrow>
+
+		</div>
+		<xf:submitrow submit="{{ phrase('post_reply') }}" icon="reply" sticky="true" />
+	</div>
+</xf:form>

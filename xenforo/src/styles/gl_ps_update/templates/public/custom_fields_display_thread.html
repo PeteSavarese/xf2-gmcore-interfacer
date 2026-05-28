@@ -1,0 +1,10 @@
+<xf:if is="{{ $post.position < 1 AND $customFields is not empty }}">
+	<div>
+		<xf:foreach loop="$customFields" key="$fieldId" value="$field">
+			<dl class="pairs pairs--inline">
+				<dt>{$field.label}</dt>
+				<dd>{$field.value|raw}</dd>
+			</dl>
+		</xf:foreach>
+	</div>
+</xf:if>

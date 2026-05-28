@@ -1,0 +1,25 @@
+{
+    "group_name": "block",
+    "title": "Block tab header",
+    "description": "Occasionally, blocks will have multi-part, tab headers, styled with these settings",
+    "property_type": "css",
+    "css_components": [
+        "text",
+        "background",
+        "border",
+        "extra"
+    ],
+    "value_type": "",
+    "value_parameters": "",
+    "has_variations": false,
+    "depends_on": "",
+    "value_group": "",
+    "property_value": {
+        "font-size": "@xf-fontSizeNormal",
+        "color": "@xf-paletteColor2",
+        "background-color": "rgba(23, 32, 48, 0.75)",
+        "border-bottom-width": "@xf-borderSize",
+        "border-bottom-color": "@xf-borderColor"
+    },
+    "display_order": 20200
+}

@@ -1,0 +1,17 @@
+<xf:title>{{ phrase('unfeature_content') }}</xf:title>
+
+<xf:breadcrumb source="$breadcrumbs" />
+
+<xf:form action="{$confirmUrl}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:inforow rowtype="confirm">
+				{{ phrase('you_sure_you_want_to_unfeature_this_content') }}
+			</xf:inforow>
+		</div>
+
+		<xf:redirect />
+
+		<xf:submitrow rowtype="simple" submit="{{ phrase('unfeature') }}" icon="delete" />
+	</div>
+</xf:form>

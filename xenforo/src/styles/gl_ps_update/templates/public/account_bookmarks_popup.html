@@ -1,0 +1,26 @@
+<div class="menu-row menu-row--alt menu-row--close">
+	<div data-xf-init="bookmark-label-filter" data-target=".js-bookmarksMenuBody" data-show-all-link-target=".js-bookmarkShowAllLink">
+		<xf:macro id="bookmark_macros::filter"
+			arg-label="{$label}"
+			arg-allLabels="{$allLabels}" />
+	</div>
+</div>
+<div class="menu-scroller">
+	<ol class="listPlain">
+		<xf:if is="$bookmarks is not empty">
+			<xf:foreach loop="$bookmarks" value="$bookmark">
+				<li class="menu-row menu-row--close menu-row--separated">
+					<xf:macro id="bookmark_macros::row"
+						arg-bookmark="{$bookmark}"
+						arg-content="{$bookmark.Content}" />
+				</li>
+			</xf:foreach>
+			<xf:else />
+			<xf:if is="$label">
+				<li class="menu-row">{{ phrase('no_items_matched_your_filter') }}</li>
+			<xf:else />
+				<li class="menu-row">{{ phrase('you_have_not_added_any_bookmarks_yet') }}</li>
+			</xf:if>
+		</xf:if>
+	</ol>
+</div>

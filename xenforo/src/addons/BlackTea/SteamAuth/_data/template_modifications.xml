@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template_modifications>
+  <modification type="public" template="account_privacy" modification_key="steamauth_account_privacy" description="Adds user privacy fields" execution_order="10" enabled="1" action="preg_replace">
+    <find><![CDATA[/view_your_identities:'\) }}" \/>/]]></find>
+    <replace><![CDATA[$0
+<xf:include template="blacktea_steamauth_flags_privacy_view" />]]></replace>
+  </modification>
+  <modification type="public" template="connected_account_macros" modification_key="steamauth_connected_account_macros_css" description="Adds associate button CSS" execution_order="10" enabled="1" action="preg_replace">
+    <find><![CDATA[/<xf:macro name="associate" arg-provider="!">/]]></find>
+    <replace><![CDATA[$0
+<xf:css src="public:login_steam.less" />]]></replace>
+  </modification>
+  <modification type="public" template="connected_account_macros" modification_key="steamauth_connected_account_macros_disassociate" description="Adds the ability for administrators to remove Steam disassociation" execution_order="10" enabled="1" action="preg_replace">
+    <find><![CDATA[/<xf:form [\s\S]*?<\/xf:form>/]]></find>
+    <replace><![CDATA[<xf:if is="$provider.getValue('provider_id') !== 'steam' || can_disassociate_steam()">
+<xf:css src="public:login_steam.less" />
+$0
+</xf:if>]]></replace>
+  </modification>
+  <modification type="public" template="login" modification_key="steamauth_login_css" description="Adds login button CSS" execution_order="10" enabled="1" action="preg_replace">
+    <find><![CDATA[/<xf:title>/]]></find>
+    <replace><![CDATA[<xf:css src="public:login_steam.less" />
+$0]]></replace>
+  </modification>
+  <modification type="public" template="message_macros" modification_key="steamauth_message_macros_banner_above" description="Adds a Steam profile banner to user posts (above)" execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[<xf:set var="$extras"]]></find>
+    <replace><![CDATA[<xf:if is="can_display_steam_user_banner('before')">
+	{{steam_user_banner($user)}}
+</xf:if>
+$0]]></replace>
+  </modification>
+  <modification type="public" template="message_macros" modification_key="steamauth_message_macros_banner_below" description="Adds a Steam profile banner to user posts (below)" execution_order="10" enabled="1" action="preg_replace">
+    <find><![CDATA[/<xf:macro\s+id="user_info"[\s\S]*?<span[^>]*class="[^"]*\bmessage-userArrow\b[^"]*"[^>]*><\/span>/]]></find>
+    <replace><![CDATA[$0
+<xf:if is="can_display_steam_user_banner('after')">
+	{{steam_user_banner($user)}}
+</xf:if>]]></replace>
+  </modification>
+  <modification type="public" template="register_form" modification_key="steamauth_connected_register_form" description="Adds the ability for administrators to remove non-steam connected account providers" execution_order="10" enabled="1" action="preg_replace">
+    <find><![CDATA[/(?<=<xf:foreach loop="\$providers" value="\$provider">).+?(?=<\/xf:foreach)/s]]></find>
+    <replace><![CDATA[<xf:if is="!$xf.options.blacktea_steamauth_force_registration || $provider.getValue('provider_id') == 'steam'">
+$0
+</xf:if>]]></replace>
+  </modification>
+  <modification type="public" template="register_form" modification_key="steamauth_connected_register_form_css" description="Adds register button CSS" execution_order="10" enabled="1" action="preg_replace">
+    <find><![CDATA[/<xf:title>/]]></find>
+    <replace><![CDATA[<xf:css src="public:login_steam.less" />
+$0]]></replace>
+  </modification>
+  <modification type="public" template="register_form" modification_key="steamauth_connected_register_form_registration" description="Adds the ability for administrators to remove non-steam registration" execution_order="10" enabled="1" action="preg_replace">
+    <find><![CDATA[/<xf:form [\s\S]*?<\/xf:form>/]]></find>
+    <replace><![CDATA[<xf:if is="!$xf.options.blacktea_steamauth_force_registration">
+$0
+</xf:if>]]></replace>
+  </modification>
+</template_modifications>

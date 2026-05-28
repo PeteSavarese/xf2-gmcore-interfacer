@@ -1,0 +1,204 @@
+<xf:macro id="picture"
+	arg-property="!"
+	arg-propertyRetina="{{ null }}"
+	arg-width="{{ null }}"
+	arg-height="{{ null }}"
+	arg-alt="{{ null }}"
+    arg-lazy="{{ false }}">
+
+	<xf:set var="$variations" value="{{ {} }}" />
+
+	<xf:foreach loop="$xf.style.getVariations()" value="$variation">
+		<xf:set var="$src" value="{{ property_variation($property, $variation) }}" />
+		<xf:set var="$src2x" value="{{ $propertyRetina ? property_variation($propertyRetina, $variation) : null }}" />
+
+		<xf:set var="$variations" value="{{ $variations|replace($variation, {
+				1: $src ? base_url($src) : null,
+				2: $src2x ? base_url($src2x) : null
+			}) }}" />
+	</xf:foreach>
+
+	<xf:macro id="picture_variations"
+		arg-variations="{$variations}"
+		arg-width="{$width}"
+		arg-height="{$height}"
+		arg-alt="{$alt}"
+		arg-lazy="{$lazy}" />
+</xf:macro>
+
+<xf:macro id="picture_color_scheme"
+	arg-light="!"
+	arg-dark="!"
+	arg-width="{{ null }}"
+	arg-height="{{ null }}"
+	arg-alt="{{ null }}"
+    arg-lazy="{{ false }}">
+
+	<xf:set var="$light" value="{{ is_array($light) ? $light : { 1: $light } }}" />
+	<xf:set var="$dark" value="{{ is_array($dark) ? $dark : { 1: $dark } }}" />
+
+	<xf:set var="$variations" value="{{ {} }}" />
+
+	<xf:foreach loop="$xf.style.getVariations()" value="$variation">
+		<xf:set var="$styleType" value="{{ property_variation('styleType', $variation, 'light') }}" />
+		<xf:set var="$src" value="{{ $styleType === 'light' ? $light.1 : $dark.1 }}" />
+		<xf:set var="$src2x" value="{{ $styleType === 'light' ? $light.2 : $dark.2 }}" />
+
+		<xf:set var="$variations" value="{{ $variations|replace($variation, {
+				1: $src ? base_url($src) : null,
+				2: $src2x ? base_url($src2x) : null
+			}) }}" />
+	</xf:foreach>
+
+	<xf:macro id="picture_variations"
+		arg-variations="{$variations}"
+		arg-width="{$width}"
+		arg-height="{$height}"
+		arg-alt="{$alt}"
+		arg-lazy="{$lazy}" />
+</xf:macro>
+
+<xf:macro id="picture_variations"
+	arg-variations="!"
+	arg-width="{{ null }}"
+	arg-height="{{ null }}"
+	arg-alt="{{ null }}"
+    arg-lazy="{{ false }}">
+
+	<picture data-variations="{{ $variations|json }}">
+		<xf:set var="$variation" value="{{ ($xf.style.isVariationsEnabled() && $xf.visitor.style_variation) ? $xf.visitor.style_variation : 'default' }}" />
+		<xf:set var="$src" value="{$variations.{$variation}.1}" />
+		<xf:set var="$src2x" value="{$variations.{$variation}.2}" />
+
+		<xf:if is="$xf.style.isVariationsEnabled() && !$xf.visitor.style_variation && $xf.style.hasAlternateStyleTypeVariation()">
+			<xf:set var="$alternateVariation" value="{{ $xf.style.getAlternateStyleTypeVariation() }}" />
+			<xf:set var="$alternateSrc" value="{{ $variations.{$alternateVariation}.1 }}" />
+			<xf:set var="$alternateSrc2x" value="{{ $variations.{$alternateVariation}.2 }}" />
+
+			<xf:if is="$alternateSrc !== $src || $alternateSrc2x !== $src2x">
+				<source srcset="{$alternateSrc}{{ $alternateSrc2x ? ', ' . $alternateSrc2x . ' 2x' : '' }}" media="(prefers-color-scheme: {{ $xf.style.getAlternateStyleType() }})" />
+			</xf:if>
+		</xf:if>
+
+		<img src="{$src}" {{ $src2x ? 'srcset="' . $src2x . ' 2x"' : '' }} width="{$width}" height="{$height}" alt="{{ $alt|for_attr }}" {{ $lazy ? 'loading="lazy"' : '' }} />
+	</picture>
+</xf:macro>
+
+<xf:macro name="variation_menu"
+	arg-style="!"
+	arg-routeType="public"
+	arg-route="misc/style-variation"
+	arg-selectedVariation="{$xf.visitor.style_variation}"
+	arg-live="{{ false }}">
+
+	<xf:if is="$style.hasAlternateStyleTypeVariation()">
+		<xf:macro name="variation_menu_item"
+			arg-routeType="{$routeType}"
+			arg-route="{$route}"
+			arg-variation=""
+			arg-label="{{ phrase('system') }}"
+			arg-selectedVariation="{$selectedVariation}"
+			arg-live="{$live}"
+			arg-redirect="{$redirect}" />
+
+		<xf:macro name="variation_menu_item"
+			arg-routeType="{$routeType}"
+			arg-route="{$route}"
+			arg-variation="{{ $style.getStyleTypeVariation('light') }}"
+			arg-icon="{{ $style.getVariationIcon($style.getStyleTypeVariation('light')) }}"
+			arg-label="{{ phrase('light') }}"
+			arg-selectedVariation="{$selectedVariation}"
+			arg-live="{$live}"
+			arg-redirect="{$redirect}" />
+
+		<xf:macro name="variation_menu_item"
+			arg-routeType="{$routeType}"
+			arg-route="{$route}"
+			arg-variation="{{ $style.getStyleTypeVariation('dark') }}"
+			arg-icon="{{ $style.getVariationIcon($style.getStyleTypeVariation('dark')) }}"
+			arg-label="{{ phrase('dark') }}"
+			arg-selectedVariation="{$selectedVariation}"
+			arg-live="{$live}"
+			arg-redirect="{$redirect}" />
+	<xf:else />
+		<xf:macro name="variation_menu_item"
+			arg-routeType="{$routeType}"
+			arg-route="{$route}"
+			arg-variation=""
+			arg-selectedVariation="{$selectedVariation}"
+			arg-live="{$live}"
+			arg-redirect="{$redirect}" />
+	</xf:if>
+
+	<xf:foreach loop="$style.getVariations(false)" value="$variation">
+		<xf:if is="$variation !== $style.getAlternateStyleTypeVariation()">
+			<xf:macro name="variation_menu_item"
+				arg-routeType="{$routeType}"
+				arg-route="{$route}"
+				arg-variation="{$variation}"
+				arg-selectedVariation="{$selectedVariation}"
+				arg-live="{$live}"
+				arg-redirect="{$redirect}" />
+		</xf:if>
+	</xf:foreach>
+</xf:macro>
+
+<xf:macro name="variation_menu_item"
+	arg-routeType="public"
+	arg-route="{{ link('misc/style-variation') }}"
+	arg-variation="!"
+	arg-icon="fa-adjust"
+	arg-label=""
+	arg-selectedVariation="{$xf.visitor.style_variation}"
+	arg-live="{{ false }}"
+	arg-redirect="{{ null }}">
+
+	<a href="{{ link_type($routeType, $route, null, {
+			'variation': $variation,
+			'reset': $variation ? null : true,
+			't': csrf_token(),
+			'_xfRedirect': $redirect
+		}) }}"
+		class="menu-linkRow {{ $variation === $selectedVariation ? 'is-selected' : '' }}"
+		rel="nofollow"
+		data-xf-click="{{ $live ? 'style-variation' : '' }}" data-variation="{$variation}">
+
+		<xf:fa icon="{$icon}" />
+
+		<xf:if is="$label">
+			{$label}
+		<xf:elseif is="$variation" />
+			{{ phrase_dynamic('style_variation.' . $variation) }}
+		<xf:else />
+			{{ phrase('style_variation.default') }}
+		</xf:if>
+	</a>
+</xf:macro>
+
+<xf:macro name="variation_input"
+	arg-style="!"
+	arg-name="user[style_variation]"
+	arg-value="{$xf.visitor.style_variation}">
+
+	<xf:if is="$style.isVariationsEnabled()">
+		<xf:selectrow name="{$name}" value="{$value}"
+			label="{{ phrase('style_variation') }}">
+
+			<xf:if is="$style.hasAlternateStyleTypeVariation()">
+				<xf:option value="">{{ phrase('system') }}</xf:option>
+				<xf:option value="{{ $style.getStyleTypeVariation('light') }}">{{ phrase('light') }}</xf:option>
+				<xf:option value="{{ $style.getStyleTypeVariation('dark') }}">{{ phrase('dark') }}</xf:option>
+			<xf:else />
+				<xf:option value="">{{ phrase('style_variation.default') }}</xf:option>
+			</xf:if>
+
+			<xf:foreach loop="$style.getVariations(false)" value="$variation">
+				<xf:if is="$variation !== $style.getAlternateStyleTypeVariation()">
+					<xf:option value="{$variation}">{{ phrase_dynamic('style_variation.' . $variation) }}</xf:option>
+				</xf:if>
+			</xf:foreach>
+		</xf:selectrow>
+	<xf:else />
+		<xf:hiddenval name="user[style_variation]">{$value}</xf:hiddenval>
+	</xf:if>
+</xf:macro>

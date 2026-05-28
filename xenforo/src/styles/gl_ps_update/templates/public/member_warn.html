@@ -1,0 +1,137 @@
+<xf:title>{{ phrase('warn_member:') }} {$user.username}</xf:title>
+
+<xf:if is="$breadcrumbs">
+	<xf:breadcrumb source="$breadcrumbs" />
+</xf:if>
+
+<xf:js src="xf/form_fill.js" min="1" />
+
+<xf:form action="{$warnUrl}" ajax="true" class="block" data-xf-init="form-fill">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:formrow label="{{ phrase('member') }}"><xf:username user="{$user}" /></xf:formrow>
+
+			<xf:formrow label="{{ phrase('content') }}">
+				<xf:if is="{$contentUrl}">
+					<a href="{$contentUrl}">{$title}</a>
+				<xf:else />
+					{$title}
+				</xf:if>
+			</xf:formrow>
+
+			<xf:radiorow name="warning_definition_id" value="0"
+				label="{{ phrase('warning_type') }}">
+
+				<xf:foreach loop="$warnings" value="$warning">
+					<xf:option value="{$warning.warning_definition_id}" class="js-FormFiller">{$warning.title}</xf:option>
+				</xf:foreach>
+				<xf:option value="0" class="js-FormFiller"
+					label="{{ phrase('custom_warning:') }}">
+
+					<xf:textbox name="custom_title" maxlength="{{ max_length('XF:Warning', 'title') }}" />
+				</xf:option>
+			</xf:radiorow>
+
+			<div id="WarningEditableContainer">
+				<xf:checkboxrow label="{{ phrase('warning_points') }}">
+					<xf:option name="points_enable" value="1" selected="true"
+						label="{{ phrase('apply_warning_points:') }}">
+
+						<xf:numberbox name="points" value="1" min="0" />
+					</xf:option>
+				</xf:checkboxrow>
+
+				<xf:checkboxrow label="{{ phrase('points_expiry') }}">
+					<xf:option name="expiry_enable" value="1" selected="true"
+						label="{{ phrase('points_expire_after:') }}">
+
+						<xf:dependent>
+							<div class="inputGroup">
+								<xf:numberbox name="expiry_value" value="1" min="0" />
+								<span class="inputGroup-splitter"></span>
+								<xf:select name="expiry_unit" value="months" class="input--inline">
+									<xf:option value="days">{{ phrase('days') }}</xf:option>
+									<xf:option value="weeks">{{ phrase('weeks') }}</xf:option>
+									<xf:option value="months">{{ phrase('months') }}</xf:option>
+									<xf:option value="years">{{ phrase('years') }}</xf:option>
+								</xf:select>
+							</div>
+						</xf:dependent>
+					</xf:option>
+				</xf:checkboxrow>
+			</div>
+
+			<xf:textarearow name="notes" autosize="true"
+				label="{{ phrase('notes') }}"
+				explain="{{ phrase('this_will_not_be_shown_to_member_receiving_warning') }}" />
+		</div>
+
+		<h2 class="block-formSectionHeader"><span class="block-formSectionHeader-aligner">{{ phrase('member_notification') }}</span></h2>
+		<div class="block-body">
+			<xf:checkboxrow>
+				<xf:option name="start_conversation" value="1"
+					data-xf-init="disabler"
+					data-container="#WarningConversation"
+					data-hide="true"
+					label="{{ phrase('send_direct_message_to_x', {'name': $user.username}) }}" />
+			</xf:checkboxrow>
+
+			<div id="WarningConversation">
+				<xf:textboxrow name="conversation_title"
+					maxlength="{{ max_length('XF:ConversationMaster', 'title') }}"
+					label="{{ phrase('title') }}" />
+
+				<xf:textarearow name="conversation_message" rows="6" autosize="true"
+					maxlength="{$xf.options.messageMaxLength}"
+					label="{{ phrase('message') }}" />
+
+				<xf:checkboxrow>
+					<xf:option name="open_invite" value="1">
+						{{ phrase('allow_x_to_invite_others_to_this_direct_message', {'user': $user.username}) }}
+					</xf:option>
+					<xf:option name="conversation_locked" value="1">
+						{{ phrase('lock_direct_message_no_responses_will_be_allowed') }}
+					</xf:option>
+				</xf:checkboxrow>
+			</div>
+		</div>
+
+		<xf:if is="$contentActions.delete OR $contentActions.public">
+			<h2 class="block-formSectionHeader"><span class="block-formSectionHeader-aligner">{{ phrase('content_action') }}</span></h2>
+			<div class="block-body">
+				<xf:radiorow name="content_action" value=""
+					label="{{ phrase('content_action') }}">
+
+					<xf:option value="">{{ phrase('do_nothing') }}</xf:option>
+					<xf:if is="$contentActions.delete">
+						<xf:option value="delete"
+							label="{{ phrase('delete_the_content') }}"
+							hint="{{ phrase('item_will_remain_viewable_by_moderators_and_may_be_restored_at_later') }}">
+
+							<xf:textbox name="action_options[delete_reason]"
+								placeholder="{{ phrase('reason_for_deletion...') }}"
+								maxlength="{{ max_length('XF:DeletionLog', 'delete_reason') }}" />
+						</xf:option>
+					</xf:if>
+					<xf:if is="$contentActions.public">
+						<xf:option value="public"
+							label="{{ phrase('post_public_warning') }}"
+							hint="{{ phrase('this_will_be_visible_to_anyone_who_can_see_content_for_warning') }}">
+
+							<xf:textbox name="action_options[public_message]" maxlength="255"
+								placeholder="{{ phrase('public_warning_text...') }}" />
+						</xf:option>
+					</xf:if>
+				</xf:radiorow>
+			</div>
+		</xf:if>
+
+		<xf:submitrow submit="{{ phrase('warn') }}" sticky="true" />
+	</div>
+
+	<xf:redirect />
+	<xf:hiddenval name="filled_warning_definition_id">0</xf:hiddenval>
+	<input type="checkbox" id="WarningEditableInput"
+		data-xf-init="disabler" data-container="#WarningEditableContainer"
+		checked="checked" style="display: none" />
+</xf:form>

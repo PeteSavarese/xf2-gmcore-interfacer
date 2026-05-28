@@ -1,0 +1,7 @@
+<xf:extends template="thread_view" />
+
+<xf:extension id="above_messages">
+	<xf:if is="$poll">
+		<xf:macro id="poll_macros::poll_block" arg-poll="{$poll}" />
+	</xf:if>
+</xf:extension>

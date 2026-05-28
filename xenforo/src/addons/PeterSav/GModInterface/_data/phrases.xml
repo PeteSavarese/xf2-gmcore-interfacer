@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phrases>
+  <phrase title="admin_navigation.gmodinterfacer_discord" version_id="1011000" version_string="1.1.10"><![CDATA[Discord Role Mapping]]></phrase>
+  <phrase title="admin_navigation.gmodinterfacer_settings" version_id="1010600" version_string="1.1.6"><![CDATA[Settings]]></phrase>
+  <phrase title="admin_navigation.gmodinterfacer_store_mange_ranks" version_id="1010800" version_string="1.1.8"><![CDATA[Manage Store Ranks]]></phrase>
+  <phrase title="admin_navigation.gmodinterfacer_store_manual_apply" version_id="1011000" version_string="1.1.10"><![CDATA[Manual Apply
+]]></phrase>
+  <phrase title="admin_navigation.gmodinterfacer_store_options" version_id="1000020" version_string="1.0.2 Alpha"><![CDATA[Store]]></phrase>
+  <phrase title="admin_navigation.gmodinterfacer_store_recovery" version_id="1011000" version_string="1.1.10"><![CDATA[Recovery Queue]]></phrase>
+  <phrase title="admin_navigation.gmodinterfacer_store_view_transactions" version_id="1010800" version_string="1.1.8"><![CDATA[View Purchases]]></phrase>
+  <phrase title="admin_navigation.petersav_gmodinterfacer" version_id="1000020" version_string="1.0.2 Alpha"><![CDATA[GMod Interfacer]]></phrase>
+  <phrase title="admin_permission.gmod_db_options" version_id="1010700" version_string="1.1.7"><![CDATA[Manage GMod Core DB Options]]></phrase>
+  <phrase title="admin_permission.gmod_manage_store_ranks" version_id="1010900" version_string="1.1.9"><![CDATA[Manage Store Ranks]]></phrase>
+  <phrase title="api_scope.discord_read" version_id="1011000" version_string="1.1.10"><![CDATA[]]></phrase>
+  <phrase title="api_scope.discord_write" version_id="1011000" version_string="1.1.10"><![CDATA[]]></phrase>
+  <phrase title="cron_entry.gmodLotteryWinnerPicking" version_id="1000020" version_string="1.0.2 Alpha"><![CDATA[GMod Interfacer: Pick Lottery Winner]]></phrase>
+  <phrase title="cron_entry.gmodStoreExpireCheck" version_id="1010400" version_string="1.1.4"><![CDATA[GMod Interfacer: Check for Expired Store Ranks]]></phrase>
+  <phrase title="nav.dimeHLogsSearch" version_id="1010400" version_string="1.1.4"><![CDATA[History Logs Search]]></phrase>
+  <phrase title="nav.gmodDiscord" version_id="1010200" version_string="1.1.2"><![CDATA[Discord]]></phrase>
+  <phrase title="nav.gmodServerBans" version_id="1010300" version_string="1.1.3"><![CDATA[Bans]]></phrase>
+  <phrase title="nav.gmodServerStats" version_id="1011000" version_string="1.1.10"><![CDATA[Stats]]></phrase>
+  <phrase title="nav.gmodServers" version_id="1010200" version_string="1.1.2"><![CDATA[Servers]]></phrase>
+  <phrase title="nav.gmodStaffTools" version_id="1010400" version_string="1.1.4"><![CDATA[GL Staff Tools]]></phrase>
+  <phrase title="nav.gmodStore" version_id="1010200" version_string="1.1.2"><![CDATA[Store]]></phrase>
+  <phrase title="option.gmod_interfacer_db_host" version_id="1010600" version_string="1.1.6"><![CDATA[DB Host]]></phrase>
+  <phrase title="option.gmod_interfacer_db_name" version_id="1010600" version_string="1.1.6"><![CDATA[DB Name]]></phrase>
+  <phrase title="option.gmod_interfacer_db_password" version_id="1010600" version_string="1.1.6"><![CDATA[DB Password]]></phrase>
+  <phrase title="option.gmod_interfacer_db_port" version_id="1010600" version_string="1.1.6"><![CDATA[DB Port]]></phrase>
+  <phrase title="option.gmod_interfacer_db_username" version_id="1010600" version_string="1.1.6"><![CDATA[DB Username]]></phrase>
+  <phrase title="option.gmod_interfacer_discord_bot_client_id" version_id="1010900" version_string="1.1.9"><![CDATA[Discord Bot Client ID]]></phrase>
+  <phrase title="option.gmod_interfacer_discord_bot_client_secret" version_id="1011000" version_string="1.1.10"><![CDATA[Discord Bot OAuth2 Client Secret]]></phrase>
+  <phrase title="option.gmod_interfacer_discord_bot_token" version_id="1010900" version_string="1.1.9"><![CDATA[Discord Bot Token]]></phrase>
+  <phrase title="option.gmod_interfacer_discord_server_guild" version_id="1010900" version_string="1.1.9"><![CDATA[Discord Guild ID]]></phrase>
+  <phrase title="option.gmod_interfacer_store_active" version_id="1000020" version_string="1.0.2 Alpha"><![CDATA[Store is active]]></phrase>
+  <phrase title="option.gmod_interfacer_store_production_check" version_id="1000020" version_string="1.0.2 Alpha"><![CDATA[Set checkout to production]]></phrase>
+  <phrase title="option.gmod_interfacer_store_production_client_id" version_id="1000020" version_string="1.0.2 Alpha"><![CDATA[Production Client ID]]></phrase>
+  <phrase title="option.gmod_interfacer_store_production_secret_key" version_id="1000020" version_string="1.0.2 Alpha"><![CDATA[Production Secret Key]]></phrase>
+  <phrase title="option.gmod_interfacer_store_sandbox_client_id" version_id="1000020" version_string="1.0.2 Alpha"><![CDATA[Sandbox Client ID]]></phrase>
+  <phrase title="option.gmod_interfacer_store_sandbox_secret_key" version_id="1000020" version_string="1.0.2 Alpha"><![CDATA[Sandbox Secret Key]]></phrase>
+  <phrase title="option_explain.gmod_interfacer_db_host" version_id="1010600" version_string="1.1.6"><![CDATA[IP address for MySQL database for server core.]]></phrase>
+  <phrase title="option_explain.gmod_interfacer_db_name" version_id="1010600" version_string="1.1.6"><![CDATA[Set the DB name for MySQL for database for server core.]]></phrase>
+  <phrase title="option_explain.gmod_interfacer_db_password" version_id="1010600" version_string="1.1.6"><![CDATA[Set the username for MySQL for database for server core.]]></phrase>
+  <phrase title="option_explain.gmod_interfacer_db_port" version_id="1010600" version_string="1.1.6"><![CDATA[Port for MySQL for database for server core.]]></phrase>
+  <phrase title="option_explain.gmod_interfacer_db_username" version_id="1010600" version_string="1.1.6"><![CDATA[Set the username for MySQL for database for server core.]]></phrase>
+  <phrase title="option_explain.gmod_interfacer_discord_bot_client_id" version_id="1011000" version_string="1.1.10"><![CDATA[Go to <a href="https://discord.com/developers/applications" target=”_blank”> Discord developer applications</a>, open bot, and copy "Application ID" from the "General Information" page.]]></phrase>
+  <phrase title="option_explain.gmod_interfacer_discord_bot_client_secret" version_id="1011000" version_string="1.1.10"><![CDATA[Go to <a href="https://discord.com/developers/applications" target=”_blank”> Discord developer applications</a>, open bot, go to OAuth2 and copy "Client Secret".]]></phrase>
+  <phrase title="option_explain.gmod_interfacer_discord_bot_token" version_id="1011000" version_string="1.1.10"><![CDATA[Go to <a href="https://discord.com/developers/applications" target=”_blank”> Discord developer applications</a>, open bot, go to "Bot" and click "Reset Token" to get tokenn.]]></phrase>
+  <phrase title="option_explain.gmod_interfacer_discord_server_guild" version_id="1011000" version_string="1.1.10"><![CDATA[Right-click on server on sidebar → "Copy Server ID"]]></phrase>
+  <phrase title="option_explain.gmod_interfacer_store_active" version_id="1000020" version_string="1.0.2 Alpha"><![CDATA[If checked, users can view store ranks and check out. If not checked, the page will display a message stating the store is not open due to work/modifications.]]></phrase>
+  <phrase title="option_explain.gmod_interfacer_store_production_check" version_id="1000020" version_string="1.0.2 Alpha"><![CDATA[If unchecked, the store page and processing will run in PayPal Sandbox. If checked, the store will run on PayPal production with real funds and transactions]]></phrase>
+  <phrase title="option_explain.gmod_interfacer_store_production_client_id" version_id="1000020" version_string="1.0.2 Alpha"><![CDATA[The production Client ID for the PayPal App "AHG Rank Store" found <a href="https://developer.paypal.com/developer/applications">here</a>]]></phrase>
+  <phrase title="option_explain.gmod_interfacer_store_production_secret_key" version_id="1000020" version_string="1.0.2 Alpha"><![CDATA[The production Secret Key for the PayPal App "AHG Rank Store" found <a href="https://developer.paypal.com/developer/applications">here</a>]]></phrase>
+  <phrase title="option_explain.gmod_interfacer_store_sandbox_client_id" version_id="1000020" version_string="1.0.2 Alpha"><![CDATA[The sandbox Client ID for the PayPal App "AHG Rank Store" found <a href="https://developer.paypal.com/developer/applications">here</a>]]></phrase>
+  <phrase title="option_explain.gmod_interfacer_store_sandbox_secret_key" version_id="1000020" version_string="1.0.2 Alpha"><![CDATA[The sandbox Secret Key for the PayPal App "AHG Rank Store" found <a href="https://developer.paypal.com/developer/applications">here</a>]]></phrase>
+  <phrase title="option_group.gmod_interfacer_discord" version_id="1011000" version_string="1.1.10"><![CDATA[Gmod Interfacer - Discord]]></phrase>
+  <phrase title="option_group.gmod_interfacer_settings" version_id="1010600" version_string="1.1.6"><![CDATA[GMod Interfacer]]></phrase>
+  <phrase title="option_group.gmod_interfacer_store_options" version_id="1011000" version_string="1.1.10"><![CDATA[GMod Interfacer - Store]]></phrase>
+  <phrase title="option_group_description.gmod_interfacer_discord" version_id="1011000" version_string="1.1.10"><![CDATA[Manage Discord Bot Keys, Guild ID, Webhook URLs, and more.]]></phrase>
+  <phrase title="option_group_description.gmod_interfacer_settings" version_id="1010600" version_string="1.1.6"><![CDATA[Manage database credentials and more (maybe idk lol)]]></phrase>
+  <phrase title="option_group_description.gmod_interfacer_store_options" version_id="1000020" version_string="1.0.2 Alpha"><![CDATA[Manage PayPal API keys, sandboxed or production, and more (maybe idk lol)]]></phrase>
+  <phrase title="permission.gmodUserPerms_view_hlogs" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Can view history logs]]></phrase>
+  <phrase title="permission_interface.gmodUserPerms" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[GMod Interfacer]]></phrase>
+  <phrase title="widget_def.gmod_servers_widget" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[GMod: Server List]]></phrase>
+  <phrase title="widget_def_desc.gmod_servers_widget" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Small widget with servers map, ip address, and join button.]]></phrase>
+</phrases>

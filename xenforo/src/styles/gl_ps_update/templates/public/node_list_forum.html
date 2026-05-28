@@ -1,0 +1,150 @@
+<xf:macro id="depth1" arg-node="!" arg-extras="!" arg-children="!" arg-childExtras="!" arg-depth="1">
+	<div class="block block-container">
+		<xf:macro id="forum"
+			arg-node="{$node}"
+			arg-extras="{$extras}"
+			arg-children="{$children}"
+			arg-childExtras="{$childExtras}"
+			arg-depth="{$depth}" />
+	</div>
+</xf:macro>
+
+<xf:macro id="depth2" arg-node="!" arg-extras="!" arg-children="!" arg-childExtras="!" arg-depth="1">
+	<xf:macro id="forum"
+		arg-node="{$node}"
+		arg-extras="{$extras}"
+		arg-children="{$children}"
+		arg-childExtras="{$childExtras}"
+		arg-depth="{$depth}" />
+</xf:macro>
+
+<xf:macro id="depthN" arg-node="!" arg-extras="!" arg-children="!" arg-childExtras="!" arg-depth="1">
+	<li>
+		<a href="{{ link('forums', $node) }}" class="subNodeLink subNodeLink--forum {{ $extras.hasNew ? 'subNodeLink--unread' : '' }}">
+			<xf:fa icon="{{ $node.Data.TypeHandler.getTypeIconClass() ?: 'fa-comments' }}" class="subNodeLink-icon" />{$node.title}
+		</a>
+		<xf:macro id="forum_list::sub_node_list"
+			arg-children="{$children}"
+			arg-childExtras="{$childExtras}"
+			arg-depth="{{ $depth + 1 }}" />
+	</li>
+</xf:macro>
+
+<xf:macro id="forum"
+	arg-node="!"
+	arg-extras="!"
+	arg-children="!"
+	arg-childExtras="!"
+	arg-depth="!"
+	arg-chooseName=""
+	arg-bonusInfo="">
+
+	<div class="node node--id{$node.node_id} node--depth{$depth} node--forum {{ $extras.hasNew ? 'node--unread' : 'node--read' }}">
+		<div class="node-body">
+			<span class="node-icon" aria-hidden="true">
+				<xf:fa icon="{{ $node.Data.TypeHandler.getTypeIconClass() ?: 'fa-comments' }}" />
+			</span>
+			<div class="node-main js-nodeMain">
+				<xf:if is="$chooseName">
+					<xf:checkbox standalone="true">
+						<xf:option labelclass="u-pullRight" class="js-chooseItem" name="{$chooseName}[]" value="{$node.node_id}" />
+					</xf:checkbox>
+				</xf:if>
+
+				<xf:set var="$descriptionDisplay" value="{{ property('nodeListDescriptionDisplay') }}" />
+				<h3 class="node-title">
+					<a href="{{ link('forums', $node) }}" data-xf-init="{{ $descriptionDisplay == 'tooltip' ? 'element-tooltip' : '' }}" data-shortcut="node-description">{$node.title}</a>
+				</h3>
+				<xf:if is="$descriptionDisplay != 'none' && $node.description">
+					<div class="node-description {{ $descriptionDisplay == 'tooltip' ? 'node-description--tooltip js-nodeDescTooltip' : '' }}">{$node.description|raw}</div>
+				</xf:if>
+
+				<div class="node-meta">
+					<xf:if is="!{$extras.privateInfo}">
+						<div class="node-statsMeta">
+							<dl class="pairs pairs--inline">
+								<dt>{{ phrase('threads') }}</dt>
+								<dd>{$extras.discussion_count|number_short(1)}</dd>
+							</dl>
+							<dl class="pairs pairs--inline">
+								<dt>{{ phrase('messages') }}</dt>
+								<dd>{$extras.message_count|number_short(1)}</dd>
+							</dl>
+						</div>
+					</xf:if>
+
+					<xf:if is="$depth == 2 AND property('nodeListSubDisplay') == 'menu'">
+						<xf:macro id="forum_list::sub_nodes_menu"
+							arg-children="{$children}"
+							arg-childExtras="{$childExtras}"
+							arg-depth="{{ $depth + 1 }}" />
+					</xf:if>
+				</div>
+
+				<xf:if is="$depth == 2 AND property('nodeListSubDisplay') == 'flat'">
+					<xf:macro id="forum_list::sub_nodes_flat"
+						arg-children="{$children}"
+						arg-childExtras="{$childExtras}"
+						arg-depth="{{ $depth + 1 }}" />
+				</xf:if>
+
+				<xf:if is="$bonusInfo is not empty">
+					<div class="node-bonus">{$bonusInfo}</div>
+				</xf:if>
+			</div>
+
+			<xf:if is="!{$extras.privateInfo}">
+				<div class="node-stats">
+					<dl class="pairs pairs--rows">
+						<dt>{{ phrase('threads') }}</dt>
+						<dd>{$extras.discussion_count|number_short(1)}</dd>
+					</dl>
+					<dl class="pairs pairs--rows">
+						<dt>{{ phrase('messages') }}</dt>
+						<dd>{$extras.message_count|number_short(1)}</dd>
+					</dl>
+				</div>
+			</xf:if>
+
+			<div class="node-extra">
+				<xf:if is="{$extras.privateInfo}">
+					<span class="node-extra-placeholder">{{ phrase('private') }}</span>
+				<xf:elseif is="{$extras.LastThread}" />
+					<div class="node-extra-icon">
+						<xf:if is="$xf.visitor.isIgnoring($extras.last_post_user_id)">
+							<xf:avatar user="{{ null }}" size="xs" />
+						<xf:else />
+							<xf:avatar user="{$extras.LastPostUser}" defaultname="{$extras.last_post_username}" size="xs" />
+						</xf:if>
+					</div>
+					<div class="node-extra-row">
+						<xf:if is="$extras.LastThread.isUnread()">
+							<a href="{{ link('threads/unread', $extras.LastThread) }}" class="node-extra-title" title="{$extras.LastThread.title}">{{ prefix('thread', $extras.LastThread) }}{$extras.LastThread.title}</a>
+						<xf:else />
+							<a href="{{ link('threads/post', $extras.LastThread, {'post_id': $extras.last_post_id}) }}" class="node-extra-title" title="{$extras.LastThread.title}">{{ prefix('thread', $extras.LastThread) }}{$extras.LastThread.title}</a>
+						</xf:if>
+					</div>
+					<div class="node-extra-row">
+						<ul class="listInline listInline--bullet">
+							<li><xf:date time="{$extras.last_post_date}" class="node-extra-date" /></li>
+							<xf:if is="$xf.visitor.isIgnoring($extras.last_post_user_id)">
+								<li class="node-extra-user">{{ phrase('ignored_member') }}</li>
+							<xf:else />
+								<li class="node-extra-user"><xf:username user="{$extras.LastPostUser}" defaultname="{$extras.last_post_username}" /></li>
+							</xf:if>
+						</ul>
+					</div>
+				<xf:else />
+					<span class="node-extra-placeholder">{{ phrase('none') }}</span>
+				</xf:if>
+			</div>
+		</div>
+	</div>
+
+	<xf:if is="{$depth} == 1">
+		<xf:macro id="forum_list::node_list"
+			arg-children="{$children}"
+			arg-extras="{$childExtras}"
+			arg-depth="{{ $depth + 1 }}" />
+	</xf:if>
+</xf:macro>

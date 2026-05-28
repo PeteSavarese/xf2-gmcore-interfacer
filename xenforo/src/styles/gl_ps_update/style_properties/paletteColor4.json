@@ -1,0 +1,16 @@
+{
+    "group_name": "palette",
+    "title": "Color 4",
+    "description": "",
+    "property_type": "value",
+    "css_components": [],
+    "value_type": "color",
+    "value_parameters": "hidePalette=true",
+    "has_variations": true,
+    "depends_on": "",
+    "value_group": "primary",
+    "property_value": {
+        "default": "#bdc3c7"
+    },
+    "display_order": 1300
+}

@@ -1,0 +1,18 @@
+<xf:if is="$changes is not empty">
+	<ol class="listPlain">
+		<xf:foreach loop="$changes" value="$change">
+			<li class="menu-row {{ !$change.visible ? 'menu-row--alt' : '' }}">{$change.old_username}</li>
+		</xf:foreach>
+	</ol>
+	<xf:if is="$seeMore">
+		<div class="menu-footer menu-footer--split">
+			<div class="menu-footer-main">
+				<ul class="listInline listInline--bullet">
+					<li><a href="{{ link('members/username-history', $user) }}" data-xf-click="overlay" data-menu-closer="true">{{ phrase('see_more') }}</a></li>
+				</ul>
+			</div>
+		</div>
+	</xf:if>
+<xf:else />
+	<div class="menu-row">{{ phrase('no_items_to_display') }}</div>
+</xf:if>

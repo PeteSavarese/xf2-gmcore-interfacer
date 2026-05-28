@@ -1,0 +1,40 @@
+<xf:title>{{ phrase('register') }}</xf:title>
+
+<xf:head option="robots"><meta name="robots" content="noindex" /></xf:head>
+
+<div class="blockMessage">
+	<xf:if is="$xf.visitor.user_state == 'email_confirm'">
+		{{ phrase('thanks_for_registering_to_complete_registration_follow_link') }}
+		<xf:if is="$hasPreRegAction">
+			<br /><br />
+			{{ phrase('once_your_registration_has_been_completed_your_content_will_be_posted') }}
+		</xf:if>
+	<xf:elseif is="$xf.visitor.user_state == 'moderated'" />
+		{{ phrase('thanks_for_registering_registration_must_be_approved') }}
+		<xf:if is="$hasPreRegAction">
+			<br /><br />
+			{{ phrase('once_your_registration_has_been_completed_your_content_will_be_posted') }}
+		</xf:if>
+	<xf:elseif is="{$facebook}" />
+		{{ phrase('thanks_creating_account_using_facebook_account_active') }}
+	<xf:else />
+		{{ phrase('thanks_for_registering_complete') }}
+	</xf:if>
+
+	<xf:if is="{$xf.session.preRegContentUrl}">
+		<br />
+		<br />
+		{{ phrase('content_you_created_before_registering_posted_automatically') }}
+		<div style="margin-top: .5em">
+			<xf:button href="{$xf.session.preRegContentUrl}">{{ phrase('view_your_content') }}</xf:button>
+		</div>
+	</xf:if>
+
+	<ul>
+		<xf:if is="{$redirect}"><li><a href="{{ link($redirect) }}">{{ phrase('return_to_page_you_were_viewing') }}</a></li></xf:if>
+		<li><a href="{{ link('index') }}">{{ phrase('return_to_forum_home_page') }}</a></li>
+		<xf:if is="$xf.visitor.canEditProfile()">
+			<li><a href="{{ link('account') }}">{{ phrase('edit_your_account_details') }}</a></li>
+		</xf:if>
+	</ul>
+</div>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<permissions>
+    <permission permission_group_id="shoutbox" permission_id="can_ban_user" permission_type="flag"
+                interface_group_id="shoutbox" display_order="1"/>
+    <permission permission_group_id="shoutbox" permission_id="can_delete_messages" permission_type="flag"
+                interface_group_id="shoutbox" display_order="1"/>
+    <permission permission_group_id="shoutbox" permission_id="force_update" permission_type="flag"
+                interface_group_id="shoutbox" display_order="1"/>
+</permissions>

@@ -1,0 +1,38 @@
+<xf:title>{{ phrase('warnings:') }} {$user.username}</xf:title>
+
+<xf:breadcrumb href="{{ link('members', $user) }}">{$user.username}</xf:breadcrumb>
+
+<div class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:datalist data-xf-init="responsive-data-list">
+				<xf:datarow rowtype="header">
+					<xf:cell>{{ phrase('warning') }}</xf:cell>
+					<xf:cell>{{ phrase('date') }}</xf:cell>
+					<xf:cell>{{ phrase('points') }}</xf:cell>
+					<xf:cell>{{ phrase('expiry') }}</xf:cell>
+				</xf:datarow>
+				<xf:foreach loop="$warnings" value="$warning">
+					<xf:datarow rowclass="{{ $warning.is_expired ? 'dataList-row--disabled' : '' }}">
+						<xf:cell href="{{ link('warnings', $warning) }}" overlay="true">{$warning.title}</xf:cell>
+						<xf:cell href="{{ link('warnings', $warning) }}" overlay="true"><xf:date time="{$warning.warning_date} " /></xf:cell>
+						<xf:cell href="{{ link('warnings', $warning) }}" overlay="true">{$warning.points|number}</xf:cell>
+						<xf:cell href="{{ link('warnings', $warning) }}" overlay="true">
+							<xf:if is="$warning.expiry_date">
+								<xf:date time="{$warning.expiry_date} " />
+							<xf:else />
+								{{ phrase('n_a') }}
+							</xf:if>
+						</xf:cell>
+					</xf:datarow>
+				</xf:foreach>
+			</xf:datalist>
+		</div>
+		<div class="block-footer">
+			<ul class="listInline listInline--bullet">
+				<li>{{ phrase('warning_points:') }} {$user.warning_points|number}</li>
+				<li>{{ phrase('total_warnings:') }} {{ count($warnings)|number }}</li>
+			</ul>
+		</div>
+	</div>
+</div>

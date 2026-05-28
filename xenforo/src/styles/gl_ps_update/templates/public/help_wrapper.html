@@ -1,0 +1,21 @@
+<xf:if is="$pages is not empty">
+	<xf:sidenav>
+		<div class="block">
+			<div class="block-container">
+				<h2 class="block-header">{{ phrase('help') }}</h2>
+				<div class="block-body">
+					<xf:foreach loop="$pages" value="$page">
+						<xf:if is="($page.page_id == 'trophies' AND $xf.options.enableTrophies) OR $page.page_id != 'trophies'">
+							<a href="{$page.public_url}" class="blockLink {{ $pageSelected == $page.page_name ? 'is-selected' : '' }}">{$page.title}</a>
+						</xf:if>
+					</xf:foreach>
+				</div>
+			</div>
+		</div>
+	</xf:sidenav>
+	<xf:page option="sideNavTitle">{{ phrase('help_pages') }}</xf:page>
+</xf:if>
+
+<xf:widgetpos id="help_page_sidenav" position="sidenav" />
+
+{$innerContent|raw}

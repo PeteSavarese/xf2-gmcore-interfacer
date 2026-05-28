@@ -1,0 +1,9 @@
+{
+    "event_id": "notices_setup",
+    "execute_order": 10,
+    "callback_class": "BlackTea\\SteamAuth\\Listener\\NoticeSetup",
+    "callback_method": "run",
+    "active": true,
+    "hint": "",
+    "description": ""
+}

@@ -1,0 +1,145 @@
+<xf:macro id="link"
+	arg-content="!"
+	arg-confirmUrl="!"
+	arg-editText="{{ phrase('edit_bookmark') }}"
+	arg-addText="{{ phrase('add_bookmark') }}"
+	arg-showText="{{ true }}"
+	arg-class="actionBar-action actionBar-action--bookmarkLink">
+
+	<xf:if is="$content.canBookmark()">
+		<a href="{$confirmUrl}" class="bookmarkLink {$class} {{ $content.isBookmarked() ? 'is-bookmarked' : '' }}"
+			title="{{ $showText ? '' : ($content.isBookmarked() ? $editText|for_attr : $addText|for_attr) }}"
+			data-xf-click="bookmark-click"
+			data-label=".js-bookmarkText"
+			data-sk-bookmarked="addClass:is-bookmarked, titleAttr:sync"
+			data-sk-bookmarkremoved="removeClass:is-bookmarked, titleAttr:sync"><xf:trim>
+			<span class="js-bookmarkText {{ $showText ? '' : 'u-srOnly' }}"><xf:if is="$content.isBookmarked()">{$editText}<xf:else/>{$addText}</xf:if></span>
+		</xf:trim></a>
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="button"
+	arg-content="!"
+	arg-confirmUrl="!"
+	arg-class="button--link"
+	arg-showText="{{ false }}"
+	arg-editText="{{ phrase('edit_bookmark') }}"
+	arg-addText="{{ phrase('add_bookmark') }}">
+
+	<xf:if is="$content.canBookmark()">
+		<xf:button href="{$confirmUrl}" icon="bookmark" class="{{ $showText ? '' : 'button--iconOnly' }} {$class} {{ $content.isBookmarked() ? 'is-bookmarked' : '' }}"
+			title="{{ $showText ? '' : ($content.isBookmarked() ? $editText|for_attr : $addText|for_attr) }}"
+			data-xf-click="bookmark-click"
+			data-label=".js-bookmarkText"
+			data-sk-bookmarked="addClass:is-bookmarked, titleAttr:sync"
+			data-sk-bookmarkremoved="removeClass:is-bookmarked, titleAttr:sync"><xf:trim>
+			<span class="js-bookmarkText {{ $showText ? '' : 'u-srOnly' }}"><xf:if is="$content.isBookmarked()">{$editText}<xf:else/>{$addText}</xf:if></span>
+		</xf:trim></xf:button>
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="row"
+	arg-bookmark="!"
+	arg-content="!">
+
+	<div class="contentRow">
+		<xf:if is="$bookmark.has_custom_icon">
+			{$bookmark.renderCustomIcon()|raw}
+		<xf:elseif is="$bookmark.content_user" />
+			<div class="contentRow-figure contentRow-figure--fixedBookmarkIcon">
+				<xf:avatar user="$bookmark.content_user" href="" size="s" defaultname="{$bookmark.content_user.username}" />
+			</div>
+		</xf:if>
+
+		<div class="contentRow-main">
+			<xf:macro id="item_buttons" arg-bookmark="{$bookmark}" />
+
+			<div class="contentRow-title">
+				<a href="{$bookmark.content_link}">{$bookmark.content_title}</a>
+			</div>
+
+			<div class="contentRow-snippet">
+				<xf:if is="$bookmark.message">
+					{{ structured_text($bookmark.message) }}
+				<xf:else />
+					<xf:if contentcheck="true">
+						<xf:contentcheck>
+							{$bookmark.renderMessageFallback()|raw}
+						</xf:contentcheck>
+					<xf:else />
+						{{ phrase('no_bookmark_note') }}
+					</xf:if>
+				</xf:if>
+			</div>
+
+			<xf:macro id="item_footer"
+				arg-bookmark="{$bookmark}"
+				arg-content="{$content}" />
+		</div>
+	</div>
+</xf:macro>
+
+<xf:macro id="item_buttons" arg-bookmark="!">
+
+	<div class="contentRow-extra">
+		<xf:button class="button--link button--smaller menuTrigger"
+			data-xf-click="menu"
+			aria-label="{{ phrase('more_options') }}"
+			aria-expanded="false"
+			aria-haspopup="true">
+			<xf:fa icon="fa-cog" />
+		</xf:button>
+
+		<div class="menu" data-menu="menu" aria-hidden="true">
+			<div class="menu-content">
+				<h3 class="menu-header">{{ phrase('bookmark_tools') }}</h3>
+				<a class="menu-linkRow is-hidden" role="button" tabindex="0" data-menu-closer="on" data-xf-init="copy-to-clipboard" data-copy-text="{$bookmark.content_link}">{{ phrase('copy_link') }}</a>
+				<a href="{$bookmark.edit_link}" class="menu-linkRow" data-xf-click="overlay">{{ phrase('edit') }}</a>
+				<a href="{$bookmark.delete_link}" class="menu-linkRow" data-xf-click="overlay">{{ phrase('delete') }}</a>
+			</div>
+		</div>
+	</div>
+</xf:macro>
+
+<xf:macro id="item_footer" arg-bookmark="!" arg-content="!">
+	<div class="contentRow-minor contentRow-minor--hideLinks contentRow-minor--smaller">
+		<ul class="listInline listInline--bullet">
+			<xf:if is="$bookmark.content_user OR $content.isValidKey('username')">
+				<li>
+					<xf:fa icon="fa-user" title="{{ phrase('user') }}" />
+					<span class="u-srOnly">{{ phrase('user') }}</span>
+					<xf:username user="{$bookmark.content_user}" defaultname="{{ $content.isValidKey('username') ? $content.username : '' }}" />
+				</li>
+			</xf:if>
+			<li>
+				<xf:fa icon="fa-clock" title="{{ phrase('bookmarked') }}" />
+				<span class="u-srOnly">{{ phrase('bookmarked') }}</span>
+				<xf:date time="$bookmark.bookmark_date" />
+			</li>
+			<xf:if is="$bookmark.labels">
+				<li class="tagList">
+					<span class="u-srOnly">{{ phrase('labels') }}</span>
+					<xf:foreach loop="$bookmark.labels" value="$label">
+						<a href="{{ link('account/bookmarks', null, {'label': $label.label}) }}" class="tagItem" dir="auto">{$label.label}</a>
+					</xf:foreach>
+				</li>
+			</xf:if>
+		</ul>
+	</div>
+</xf:macro>
+
+<xf:macro id="filter"
+	arg-label="{$label}"
+	arg-allLabels="{{ [] }}"
+	arg-name="labels"
+	arg-minLength="0"
+	arg-maxTokens="1"
+	arg-placeholder="{{ phrase('filter_by_label...') }}">
+	<xf:tokeninput inputclass="js-labelFilter"
+		name="{$name}"
+		value="{$label}"
+		min-length="{$minLength}"
+		max-tokens="{$maxTokens}"
+		list-data="{$allLabels|json}"
+		placeholder="{$placeholder}" />
+</xf:macro>

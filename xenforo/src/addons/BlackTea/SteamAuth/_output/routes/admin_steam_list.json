@@ -1,0 +1,11 @@
+{
+    "route_type": "admin",
+    "route_prefix": "steam",
+    "sub_name": "list",
+    "format": "list/",
+    "build_class": "",
+    "build_method": "",
+    "controller": "BlackTea\\SteamAuth:Steam",
+    "context": "",
+    "action_prefix": "list"
+}

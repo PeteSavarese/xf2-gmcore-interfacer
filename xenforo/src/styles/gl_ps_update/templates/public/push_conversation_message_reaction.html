@@ -1,0 +1,7 @@
+{{ phrase('x_reacted_to_your_reply_in_the_direct_message_y', {
+	'name': $user.username ?: $alert.username,
+	'reaction': reaction_title($extra.reaction_id),
+	'title': $content.Conversation.title
+}) }}
+<push:url>{{ link('canonical:direct-messages/replies', $content) }}</push:url>
+<push:tag>conversation_message_reaction_{$content.message_id}_{$extra.reaction_id}</push:tag>

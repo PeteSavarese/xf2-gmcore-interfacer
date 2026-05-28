@@ -1,0 +1,188 @@
+<xf:title>{{ phrase('reported_content:') }} {$report.title}</xf:title>
+<xf:h1>{$report.title}</xf:h1>
+
+<xf:breadcrumb href="{{ link('reports') }}">{{ phrase('reports') }}</xf:breadcrumb>
+<xf:css src="message.less" />
+<xf:css src="report.less" />
+
+<div class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<div class="block-row block-row--separated block-row--alt">
+				<xf:set var="$extra">
+					<xf:if is="$report.User AND $xf.visitor.canCleanSpam() AND $report.User.isPossibleSpammer()">
+						<xf:button class="button--link" href="{{ link('spam-cleaner', $report.User) }}" data-xf-click="overlay">{{ phrase('spam') }}</xf:button>
+					</xf:if>
+				</xf:set>
+				<xf:macro id="member_list_macros::item" arg-user="{$report.User}" arg-extraData="{$extra}" />
+			</div>
+			{$handler.render($report)|raw}
+		</div>
+		<xf:if is="$report.link">
+			<div class="block-footer">
+				<span class="block-footer-controls"><xf:button href="{$report.link}">{{ phrase('go_to_content') }}</xf:button></span>
+			</div>
+		</xf:if>
+	</div>
+</div>
+
+<div class="blockMessage">
+	<div class="pairJustifier">
+		<dl class="pairs pairs--rows">
+			<dt>{{ phrase('created') }}</dt>
+			<dd><xf:date time="$report.first_report_date" /></dd>
+		</dl>
+		<dl class="pairs pairs--rows">
+			<dt>{{ phrase('reports') }}</dt>
+			<dd>{$report.report_count|number}</dd>
+		</dl>
+		<dl class="pairs pairs--rows">
+			<dt>{{ phrase('comments') }}</dt>
+			<dd>{$report.comment_count|number}</dd>
+		</dl>
+		<dl class="pairs pairs--rows">
+			<dt>{{ phrase('status') }}</dt>
+			<dd>
+				{$report.getReportState()}
+				<xf:if is="$report.report_state == 'assigned'">
+					{$xf.language.parenthesis_open}<xf:username user="$report.AssignedUser" />{$xf.language.parenthesis_close}
+				</xf:if>
+			</dd>
+		</dl>
+		<dl class="pairs pairs--rows">
+			<dt>{{ phrase('updated') }}</dt>
+			<dd><xf:date time="$report.last_modified_date" /></dd>
+		</dl>
+	</div>
+</div>
+
+<div class="block">
+	<div class="block-container">
+		<h3 class="block-header">{{ phrase('comments') }}</h3>
+
+		<div class="block-body">
+			<xf:foreach loop="$comments" value="$comment">
+				<article class="message message--simple">
+					<div class="message-inner">
+						<div class="message-cell message-cell--user">
+							<xf:macro id="message_macros::user_info_simple" arg-user="{$comment.User}"  arg-fallbackName="{$comment.username}" />
+						</div>
+						<div class="message-cell message-cell--main">
+							<span class="u-anchorTarget" id="report-comment-{$comment.report_comment_id}"></span>
+							<div class="message-content">
+								<header class="message-attribution message-attribution--plain">
+									<ul class="listInline listInline--bullet">
+										<li class="message-attribution-user">
+											<xf:avatar user="$comment.User" size="xxs" defaultname="{$comment.username}" />
+											<h4 class="attribution"><xf:username user="$comment.User" rich="true" defaultname="{$comment.username}" /></h4>
+										</li>
+										<li><a href="#report-comment-{$comment.report_comment_id}" class="u-concealed"><xf:date time="$comment.comment_date" /></a></li>
+										<xf:if is="$comment.is_report">
+											<li><span class="label label--accent">{{ phrase('report_noun') }}</span></li>
+										</xf:if>
+									</ul>
+								</header>
+
+								<xf:if is="$comment.state_change">
+									<div class="message-minorHighlight">{{ phrase('status_changed:') }} {$report.getReportState($comment.state_change)}</div>
+								</xf:if>
+
+								<xf:if is="$comment.message">
+									<article class="message-body">
+										{{ bb_code($comment.message, 'report_comment', $comment) }}
+									</article>
+								</xf:if>
+							</div>
+						</div>
+					</div>
+				</article>
+			</xf:foreach>
+		</div>
+	</div>
+</div>
+
+<div class="block">
+	<div class="block-container">
+
+		<h2 class="block-tabHeader tabs" data-xf-init="tabs" role="tablist">
+			<a class="tabs-tab is-active" role="tab" tabindex="0" aria-controls="{{ unique_id('reportUpdate') }}">{{ phrase('update') }}</a>
+			<a class="tabs-tab" role="tab" tabindex="0" aria-controls="{{ unique_id('reportReassign') }}">{{ phrase('reassign') }}</a>
+		</h2>
+
+		<ul class="tabPanes">
+
+			<li class="is-active" role="tabpanel" id="{{ unique_id('reportUpdate') }}">
+				<xf:form action="{{ link('reports/update', $report) }}" ajax="true" draft="{{ link('reports/draft', $report) }}">
+					<div class="block-body">
+						<xf:set var="$assignedToOther" value="{{ $report.report_state == 'assigned' && $report.AssignedUser && $report.AssignedUser.user_id != $xf.visitor.user_id }}" />
+
+						<xf:if is="$assignedToOther">
+							<xf:formrow rowclass="js-handleToggleTrigger">
+								{{ phrase('this_report_is_currently_assigned_to_x', {'assigned_username': $report.AssignedUser.username}) }}
+								<div>
+									<xf:button data-xf-click="toggle" data-target=".js-handleToggle" data-hide=".js-handleToggleTrigger">
+										{{ phrase('handle_report') }}
+									</xf:button>
+								</div>
+							</xf:formrow>
+						</xf:if>
+
+						<div class="js-handleToggle{{ !$assignedToOther ? ' is-active' : '' }}">
+
+							<xf:editorrow name="message" value="{$report.draft_comment.message}" data-min-height="100"
+								rowtype="fullWidth noLabel"
+								label="{{ phrase('message') }}">
+
+								<xf:explain>
+									{{ phrase('your_comment_will_only_be_visible_to_moderators') }}
+									<xf:if is="$report.isClosed()">{{ phrase('your_comment_will_re_open_this_report') }}</xf:if>
+								</xf:explain>
+							</xf:editorrow>
+
+							<xf:if is="!$report.isClosed()">
+								<xf:radiorow name="report_state"
+									label="{{ phrase('status') }}">
+
+									<xf:option value="" label="{{ phrase('do_not_change') }}" selected="true" />
+									<xf:option value="assigned" label="{{ $report.report_state == 'assigned' ? phrase('unassign') : phrase('report_state.assigned') }}" />
+									<xf:option value="resolved" label="{{ phrase('report_state.resolved') }}" />
+									<xf:option value="rejected" label="{{ phrase('report_state.rejected') }}" />
+								</xf:radiorow>
+
+								<xf:checkboxrow
+									explain="{{ phrase('any_resolution_rejection_alert_text_will_be_appended_to_comment') }}">
+
+									<xf:option name="send_alert" label="{{ phrase('send_resolution_rejection_alert:') }}">
+										<xf:dependent>
+											<xf:textbox name="alert_comment" maxlength="300" />
+										</xf:dependent>
+									</xf:option>
+								</xf:checkboxrow>
+							</xf:if>
+						</div>
+					</div>
+					<div class="js-handleToggle{{ !$assignedToOther ? ' is-active' : '' }}">
+						<xf:submitrow icon="save" />
+					</div>
+				</xf:form>
+			</li>
+
+			<li role="tabpanel" id="{{ unique_id('reportReassign') }}">
+				<xf:form action="{{ link('reports/reassign', $report) }}" ajax="true">
+					<div class="block-body">
+						<xf:selectrow name="user_id" value="{$report.assigned_user_id}"
+							label="{{ phrase('member') }}">
+
+							<xf:option value="0" label="{{ phrase('(none)') }}" />
+							<xf:foreach loop="$moderators" value="$moderator">
+								<xf:option value="{$moderator.User.user_id}" label="{$moderator.User.username}" />
+							</xf:foreach>
+						</xf:selectrow>
+					</div>
+					<xf:submitrow submit="{{ phrase('reassign') }}" />
+				</xf:form>
+			</li>
+
+		</ul>
+	</div>
+</div>

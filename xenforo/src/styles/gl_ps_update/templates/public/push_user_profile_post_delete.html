@@ -1,0 +1,9 @@
+<xf:if is="$extra.profileUserId == $xf.visitor.user_id">
+	{{ phrase('your_status_update_was_deleted') }}
+<xf:else />
+	{{ phrase('your_profile_post_for_x_was_deleted', {
+		'user': $extra.profileUser
+	}) }}
+	<push:url>{{ base_url($extra.profileLink, 'canonical') }}</push:url>
+</xf:if>
+<xf:if is="$extra.reason">{{ phrase('reason:') }} {$extra.reason}</xf:if>

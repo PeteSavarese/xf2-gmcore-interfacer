@@ -1,0 +1,50 @@
+<xf:macro id="vote_control"
+	arg-link="!"
+	arg-content="!"
+	arg-extraClass=""
+	arg-includeMicrodata="{{ false }}">
+
+	<xf:set var="$currentVote" value="{{ $content.getVisitorContentVote() }}" />
+	<xf:set var="$canVote" value="{{ $content.canVoteOnContent() }}" />
+	<div class="contentVote {{ $currentVote ? 'is-voted' : '' }} js-contentVote {$extraClass}" data-xf-init="content-vote" data-content-id="{{ $content.getEntityContentTypeId() }}">
+		<xf:if is="$includeMicrodata">
+			<meta itemprop="upvoteCount" content="{$content.vote_score}" />
+		</xf:if>
+
+		<a href="{{ $canVote ? link($link, $content, {'type' : 'up'}) : 'javascript:' }}"
+			class="contentVote-vote {{ $canVote ? '' : 'is-disabled' }} contentVote-vote--up {{ ($currentVote == 'up') ? 'is-voted' : '' }}"
+			data-vote="up"><span class="u-srOnly">{{ phrase('upvote') }}</span></a>
+
+		<span class="contentVote-score {{ $content.vote_score > 0 ? 'is-positive' : ''  }} {{ $content.vote_score < 0 ? 'is-negative' : ''  }} js-voteCount"
+			data-score="{$content.vote_score}">{$content.vote_score_short}</span>
+
+		<xf:if is="$content.isContentDownvoteSupported()">
+			<a href="{{ $canVote ? link($link, $content, {'type' : 'down'}) : 'javascript:' }}"
+				class="contentVote-vote {{ ($canVote AND $content.canDownvoteContent()) ? '' : 'is-disabled' }} contentVote-vote--down {{ ($currentVote == 'down') ? 'is-voted' : '' }}"
+				data-vote="down"><span class="u-srOnly">{{ phrase('downvote') }}</span></a>
+		</xf:if>
+	</div>
+
+</xf:macro>
+
+<xf:macro id="vote_display" arg-content="!" arg-extraClass="" arg-includeMicrodata="{{ false }}">
+
+	<div class="contentVote js-contentVote contentVote--display {{ $content.getVisitorContentVote() ? 'is-voted' : '' }} {$extraClass}" data-content-id="{{ $content.getEntityContentTypeId() }}">
+		<xf:if is="$includeMicrodata">
+			<meta itemprop="upvoteCount" content="{$content.vote_score}" />
+		</xf:if>
+
+		<span class="contentVote-score {{ $content.vote_score > 0 ? 'is-positive' : ''  }} {{ $content.vote_score < 0 ? 'is-negative' : ''  }} js-voteCount" data-score="{$content.vote_score}">{$content.vote_score_short}</span>
+		<span class="contentVote-description">{{ $content.vote_score == 1 ? phrase('vote_noun') : phrase('votes') }}</span>
+	</div>
+
+</xf:macro>
+
+<xf:macro id="vote_display_placeholder" arg-extraClass="">
+
+	<div class="contentVote contentVote--display contentVote--placeholder {$extraClass}">
+		<span class="contentVote-score">-</span>
+		<span class="contentVote-description">{{ phrase('votes') }}</span>
+	</div>
+
+</xf:macro>

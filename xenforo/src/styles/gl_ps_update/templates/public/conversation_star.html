@@ -1,0 +1,22 @@
+<xf:title>{{ $isStarred ? phrase('unstar') : phrase('star') }}</xf:title>
+
+<xf:breadcrumb href="{{ link('direct-messages') }}">{{ phrase('direct_messages') }}</xf:breadcrumb>
+<xf:breadcrumb href="{{ link('direct-messages', $conversation) }}">{$conversation.title}</xf:breadcrumb>
+
+<xf:form action="{{ link('direct-messages/star', $userConv) }}" ajax="true" class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:inforow rowtype="confirm">
+				<xf:if is="$isStarred">
+					{{ phrase('please_confirm_that_you_wish_to_unstar_following_direct_message:') }}
+				<xf:else />
+					{{ phrase('please_confirm_that_you_wish_to_star_following_direct_message:') }}
+				</xf:if>
+				<strong><a href="{{ link('direct-messages', $conversation) }}">{$conversation.title}</a></strong>
+			</xf:inforow>
+		</div>
+		<xf:submitrow submit="{{ $isStarred ? phrase('unstar') : phrase('star') }}" rowtype="simple" />
+	</div>
+
+	<xf:redirect />
+</xf:form>

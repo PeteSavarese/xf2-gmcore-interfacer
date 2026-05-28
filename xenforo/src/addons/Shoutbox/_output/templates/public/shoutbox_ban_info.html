@@ -1,0 +1,29 @@
+<xf:title>Shoutbox ban</xf:title>
+
+<xf:form action="#" class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:inforow rowtype="confirm">
+				You are currently banned from posting in the shoutbox.
+			</xf:inforow>
+
+			<xf:if is="$ban.BannedBy">
+				<xf:formrow label="Banned by">{$ban.BannedBy.username}</xf:formrow>
+			</xf:if>
+
+			<xf:formrow label="Ban issued">{{ shoutbox_date_dynamic($ban.banned_on) }}</xf:formrow>
+
+			<xf:formrow label="Ban expires">
+				<xf:if is="$ban.expires_on">
+					{{ shoutbox_date_dynamic($ban.expires_on) }}
+				<xf:else />
+					Permanent
+				</xf:if>
+			</xf:formrow>
+
+			<xf:if is="$ban.reason">
+				<xf:formrow label="{{ phrase('reason') }}">{$ban.reason|escape}</xf:formrow>
+			</xf:if>
+		</div>
+	</div>
+</xf:form>

@@ -1,0 +1,38 @@
+.profileBannerContainer
+{
+	display: none;
+
+	+ .formRow
+	{
+		border-width: 0;
+	}
+
+	&.profileBannerContainer--withBanner
+	{
+		display: block;
+
+		+ .formRow
+		{
+			border-width: 1px;
+		}
+
+		.profileBannerContainer-explain
+		{
+			margin: @xf-paddingMedium;
+			font-style: normal;
+			.xf-formExplain();
+			.m-textColoredLinks();
+		}
+	}
+
+	.memberProfileBanner
+	{
+		height: 200px;
+	}
+}
+
+.profileBannerContainer {
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid rgba(52, 73, 94, 0.7);
+}

@@ -1,0 +1,4 @@
+{
+    "api_scope_id": "shoutbox:write",
+    "usable_with_oauth_clients": true
+}

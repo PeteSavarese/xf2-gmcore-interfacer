@@ -1,0 +1,109 @@
+<xf:title>Recovery Queue</xf:title>
+
+<xf:form action="{{ link('gl-store/recoveryadd') }}" method="post" class="block">
+    <div class="block-container">
+        <h3 class="block-formSectionHeader">Add Entry to Recovery Queue</h3>
+        <div class="block-body">
+            <xf:formrow label="PayPal Capture ID" hint="17-character capture ID, e.g. 06A21469RJ8606838">
+                <xf:textbox name="paypal_capture_id" maxlength="20" class="input--wide" />
+            </xf:formrow>
+            <xf:formrow label="Payer Email">
+                <xf:textbox name="payer_email" type="email" class="input--wide" />
+            </xf:formrow>
+            <xf:formrow label="Transaction Date" hint="e.g. 2026-02-07 or MM/DD/YYYY | Used for display only">
+                <xf:textbox name="transaction_date" class="input--wide" />
+            </xf:formrow>
+            <xf:submitrow label="Fetch from PayPal &amp; Add" icon="add" />
+        </div>
+    </div>
+</xf:form>
+
+<div class="block">
+    <div class="block-container">
+        <h3 class="block-formSectionHeader">Pending &amp; Processed Entries ({{ count($entries) }})</h3>
+        <div class="block-body">
+            <xf:if is="!$entries">
+                <p class="block-row u-muted">No entries in the recovery queue yet.</p>
+            <xf:else />
+                <xf:foreach loop="$entries" value="$row">
+                    <xf:set var="$entry" value="{$row.entry}" />
+                    <div class="block-row" style="padding: 12px; border-bottom: 1px solid #eee;">
+                        <div style="display:flex; gap: 16px; align-items: flex-start; flex-wrap: wrap;">
+
+                            <div style="min-width: 200px;">
+                                <strong>Capture ID:</strong> {$entry.paypal_capture_id}<br>
+                                <strong>Date:</strong> <xf:date time="{$entry.transaction_date}" /><br>
+                                <strong>Amount:</strong> <xf:if is="$entry.amount">${$entry.amount}<xf:else />Unknown</xf:if><br>
+                                <strong>Payer email:</strong> {$entry.payer_email}
+                            </div>
+
+                            <div style="min-width: 180px;">
+                                <strong>Purchaser:</strong>
+                                <xf:if is="$row.purchaser">
+                                    <a href="{{ link('users/edit', $row.purchaser) }}">{$row.purchaser.username}</a>
+                                <xf:else />
+                                    <span class="u-muted">No match</span>
+                                </xf:if><br>
+                                <strong>Rank:</strong>
+                                <xf:if is="$row.rank_group">
+                                    {$row.rank_group.title}
+                                <xf:else />
+                                    <span style="color: #c00;">Not found</span>
+                                </xf:if>
+                            </div>
+
+                            <div>
+                                <strong>Status:</strong>
+                                <xf:if is="$entry.status == 'applied'">
+                                    <span style="color: green;">Applied</span>
+                                    | Receiver: <xf:if is="$row.receiver"><a href="{{ link('users/edit', $row.receiver) }}">{$row.receiver.username}</a><xf:else />ID {$entry.receiver_user_id}</xf:if>
+                                <xf:elseif is="$entry.status == 'skipped'" />
+                                    <span class="u-muted">Skipped</span>
+                                <xf:else />
+                                    <span style="color: #a60;">Pending</span>
+                                </xf:if>
+                            </div>
+                        </div>
+
+                        <xf:if is="$entry.status == 'pending'">
+                            <xf:form action="{{ link('gl-store/recoveryapply') }}" method="post" style="margin-top: 10px;">
+                                                <input type="hidden" name="entry_id" value="{$entry.id}" />
+                                <div style="display:flex; gap: 12px; flex-wrap: wrap; align-items: flex-end;">
+                                    <xf:if is="!$row.rank_group">
+                                        <xf:formrow label="Override Rank" rowclass="u-noMargin">
+                                            <xf:select name="rank_id_override" class="input--inline">
+                                                <xf:option value="">-- select rank --</xf:option>
+                                                <xf:foreach loop="$allRanks" value="$rg">
+                                                    <xf:option value="{$rg.upgrade_id}">{$rg.title}</xf:option>
+                                                </xf:foreach>
+                                            </xf:select>
+                                        </xf:formrow>
+                                    <xf:else />
+                                        <input type="hidden" name="rank_id_override" value="0" />
+                                    </xf:if>
+
+                                    <xf:if is="!$row.purchaser">
+                                        <xf:formrow label="Purchaser username" rowclass="u-noMargin">
+                                            <xf:textbox name="purchaser_username" ac="single" class="input--inline" style="width: 160px;" />
+                                        </xf:formrow>
+                                    <xf:else />
+                                        <input type="hidden" name="purchaser_username" value="" />
+                                    </xf:if>
+
+                                    <xf:formrow label="Receiver username" rowclass="u-noMargin">
+                                        <xf:textbox name="receiver_username" ac="single" class="input--inline" style="width: 160px;" />
+                                    </xf:formrow>
+
+                                    <div>
+                                        <button type="submit" name="apply_action" value="apply" class="button button--primary">Apply Rank</button>
+                                        <button type="submit" name="apply_action" value="skip" class="button">Skip</button>
+                                    </div>
+                                </div>
+                            </xf:form>
+                        </xf:if>
+                    </div>
+                </xf:foreach>
+            </xf:if>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,14 @@
+{
+    "group_name": "page",
+    "title": "Maximum page width",
+    "description": "As the window is resized, it will continue to grow in width until this value, after which it will remain static",
+    "property_type": "value",
+    "css_components": [],
+    "value_type": "unit",
+    "value_parameters": "",
+    "has_variations": false,
+    "depends_on": "",
+    "value_group": "page",
+    "property_value": "80%",
+    "display_order": 100
+}

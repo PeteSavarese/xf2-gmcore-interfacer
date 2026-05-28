@@ -1,0 +1,42 @@
+<xf:macro id="answer" extends="post_macros::post">
+	<xf:extension id="extra_classes" value="message--post {{ $post.is_question_solution ? 'message--solution' : '' }}" />
+
+	<xf:extension id="main_cell">
+		<xf:extensionparent />
+
+		<xf:if contentcheck="true">
+			<div class="message-cell message-cell--vote">
+				<div class="message-column">
+				<xf:contentcheck>
+					<xf:if is="$post.isContentVotingSupported()">
+						<xf:macro id="content_vote_macros::vote_control"
+							arg-link="posts/vote"
+							arg-content="{$post}"
+							arg-includeMicrodata="{{ true }} "/>
+					</xf:if>
+
+					<xf:if is="$post.canMarkAsQuestionSolution()">
+						<xf:set var="$isSolutionText" value="{{ phrase('unmark_as_solution') }}" />
+						<xf:set var="$makeSolutionText" value="{{ phrase('mark_as_solution') }}" />
+
+						<a href="{{ link('posts/mark-solution', $post) }}"
+							class="solutionIcon {{ $post.is_question_solution ? 'is-solution' : ''  }} js-solutionControl"
+							data-xf-click="solution-edit"
+							data-sk-marked="addClass:is-solution, titleAttr:sync, {$isSolutionText|for_attr}"
+							data-sk-removed="removeClass:is-solution, titleAttr:sync, {$makeSolutionText|for_attr}"
+							data-label=".u-srOnly"
+							data-xf-init="tooltip"
+							title="{{ $post.is_question_solution ? $isSolutionText : $makeSolutionText }}">
+							<span class="u-srOnly">{{ $post.is_question_solution ? $isSolutionText : $makeSolutionText }}</span>
+						</a>
+					<xf:elseif is="$post.is_question_solution" />
+						<span class="solutionIcon is-solution" data-xf-init="tooltip" title="{{ phrase('solution')|for_attr }}">
+							<span class="u-srOnly">{{ phrase('solution') }}</span>
+						</span>
+					</xf:if>
+				</xf:contentcheck>
+				</div>
+			</div>
+		</xf:if>
+	</xf:extension>
+</xf:macro>

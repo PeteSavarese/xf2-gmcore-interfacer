@@ -1,0 +1,11 @@
+{
+    "route_type": "admin",
+    "route_prefix": "shoutbox-bans",
+    "sub_name": "",
+    "format": ":int<user_id,username>",
+    "build_class": "",
+    "build_method": "",
+    "controller": "Shoutbox:Bans",
+    "context": "shoutboxBans",
+    "action_prefix": ""
+}

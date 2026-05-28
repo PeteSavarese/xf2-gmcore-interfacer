@@ -1,0 +1,33 @@
+<xf:macro id="currency_list" arg-value="!" arg-includePopular="{{ true }}" arg-row="{{ false }}" arg-rowLabel="" arg-name="cost_currency" arg-rowClass="" arg-class="">
+	<xf:set var="$currencyData" value="{{ $xf.app.data('XF:Currency') }}" />
+	<xf:set var="$currencies" value="{$currencyData.getCurrencyOptions()}" />
+	<xf:if is="$includePopular">
+		<xf:set var="$popularCurrencies" value="{$currencyData.getCurrencyOptions(true)}" />
+	</xf:if>
+
+	<xf:set var="$select">
+		<xf:select name="{$name}" value="{$value}" class="{$class}">
+			<xf:option value="">&nbsp;</xf:option>
+			<xf:if is="$popularCurrencies">
+				<xf:optgroup label="{{ phrase('popular_currencies') }}">
+					<xf:options source="{$popularCurrencies}" />
+				</xf:optgroup>
+				<xf:optgroup label="{{ phrase('other_currencies') }}">
+					<xf:options source="{$currencies}" />
+				</xf:optgroup>
+			<xf:else />
+				<xf:options source="{$currencies}" />
+			</xf:if>
+		</xf:select>
+	</xf:set>
+
+	<xf:if is="$row">
+		<xf:formrow rowtype="input" class="{$rowClass}"
+			label="{$rowLabel}">
+
+			{$select|raw}
+		</xf:formrow>
+	<xf:else />
+		{$select|raw}
+	</xf:if>
+</xf:macro>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<routes>
+    <route route_type="admin" route_prefix="shoutbox-bans" format=":int&lt;user_id,username&gt;"
+           controller="Shoutbox:Bans" context="shoutboxBans"/>
+    <route route_type="api" route_prefix="shoutbox" sub_name="discord_delete" format="discord/delete"
+           controller="Shoutbox:Discord" action_prefix="Delete"/>
+    <route route_type="api" route_prefix="shoutbox" sub_name="discord_ingest" format="discord/ingest"
+           controller="Shoutbox:Discord" action_prefix="Ingest"/>
+    <route route_type="api" route_prefix="shoutbox" sub_name="discord_timeout" format="discord/timeout"
+           controller="Shoutbox:Discord" action_prefix="Timeout"/>
+    <route route_type="api" route_prefix="shoutbox" sub_name="discord_untimeout" format="discord/untimeout"
+           controller="Shoutbox:Discord" action_prefix="Untimeout"/>
+    <route route_type="api" route_prefix="shoutbox" sub_name="discord_update" format="discord/update"
+           controller="Shoutbox:Discord" action_prefix="Update"/>
+    <route route_type="public" route_prefix="shoutbox" format=":int&lt;message_id&gt;/" controller="Shoutbox:Index"/>
+</routes>

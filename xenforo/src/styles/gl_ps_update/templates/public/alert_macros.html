@@ -1,0 +1,21 @@
+<xf:macro id="row" arg-alert="!">
+	<div class="contentRow">
+		<div class="contentRow-figure">
+			<xf:avatar user="$alert.User" size="xxs" defaultname="{$alert.username}" />
+		</div>
+		<div class="contentRow-main contentRow-main--close">
+			{$alert.render()|raw}
+			<div class="contentRow-minor contentRow-minor--smaller">
+				<xf:date time="$alert.event_date" />
+				<span class="u-pullRight">
+					<a href="{{ link('account/alert-toggle', null, {'alert_id': $alert.alert_id}) }}"
+						data-xf-init="tooltip" data-content="{{ $alert.isUnreadInUi() ? phrase('mark_read')|for_attr : phrase('mark_unread')|for_attr }}"
+						data-read="{{ phrase('mark_read')|for_attr }}" data-unread="{{ phrase('mark_unread')|for_attr }}"
+						class="js-alertToggle alertToggler"><xf:trim>
+						<i class="alertToggler-icon"></i>
+					</xf:trim></a>
+				</span>
+			</div>
+		</div>
+	</div>
+</xf:macro>

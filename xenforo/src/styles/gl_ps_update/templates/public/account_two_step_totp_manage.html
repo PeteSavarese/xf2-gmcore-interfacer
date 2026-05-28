@@ -1,0 +1,22 @@
+<xf:title>{{ phrase('two_step_verification_setup:') }} {$provider.title}</xf:title>
+
+<xf:wrap template="account_wrapper" />
+
+<xf:form action="{{ link('account/two-step/manage', $provider) }}" class="block" ajax="{{ $newProviderData ? 'true' : '' }}">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:if is="$newProviderData">
+				{{ $provider.render('setup', $xf.visitor, $newProviderData, $newTriggerData)|raw }}
+
+				<xf:hiddenval name="confirm">1</xf:hiddenval>
+			<xf:else />
+				<xf:checkboxrow>
+					<xf:option name="regen" value="1"
+						label="{{ phrase('regenerate_secret_for_new_device') }}"
+						hint="{{ phrase('totp_this_will_regenerate_secret') }}" />
+				</xf:checkboxrow>
+			</xf:if>
+		</div>
+		<xf:submitrow submit="{{ phrase('confirm') }}" />
+	</div>
+</xf:form>

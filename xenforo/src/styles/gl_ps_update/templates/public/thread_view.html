@@ -1,0 +1,483 @@
+<xf:title page="{$page}">{{ prefix('thread', $thread, 'escaped') }}{$thread.title}</xf:title>
+<xf:h1>{{ prefix('thread', $thread) }}{$thread.title}</xf:h1>
+
+<xf:if is="!$thread.isSearchEngineIndexable()">
+	<xf:head option="metaNoindex"><meta name="robots" content="noindex" /></xf:head>
+</xf:if>
+
+<xf:description meta="false">
+	<ul class="listInline listInline--bullet">
+		<li>
+			<xf:fa icon="fa-user" title="{{ phrase('thread_starter')|for_attr }}" />
+			<span class="u-srOnly">{{ phrase('thread_starter') }}</span>
+
+			<xf:username user="{$thread.User}" defaultname="{$thread.username}" class="u-concealed" />
+		</li>
+		<li>
+			<xf:fa icon="fa-clock" title="{{ phrase('start_date')|for_attr }}" />
+			<span class="u-srOnly">{{ phrase('start_date') }}</span>
+
+			<a href="{{ link('threads', $thread) }}" class="u-concealed"><xf:date time="{$thread.post_date}" /></a>
+		</li>
+		<xf:if is="$thread.featured">
+			<li><span class="label label--accent">{{ phrase('featured') }}</span></li>
+		</xf:if>
+		<xf:if is="$xf.options.enableTagging AND ($thread.canEditTags() OR $thread.tags)">
+			<li>
+				<xf:macro id="tag_macros::list"
+					arg-tags="{$thread.tags}"
+					arg-tagList="tagList--thread-{$thread.thread_id}"
+					arg-editLink="{{ $thread.canEditTags() ? link('threads/tags', $thread) : '' }}" />
+			</li>
+		</xf:if>
+	</ul>
+</xf:description>
+
+<xf:set var="$fpSnippet" value="{{ snippet($firstPost.message, 0, {'stripBbCode': true}) }}" />
+
+<xf:macro id="metadata_macros::metadata"
+	arg-description="{$fpSnippet}"
+	arg-shareUrl="{{ link('canonical:threads', $thread) }}"
+	arg-canonicalUrl="{{ link('canonical:threads', $thread, {'page': $page}) }}" />
+
+<xf:macro id="metadata_macros::oembed"
+	arg-oembedUrl="{$thread.getOembedEndpointUrl()}"
+	arg-title="{$thread.getContentTitle()}" />
+
+<xf:page option="ldJsonHtml">
+	<xf:extension id="structured_data_extra_params" value="{{ [] }}" />
+	<xf:extension id="structured_data">
+		<xf:set var="$ldJson"
+			value="{{ $thread.getLdStructuredData($firstPost, $page, extension_value('structured_data_extra_params')) }}"
+		/>
+		<xf:if is="$ldJson">
+			<script type="application/ld+json">
+				{$ldJson|json(true)|raw}
+			</script>
+		</xf:if>
+	</xf:extension>
+</xf:page>
+
+<xf:extension id="content_top"></xf:extension>
+<!--[XF:content_top]-->
+
+<xf:if is="$pendingApproval">
+	<div class="blockMessage blockMessage--important">{{ phrase('content_submitted_displayed_pending_approval') }}</div>
+</xf:if>
+
+<xf:if is="$thread.prefix_id">
+	<xf:if contentcheck="true">
+		<div class="blockMessage blockMessage--alt blockMessage--small blockMessage--close">
+			<xf:contentcheck>{{ prefix_description('thread', $thread.prefix_id) }}</xf:contentcheck>
+		</div>
+	</xf:if>
+</xf:if>
+
+<xf:macro id="forum_macros::forum_page_options" arg-forum="{$forum}" arg-thread="{$thread}" />
+
+<xf:breadcrumb source="$forum.getBreadcrumbs()" />
+
+<xf:if is="$canInlineMod OR $thread.canUseInlineModeration()">
+	<xf:js src="xf/inline_mod.js" min="1" />
+</xf:if>
+
+<xf:extension id="above_messages"></xf:extension>
+<xf:ad position="thread_view_above_messages" arg-thread="{$thread}" />
+<xf:widgetpos id="thread_view_above_messages" context-thread="{$thread}" />
+
+<xf:set var="$threadActionsHtml">
+	<xf:extension id="thread_actions">
+		<xf:if contentcheck="true">
+			<div class="block-outer-opposite">
+				<div class="buttonGroup">
+				<xf:contentcheck>
+					<xf:extension id="thread_action_buttons">
+						<xf:if is="$canInlineMod">
+							<xf:macro id="inline_mod_macros::button" />
+						</xf:if>
+						<xf:if is="$thread.discussion_state == 'deleted' AND $thread.canUndelete()">
+							<xf:button href="{{ link('threads/undelete', $thread) }}" class="button--link" overlay="true">
+								{{ phrase('undelete') }}
+							</xf:button>
+						</xf:if>
+						<xf:if is="$thread.canApproveUnapprove() AND $thread.discussion_state == 'moderated'">
+							<xf:button href="{{ link('threads/approve', $thread) }}" class="button--link" overlay="true">
+								{{ phrase('approve') }}
+							</xf:button>
+						</xf:if>
+						<xf:if is="$xf.visitor.user_id AND $thread.isUnread()">
+							<xf:button href="{{ ($firstUnread AND $isSimpleDateDisplay) ? ('#post-' . $firstUnread.post_id) : link('threads/unread', $thread, {'new': 1}) }}"
+								class="button--link"
+								data-xf-click="scroll-to"
+								data-silent="true">
+									{{ phrase('jump_to_new') }}
+							</xf:button>
+						</xf:if>
+						<xf:if is="$thread.canWatch()">
+							<xf:button href="{{ link('threads/watch', $thread) }}" class="button--link"
+								data-xf-click="switch-overlay"
+								data-sk-watch="{{ phrase('watch') }}"
+								data-sk-unwatch="{{ phrase('unwatch') }}">
+								<xf:if is="{$thread.Watch.{$xf.visitor.user_id}}">
+									{{ phrase('unwatch') }}
+								<xf:else />
+									{{ phrase('watch') }}
+								</xf:if>
+							</xf:button>
+						</xf:if>
+
+						<xf:if contentcheck="true">
+							<div class="buttonGroup-buttonWrapper">
+								<xf:button class="button--link menuTrigger" data-xf-click="menu" aria-expanded="false" aria-haspopup="true" title="{{ phrase('more_options') }}">&#8226;&#8226;&#8226;</xf:button>
+								<div class="menu" data-menu="menu" aria-hidden="true">
+									<div class="menu-content">
+										<h4 class="menu-header">{{ phrase('more_options') }}</h4>
+										<xf:contentcheck>
+											<!--[XF:thread_tools_menu:top]-->
+											<xf:if is="$thread.canEdit()">
+												<a href="{{ link('threads/edit', $thread) }}" data-xf-click="overlay" class="menu-linkRow">{{ phrase('edit_thread') }}</a>
+											</xf:if>
+											<xf:if is="$thread.canChangeType() AND count($creatableThreadTypes) > 1">
+												<a href="{{ link('threads/change-type', $thread) }}" data-xf-click="overlay" class="menu-linkRow">{{ phrase('change_thread_type') }}</a>
+											</xf:if>
+											<xf:if is="$thread.canLockUnlock()">
+												<a href="{{ link('threads/quick-close', $thread) }}"
+													class="menu-linkRow"
+													data-xf-click="switch"
+													data-menu-closer="true">
+
+													<xf:if is="$thread.discussion_open">
+														{{ phrase('lock_thread') }}
+													<xf:else />
+														{{ phrase('unlock_thread') }}
+													</xf:if>
+												</a>
+											</xf:if>
+											<xf:if is="$thread.canStickUnstick()">
+												<a href="{{ link('threads/quick-stick', $thread) }}"
+													class="menu-linkRow"
+													data-xf-click="switch"
+													data-menu-closer="true">
+
+													<xf:if is="$thread.sticky">
+														{{ phrase('unstick_thread') }}
+													<xf:else />
+														{{ phrase('stick_thread') }}
+													</xf:if>
+												</a>
+											</xf:if>
+											<xf:if is="$thread.canFeatureUnfeature()">
+												<a href="{{ link('threads/feature', $thread) }}" class="menu-linkRow"
+													data-xf-click="overlay">
+
+													<xf:if is="$thread.isFeatured()">
+														{{ phrase('manage_feature') }}
+													<xf:else />
+														{{ phrase('feature_thread') }}
+													</xf:if>
+												</a>
+											</xf:if>
+											<xf:if is="$thread.canCreatePoll()">
+												<a href="{{ link('threads/poll/create', $thread) }}" data-xf-click="overlay" class="menu-linkRow">{{ phrase('create_poll') }}</a>
+											</xf:if>
+											<xf:if is="$thread.canDelete('soft')">
+												<a href="{{ link('threads/delete', $thread) }}" data-xf-click="overlay" class="menu-linkRow">{{ phrase('delete_thread') }}</a>
+											</xf:if>
+											<xf:if is="$thread.canMove()">
+												<a href="{{ link('threads/move', $thread) }}" data-xf-click="overlay" class="menu-linkRow">{{ phrase('move_thread') }}</a>
+											</xf:if>
+											<xf:if is="$thread.canReplyBan()">
+												<a href="{{ link('threads/reply-bans', $thread) }}" data-xf-click="overlay" class="menu-linkRow">{{ phrase('manage_reply_bans') }}</a>
+											</xf:if>
+											<xf:if is="$thread.canViewModeratorLogs()">
+												<a href="{{ link('threads/moderator-actions', $thread) }}" data-xf-click="overlay" class="menu-linkRow">{{ phrase('moderator_actions') }}</a>
+											</xf:if>
+											<!--[XF:thread_tools_menu:before_footer]-->
+											<xf:if is="$thread.canUseInlineModeration()">
+												<div class="menu-footer"
+													data-xf-init="inline-mod"
+													data-type="thread"
+													data-href="{{ link('inline-mod') }}"
+													data-toggle=".js-threadInlineModToggle">
+													<xf:checkbox standalone="true">
+														<xf:option class="js-threadInlineModToggle" value="{$thread.thread_id}" label="{{ phrase('select_for_moderation') }}" hiddenlabel="true" />
+													</xf:checkbox>
+												</div>
+											</xf:if>
+											<!--[XF:thread_tools_menu:bottom]-->
+										</xf:contentcheck>
+									</div>
+								</div>
+							</div>
+						</xf:if>
+					</xf:extension>
+				</xf:contentcheck>
+				</div>
+			</div>
+		</xf:if>
+	</xf:extension>
+</xf:set>
+
+<xf:set var="$postSortFilterHtml">
+	<xf:extension id="post_sort_filter">
+		<xf:if is="($posts is not empty OR $filters)">
+			<xf:if contentcheck="true">
+				<div class="tabs tabs--standalone tabs--standalone--small tabs--standalone--inline">
+				<xf:contentcheck>
+					<xf:if is="$availableSorts AND count($availableSorts) > 1">
+						<xf:foreach loop="$availableSorts" key="$sortKey" value="$null">
+							<a href="{{ link('threads', $thread, $pageNavFilters|replace({'order': $sortKey == $defaultOrder ? null : $sortKey})) }}"
+								class="tabs-tab {{ $sortKey == $effectiveOrder ? 'is-active' : '' }}"
+								rel="nofollow">
+								{{ phrase_dynamic('thread_sort.' . $sortKey) }}
+							</a>
+						</xf:foreach>
+					</xf:if>
+					<xf:extension id="post_sort_filter_end"></xf:extension>
+				</xf:contentcheck>
+				</div>
+			</xf:if>
+		</xf:if>
+	</xf:extension>
+</xf:set>
+
+<xf:if is="$isFirstPostPinned">
+	<xf:extension id="pinned_block_before"></xf:extension>
+
+	<xf:extension id="pinned_block_classes" value="" />
+	<div class="block block--messages {{ extension_value('pinned_block_classes') }}"
+		data-xf-init="lightbox{{ $xf.options.selectQuotable ? ' select-to-quote' : '' }}"
+		data-message-selector=".js-post"
+		data-lb-id="thread-{$thread.thread_id}">
+		<xf:extension id="pinned_outer_before">
+			<xf:macro id="thread_status" arg-thread="{$thread}" arg-wrapperClass="block-outer" />
+
+			<div class="block-outer"><xf:trim>
+				{$threadActionsHtml}
+			</xf:trim></div>
+
+			<xf:macro id="thread_custom_fields_status"
+				arg-thread="{$thread}"
+				arg-forum="{$forum}"
+				arg-wrapperClass="block-outer" />
+		</xf:extension>
+
+		<div class="block-container">
+			<div class="block-body">
+				<xf:extension id="pinned_body">
+					<xf:macro id="{{ $templateOverrides.pinned_first_post_macro ?: 'post_macros::post' }}"
+						arg-post="{$pinnedPost}"
+						arg-thread="{$thread}"
+						arg-highlightedPosts="{$highlightedPosts}"
+						args="{$templateOverrides.pinned_first_post_macro_args}" />
+				</xf:extension>
+			</div>
+		</div>
+
+		<xf:extension id="pinned_outer_after"></xf:extension>
+	</div>
+</xf:if>
+
+<xf:extension id="above_messages_below_pinned"></xf:extension>
+
+<xf:extension id="message_block_classes" value="block--messages" />
+<div class="block {{ extension_value('message_block_classes') }}" data-xf-init="{{ $canInlineMod ? 'inline-mod' : '' }}" data-type="post" data-href="{{ link('inline-mod') }}" data-search-target="*">
+
+	<span class="u-anchorTarget" id="posts"></span>
+
+	<xf:if is="!$isFirstPostPinned">
+		<xf:macro id="thread_status" arg-thread="{$thread}" arg-wrapperClass="block-outer" />
+	</xf:if>
+
+	<div class="block-outer"><xf:extension id="messages_block_outer"><xf:trim>
+		<xf:pagenav
+			page="{$page}" perpage="{$perPage}" total="{$totalPosts}"
+			link="threads" data="{$thread}" params="{$pageNavFilters}" hash="{$pageNavHash}"
+			wrapperclass="block-outer-main" />
+
+			<xf:if is="!$isFirstPostPinned">
+				{$threadActionsHtml}
+			</xf:if>
+
+			<xf:if contentcheck="true">
+				<div class="block-outer-opposite">
+					<xf:contentcheck>{$postSortFilterHtml}</xf:contentcheck>
+				</div>
+			</xf:if>
+	</xf:trim></xf:extension></div>
+
+	<xf:extension id="messages_block_outer_secondary"></xf:extension>
+
+	<xf:if is="!$isFirstPostPinned">
+		<xf:macro id="thread_custom_fields_status"
+			arg-thread="{$thread}"
+			arg-forum="{$forum}"
+			arg-wrapperClass="block-outer" />
+	</xf:if>
+
+	<div class="block-container lbContainer"
+		data-xf-init="lightbox{{ $xf.options.selectQuotable ? ' select-to-quote' : '' }}"
+		data-message-selector=".js-post"
+		data-lb-id="thread-{$thread.thread_id}"
+		data-lb-universal="{$xf.options.lightBoxUniversal}">
+
+		<div class="block-body js-replyNewMessageContainer">
+			<xf:if is="$posts is not empty">
+				<xf:foreach loop="$posts" value="$post">
+
+					<xf:extension id="messages_block_body_before_post"></xf:extension>
+
+					<xf:if is="$post.message_state == 'deleted'">
+						<xf:macro id="{{ $templateOverrides.post_deleted_macro ?: 'post_macros::post_deleted' }}"
+							arg-post="{$post}"
+							arg-thread="{$thread}"
+							args="{$templateOverrides.post_deleted_macro_args}" />
+					<xf:else />
+						<xf:macro id="{{ $templateOverrides.post_macro ?: 'post_macros::post' }}"
+							arg-post="{$post}"
+							arg-thread="{$thread}"
+							arg-highlightedPosts="{$highlightedPosts}"
+							args="{$templateOverrides.post_macro_args}" />
+					</xf:if>
+
+					<xf:extension id="messages_block_body_after_post"></xf:extension>
+
+				</xf:foreach>
+			<xf:else />
+				<xf:if is="$filters">
+					<div class="message">
+						<div class="message-inner">
+							<div class="message-cell">
+								{{ phrase('there_no_posts_matching_your_filters') }}
+							</div>
+						</div>
+					</div>
+				</xf:if>
+			</xf:if>
+		</div>
+	</div>
+
+	<xf:if contentcheck="true">
+		<div class="block-outer block-outer--after">
+			<xf:contentcheck>
+				<xf:pagenav
+					page="{$page}" perpage="{$perPage}" total="{$totalPosts}"
+					link="threads" data="{$thread}" params="{$pageNavFilters}" hash="{$pageNavHash}"
+					wrapperclass="block-outer-main" />
+
+				<xf:showignored wrapperclass="block-outer-opposite" />
+				<xf:if is="
+					!$thread.canReply()
+					AND !$thread.canReplyPreReg()
+					AND $thread.discussion_state == 'visible'
+					AND $thread.discussion_open
+				">
+					<div class="block-outer-opposite">
+						<xf:if is="$xf.visitor.user_id">
+							<span class="button button--wrap is-disabled">
+								{{ phrase('no_permission_to_reply') }}
+								<!-- this is not interactive so shouldn't be a button element -->
+							</span>
+						<xf:else />
+							<xf:button href="{{ link('login') }}" class="button--link button--wrap" overlay="true">
+								{{ phrase('log_in_or_register_to_reply') }}
+							</xf:button>
+						</xf:if>
+					</div>
+				</xf:if>
+			</xf:contentcheck>
+		</div>
+	</xf:if>
+
+	<xf:macro id="thread_status" arg-thread="{$thread}" arg-wrapperClass="block-outer block-outer--after" />
+</div>
+
+<xf:ad position="thread_view_below_messages" arg-thread="{$thread}" />
+<xf:extension id="below_messages"></xf:extension>
+<xf:widgetpos id="thread_view_below_messages" context-thread="{$thread}" />
+
+<xf:set var="$isPreRegReply" value="{{ $thread.canReplyPreReg() }}" />
+<xf:if is="$thread.canReply() OR $isPreRegReply">
+	<xf:form action="{{ link('threads/add-reply', $thread) }}"
+		ajax="true"
+		draft="{{ link('threads/draft', $thread) }}"
+		class="block js-quickReply"
+		data-xf-init="attachment-manager quick-reply{{ ($xf.visitor.isShownCaptcha() AND !$isPreRegReply) ? ' guest-captcha' : '' }}"
+		data-captcha-context="xf_guest_thread_quick_reply"
+		data-message-container="div[data-type='post'] .js-replyNewMessageContainer">
+
+		<xf:js src="xf/action.js, xf/message.js, xf/captcha.js" min="1" />
+
+		<div class="block-container">
+			<div class="block-body">
+				<xf:macro id="quick_reply_macros::body"
+					arg-message="{$thread.draft_reply.message}"
+					arg-attachmentData="{$attachmentData}"
+					arg-forceHash="{$thread.draft_reply.attachment_hash}"
+					arg-messageSelector=".js-post"
+					arg-multiQuoteHref="{{ link('threads/multi-quote', $thread) }}"
+					arg-multiQuoteStorageKey="multiQuoteThread"
+					arg-lastItemId="{$lastPost.post_id}"
+					arg-lastDate="{$lastPost.post_date}"
+					arg-lastKnownDate="{$thread.last_post_date}"
+					arg-loadExtra="{$isSimpleDateDisplay}"
+					arg-showGuestControls="{{ !$isPreRegReply }}"
+					arg-previewUrl="{{ link('threads/reply-preview', $thread) }}"/>
+			</div>
+		</div>
+	</xf:form>
+</xf:if>
+
+<xf:widgetpos id="thread_view_below_quick_reply" context-thread="{$thread}" />
+<xf:extension id="below_quick_reply"></xf:extension>
+
+<div class="blockMessage blockMessage--none">
+	<xf:macro id="share_page_macros::buttons" arg-iconic="{{ true }}" arg-label="{{ phrase('share:') }}" />
+</div>
+
+<xf:extension id="below_share"></xf:extension>
+
+<xf:macro id="thread_status" arg-thread="!" arg-wrapperClass="">
+	<xf:if contentcheck="true">
+		<div class="{$wrapperClass}">
+			<dl class="blockStatus">
+				<dt>{{ phrase('status') }}</dt>
+				<xf:contentcheck>
+					<xf:if is="$thread.discussion_state == 'deleted'">
+						<dd class="blockStatus-message blockStatus-message--deleted">
+							<xf:macro id="deletion_macros::notice" arg-log="{$thread.DeletionLog}" />
+						</dd>
+					<xf:elseif is="$thread.discussion_state == 'moderated'" />
+						<dd class="blockStatus-message blockStatus-message--moderated">
+							{{ phrase('awaiting_approval_before_being_displayed_publicly') }}
+						</dd>
+					</xf:if>
+					<xf:if is="!$thread.discussion_open">
+						<dd class="blockStatus-message blockStatus-message--locked">
+							{{ phrase('not_open_for_further_replies') }}
+						</dd>
+					</xf:if>
+				</xf:contentcheck>
+			</dl>
+		</div>
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="thread_custom_fields_status" arg-thread="!" arg-forum="!" arg-wrapperClass="">
+	<div class="{$wrapperClass} js-threadStatusField"><xf:trim>
+		<xf:if contentcheck="true">
+			<div class="blockStatus blockStatus--info">
+				<xf:contentcheck>
+					<xf:macro id="custom_fields_macros::custom_fields_view"
+						arg-type="threads"
+						arg-group="thread_status"
+						arg-onlyInclude="{$forum.field_cache}"
+						arg-set="{$thread.custom_fields}"
+						arg-wrapperClass="blockStatus-message" />
+				</xf:contentcheck>
+			</div>
+		</xf:if>
+	</xf:trim></div>
+</xf:macro>
+
+<xf:widgetpos id="thread_view_sidebar" context-thread="{$thread}" position="sidebar" />

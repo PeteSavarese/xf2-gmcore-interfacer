@@ -1,0 +1,75 @@
+<xf:title>{{ phrase('watched_forums') }}</xf:title>
+
+<xf:css src="node_list.less" />
+
+<xf:if is="$watchedForums is not empty">
+	<xf:form action="{{ link('watched/forums/update') }}" ajax="true" class="block" autocomplete="off">
+
+		<div class="block-outer">
+
+			<div class="block-outer-opposite">
+				<xf:button class="button--link menuTrigger" data-xf-click="menu" aria-expanded="false" aria-haspopup="true">{{ phrase('manage_watched_forums') }}</xf:button>
+				<div class="menu" data-menu="menu" aria-hidden="true">
+					<div class="menu-content">
+						<h3 class="menu-header">{{ phrase('manage_watched_forums') }}</h3>
+						<!--[XF:manage_menu:top]-->
+						<a href="{{ link('watched/forums/manage', null, {'state': 'watch_no_email'}) }}" data-xf-click="overlay" class="menu-linkRow">{{ phrase('disable_email_notification') }}</a>
+						<a href="{{ link('watched/forums/manage', null, {'state': 'delete'}) }}" data-xf-click="overlay" class="menu-linkRow">{{ phrase('stop_watching_forums') }}</a>
+						<!--[XF:manage_menu:bottom]-->
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="block-container">
+			<div class="block-body">
+				<xf:foreach loop="$nodeTree.getFlattened()" key="$id" value="$treeEntry">
+					<xf:set var="$node" value="{$treeEntry.record}" />
+					<xf:set var="$forumWatch" value="{$watchedForums.{$node.node_id}}" />
+					<xf:if is="$forumWatch">
+						<xf:set var="$bonusInfo">
+							<ul class="listInline listInline--bullet">
+								<xf:if is="$forumWatch.notify_on == 'thread'">
+									<li>{{ phrase('new_threads') }}</li>
+								<xf:elseif is="$forumWatch.notify_on == 'message'" />
+									<li>{{ phrase('new_messages') }}</li>
+								</xf:if>
+								<xf:if is="$forumWatch.send_alert"><li>{{ phrase('alerts') }}</li></xf:if>
+								<xf:if is="$forumWatch.send_email"><li>{{ phrase('emails') }}</li></xf:if>
+							</ul>
+						</xf:set>
+						<xf:macro id="node_list_forum::forum"
+							arg-node="{$node}"
+							arg-extras="{$nodeExtras.{$node.node_id}}"
+							arg-children="{$nodeTree.{$id}.children}"
+							arg-childExtras="{$nodeExtras}"
+							arg-depth="2"
+							arg-chooseName="node_ids"
+							arg-bonusInfo="{$bonusInfo}" />
+					</xf:if>
+				</xf:foreach>
+			</div>
+			<div class="block-footer block-footer--split">
+				<span class="block-footer-counter"></span>
+				<span class="block-footer-select"><xf:checkbox standalone="true">
+					<xf:option class="input--inline" check-all="< .block-container" label="{{ phrase('select_all') }}" />
+				</xf:checkbox></span>
+				<span class="block-footer-controls">
+					<xf:select name="action" class="input--inline">
+						<xf:option>{{ phrase('with_selected...') }}</xf:option>
+						<!--[XF:action_menu:top]-->
+						<xf:option value="email">{{ phrase('enable_email_notification') }}</xf:option>
+						<xf:option value="no_email">{{ phrase('disable_email_notification') }}</xf:option>
+						<xf:option value="alert">{{ phrase('enable_alerts') }}</xf:option>
+						<xf:option value="no_alert">{{ phrase('disable_alerts') }}</xf:option>
+						<xf:option value="delete">{{ phrase('stop_watching') }}</xf:option>
+						<!--[XF:action_menu:bottom]-->
+					</xf:select>
+					<xf:button type="submit">{{ phrase('go') }}</xf:button>
+				</span>
+			</div>
+		</div>
+	</xf:form>
+<xf:else />
+	<div class="blockMessage">{{ phrase('you_not_watching_any_forums') }}</div>
+</xf:if>

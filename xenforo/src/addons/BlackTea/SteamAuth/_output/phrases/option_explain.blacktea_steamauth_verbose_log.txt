@@ -1,0 +1,1 @@
+Ticking this box will make error logging significantly more fine-grained. If you are experiencing unexpected issues with add-on, for better debugging, you may try enabling this setting.

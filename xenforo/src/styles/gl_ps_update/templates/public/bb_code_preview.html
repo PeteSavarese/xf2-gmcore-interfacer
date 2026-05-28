@@ -1,0 +1,14 @@
+<xf:if is="$message">
+	<xf:css src="bb_code_preview.less" />
+	<div class="bbCodePreview">
+	<xf:formrow rowtype="fullWidth noLabel noGutter">
+		<h4 class="block-textHeader">{{ phrase('preview') }}</h4>
+		<div class="bbCodePreview-content">
+			{{ bb_code($message, $context . ':preview', $user, {
+				'attachments': $attachments,
+				'viewAttachments': $canViewAttachments
+			}) }}
+		</div>
+	</xf:formrow>
+	</div>
+</xf:if>

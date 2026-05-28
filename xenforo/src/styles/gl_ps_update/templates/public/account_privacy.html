@@ -1,0 +1,68 @@
+<xf:title>{{ phrase('privacy') }}</xf:title>
+
+<xf:wrap template="account_wrapper" />
+
+<xf:form action="{{ link('account/privacy') }}" ajax="true" class="block" data-force-flash-message="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:macro id="helper_account::activity_privacy_row" />
+			<xf:macro id="helper_account::dob_privacy_row" />
+			<xf:macro id="helper_account::email_options_row" arg-showExplain="{{ true }}" />
+
+			<xf:formrow rowtype="inputLabelPair"
+				label="{{ phrase('allow_users_to') }}">
+
+				<xf:macro id="privacy_option"
+					arg-user="{$xf.visitor}"
+					arg-name="allow_view_profile"
+					arg-label="{{ phrase('view_your_details_on_your_profile_page') }}" />
+
+				<xf:if is="$xf.visitor.canViewProfilePosts()">
+					<xf:macro id="privacy_option"
+						arg-user="{$xf.visitor}"
+						arg-name="allow_post_profile"
+						arg-label="{{ phrase('post_messages_on_your_profile_page') }}"
+						arg-hideEveryone="{{true}}" />
+				</xf:if>
+
+				<xf:if is="$xf.options.enableNewsFeed">
+					<xf:macro id="privacy_option"
+						arg-user="{$xf.visitor}"
+						arg-name="allow_receive_news_feed"
+						arg-label="{{ phrase('receive_your_news_feed') }}" />
+				</xf:if>
+
+				<xf:macro id="privacy_option"
+					arg-user="{$xf.visitor}"
+					arg-name="allow_send_personal_conversation"
+					arg-label="{{ phrase('send_direct_message_to_you') }}"
+					arg-hideEveryone="{{true}}" />
+
+				<xf:macro id="privacy_option"
+					arg-user="{$xf.visitor}"
+					arg-name="allow_view_identities"
+					arg-label="{{ phrase('view_your_identities') }}" />
+			</xf:formrow>
+		</div>
+		<xf:submitrow icon="save" sticky="true" />
+	</div>
+</xf:form>
+
+<xf:macro id="privacy_option" arg-user="!" arg-name="!" arg-label="!" arg-hideEveryone="{{ false }}" arg-hideFollowed="{{ false }}">
+	<xf:set var="$controlId" value="{{ unique_id() }}" />
+	<dl class="inputLabelPair">
+		<dt><label for="{$controlId}">{$label}</label></dt>
+		<dd>
+			<xf:select id="{$controlId}" name="privacy[{$name}]" value="{$user.Privacy.{$name}}">
+				<xf:if is="!$hideEveryone">
+					<xf:option value="everyone">{{ phrase('all_visitors') }}</xf:option>
+				</xf:if>
+				<xf:option value="members">{{ phrase('members_only') }}</xf:option>
+				<xf:if is="!$hideFollowed">
+					<xf:option value="followed">{{ phrase('people_you_follow') }}</xf:option>
+				</xf:if>
+				<xf:option value="none">{{ phrase('nobody') }}</xf:option>
+			</xf:select>
+		</dd>
+	</dl>
+</xf:macro>

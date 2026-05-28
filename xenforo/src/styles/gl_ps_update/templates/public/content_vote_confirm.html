@@ -1,0 +1,19 @@
+<xf:title>{{ phrase('vote_for_content') }}</xf:title>
+
+<xf:form action="{$confirmUrl}" class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:inforow rowtype="confirm">
+				<xf:if is="$vote == $voteType">
+					{{ phrase('you_sure_you_want_to_remove_your_vote_for_this_content') }}
+				<xf:elseif is="$voteType == 'up'" />
+					{{ phrase('you_sure_you_want_to_upvote_this_content') }}
+				<xf:else />
+					{{ phrase('you_sure_you_want_to_downvote_this_content') }}
+				</xf:if>
+			</xf:inforow>
+		</div>
+		<xf:submitrow icon="confirm" rowtype="simple" />
+	</div>
+	<xf:hiddenval name="type">{$voteType}</xf:hiddenval>
+</xf:form>

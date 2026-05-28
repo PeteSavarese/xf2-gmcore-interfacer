@@ -1,0 +1,100 @@
+<xf:macro id="watch_input"
+	arg-thread="!"
+	arg-rowType=""
+	arg-label="{{ phrase('options') }}"
+	arg-explain=""
+	arg-forceWatchChecked="{{ null }}"
+	arg-forceWatchEmailChecked="{{ null }}"
+	arg-visible="{{ true }}">
+
+	<xf:set var="$threadWatch" value="{$thread.Watch.{$xf.visitor.user_id}}" />
+	<xf:set var="$defaultThreadWatch" value="{{
+		$thread.isInsert() ? $xf.visitor.Option.creation_watch_state : $xf.visitor.Option.interaction_watch_state
+	}}" />
+
+	<xf:if is="$forceWatchChecked !== null">
+		<xf:set var="$watchChecked" value="{$forceWatchChecked}" />
+	<xf:else />
+		<xf:set var="$watchChecked" value="{{ ($thread.thread_id AND $threadWatch is not empty) ?: ($defaultThreadWatch != '') }}" />
+	</xf:if>
+
+	<xf:if is="$forceWatchEmailChecked !== null">
+		<xf:set var="$watchEmailChecked" value="{$forceWatchEmailChecked}" />
+	<xf:else />
+		<xf:set var="$watchEmailChecked" value="{{ ($thread.thread_id AND $threadWatch.email_subscribe) ?: ($defaultThreadWatch == 'watch_email') }}" />
+	</xf:if>
+
+	<xf:if is="$visible">
+		<xf:checkboxrow label="{$label}" rowtype="{$rowType}">
+			<xf:option name="watch_thread" value="1" selected="$watchChecked"
+				label="{{ phrase('watch_this_thread...') }}">
+
+				<xf:checkbox>
+					<xf:option name="watch_thread_email" value="1" selected="$watchEmailChecked"
+						label="{{ phrase('and_receive_email_notifications') }}"/>
+
+				</xf:checkbox>
+			</xf:option>
+			<xf:explain>{$explain}</xf:explain>
+		</xf:checkboxrow>
+	<xf:else />
+		<xf:hiddenval name="watch_thread" value="{$watchChecked}" />
+		<xf:hiddenval name="watch_thread_email" value="{$watchEmailChecked}" />
+	</xf:if>
+	<xf:hiddenval name="_xfSet[watch_thread]" value="1" />
+</xf:macro>
+
+<xf:macro id="thread_status"
+	arg-thread="!"
+	arg-rowType="">
+
+	<xf:checkboxrow hideempty="true" rowtype="{$rowType}"
+		label="{{ phrase('set_thread_status') }}">
+
+		<xf:if is="$thread.canLockUnlock()">
+			<xf:option name="discussion_open" value="1" selected="{$thread.discussion_open}"
+				label="{{ phrase('unlocked') }}"
+				hint="{{ phrase('people_may_reply_to_this_thread') }}">
+
+				<xf:afterhtml>
+					<xf:hiddenval name="_xfSet[discussion_open]" value="1" />
+				</xf:afterhtml>
+			</xf:option>
+		</xf:if>
+		<xf:if is="$thread.canStickUnstick()">
+			<xf:option name="sticky" value="1" selected="{$thread.sticky}"
+				label="{{ phrase('sticky') }}"
+				hint="{{ phrase('sticky_threads_appear_at_top_of_first_page_of_list_of_threads') }}">
+
+				<xf:afterhtml>
+					<xf:hiddenval name="_xfSet[sticky]" value="1" />
+				</xf:afterhtml>
+			</xf:option>
+		</xf:if>
+	</xf:checkboxrow>
+
+	<xf:if is="$thread.canManageSearchEngineIndexing()">
+		<xf:if is="$thread.exists()">
+			<xf:set var="$defaultIsIndexed" value="{{ $thread.Forum.doesThreadMeetSearchEngineIndexCriteria($thread) }}" />
+			<xf:set var="$defaultThreadIndexStatus">{{ parens($defaultIsIndexed ? phrase('yes') : phrase('no')) }}</xf:set>
+		<xf:else />
+			<xf:set var="$defaultThreadIndexStatus" value="" />
+		</xf:if>
+
+		<xf:radiorow name="index_state" value="{$thread}"
+			label="{{ phrase('allow_search_engine_indexing') }}">
+
+			<xf:option value="default"
+				label="{{ phrase('default') }} {$defaultThreadIndexStatus}"
+				hint="{{ phrase('allows_search_engines_to_index_this_thread_based_on_settings_of') }}" />
+			<xf:option value="indexed"
+				label="{{ phrase('yes') }}"
+				hint="{{ phrase('always_allow_search_engines_to_index_this_thread') }}" />
+			<xf:option value="not_indexed"
+				label="{{ phrase('no') }}"
+				hint="{{ phrase('never_allow_search_engines_to_index_this_thread') }}" />
+		</xf:radiorow>
+
+		<xf:hiddenval name="_xfSet[index_state]" value="1" />
+	</xf:if>
+</xf:macro>

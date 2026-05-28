@@ -1,0 +1,16 @@
+<xf:macro id="find_new_filter_footer">
+	<hr class="menu-separator" />
+	<div class="menu-row">
+		<xf:checkbox>
+			<xf:option name="save"
+				label="{{ phrase('save_as_default') }}"
+				hint="{{ phrase('these_filters_will_be_used_by_default_whenever_you_return') }}" />
+		</xf:checkbox>
+	</div>
+	<div class="menu-footer">
+		<span class="menu-footer-controls">
+			<xf:button type="submit" class="button--primary">{{ phrase('filter') }}</xf:button>
+		</span>
+		<xf:hiddenval name="skip">1</xf:hiddenval>
+	</div>
+</xf:macro>

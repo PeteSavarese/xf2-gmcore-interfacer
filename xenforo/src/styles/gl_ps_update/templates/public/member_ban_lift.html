@@ -1,0 +1,31 @@
+<xf:title>{{ phrase('confirm_lifting_of_ban:') }} {$user.username}</xf:title>
+
+<xf:form action="{{ link('members/ban/lift', $user) }}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:inforow rowtype="confirm">
+				{{ phrase('please_confirm_that_you_want_to_lift_ban_on_following_user:') }}
+				<strong><a href="{{ link('members/ban', $user) }}">{$user.username}</a></strong>
+			</xf:inforow>
+
+			<xf:formrow label="{{ phrase('banned_by') }}">{$userBan.BanUser.username}</xf:formrow>
+
+			<xf:formrow label="{{ phrase('ban_started') }}">{{ date($userBan.ban_date) }}</xf:formrow>
+
+			<xf:formrow label="{{ phrase('ban_ends') }}">
+				<xf:if is="$userBan.end_date">
+					{{ date($userBan.end_date) }}
+				<xf:else />
+					{{ phrase('never') }}
+				</xf:if>
+			</xf:formrow>
+
+			<xf:if is="$userBan.user_reason">
+				<xf:formrow label="{{ phrase('reason_for_ban') }}">{$userBan.user_reason}</xf:formrow>
+			</xf:if>
+		</div>
+		<xf:submitrow submit="{{ phrase('lift_ban') }}" />
+	</div>
+
+	<xf:redirect />
+</xf:form>

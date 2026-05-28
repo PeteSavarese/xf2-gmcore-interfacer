@@ -1,0 +1,86 @@
+<xf:if is="$options.staffOnline">
+	<xf:if contentcheck="true">
+		<div class="block" data-widget-section="staffMembers"{{ widget_data($widget) }}>
+			<div class="block-container">
+				<h3 class="block-minorHeader"><a href="{{ link('members', null, {'key': 'staff_members'}) }}">{{ phrase('staff_online') }}</a></h3>
+				<ul class="block-body">
+				<xf:contentcheck>
+					<xf:foreach loop="$online.users" value="$user">
+						<xf:if is="$user.is_staff">
+							<li class="block-row">
+								<div class="contentRow">
+									<div class="contentRow-figure">
+										<xf:avatar user="$user" size="xs" />
+									</div>
+									<div class="contentRow-main contentRow-main--close">
+										<xf:username user="$user" rich="true" />
+										<div class="contentRow-minor">
+											<xf:usertitle user="$user" />
+										</div>
+									</div>
+								</div>
+							</li>
+						</xf:if>
+					</xf:foreach>
+				</xf:contentcheck>
+				</ul>
+			</div>
+		</div>
+	</xf:if>
+</xf:if>
+
+<div class="block" data-widget-section="onlineNow"{{ widget_data($widget) }}>
+	<div class="block-container">
+		<h3 class="block-minorHeader"><a href="{{ link('online') }}">{$title}</a></h3>
+		<div class="block-body">
+			<xf:if contentcheck="true">
+				<div class="block-row block-row--minor">
+					<h4 class="block-textHeader block-textHeader--scaled">
+						{{ phrase('people_you_follow') }}
+					</h4>
+					<ul class="listHeap">
+						<xf:contentcheck>
+							<xf:if is="$options.followedOnline">
+								<xf:foreach loop="$online.users" value="$user">
+									<xf:if is="in_array($user.user_id, $xf.visitor.Profile.following)">
+										<li>
+											<xf:avatar user="$user" size="xxs" img="true" />
+										</li>
+									</xf:if>
+								</xf:foreach>
+							</xf:if>
+						</xf:contentcheck>
+					</ul>
+				</div>
+
+				<div class="block-row block-row--minor">
+					<h4 class="block-textHeader block-textHeader--scaled">
+						{{ phrase('members') }}
+					</h4>
+			<xf:else />
+				<div class="block-row block-row--minor">
+			</xf:if>
+
+				<xf:if is="$online.users is not empty">
+					<ul class="listInline listInline--comma">
+						<xf:foreach loop="$online.users" value="$user"><xf:trim>
+							<li><xf:username user="$user" rich="true" class="{{ !$user.visible ? 'username--invisible' : '' }}" /></li>
+						</xf:trim></xf:foreach>
+					</ul>
+					<xf:if is="$online.counts.unseen">
+						<a href="{{ link('online') }}">{{ phrase('ellipsis_and_x_more', {'count': $online.counts.unseen}) }}</a>
+					</xf:if>
+				<xf:else />
+					{{ phrase('no_members_online_now') }}
+				</xf:if>
+			</div>
+		</div>
+		<div class="block-footer">
+			<span class="block-footer-counter">{{ phrase('online_now_x_members_y_guests_z',{
+				'total': number($online.counts.total),
+				'members': number($online.counts.members),
+				'guests': number($online.counts.guests)})
+			}}</span>
+		</div>
+	</div>
+</div>

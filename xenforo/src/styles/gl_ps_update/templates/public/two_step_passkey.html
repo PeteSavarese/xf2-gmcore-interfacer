@@ -1,0 +1,16 @@
+<xf:js src="xf/webauthn.js" min="1" />
+
+<xf:if is="$context == 'login'">
+	<xf:formrow data-xf-init="webauthn"
+		data-type="get"
+		data-existing-credentials="{$existingCredentials|json}"
+		data-autotrigger="true"
+		data-autosubmit="true"
+		data-verifying="{{ phrase('verifying...') }}">
+
+		<xf:button class="button--link js-webauthnStart">{{ phrase('use_passkey_or_security_key') }}</xf:button>
+	</xf:formrow>
+
+	<xf:hiddenval name="webauthn_payload" />
+	<xf:hiddenval name="webauthn_challenge">{{ $passkey ? $passkey.getChallenge() : '' }}</xf:hiddenval>
+</xf:if>

@@ -1,0 +1,56 @@
+<xf:if is="!in_array($pageSelected, ['overview', 'featured'])">
+	<xf:head option="metaNoindex"><meta name="robots" content="noindex" /></xf:head>
+</xf:if>
+
+<xf:if is="property('whatsNewNavStyle') == 'tabs'">
+	<div class="tabs tabs--standalone">
+		<div class="hScroller" data-xf-init="h-scroller">
+			<span class="hScroller-scroll">
+				<xf:macro id="links"
+					arg-pageSelected="{$pageSelected}"
+					arg-baseClass="tabs-tab"
+					arg-selectedClass="is-active" />
+			</span>
+		</div>
+	</div>
+<xf:else />
+	<xf:sidenav>
+		<div class="block">
+			<div class="block-container">
+				<h3 class="block-header">{{ phrase('whats_new') }}</h3>
+				<div class="block-body">
+					<xf:macro id="links"
+						arg-pageSelected="{$pageSelected}"
+						arg-baseClass="blockLink"
+						arg-selectedClass="is-selected" />
+				</div>
+			</div>
+		</div>
+
+		<xf:widgetpos id="whats_new_sidenav" />
+	</xf:sidenav>
+	<xf:page option="sideNavTitle">{{ phrase('whats_new') }}</xf:page>
+</xf:if>
+
+{$innerContent|raw}
+
+<xf:macro id="links" arg-pageSelected="!" arg-baseClass="!" arg-selectedClass="!">
+	<a class="{$baseClass} {{ $pageSelected == 'overview' ? {$selectedClass} : '' }}" href="{{ link('whats-new') }}">{{ phrase('whats_new') }}</a>
+	<!--[XF:links:start]-->
+	<a class="{$baseClass} {{ $pageSelected == 'featured' ? {$selectedClass} : '' }}" href="{{ link('featured') }}">{{ phrase('featured_content') }}</a>
+	<!--[XF:links:after_featured]-->
+	<a class="{$baseClass} {{ $pageSelected == 'new_thread' ? {$selectedClass} : '' }}" href="{{ link('whats-new/posts') }}" rel="nofollow">{{ phrase('new_posts') }}</a>
+	<!--[XF:links:after_thread]-->
+	<xf:if is="$xf.visitor.canViewProfilePosts()">
+		<a class="{$baseClass} {{ $pageSelected == 'new_profile_post' ? {$selectedClass} : '' }}" href="{{ link('whats-new/profile-posts') }}" rel="nofollow">{{ phrase('new_profile_posts') }}</a>
+	</xf:if>
+	<!--[XF:links:after_profile_post]-->
+	<xf:if is="$xf.options.enableNewsFeed">
+		<xf:if is="$xf.visitor.user_id">
+			<a class="{$baseClass} {{ $pageSelected == 'news_feed' ? {$selectedClass} : '' }}" href="{{ link('whats-new/news-feed') }}" rel="nofollow">{{ phrase('your_news_feed') }}</a>
+		</xf:if>
+
+		<a class="{$baseClass} {{ $pageSelected == 'latest_activity' ? {$selectedClass} : '' }}" href="{{ link('whats-new/latest-activity') }}" rel="nofollow">{{ phrase('latest_activity') }}</a>
+	</xf:if>
+	<!--[XF:links:end]-->
+</xf:macro>

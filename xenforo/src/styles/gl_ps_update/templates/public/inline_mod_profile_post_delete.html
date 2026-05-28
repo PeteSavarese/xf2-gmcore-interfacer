@@ -1,0 +1,24 @@
+<xf:title>{{ phrase('inline_moderation_delete_profile_posts') }}</xf:title>
+
+<xf:form action="{{ link('inline-mod') }}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:inforow rowtype="confirm">{{ phrase('you_sure_you_want_to_delete_x_profile_posts', {'count': $total}) }}</xf:inforow>
+
+			<xf:macro id="helper_action::delete_type" arg-canHardDelete="{$canHardDelete}" />
+
+			<xf:macro id="helper_action::author_alert" />
+		</div>
+		<xf:submitrow icon="delete" />
+	</div>
+
+	<xf:foreach loop="$profilePosts" value="$profilePost">
+		<xf:hiddenval name="ids[]">{$profilePost.profile_post_id}</xf:hiddenval>
+	</xf:foreach>
+
+	<xf:hiddenval name="type">profile_post</xf:hiddenval>
+	<xf:hiddenval name="action">delete</xf:hiddenval>
+	<xf:hiddenval name="confirmed">1</xf:hiddenval>
+
+	<xf:redirect url="{$redirect}" />
+</xf:form>

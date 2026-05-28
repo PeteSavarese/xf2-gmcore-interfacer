@@ -1,0 +1,26 @@
+<xf:title>{{ phrase('leave_direct_message') }}</xf:title>
+
+<xf:breadcrumb href="{{ link('direct-messages') }}">{{ phrase('direct_messages') }}</xf:breadcrumb>
+<xf:breadcrumb href="{{ link('direct-messages', $conversation) }}">{$conversation.title}</xf:breadcrumb>
+
+<xf:form action="{{ link('direct-messages/leave', $conversation) }}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:inforow>
+				{{ phrase('leaving_direct_message_will_remove_it_from_your_direct_message_list') }}
+			</xf:inforow>
+			<xf:radiorow name="recipient_state"
+				label="{{ phrase('future_message_handling') }}">
+
+				<xf:option value="deleted" checked="checked"
+					label="{{ phrase('accept_future_messages') }}"
+					hint="{{ phrase('should_direct_message_receive_responses_restored_to_inbox') }}" />
+
+				<xf:option value="deleted_ignored"
+					label="{{ phrase('ignore_future_messages') }}"
+					hint="{{ phrase('not_notified_of_responses_direct_message_remain_deleted') }}" />
+			</xf:radiorow>
+		</div>
+		<xf:submitrow submit="{{ phrase('leave') }}" />
+	</div>
+</xf:form>

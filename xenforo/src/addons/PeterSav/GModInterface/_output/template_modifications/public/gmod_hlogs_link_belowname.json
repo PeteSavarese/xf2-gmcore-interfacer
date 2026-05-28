@@ -1,0 +1,9 @@
+{
+    "template": "message_macros",
+    "description": "Adds link to user's history logs under their username on a forum post",
+    "execution_order": 10,
+    "enabled": true,
+    "action": "str_replace",
+    "find": "\t\t<span class=\"message-userArrow\"></span>\n\t</section>",
+    "replace": "$0\n<xf:if is=\"{{ $xf.visitor->hasPermission('gmodUserPerms', 'view_hlogs') }}\">\n\t<xf:css src=\"public:message_macros_steam.less\" />\n\t<center><a href=\"/gl/hlogs/results?steamid={{user_to_steamid64($user)}}\">History Logs</a></center>\n</xf:if>"
+}

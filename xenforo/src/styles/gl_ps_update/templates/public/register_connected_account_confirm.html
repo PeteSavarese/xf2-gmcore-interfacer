@@ -1,0 +1,16 @@
+<xf:title>{{ phrase('continue_with_x', {'provider': $provider.title}) }}</xf:title>
+
+<xf:form action="{{ link('register/connected-accounts', $provider, {'setup': true}) }}" class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:inforow rowtype="confirm">
+				{{ phrase('you_sure_you_want_to_connect_account') }}
+				<strong>{$provider.title}</strong>
+			</xf:inforow>
+
+			<xf:redirect url="{$redirect}" />
+		</div>
+
+		<xf:submitrow icon="confirm" rowtype="simple" />
+	</div>
+</xf:form>

@@ -1,0 +1,11 @@
+{
+    "parent_navigation_id": "gmodServers",
+    "display_order": 100,
+    "navigation_type_id": "basic",
+    "type_config": {
+        "link": "/gl/stats",
+        "display_condition": "",
+        "extra_attributes": []
+    },
+    "enabled": true
+}

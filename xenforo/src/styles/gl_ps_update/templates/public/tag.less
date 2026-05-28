@@ -1,0 +1,36 @@
+.tagCloud-tag
+{
+	display: inline-block;
+	margin-right: 8px;
+
+	&:last-child
+	{
+		margin-right: 0;
+	}
+
+	&Level1 { font-size: 100%; color: xf-diminish(@xf-linkColor, 10%); }
+	&Level2 { font-size: 100%; }
+	&Level3 { font-size: 125%; }
+	&Level4 { font-size: 150%; }
+	&Level5 { font-size: 175%; }
+	&Level6 { font-size: 200%; }
+	&Level7 { font-size: 225%; color: xf-intensify(@xf-linkColor, 10%); }
+}
+
+.tagItem {
+	border-radius: @gl-radius-pill;
+	border: 1px solid @gl-border;
+	background: rgba(14, 20, 28, 0.85);
+	color: @gl-text-secondary;
+	font-size: 11px;
+	font-weight: 600;
+	padding: 4px 12px;
+	transition: all 0.2s ease;
+	letter-spacing: 0.3px;
+}
+
+.tagItem:hover {
+	border-color: @gl-border-accent;
+	color: @gl-accent;
+	background: @gl-accent-soft;
+}

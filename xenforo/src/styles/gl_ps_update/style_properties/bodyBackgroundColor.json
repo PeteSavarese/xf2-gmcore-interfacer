@@ -1,0 +1,18 @@
+{
+    "group_name": "palette",
+    "title": "Page body background color",
+    "description": "Background color for the page body",
+    "property_type": "css",
+    "css_components": [
+        "background"
+    ],
+    "value_type": "",
+    "value_parameters": "",
+    "has_variations": false,
+    "depends_on": "",
+    "value_group": "",
+    "property_value": {
+        "background-color": "#0f1822"
+    },
+    "display_order": 0
+}

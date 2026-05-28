@@ -1,0 +1,99 @@
+<xf:macro id="conversation_page_options"
+	arg-conversation="{{ null }}">
+
+	<xf:if is="{$conversation}">
+		<xf:page option="searchConstraints" value="{{ {
+			phrase('direct_messages'): {'search_type': 'conversation_message'},
+			phrase('this_direct_message'): {'search_type': 'conversation_message', 'c': {'conversation': $conversation.conversation_id}}
+		} }}" />
+	<xf:else />
+		<xf:page option="searchConstraints" value="{{ {
+			phrase('direct_messages'): {'search_type': 'conversation_message'}
+		} }}" />
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="item"
+	arg-userConv="!"
+	arg-allowInlineMod="{{ true }}">
+
+	<xf:css src="structured_list.less" />
+
+	<div class="structItem structItem--conversation {{ $userConv.isUnread() ? 'is-unread' : '' }} js-inlineModContainer" data-author="{{ $userConv.Master.Starter.username ?: $userConv.Master.username }}">
+		<div class="structItem-cell structItem-cell--icon">
+			<div class="structItem-iconContainer">
+				<xf:avatar user="$userConv.Master.Starter" size="s" defaultname="{$userConv.Master.username}" />
+			</div>
+		</div>
+		<div class="structItem-cell structItem-cell--main" data-xf-init="touch-proxy">
+			<xf:if contentcheck="true">
+				<ul class="structItem-statuses">
+				<xf:contentcheck>
+					<xf:if is="$userConv.is_starred">
+						<li>
+							<i class="structItem-status structItem-status--starred" aria-hidden="true" title="{{ phrase('starred')|for_attr }}"></i>
+							<span class="u-srOnly">{{ phrase('starred') }}</span>
+						</li>
+					</xf:if>
+					<xf:if is="!$userConv.Master.conversation_open">
+						<li>
+							<i class="structItem-status structItem-status--locked" aria-hidden="true" title="{{ phrase('locked')|for_attr }}"></i>
+							<span class="u-srOnly">{{ phrase('locked') }}</span>
+						</li>
+					</xf:if>
+				</xf:contentcheck>
+				</ul>
+			</xf:if>
+
+			<a href="{{ link('direct-messages/unread', $userConv) }}" class="structItem-title" data-tp-primary="on">{$userConv.title}</a>
+
+			<div class="structItem-minor">
+				<xf:if contentcheck="true">
+					<ul class="structItem-extraInfo">
+					<xf:contentcheck>
+						<xf:if is="$allowInlineMod">
+							<li><xf:checkbox standalone="true">
+								<xf:option value="{$userConv.conversation_id}" class="js-inlineModToggle" />
+							</xf:checkbox></li>
+						</xf:if>
+					</xf:contentcheck>
+					</ul>
+				</xf:if>
+
+				<ul class="structItem-parts">
+					<li>
+						<ul class="listInline listInline--comma listInline--selfInline">
+							<li><xf:username user="$userConv.Master.Starter" defaultname="{$userConv.Master.username}" title="{{ phrase('direct_message_starter') }}" /></li><xf:trim>
+							</xf:trim><xf:foreach loop="$userConv.Master.recipients" value="$recipient" if="{$recipient.user_id} != {$userConv.Master.user_id}"><xf:trim>
+								<li><xf:username user="{$recipient}" defaultname="{{ phrase('unknown_member') }}" /></li>
+							</xf:trim></xf:foreach>
+						</ul>
+					</li>
+					<li class="structItem-startDate"><a href="{{ link('direct-messages', $userConv) }}" rel="nofollow"><xf:date time="{$userConv.Master.start_date}" /></a></li>
+				</ul>
+
+				<xf:if is="$userConv.reply_count >= $xf.options.messagesPerPage">
+					<span class="structItem-pageJump">
+					<xf:foreach loop="{{ last_pages($userConv.reply_count + 1, $xf.options.messagesPerPage, $xf.options.lastPageLinks) }}" value="$p">
+						<a href="{{ link('direct-messages', $userConv, {'page': $p}) }}">{$p}</a>
+					</xf:foreach>
+					</span>
+				</xf:if>
+			</div>
+		</div>
+		<div class="structItem-cell structItem-cell--meta">
+			<dl class="pairs pairs--justified">
+				<dt>{{ phrase('replies') }}</dt>
+				<dd>{$userConv.reply_count|number}</dd>
+			</dl>
+			<dl class="pairs pairs--justified structItem-minor">
+				<dt>{{ phrase('participants') }}</dt>
+				<dd>{$userConv.Master.recipient_count|number}</dd>
+			</dl>
+		</div>
+		<div class="structItem-cell structItem-cell--latest">
+			<a href="{{ link('direct-messages/latest', $userConv) }}" rel="nofollow"><xf:date time="{$userConv.last_message_date}" class="structItem-latestDate" /></a>
+			<div class="structItem-minor"><xf:username user="{$userConv.Master.last_message_cache}" /></div>
+		</div>
+	</div>
+</xf:macro>

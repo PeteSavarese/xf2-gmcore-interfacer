@@ -1,0 +1,25 @@
+<xf:title>{{ phrase('two_step_verification_backup_codes') }}</xf:title>
+
+<xf:wrap template="account_wrapper" />
+
+<div class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<div class="block-row block-row--separated">
+				{{ phrase('two_step_verification_backup_codes_have_automatically_been_generated') }}
+			</div>
+			<div class="block-row block-row--separated">
+				<ul class="listColumns listColumns--spaced listPlain">
+				<xf:foreach loop="$codes" value="$code">
+					<li><div>{$code}</div></li>
+				</xf:foreach>
+				</ul>
+			</div>
+		</div>
+		<div class="block-footer">
+			<span class="block-footer-controls">
+				<xf:button class="button--primary js-overlayClose">{{ phrase('i_have_saved_backup_codes') }}</xf:button>
+			</span>
+		</div>
+	</div>
+</div>

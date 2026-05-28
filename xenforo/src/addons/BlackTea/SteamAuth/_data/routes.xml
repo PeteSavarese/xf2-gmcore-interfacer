@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<routes>
+  <route route_type="admin" route_prefix="steam" sub_name="getsummaries" format="getsummaries/:str&lt;steamids&gt;/" controller="BlackTea\SteamAuth:Steam" action_prefix="getsummaries"/>
+  <route route_type="admin" route_prefix="steam" sub_name="list" format="list/" controller="BlackTea\SteamAuth:Steam" action_prefix="list"/>
+  <route route_type="admin" route_prefix="steam" sub_name="migrate" format="migrate/" controller="BlackTea\SteamAuth:Steam" action_prefix="migrate"/>
+  <route route_type="admin" route_prefix="steam" sub_name="support" format="support/" controller="BlackTea\SteamAuth:Steam" action_prefix="support"/>
+  <route route_type="public" route_prefix="steam" sub_name="active-games" format="active-games/:page" controller="BlackTea\SteamAuth:Steam" context="steamauth" action_prefix="activeGames"/>
+  <route route_type="public" route_prefix="steam" sub_name="active-players" format="active-players/:page" controller="BlackTea\SteamAuth:Steam" context="steamauth" action_prefix="activePlayers"/>
+  <route route_type="public" route_prefix="steam" sub_name="getsummaries" format="getsummaries/:str&lt;steamids&gt;/" controller="BlackTea\SteamAuth:Steam" action_prefix="getsummaries"/>
+  <route route_type="public" route_prefix="steam" sub_name="owned-games" format="owned-games/:page" controller="BlackTea\SteamAuth:Steam" context="steamauth" action_prefix="ownedGames"/>
+  <route route_type="public" route_prefix="steam" sub_name="played-games" format="played-games/:page" controller="BlackTea\SteamAuth:Steam" context="steamauth" action_prefix="playedGames"/>
+</routes>

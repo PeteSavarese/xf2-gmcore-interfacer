@@ -1,0 +1,64 @@
+<xf:title>{{ phrase('register_using_x', {'provider': $provider.title}) }}</xf:title>
+
+<xf:set var="$user" value="{{ $user ?: $xf.visitor }}" />
+<xf:js src="xf/login_signup.js" min="1" />
+
+<xf:head option="robots"><meta name="robots" content="noindex" /></xf:head>
+
+<xf:form action="{{ link('register/connected-accounts/register', $provider) }}" ajax="true" class="block">
+	<div class="block-container">
+		<h2 class="block-tabHeader tabs" data-xf-init="tabs" role="tablist">
+			<a class="tabs-tab is-active" role="tab" tabindex="0" aria-controls="{{ unique_id('regCreate') }}">
+				{{ phrase('create_new_account') }}
+			</a>
+			<a class="tabs-tab" role="tab" tabindex="0" aria-controls="{{ unique_id('regAssoc') }}">
+				{{ phrase('associate_existing_account') }}
+			</a>
+		</h2>
+
+		<ul class="tabPanes">
+			<li class="is-active"
+				data-xf-init="reg-form"
+				data-timer="{$xf.options.registrationTimer}"
+				role="tabpanel"
+				id="{{ unique_id('regCreate') }}">
+
+				<div class="block-body">
+					<xf:macro id="register_macros::username_row" />
+
+					<xf:if is="$providerData.email">
+						<xf:formrow label="{{ phrase('email') }}">{$providerData.email|email_display}</xf:formrow>
+					<xf:else />
+						<xf:macro id="register_macros::email_row" />
+					</xf:if>
+
+					<xf:if is="!$providerData.dob">
+						<xf:macro id="register_macros::dob_row" />
+					</xf:if>
+
+					<xf:if is="!$providerData.location">
+						<xf:macro id="register_macros::location_row" />
+					</xf:if>
+
+					<xf:macro id="register_macros::custom_fields" />
+
+					<xf:macro id="register_macros::email_choice_row" />
+
+					<xf:macro id="register_macros::tos_row" />
+				</div>
+				<xf:macro id="register_macros::submit_row" />
+
+			</li>
+			<li role="tabpanel" id="{{ unique_id('regAssoc') }}">
+				<div class="block-body block-row">
+					{{ phrase('to_associate_existing_account_first_log_in_start_via_connected_accounts', {
+						'link': link('account/connected-accounts')
+					}) }}
+				</div>
+			</li>
+		</ul>
+	</div>
+
+	<xf:redirect url="{$redirect}" />
+	<xf:hiddenval name="timezone" value="" data-xf-init="auto-timezone" />
+</xf:form>

@@ -1,0 +1,5 @@
+{{ phrase('your_thread_x_was_merged_into_y', {
+	'title': $extra.title,
+	'target': '<a href="' . base_url($extra.targetLink) . '" class="fauxBlockLink-blockLink">' . prefix('thread', $extra.prefix_id) . $extra.targetTitle . '</a>'
+}) }}
+<xf:if is="$extra.reason">{{ phrase('reason:') }} {$extra.reason}</xf:if>

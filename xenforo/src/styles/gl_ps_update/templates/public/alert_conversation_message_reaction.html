@@ -1,0 +1,5 @@
+{{ phrase('x_reacted_to_your_reply_in_the_direct_message_y', {
+	'name': username_link($user, false, {'defaultname': $alert.username}),
+	'reaction': alert_reaction($extra.reaction_id)|preescaped,
+	'title': '<a href="' . link('direct-messages/replies', $content) . '" class="fauxBlockLink-blockLink">' . $content.Conversation.title . '</a>'
+}) }}

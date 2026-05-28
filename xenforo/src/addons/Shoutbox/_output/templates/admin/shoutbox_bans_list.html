@@ -1,0 +1,63 @@
+<xf:title>
+	<xf:if is="$tab == 'expired'">Expired shoutbox bans<xf:else />Active shoutbox bans</xf:if>
+</xf:title>
+
+<xf:pageaction>
+	<xf:button href="{{ link('shoutbox-bans/history') }}">Ban history</xf:button>
+	<xf:if is="$tab != 'expired'">
+		<xf:button href="{{ link('shoutbox-bans/expired') }}">View expired</xf:button>
+	<xf:else />
+		<xf:button href="{{ link('shoutbox-bans') }}">View active</xf:button>
+	</xf:if>
+</xf:pageaction>
+
+<xf:if is="$bans is not empty">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:datalist>
+				<xf:foreach loop="$bans" value="$ban">
+					<xf:set var="$userLabel" value="" />
+					<xf:if is="$ban.User">
+						<xf:set var="$userLabel" value="{$ban.User.username}" />
+					<xf:else />
+						<xf:set var="$userLabel" value="{$ban.user_id}" />
+					</xf:if>
+
+					<xf:set var="$bannedBy" value="{$ban.ban_user_id}" />
+					<xf:if is="$ban.BannedBy">
+						<xf:set var="$bannedBy" value="{$ban.BannedBy.username}" />
+					</xf:if>
+
+					<xf:set var="$reasonText" value="-" />
+					<xf:if is="$ban.reason">
+						<xf:set var="$reasonText" value="{$ban.reason}" />
+					</xf:if>
+
+					<xf:set var="$bannedOnText" value="{{ timestamp_format($ban.banned_on) }}" />
+					<xf:set var="$expiresText" value="Never" />
+					<xf:if is="$ban.expires_on">
+						<xf:set var="$expiresText" value="{{ timestamp_format($ban.expires_on) }}" />
+					</xf:if>
+
+					<xf:set var="$historyLink" value="" />
+					<xf:if is="$ban.User">
+						<xf:set var="$historyLink" value="{{ link('shoutbox-bans/history', $ban.User) }}" />
+					</xf:if>
+
+					<xf:datarow
+						label="{$userLabel}"
+						explain="Reason: {$reasonText} • Banned: {$bannedOnText} • Expires: {$expiresText} • By: {$bannedBy}"
+						href="{$historyLink}"
+						delete="{{ link('shoutbox-bans/delete', $ban) }}">
+					</xf:datarow>
+				</xf:foreach>
+			</xf:datalist>
+		</div>
+		<div class="block-footer">
+			<span class="block-footer-counter">{{ display_totals($bans, $total) }}</span>
+			<xf:pagenav page="$page" perpage="$perPage" total="$total" link="shoutbox-bans" wrapperclass="block-footer-pagenav" />
+		</div>
+	</div>
+<xf:else />
+	<div class="blockMessage">No shoutbox bans found.</div>
+</xf:if>
