@@ -59,13 +59,9 @@ After extraction, `xenforo/` should contain `cmd.php`, `index.php`, `admin.php`,
 
 ### 2. Configure environment
 
-```bash
-cp .env.example .env
-```
-
 Edit `.env`:
 
-- `MARIADB_*`: local DB credentials. Defaults are fine for dev.
+- `MARIADB_*`: local DB credentials. Defaults are fine for local dev.
 - `HTTP_PORT`: host port for nginx (default `8080`).
 - `UID` / `GID`: set to `id -u` / `id -g` so PHP can write bind-mounted files without permission grief.
 - `XF_OPTION_boardTitle`: what appears in the forum header.
@@ -87,7 +83,7 @@ This starts nginx, PHP-FPM, MariaDB, runs the Flyway migrations for `gmcore_core
 
 ### 5. Install or upgrade XenForo
 
-- **Fresh install** (no seed dump): open <http://localhost:8080/install> and walk through XF's installer. Use the DB credentials from `.env`.
+- **Fresh install** (no seed dump): open <http://localhost:8080/install> and walk through XF's installer. Use the DB credentials from `.env`. Take a SQL dump AFTER a fresh install is completed and use for seeding.
 - **Imported dump**: open <http://localhost:8080/install> and run the upgrade flow. XF detects the existing schema and migrates as needed.
 
 ### 6. Install the bundled addons
@@ -153,8 +149,6 @@ A few things to know:
 
 [01-create-databases.sql](mariadb/initdb/01-create-databases.sql) and [01a-grant-permissions.sh](mariadb/initdb/01a-grant-permissions.sh) create the databases and grant `MARIADB_USER` access to all three on first boot.
 
-For the Flyway migration workflow (adding `V4__…sql`, etc.) see [mariadb/flyway/gl_core/README.md](mariadb/flyway/gl_core/README.md).
-
 ## Repository layout
 
 ```text
@@ -186,7 +180,7 @@ docker-compose.prod.yaml             # Prod overlay
 
 ## Deploy
 
-Both staging and prod run from the same deploy compose, layered with an environment-specific overlay.
+Both staging and prod run from the same deploy compose, layered with an environment-specific docker compose.
 
 Staging:
 
@@ -206,18 +200,6 @@ On the VPS:
 
 1. Copy `.env.example` to `.env` and fill in real values (DB passwords, image refs, board title).
 2. Use different `HTTP_PORT` values per environment so staging and prod don't collide. For example, staging on `8010` and prod on `8020`.
-
-### What persists on the VPS
-
-Only these need to survive across deploys:
-
-- `mariadb_data`: the MariaDB data directory.
-- `xf_data`, mounted at `/var/www/html/data`: XenForo runtime data (avatars, attachments, etc.).
-- `xf_internal`, mounted at `/var/www/html/internal_data`: XenForo internal cache and the install lock.
-
-XenForo (core, addons, style) is baked into the nginx and PHP images at build time. The nginx mount is read-only. PHP is read-write so the entrypoint can drop `install-lock.php` and rebuild caches.
-
-The baked images intentionally exclude XenForo's `scripts/` (PHP CLI helpers used in local dev). Locally these are present via the bind mount. On the VPS, use `docker compose exec` if you ever need them.
 
 ### GHCR image tags
 
