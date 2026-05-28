@@ -1,5 +1,7 @@
 # xf2-gmcore-interfacer
 
+Please refer to my [GMCore GMod repo](../gmcore-ttt) for my notes. This is an extension of gmcore-ttt with 10 years of major iterations being performed. I am proud of where the GMCore XF is, and my full notes are shared in my GMod repo.
+
 The XenForo web frontend for GMCore, a Garry's Mod community platform with game servers, forum, and Discord.
 
 This repo is the forum half. It bundles:
@@ -42,7 +44,6 @@ Link a forum account to Discord, sync ranks both ways, auto-join the guild.
 
 - Docker and Docker Compose v2.
 - A valid XenForo 2.3 license. XenForo is proprietary commercial software and is **not distributed in this repository**. You must obtain it yourself from <https://xenforo.com/customers/>.
-- For deploys: a VPS, GHCR access, and the secrets listed in [.github/workflows/cd.yml](.github/workflows/cd.yml).
 
 ## Local setup
 
