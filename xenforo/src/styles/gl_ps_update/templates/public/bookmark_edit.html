@@ -1,0 +1,73 @@
+<xf:if is="$tooltip">
+	<div class="bookmark-edit tooltip-content-inner">
+		<xf:form action="{$confirmUrl}" class="" ajax="true">
+			<div class="block-minorHeader">
+				<xf:if is="$added">
+					{{ phrase('bookmark_added') }}
+				<xf:elseif is="$bookmark.isInsert()" />
+					{{ phrase('add_bookmark') }}
+				<xf:else />
+					{{ phrase('edit_bookmark') }}
+				</xf:if>
+			</div>
+			<div class="block-body">
+				<div class="block-row">
+					<xf:textarearow name="message" value="{$bookmark}" label="{{ phrase('message') }}"
+						rowtype="fullWidth noPadding"
+						autosize="true"
+						rows="1"
+						hint="{{ phrase('optional') }}" />
+				</div>
+				<div class="block-row">
+					<xf:formrow label="{{ phrase('labels') }}" hint="{{ phrase('optional') }}" rowtype="fullWidth noPadding"
+						explain="{{ phrase('multiple_labels_may_be_separated_by_commas') }}">
+						<xf:macro id="bookmark_macros::filter"
+							arg-label="{$bookmark.labels|pluck('label')|join(', ')}"
+							arg-allLabels="{$allLabels}"
+							arg-maxTokens="0"
+							arg-placeholder="" />
+					</xf:formrow>
+				</div>
+				<div class="block-row">
+					<div class="formButtonGroup formButtonGroup--simple formButtonGroup--close">
+						<div class="formButtonGroup-primary">
+							<xf:button type="submit" class="button--primary" icon="save" />
+							<xf:button type="submit" name="delete" icon="delete" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</xf:form>
+	</div>
+<xf:else />
+	<xf:if is="$bookmark.isInsert()">
+		<xf:title>{{ phrase('add_bookmark') }}</xf:title>
+	<xf:else />
+		<xf:title>{{ phrase('edit_bookmark') }}</xf:title>
+	</xf:if>
+
+
+	<xf:form action="{$confirmUrl}" class="block" ajax="true">
+		<div class="block-container">
+			<div class="block-body">
+				<xf:textarearow name="message" value="{$bookmark}" label="{{ phrase('message') }}"
+					autosize="true"
+					hint="{{ phrase('optional') }}" />
+
+				<xf:formrow label="{{ phrase('labels') }}" rowtype="input" hint="{{ phrase('optional') }}">
+					<xf:macro id="bookmark_macros::filter"
+						arg-label="{$bookmark.labels|pluck('label')|join(', ')}"
+						arg-allLabels="{$allLabels}"
+						arg-maxTokens="0"
+						arg-placeholder="" />
+					<div class="formRow-explain">
+						{{ phrase('multiple_labels_may_be_separated_by_commas') }}
+					</div>
+				</xf:formrow>
+			</div>
+			<xf:submitrow icon="save"><xf:html>
+				<xf:button type="submit" name="delete" icon="delete" />
+			</xf:html></xf:submitrow>
+		</div>
+	</xf:form>
+</xf:if>

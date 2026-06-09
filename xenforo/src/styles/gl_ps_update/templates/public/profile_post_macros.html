@@ -1,0 +1,604 @@
+<xf:macro id="attribution" arg-profilePost="!" arg-showTargetUser="{{ false }}">
+	<xf:if is="$showTargetUser AND $profilePost.user_id != $profilePost.profile_user_id">
+		<xf:username user="$profilePost.User" rich="true" defaultname="{$profilePost.username}" />
+		<xf:fa icon="{{ $xf.isRtl ? 'fa-caret-left' : 'fa-caret-right' }} u-muted" />
+		<xf:username user="$profilePost.ProfileUser" rich="true" defaultname="{{ phrase('unknown') }}" />
+		<span class="u-srOnly">{{ phrase('x_wrote_on_ys_profile', {
+			'name': ($profilePost.User.username ?: {$profilePost.username}),
+			'profile': ($profilePost.ProfileUser.username ?: phrase('unknown'))
+		}) }}</span>
+	<xf:else />
+		<xf:username user="$profilePost.User" rich="true" defaultname="{$profilePost.username}" />
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="profile_post"
+	arg-profilePost="!"
+	arg-attachmentData="{{ null }}"
+	arg-showTargetUser="{{ false }}"
+	arg-allowInlineMod="{{ true }}">
+
+	<xf:css src="message.less" />
+	<xf:js src="xf/comment.js" min="1" />
+
+	<article class="message message--simple {{ $profilePost.isIgnored() ? 'is-ignored' : '' }} js-inlineModContainer"
+		data-author="{{ $profilePost.User.username ?: $profilePost.username }}"
+		data-content="profile-post-{$profilePost.profile_post_id}"
+		id="js-profilePost-{$profilePost.profile_post_id}">
+
+		<span class="u-anchorTarget" id="profile-post-{$profilePost.profile_post_id}"></span>
+		<div class="message-inner">
+			<div class="message-cell message-cell--user">
+				<xf:macro id="message_macros::user_info_simple" arg-user="{$profilePost.User}" arg-fallbackName="{$profilePost.username}" />
+			</div>
+			<div class="message-cell message-cell--main">
+				<div class="message-main js-quickEditTarget">
+					<div class="message-content js-messageContent">
+						<header class="message-attribution message-attribution--plain">
+							<ul class="listInline listInline--bullet">
+								<li class="message-attribution-user">
+									<xf:avatar user="$profilePost.User" size="xxs" />
+									<h4 class="attribution"><xf:macro id="attribution"
+										arg-profilePost="{$profilePost}"
+										arg-showTargetUser="{$showTargetUser}" /></h4>
+								</li>
+								<li><a href="{{ link('profile-posts', $profilePost) }}" class="u-concealed" rel="nofollow"><xf:date time="$profilePost.post_date" /></a></li>
+							</ul>
+						</header>
+
+						<xf:if is="$profilePost.message_state == 'deleted'">
+							<div class="messageNotice messageNotice--deleted">
+								<xf:macro id="deletion_macros::notice" arg-log="{$profilePost.DeletionLog}" />
+							</div>
+						<xf:elseif is="$profilePost.message_state == 'moderated'" />
+							<div class="messageNotice messageNotice--moderated">
+								{{ phrase('this_message_is_awaiting_moderator_approval_and_is_invisible_to_normal') }}
+							</div>
+						</xf:if>
+						<xf:if is="$profilePost.warning_message">
+							<div class="messageNotice messageNotice--warning">
+								{$profilePost.warning_message}
+							</div>
+						</xf:if>
+						<xf:if is="$profilePost.isIgnored()">
+							<div class="messageNotice messageNotice--ignored">
+								{{ phrase('you_are_ignoring_content_by_this_member') }}
+							</div>
+						</xf:if>
+
+						<div class="lbContainer js-lbContainer"
+							data-lb-id="profile-post-{$profilePost.profile_post_id}"
+							data-lb-caption-desc="{{ $profilePost.User ? $profilePost.User.username : $profilePost.username }} &middot; {{ date_time($profilePost.post_date) }}">
+							<article class="message-body">
+								{{ bb_code($profilePost.message, 'profile_post', $profilePost) }}
+							</article>
+
+							<xf:if is="$profilePost.attach_count">
+								<xf:macro id="message_macros::attachments"
+									arg-attachments="{$profilePost.Attachments}"
+									arg-message="{$profilePost}"
+									arg-canView="{{ $xf.visitor.hasPermission('profilePost', 'viewAttachment') }}" />
+							</xf:if>
+						</div>
+					</div>
+
+					<footer class="message-footer">
+						<div class="message-actionBar actionBar">
+							<xf:if contentcheck="true">
+								<div class="actionBar-set actionBar-set--external">
+								<xf:contentcheck>
+									<xf:react content="{$profilePost}" link="profile-posts/react" list="< .message | .js-reactionsList" />
+
+									<xf:if is="$profilePost.canComment() AND property('profilePostCommentToggle')">
+										<a class="actionBar-action actionBar-action--reply"
+											data-xf-click="comment-toggle"
+											data-target=".js-commentsTarget-{$profilePost.profile_post_id}"
+											data-scroll-to="true"
+											role="button"
+											tabindex="0">{{ phrase('comment') }}</a>
+									</xf:if>
+								</xf:contentcheck>
+								</div>
+							</xf:if>
+
+							<xf:if contentcheck="true">
+								<div class="actionBar-set actionBar-set--internal">
+								<xf:contentcheck>
+									<xf:if is="{$allowInlineMod} AND $profilePost.canUseInlineModeration()">
+										<span class="actionBar-action actionBar-action--inlineMod">
+											<xf:checkbox standalone="true">
+												<xf:option value="{$profilePost.profile_post_id}"
+													class="js-inlineModToggle"
+													data-xf-init="tooltip"
+													title="{{ phrase('select_for_moderation') }}"
+													label="{{ phrase('select_for_moderation') }}"
+													hiddenlabel="true" />
+											</xf:checkbox>
+										</span>
+									</xf:if>
+									<xf:if is="$profilePost.canReport()">
+										<a href="{{ link('profile-posts/report', $profilePost) }}" class="actionBar-action actionBar-action--report" data-xf-click="overlay" data-cache="false">{{ phrase('report_verb') }}</a>
+									</xf:if>
+
+									<xf:set var="$hasActionBarMenu" value="{{ false }}" />
+									<xf:if is="$profilePost.canEdit()">
+										<xf:js src="xf/action.js, xf/message.js" min="1" />
+										<a href="{{ link('profile-posts/edit', $profilePost) }}"
+											class="actionBar-action actionBar-action--edit actionBar-action--menuItem"
+											data-xf-click="quick-edit"
+											data-editor-target="#js-profilePost-{$profilePost.profile_post_id} .js-quickEditTarget"
+											data-no-inline-mod="{{ !$allowInlineMod ? 1 : 0 }}"
+											data-menu-closer="true">{{ phrase('edit') }}</a>
+										<xf:set var="$hasActionBarMenu" value="{{ true }}" />
+									</xf:if>
+									<xf:if is="$profilePost.canDelete('soft')">
+										<a href="{{ link('profile-posts/delete', $profilePost) }}"
+											class="actionBar-action actionBar-action--delete actionBar-action--menuItem"
+											data-xf-click="overlay">{{ phrase('delete') }}</a>
+										<xf:set var="$hasActionBarMenu" value="{{ true }}" />
+									</xf:if>
+									<xf:if is="$profilePost.message_state == 'deleted' AND $profilePost.canUndelete()">
+										<a href="{{ link('profile-posts/undelete', $profilePost) }}" data-xf-click="overlay"
+											class="actionBar-action actionBar-action--undelete actionBar-action--menuItem">{{ phrase('undelete') }}</a>
+										<xf:set var="$hasActionBarMenu" value="{{ true }}" />
+									</xf:if>
+									<xf:if is="$profilePost.canCleanSpam()">
+										<a href="{{ link('spam-cleaner', $profilePost) }}"
+											class="actionBar-action actionBar-action--spam actionBar-action--menuItem"
+											data-xf-click="overlay">{{ phrase('spam') }}</a>
+										<xf:set var="$hasActionBarMenu" value="{{ true }}" />
+									</xf:if>
+									<xf:if is="$xf.visitor.canViewIps() && $profilePost.ip_id">
+										<a href="{{ link('profile-posts/ip', $profilePost) }}"
+											class="actionBar-action actionBar-action--ip actionBar-action--menuItem"
+											data-xf-click="overlay">{{ phrase('ip') }}</a>
+										<xf:set var="$hasActionBarMenu" value="{{ true }}" />
+									</xf:if>
+									<xf:if is="$profilePost.canWarn()">
+										<a href="{{ link('profile-posts/warn', $profilePost) }}"
+											class="actionBar-action actionBar-action--warn actionBar-action--menuItem">{{ phrase('warn') }}</a>
+										<xf:set var="$hasActionBarMenu" value="{{ true }}" />
+									<xf:elseif is="$profilePost.warning_id && $xf.visitor.canViewWarnings()" />
+										<a href="{{ link('warnings', {'warning_id': $profilePost.warning_id}) }}"
+											class="actionBar-action actionBar-action--warn actionBar-action--menuItem"
+											data-xf-click="overlay">{{ phrase('view_warning') }}</a>
+										<xf:set var="$hasActionBarMenu" value="{{ true }}" />
+									</xf:if>
+
+									<xf:if is="$hasActionBarMenu">
+										<a class="actionBar-action actionBar-action--menuTrigger"
+											data-xf-click="menu"
+											title="{{ phrase('more_options')|for_attr }}"
+											role="button"
+											tabindex="0"
+											aria-expanded="false"
+											aria-haspopup="true">&#8226;&#8226;&#8226;</a>
+										<div class="menu" data-menu="menu" aria-hidden="true" data-menu-builder="actionBar">
+											<div class="menu-content">
+												<h4 class="menu-header">{{ phrase('more_options') }}</h4>
+												<div class="js-menuBuilderTarget"></div>
+											</div>
+										</div>
+									</xf:if>
+								</xf:contentcheck>
+								</div>
+							</xf:if>
+
+						</div>
+
+						<section class="message-responses js-messageResponses">
+							<div class="message-responseRow message-responseRow--reactions js-reactionsList {{ $profilePost.reactions ? 'is-active' : '' }}"><xf:if is="$profilePost.reactions">
+								<xf:reactions content="{$profilePost}" link="profile-posts/reactions" />
+							</xf:if></div>
+
+							<xf:if is="$profilePost.LatestComments is not empty">
+								<xf:if is="$profilePost.hasMoreComments()">
+									<div class="message-responseRow u-jsOnly js-commentLoader">
+										<a href="{{ link('profile-posts/load-previous', $profilePost, {'before': $profilePost.LatestComments.first().comment_date}) }}"
+											data-xf-click="comment-loader"
+											data-container=".js-commentLoader"
+											rel="nofollow">{{ phrase('view_previous_comments...') }}</a>
+									</div>
+								</xf:if>
+								<div class="js-replyNewMessageContainer">
+									<xf:foreach loop="$profilePost.LatestComments" value="$comment">
+										<xf:macro
+											name="{{ $comment.message_state == 'deleted' ? 'comment_deleted' : 'comment' }}"
+											arg-comment="{$comment}"
+											arg-profilePost="{$profilePost}" />
+									</xf:foreach>
+								</div>
+							<xf:else />
+								<div class="js-replyNewMessageContainer"></div>
+							</xf:if>
+
+							<xf:if is="$profilePost.canComment()">
+								<xf:js src="xf/action.js, xf/message.js" min="1" />
+								<div class="message-responseRow js-commentsTarget-{$profilePost.profile_post_id} {{ property('profilePostCommentToggle') ? 'toggleTarget' : '' }}">
+									<xf:set var="$lastProfilePostComment" value="{$profilePost.LatestComments|last}" />
+									<xf:form action="{{ link('profile-posts/add-comment', $profilePost) }}" ajax="true" class="comment"
+										data-xf-init="attachment-manager quick-reply"
+										data-message-container="< .js-messageResponses | .js-replyNewMessageContainer">
+										<div class="comment-inner">
+											<span class="comment-avatar">
+												<xf:avatar user="{$xf.visitor}" size="xxs" />
+											</span>
+											<div class="comment-main">
+												<div class="editorPlaceholder" data-xf-click="editor-placeholder">
+													<div class="editorPlaceholder-editor is-hidden">
+														<xf:macro id="quick_reply_macros::editor"
+															arg-lastDate="{{ $lastProfilePostComment.comment_date }}"
+															arg-attachmentData="{$attachmentData}"
+															arg-minHeight="40"
+															arg-placeholder="{{ phrase('write_comment...') }}"
+															arg-submitText="{{ phrase('post_comment') }}"
+															arg-deferred="{{ true }}"
+															arg-simpleSubmit="{{ true }}"
+														/>
+													</div>
+													<div class="editorPlaceholder-placeholder">
+														<div class="input"><span class="u-muted"> {{ phrase('write_comment...') }}</span></div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</xf:form>
+								</div>
+							</xf:if>
+						</section>
+					</footer>
+				</div>
+			</div>
+		</div>
+	</article>
+</xf:macro>
+
+<xf:macro id="profile_post_deleted"
+	arg-profilePost="!"
+	arg-showTargetUser="{{ false }}">
+
+	<xf:css src="message.less" />
+	<div class="message message--simple{{ $profilePost.isIgnored() ? ' is-ignored' : '' }} js-inlineModContainer"
+		data-author="{{ $profilePost.User.username ?: $profilePost.username }}"
+		data-content="profile-post-{$profilePost.profile_post_id}">
+
+		<span class="u-anchorTarget" id="profile-post-{$profilePost.profile_post_id}"></span>
+		<div class="message-inner">
+			<div class="message-cell message-cell--user">
+				<xf:macro id="message_macros::user_info_simple" arg-user="{$profilePost.User}" arg-fallbackName="{$profilePost.username}" />
+			</div>
+			<div class="message-cell message-cell--main">
+				<div class="message-attribution message-attribution--plain">
+					<ul class="listInline listInline--bullet">
+						<li class="message-attribution-user">
+							<xf:avatar user="$profilePost.User" size="xxs" />
+							<h4 class="attribution"><xf:macro id="attribution"
+								arg-profilePost="{$profilePost}"
+								arg-showTargetUser="{$showTargetUser}" /></h4>
+						</li>
+						<li><xf:date time="$profilePost.post_date" /></li>
+					</ul>
+				</div>
+
+				<div class="messageNotice messageNotice--deleted">
+					<xf:macro id="deletion_macros::notice" arg-log="{$profilePost.DeletionLog}" />
+
+					<a href="{{ link('profile-posts/show', $profilePost) }}" class="u-jsOnly" data-xf-click="inserter" data-replace="[data-content=profile-post-{$profilePost.profile_post_id}]">{{ phrase('show...') }}</a>
+
+					<xf:if is="$profilePost.canUseInlineModeration()">
+						<span style="display: none">
+							<!-- this can be actioned on the full post -->
+							<xf:checkbox standalone="true">
+								<xf:option value="{$profilePost.profile_post_id}" class="js-inlineModToggle"
+									hiddenlabel="true" />
+							</xf:checkbox>
+						</span>
+					</xf:if>
+				</div>
+			</div>
+		</div>
+	</div>
+</xf:macro>
+
+<xf:macro id="profile_post_simple"
+	arg-profilePost="!"
+	arg-limitHeight="{{ false }}">
+
+	<div class="contentRow">
+		<div class="contentRow-figure">
+			<xf:avatar user="$profilePost.User" size="xxs" defaultname="{$profilePost.username}" />
+		</div>
+		<div class="contentRow-main contentRow-main--close">
+			<div class="contentRow-lesser">
+				<xf:macro id="attribution"
+					arg-profilePost="{$profilePost}"
+					arg-showTargetUser="{{ true }}" />
+			</div>
+
+			<xf:if is="$limitHeight">
+				<div class="contentRow-faderContainer">
+					<div class="contentRow-faderContent">
+						{{ bb_code($profilePost.message, 'profile_post', $profilePost, {'simpleUnfurl': true}) }}
+					</div>
+					<div class="contentRow-fader"></div>
+				</div>
+			<xf:else />
+				{{ bb_code($profilePost.message, 'profile_post', $profilePost, {'simpleUnfurl': true}) }}
+			</xf:if>
+
+			<div class="contentRow-minor">
+				<a href="{{ link('profile-posts', $profilePost) }}" rel="nofollow" class="u-concealed"><xf:date time="{$profilePost.post_date}" /></a>
+				<a href="{{ link('profile-posts', $profilePost) }}" rel="nofollow" class="contentRow-extra" data-xf-click="overlay" data-xf-init="tooltip" title="{{ phrase('interact')|for_attr }}">&#8226;&#8226;&#8226;</a>
+			</div>
+		</div>
+	</div>
+</xf:macro>
+
+<xf:macro id="comment"
+	arg-comment="!"
+	arg-profilePost="!">
+
+	<xf:css src="message.less" />
+
+	<div class="message-responseRow {{ $comment.isIgnored() ? 'is-ignored' : '' }}">
+		<div class="comment"
+			data-author="{$comment.User.username}"
+			data-content="profile-post-comment-{$comment.profile_post_comment_id}"
+			id="js-profilePostComment-{$comment.profile_post_comment_id}">
+
+			<div class="comment-inner">
+				<span class="comment-avatar">
+					<xf:avatar user="$comment.User" size="xxs" defaultname="{$comment.username}" />
+				</span>
+				<div class="comment-main">
+					<span class="u-anchorTarget" id="profile-post-comment-{$comment.profile_post_comment_id}"></span>
+					<div class="js-quickEditTargetComment">
+						<div class="comment-content">
+							<xf:if is="$comment.message_state == 'deleted'">
+								<div class="messageNotice messageNotice--deleted">
+									<xf:macro id="deletion_macros::notice" arg-log="{$comment.DeletionLog}" />
+								</div>
+							<xf:elseif is="$comment.message_state == 'moderated'" />
+								<div class="messageNotice messageNotice--moderated">
+									{{ phrase('this_message_is_awaiting_moderator_approval_and_is_invisible_to_normal') }}
+								</div>
+							</xf:if>
+							<xf:if is="$comment.warning_message">
+								<div class="messageNotice messageNotice--warning">
+									{$comment.warning_message}
+								</div>
+							</xf:if>
+							<xf:if is="$comment.isIgnored()">
+								<div class="messageNotice messageNotice--ignored">
+									{{ phrase('you_are_ignoring_content_by_this_member') }}
+								</div>
+							</xf:if>
+
+							<div class="comment-contentWrapper">
+								<xf:username user="$comment.User" rich="true" defaultname="{$comment.username}" class="comment-user" />
+								<div class="lbContainer js-lbContainer"
+									data-lb-id="profile-post-comment-{$comment.profile_post_comment_id}"
+									data-lb-caption-desc="{{ $comment.User ? $comment.User.username : $comment.username }} &middot; {{ date_time($comment.comment_date) }}">
+									<article class="comment-body">
+										{{ bb_code($comment.message, 'profile_post_comment', $comment) }}
+									</article>
+									<xf:if is="$comment.attach_count">
+										<xf:macro id="message_macros::attachments"
+											arg-attachments="{$comment.Attachments}"
+											arg-message="{$comment}"
+											arg-canView="{{ $xf.visitor.hasPermission('profilePost', 'viewAttachment') }}" />
+									</xf:if>
+								</div>
+							</div>
+						</div>
+
+						<footer class="comment-footer">
+							<div class="comment-actionBar actionBar">
+								<div class="actionBar-set actionBar-set--internal">
+									<span class="actionBar-action"><xf:date time="{$comment.comment_date}" /></span>
+									<xf:if is="$comment.canReport()">
+										<a href="{{ link('profile-posts/comments/report', $comment) }}"
+											class="actionBar-action actionBar-action--report"
+											data-xf-click="overlay" data-cache="false">{{ phrase('report_verb') }}</a>
+									</xf:if>
+
+									<xf:set var="$hasActionBarMenu" value="{{ false }}" />
+									<xf:if is="$comment.canEdit()">
+										<xf:js src="xf/action.js, xf/message.js" min="1" />
+										<a href="{{ link('profile-posts/comments/edit', $comment) }}"
+											class="actionBar-action actionBar-action--edit actionBar-action--menuItem"
+											data-xf-click="quick-edit"
+											data-editor-target="#js-profilePostComment-{$comment.profile_post_comment_id} .js-quickEditTargetComment"
+											data-menu-closer="true">{{ phrase('edit') }}</a>
+										<xf:set var="$hasActionBarMenu" value="{{ true }}" />
+									</xf:if>
+									<xf:if is="$comment.canDelete('soft')">
+										<a href="{{ link('profile-posts/comments/delete', $comment) }}"
+											class="actionBar-action actionBar-action--delete actionBar-action--menuItem"
+											data-xf-click="overlay">{{ phrase('delete') }}</a>
+										<xf:set var="$hasActionBarMenu" value="{{ true }}" />
+									</xf:if>
+									<xf:if is="$comment.message_state == 'deleted' AND $comment.canUndelete()">
+										<a href="{{ link('profile-posts/comments/undelete', $comment) }}" data-xf-click="overlay"
+											class="actionBar-action actionBar-action--undelete actionBar-action--menuItem">{{ phrase('undelete') }}</a>
+										<xf:set var="$hasActionBarMenu" value="{{ true }}" />
+									</xf:if>
+									<xf:if is="$comment.canCleanSpam()">
+										<a href="{{ link('spam-cleaner', $comment) }}"
+											class="actionBar-action actionBar-action--spam actionBar-action--menuItem"
+											data-xf-click="overlay">{{ phrase('spam') }}</a>
+										<xf:set var="$hasActionBarMenu" value="{{ true }}" />
+									</xf:if>
+									<xf:if is="$xf.visitor.canViewIps() && $comment.ip_id">
+										<a href="{{ link('profile-posts/comments/ip', $comment) }}"
+											class="actionBar-action actionBar-action--ip actionBar-action--menuItem"
+											data-xf-click="overlay">{{ phrase('ip') }}</a>
+										<xf:set var="$hasActionBarMenu" value="{{ true }}" />
+									</xf:if>
+									<xf:if is="$comment.canWarn()">
+										<a href="{{ link('profile-posts/comments/warn', $comment) }}"
+											class="actionBar-action actionBar-action--warn actionBar-action--menuItem">{{ phrase('warn') }}</a>
+										<xf:set var="$hasActionBarMenu" value="{{ true }}" />
+									<xf:elseif is="$comment.warning_id && $xf.visitor.canViewWarnings()" />
+										<a href="{{ link('warnings', {'warning_id': $comment.warning_id}) }}"
+											class="actionBar-action actionBar-action--warn actionBar-action--menuItem"
+											data-xf-click="overlay">{{ phrase('view_warning') }}</a>
+										<xf:set var="$hasActionBarMenu" value="{{ true }}" />
+									</xf:if>
+									<xf:if is="$comment.canApproveUnapprove()">
+										<xf:if is="$comment.message_state == 'moderated'">
+											<a href="{{ link('profile-posts/comments/approve', $comment, {'t': csrf_token()}) }}"
+												class="actionBar-action actionBar-action--approve actionBar-action--menuItem">{{ phrase('approve') }}</a>
+											<xf:set var="$hasActionBarMenu" value="{{ true }}" />
+										<xf:elseif is="$comment.message_state == 'visible'" />
+											<a href="{{ link('profile-posts/comments/unapprove', $comment, {'t': csrf_token()}) }}"
+												class="actionBar-action actionBar-action--unapprove actionBar-action--menuItem">{{ phrase('unapprove') }}</a>
+											<xf:set var="$hasActionBarMenu" value="{{ true }}" />
+										</xf:if>
+									</xf:if>
+
+									<xf:if is="$hasActionBarMenu">
+										<a class="actionBar-action actionBar-action--menuTrigger"
+											data-xf-click="menu"
+											title="{{ phrase('more_options')|for_attr }}"
+											role="button"
+											tabindex="0"
+											aria-expanded="false"
+											aria-haspopup="true">&#8226;&#8226;&#8226;</a>
+										<div class="menu" data-menu="menu" aria-hidden="true" data-menu-builder="actionBar">
+											<div class="menu-content">
+												<h4 class="menu-header">{{ phrase('more_options') }}</h4>
+												<div class="js-menuBuilderTarget"></div>
+											</div>
+										</div>
+									</xf:if>
+								</div>
+								<xf:if contentcheck="true">
+									<div class="actionBar-set actionBar-set--external">
+									<xf:contentcheck>
+										<xf:react content="{$comment}" link="profile-posts/comments/react" list="< .comment | .js-commentReactionsList" />
+									</xf:contentcheck>
+									</div>
+								</xf:if>
+							</div>
+
+							<div class="comment-reactions js-commentReactionsList {{ $comment.reactions ? 'is-active' : '' }}"><xf:if is="$comment.reactions">
+								<xf:reactions content="{$comment}" link="profile-posts/comments/reactions" />
+							</xf:if></div>
+						</footer>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</xf:macro>
+
+<xf:macro id="comment_deleted"
+	arg-comment="!"
+	arg-profilePost="!">
+
+	<div class="message-responseRow">
+		<div class="comment{{ $comment.isIgnored() ? ' is-ignored' : '' }}"
+			data-author="{$comment.User.username}"
+			data-content="profile-post-comment-{$comment.profile_post_comment_id}">
+
+			<div class="comment-inner">
+				<span class="comment-avatar">
+					<xf:avatar user="$comment.User" size="xxs" defaultname="{$comment.username}" />
+				</span>
+				<div class="comment-main">
+					<span class="u-anchorTarget" id="profile-post-comment-{$comment.profile_post_comment_id}"></span>
+					<div class="comment-content">
+						<div class="messageNotice messageNotice--deleted">
+							<xf:macro id="deletion_macros::notice" arg-log="{$comment.DeletionLog}" />
+
+							<a href="{{ link('profile-posts/comments/show', $comment) }}" class="u-jsOnly"
+								data-xf-click="inserter"
+								data-replace="[data-content=profile-post-comment-{$comment.profile_post_comment_id}]">{{ phrase('show...') }}</a>
+						</div>
+					</div>
+
+					<div class="comment-actionBar actionBar">
+						<div class="actionBar-set actionBar-set--internal">
+							<span class="actionBar-action">
+								<xf:date time="{$comment.comment_date}" />
+								<span role="presentation" aria-hidden="true">&middot;</span>
+								<xf:username user="{$comment.User}" defaultname="{$comment.username}" class="u-concealed" />
+							</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</xf:macro>
+
+<xf:macro id="quick_post" arg-user="!" arg-containerSelector="!" arg-lastDate="!" arg-attachmentData="{{ null }}">
+	<xf:js src="xf/action.js, xf/message.js" min="1" />
+
+	<xf:form action="{{ link('members/post', $user) }}"
+		ajax="true"
+		class="message-spacer js-quickReply"
+		data-xf-init="attachment-manager quick-reply"
+		data-message-container="{$containerSelector}"
+		data-ascending="0">
+
+		<xf:macro id="quick_reply_macros::body"
+			arg-attachmentData="{$attachmentData}"
+			arg-simple="{{ true }}"
+			arg-placeholder="{{ $xf.visitor.user_id == $user.user_id ? (phrase('update_your_status...')) : phrase('write_something...') }}"
+			arg-submitText="{{ phrase('post_verb') }}"
+			arg-lastDate="{$lastDate}"
+			arg-lastKnownDate="{$lastDate}"
+			arg-minHeight="40"
+			arg-deferred="{{ true }}"
+			arg-simpleSubmit="{{ true }} " />
+	</xf:form>
+</xf:macro>
+
+<xf:macro id="submit" arg-user="!" arg-lastDate="!" arg-containerSelector="!" arg-style="full" arg-context="user" arg-attachmentData="{{ null }}">
+	<xf:js src="xf/action.js, xf/message.js" min="1" />
+
+	<xf:set var="$placeholder" value="{{ $xf.visitor.user_id == $user.user_id ? (phrase('update_your_status...')) : phrase('write_something...') }}" />
+
+	<xf:form action="{{ link('members/post', $user) }}" ajax="true"
+		class="{{ $style == 'full' ? 'message message--simple' : 'block-row' }} js-quickReply"
+		data-xf-init="{{ $style == 'full' ? 'attachment-manager' : '' }} quick-reply"
+		data-message-container="{$containerSelector}"
+		data-ascending="0">
+
+		<xf:if is="$style == 'full'">
+			<xf:macro id="quick_reply_macros::body"
+				arg-attachmentData="{$attachmentData}"
+				arg-simple="{{ true }}"
+				arg-placeholder="{$placeholder}"
+				arg-submitText="{{ phrase('post_verb') }}"
+				arg-lastDate="{$lastDate}"
+				arg-lastKnownDate="{$lastDate}"
+				arg-minHeight="40"
+				arg-deferred="{{ true }}"
+				arg-simpleSubmit="{{ true }} " />
+		<xf:else />
+			<div>
+				<span class="u-srOnly" id="ctrl_message">{{ phrase('update_your_status:') }}</span>
+
+				<xf:textarea name="message" autosize="true" rows="1" maxlength="{$xf.options.profilePostMaxLength}"
+					class="js-editor"
+					data-xf-init="focus-trigger user-mentioner emoji-completer"
+					data-display="< :next" aria-labelledby="ctrl_message"
+					placeholder="{$placeholder}" />
+
+				<div class="u-hidden u-hidden--transition u-inputSpacer">
+					<xf:button type="submit" class="button--primary" icon="reply">{{ phrase('post_verb') }}</xf:button>
+				</div>
+
+				<xf:comment><!-- Posts are in descending order so last post is first! --></xf:comment>
+				<xf:hiddenval name="last_date" autocomplete="off">{$lastDate}</xf:hiddenval>
+			</div>
+		</xf:if>
+
+		<xf:hiddenval name="style">{$style}</xf:hiddenval>
+		<xf:hiddenval name="context">{$context}</xf:hiddenval>
+	</xf:form>
+</xf:macro>

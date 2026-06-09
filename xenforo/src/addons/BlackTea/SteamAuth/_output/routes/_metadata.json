@@ -1,0 +1,29 @@
+{
+    "admin_steam_getsummaries.json": {
+        "hash": "1ec2613923e02a26d69ac546d312aa11"
+    },
+    "admin_steam_list.json": {
+        "hash": "3349618f5c8a0267628ff93ed8e9edd1"
+    },
+    "admin_steam_migrate.json": {
+        "hash": "b677e2e0920444eea7931aa82fd81bf6"
+    },
+    "admin_steam_support.json": {
+        "hash": "118ea33f68cac3f2620830fd76f440e0"
+    },
+    "public_steam_active-games.json": {
+        "hash": "13668e5cf0828d9d7bb2c1ca6c444b30"
+    },
+    "public_steam_active-players.json": {
+        "hash": "bb4e7ca92b82f238fec5a4bfba957de3"
+    },
+    "public_steam_getsummaries.json": {
+        "hash": "ea4ab7a3773c9870e0c1fe80f2a642cd"
+    },
+    "public_steam_owned-games.json": {
+        "hash": "5d362788a97c4fb9478aa94bfe683f29"
+    },
+    "public_steam_played-games.json": {
+        "hash": "16790cab94b4013f8d21a7219ebe71d7"
+    }
+}

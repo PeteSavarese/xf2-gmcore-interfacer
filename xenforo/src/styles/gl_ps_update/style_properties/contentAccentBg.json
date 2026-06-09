@@ -1,0 +1,16 @@
+{
+    "group_name": "color",
+    "title": "Accented content background color",
+    "description": "This background color is used for further differentiation from regular content",
+    "property_type": "value",
+    "css_components": [],
+    "value_type": "color",
+    "value_parameters": "",
+    "has_variations": true,
+    "depends_on": "",
+    "value_group": "contentBackground",
+    "property_value": {
+        "default": "#2c3e50"
+    },
+    "display_order": 2400
+}

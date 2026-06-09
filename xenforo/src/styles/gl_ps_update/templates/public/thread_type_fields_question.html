@@ -1,0 +1,17 @@
+<xf:if is="$context == 'create' AND $subContext == 'quick'">
+	<xf:set var="$rowType" value="fullWidth noGutter mergeNext" />
+<xf:elseif is="$context == 'edit' AND $subContext == 'first_post_quick'" />
+	<xf:set var="$rowType" value="fullWidth mergeNext" />
+<xf:else />
+	<xf:set var="$rowType" value="" />
+</xf:if>
+
+<xf:if is="$thread.canEditModeratorFields()">
+	<xf:radiorow name="question[allow_question_actions]" value="{$typeData.allow_question_actions}"
+		label="{{ phrase('allow_question_actions') }}"
+		rowtype="{$rowType}">
+		<xf:option value="yes" label="{{ phrase('yes') }}" />
+		<xf:option value="no" label="{{ phrase('no') }}" hint="{{ phrase('no_voting_or_solution_options_displayed_question') }}" />
+		<xf:option value="paused" label="{{ phrase('paused') }}" hint="{{ phrase('voting_not_allowed_no_solution_existing_displayed_question') }}" />
+	</xf:radiorow>
+</xf:if>

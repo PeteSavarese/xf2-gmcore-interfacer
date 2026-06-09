@@ -1,0 +1,14 @@
+{
+    "shoutboxBans.json": {
+        "hash": "07bd4598f5925fa36d4f7c38d1b5f35e"
+    },
+    "shoutbox_bans_active.json": {
+        "hash": "041a614be0abdff8d716e58b2b1b5505"
+    },
+    "shoutbox_bans_expired.json": {
+        "hash": "f000b931acca19a0082e90521369c477"
+    },
+    "shoutbox_bans_history.json": {
+        "hash": "8130d38bb74c5625ff01c905f8eb7938"
+    }
+}

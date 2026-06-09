@@ -1,0 +1,180 @@
+<xf:js dev="gmod/store/store.js?t={$xf.time}" prod="gmod/store/store.min.js" min="true"/>
+<xf:css src="gmod_interfacer.less"/>
+
+<xf:title>Server Rank Store</xf:title>
+
+<div class="store-container">
+    <xf:if is="$isSandbox">
+        <div class="card store-notice">
+            <div class="card-header">
+                <span><xf:fa icon="fa-exclamation-triangle" aria-hidden="true"/> SANDBOX MODE</span>
+            </div>
+            <div class="card-content">
+                The rank store environment is set to <b>SANDBOX</b>. Use sandbox credentials.
+            </div>
+        </div>
+    </xf:if>
+
+    <div class="header">
+        <div class="header-background"></div>
+        <div class="header-content">
+            <h1 class="header-title">Server Ranks Store</h1>
+            <p class="store-subtitle">Purchase ranks to unlock exclusive benefits and support our servers and community
+                as we're hard at work delivering the best experiences possible!</p>
+            <div class="header-badges">
+                <span class="header-badge"><xf:fa icon="fa-shield-alt"/> TTT Premium Perks</span>
+                <span class="header-badge"><xf:fa icon="fa-bolt"/> TTT Pointshop Discounts</span>
+                <span class="header-badge"><xf:fa icon="fa-users"/> Community Support</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="store-layout">
+        <!-- Purchase Summary Sidebar -->
+        <div class="purchase-summary-sidebar">
+            <div class="card purchase-summary-card">
+                <div class="card-header">
+                    <span><xf:fa icon="fa-shopping-cart" aria-hidden="true"/> Purchase Summary</span>
+                </div>
+                <div class="card-content">
+                    <div class="selected-rank-display">
+                        <div class="rank-icon-placeholder">
+                            <img id="selectedRank-icon" src="/images/forum/store_ranks/{$upgrade.rank_image}"
+                                 alt="Rank Icon" style="display: none;">
+                            <div id="selectedRank-placeholder" class="rank-placeholder-icon">📦</div>
+                        </div>
+                        <div class="rank-details">
+                            <div class="rank-name" id="selectedPackage-name">No rank selected</div>
+                            <div class="rank-price" id="selectedPackage-price">$0.00</div>
+                        </div>
+                    </div>
+
+                    <div class="info-grid purchase-info">
+                        <div class="info-item">
+                            <div class="info-label">Recipient</div>
+                            <div class="info-value" id="selectedPackage-foruser">{$xf.visitor.username}</div>
+                        </div>
+                    </div>
+
+                    <div class="gift-action" id="gift-action">
+                        <a href="/store/userselect" class="btn btn-small gift-button full-width" id="gift-button"
+                           data-rankid="" data-xf-init="gmod-store-giftpackage">
+                            <i class="fa fa-gift"></i> Gift to Player
+                        </a>
+                        <a href="#" class="btn btn-small btn-alt full-width" id="reset-to-self-button"
+                           style="margin-top: 5px; display: none;">
+                            <xf:fa icon="fa-user"/>
+                            Clear Gift User
+                        </a>
+                    </div>
+
+                    <div class="purchase-actions">
+                        <div id="paypal-button" class="paypal-container" style="display: none;"></div>
+                        <div id="purchase-placeholder" class="empty-state">
+                            <xf:fa icon="fa-shopping-cart" aria-hidden="true"/>
+                            <p>Select a rank to continue</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="store-main-content">
+            <!-- Important Notice -->
+            <div class="card store-notice">
+                <div class="card-header">
+                    <span><xf:fa icon="fa-exclamation-triangle" aria-hidden="true"/> Important Notice</span>
+                </div>
+                <div class="card-content">
+                    All transactions are final due to the instant delivery of our store ranks. Due to this, there is a
+                    no-refund policy unless there are cases of fraud or transactions without your knowledge or consent.
+                </div>
+            </div>
+
+            <!-- Rank Cards Grid -->
+            <div class="ranks-grid">
+                <xf:foreach loop="$allGroups" value="$upgrade">
+                    <xf:if is="{$upgrade.can_purchase} == 1">
+                        <div class="card rank-card" data-rank-id="{$upgrade.upgrade_id}"
+                             data-xf-init="gmod-store-packageselect">
+                            <div class="card-header rank-card-header">
+                                <div class="rank-icon">
+                                    <img class="rank-image" src="/images/forum/store_ranks/{$upgrade.rank_image}"
+                                         alt="{$upgrade.title} Rank" title="{$upgrade.title} Rank">
+                                </div>
+                                <div class="rank-header-info">
+                                    <h2 class="rank-title" id="{$upgrade.upgrade_id}-title">{$upgrade.title|raw}</h2>
+                                    <div class="rank-price-display">
+                                        <span class="price-amount"
+                                              id="{$upgrade.upgrade_id}-price">${$upgrade.price}</span>
+                                        <xf:if is="{$upgrade.length} != 0">
+                                            <span class="price-period">per {$upgrade.length_unit}</span>
+                                        </xf:if>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="card-content rank-description">
+                                {$upgrade.description|raw}
+                            </div>
+                        </div>
+                    </xf:if>
+                </xf:foreach>
+            </div>
+        </div>
+    </div>
+</div>
+
+<xf:set var="$userHighestPriority" value="0"/>
+<xf:set var="$userCurrentRankPrice" value="0"/>
+<xf:if is="{$xf.visitor.user_id}">
+    <xf:foreach loop="$allGroups" value="$upgrade">
+        <xf:if is="{$xf.visitor.isMemberOf([{$upgrade.group_id}])}">
+            <xf:if is="{$upgrade.rank_priority} > {$userHighestPriority}">
+                <xf:set var="$userHighestPriority" value="{$upgrade.rank_priority}"/>
+                <xf:set var="$userCurrentRankPrice" value="{$upgrade.price}"/>
+            </xf:if>
+        </xf:if>
+    </xf:foreach>
+</xf:if>
+
+<script>
+    window.StoreData = {
+        isLoggedIn: <xf:if is="{$xf.visitor.user_id}">true
+            <xf:else/>
+            false</xf:if>,
+        visitorId: <xf:if is="{$xf.visitor.user_id}">{$xf.visitor.user_id}
+            <xf:else/>
+            0</xf:if>,
+        visitorUsername: <xf:if is="{$xf.visitor.user_id}">"{$xf.visitor.username|escape('js')}"
+            <xf:else/>
+            ""</xf:if>,
+        ipAddress: "{$ipAddress}",
+        clientId: <xf:if is="{$xf.visitor.user_id}">"{$clientId}"
+            <xf:else/>
+            ""</xf:if>,
+        userHighestRankPriority: {$userHighestPriority},
+        userCurrentRankPrice: {$userCurrentRankPrice},
+        upgradeData: <xf:if is="{$xf.visitor.user_id}">{
+            <xf:foreach loop="$allGroups" value="$upgrade" key="$key">
+                <xf:if is="{$upgrade.can_purchase} == 1">
+                    {$upgrade.upgrade_id}: {
+                    price: {$upgrade.price},
+                    title: '{$upgrade.title|escape('js')}',
+                    groupId: {$upgrade.group_id},
+                    rankPriority: {$upgrade.rank_priority},
+                    length: {$upgrade.length},
+                    lengthUnit: '{$upgrade.length_unit}'
+                }
+                    <xf:if is="!$__foreach.upgrade.last">,</xf:if>
+                </xf:if>
+            </xf:foreach>
+        }
+            <xf:else/>
+            {}</xf:if>
+    };
+</script>
+<xf:if is="{$xf.visitor.user_id}">
+    <script src="https://www.paypal.com/sdk/js?client-id={{$clientId}}&currency=USD&commit=true&vault=true"></script>
+</xf:if>

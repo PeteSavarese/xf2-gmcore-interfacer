@@ -1,0 +1,11 @@
+{
+    "parent_navigation_id": "shoutboxBans",
+    "display_order": 1,
+    "link": "shoutbox-bans/history",
+    "icon": "",
+    "admin_permission_id": "ban",
+    "debug_only": false,
+    "development_only": false,
+    "super_admin_only": false,
+    "hide_no_children": false
+}

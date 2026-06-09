@@ -1,0 +1,46 @@
+<xf:macro id="item" arg-user="!" arg-extraData="" arg-extraDataBig="{{ false }}">
+	<div class="contentRow">
+		<div class="contentRow-figure">
+			<xf:avatar user="$user" size="s" notooltip="true" />
+		</div>
+		<div class="contentRow-main">
+			<xf:if is="$extraData">
+				<div class="contentRow-extra {{ $extraDataBig ? 'contentRow-extra--largest' : '' }}">{$extraData}</div>
+			</xf:if>
+			<h3 class="contentRow-header"><xf:username user="$user" rich="true" notooltip="true" /></h3>
+
+			<xf:userblurb user="$user" class="contentRow-lesser" />
+
+			<div class="contentRow-minor">
+				<ul class="listInline listInline--bullet">
+					<!--[XF:stats:start]-->
+					<li><dl class="pairs pairs--inline">
+						<dt>{{ phrase('messages') }}</dt>
+						<dd>{$user.message_count|number}</dd>
+					</dl></li>
+					<!--[XF:stats:after_messages]-->
+					<xf:if is="$user.question_solution_count">
+						<li><dl class="pairs pairs--inline">
+							<dt>{{ phrase('solutions') }}</dt>
+							<dd>{$user.question_solution_count|number}</dd>
+						</dl></li>
+					</xf:if>
+					<!--[XF:stats:after_solutions]-->
+					<li><dl class="pairs pairs--inline">
+						<dt>{{ phrase('reaction_score') }}</dt>
+						<dd>{$user.reaction_score|number}</dd>
+					</dl></li>
+					<!--[XF:stats:after_likes]-->
+					<!--[XF:stats:after_reactions]-->
+					<xf:if is="$xf.options.enableTrophies">
+						<li><dl class="pairs pairs--inline">
+							<dt>{{ phrase('points') }}</dt>
+							<dd>{$user.trophy_points|number}</dd>
+						</dl></li>
+					</xf:if>
+					<!--[XF:stats:end]-->
+				</ul>
+			</div>
+		</div>
+	</div>
+</xf:macro>

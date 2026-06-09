@@ -1,0 +1,14 @@
+{
+    "group_name": "page",
+    "title": "Sidebar and side navigation width",
+    "description": "Width of any elements that make up the sidebar",
+    "property_type": "value",
+    "css_components": [],
+    "value_type": "unit",
+    "value_parameters": "",
+    "has_variations": false,
+    "depends_on": "",
+    "value_group": "sidebar",
+    "property_value": "325px",
+    "display_order": 1100
+}

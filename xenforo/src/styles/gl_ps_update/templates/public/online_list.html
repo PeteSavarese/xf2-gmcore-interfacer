@@ -1,0 +1,81 @@
+<xf:title page="{$page}">{{ phrase('current_visitors') }}</xf:title>
+
+<xf:head option="metaNoindex"><meta name="robots" content="noindex" /></xf:head>
+
+<div class="block">
+	<div class="block-container">
+		<h2 class="block-tabHeader tabs hScroller" data-xf-init="h-scroller">
+			<span class="hScroller-scroll">
+				<!--[XF:tabs:start]-->
+				<a href="{{ link('online') }}" class="tabs-tab {{ $typeLimit == '' ? 'is-active' : '' }}">{{ phrase('everyone') }}</a>
+				<a href="{{ link('online', null, {'type': 'member'}) }}" class="tabs-tab {{ $typeLimit == 'member' ? 'is-active' : '' }}">{{ phrase('members') }}</a>
+				<a href="{{ link('online', null, {'type': 'guest'}) }}" class="tabs-tab {{ $typeLimit == 'guest' ? 'is-active' : '' }}">{{ phrase('guests') }}</a>
+				<a href="{{ link('online', null, {'type': 'robot'}) }}" class="tabs-tab {{ $typeLimit == 'robot' ? 'is-active' : '' }}">{{ phrase('robots') }}</a>
+				<!--[XF:tabs:end]-->
+			</span>
+		</h2>
+		<xf:if is="$activities is not empty">
+			<ol class="block-body">
+				<xf:foreach loop="$activities" value="$activity">
+					<li class="block-row block-row--separated">
+						<div class="contentRow">
+							<div class="contentRow-figure">
+								<xf:avatar user="$activity.User" size="s" />
+							</div>
+							<div class="contentRow-main">
+								<xf:if is="$xf.visitor.canViewIps()">
+									<div class="contentRow-extra">
+										<a href="{{ $activity.user_id ? link('online/user-ip', null, {'user_id': $activity.user_id}) : link('online/guest-ip', null, {'ip': $activity.ip|hex}) }}" data-xf-click="overlay"><span>{$activity.ip|ip}</span></a>
+									</div>
+								</xf:if>
+								<xf:if is="$activity.User">
+									<h3 class="contentRow-header"><xf:username user="$activity.User" rich="true" /></h3>
+
+									<xf:userblurb user="$activity.User" class="contentRow-lesser" />
+								<xf:elseif is="$activity.robot_key" />
+									<h3 class="contentRow-header">
+										{{ phrase('robot:') }} <xf:if is="$activity.robot_link"><a href="{$activity.robot_link}" target="_blank" rel="nofollow">{$activity.robot_title}</a><xf:else />{$activity.robot_title}</xf:if>
+									</h3>
+								<xf:else />
+									<h3 class="contentRow-header">{{ phrase('guest') }}</h3>
+								</xf:if>
+
+								<div class="contentRow-minor">
+									<ul class="listInline listInline--bullet">
+										<xf:if is="!$activity.User || $activity.User.canViewCurrentActivity()">
+											<li>
+											<xf:if is="$activity.description">
+												{$activity.description}<xf:if is="$activity.item_title"> <em><a href="{$activity.item_url}">{$activity.item_title}</a></em></xf:if>
+											<xf:elseif is="$xf.visitor.is_admin" />
+												<span title="{$activity.controller_name}::{$activity.controller_action}">{{ phrase('viewing_unknown_page') }}</span>
+											<xf:else />
+												{{ phrase('viewing_unknown_page') }}
+											</xf:if>
+											</li>
+										</xf:if>
+
+										<li><xf:date time="{$activity.view_date}" /></li>
+
+										<xf:if is="$activity.view_state == 'error' && $xf.visitor.canBypassUserPrivacy()">
+											<li>
+											<xf:fa icon="fa-exclamation-triangle" title="{{ phrase('viewing_an_error')|for_attr }}" />
+											<span class="u-srOnly">{{ phrase('viewing_an_error') }}</span>
+											</li>
+										</xf:if>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</li>
+				</xf:foreach>
+			</ol>
+		<xf:else />
+			<div class="block-row">{{ phrase('no_results_found') }}</div>
+		</xf:if>
+	</div>
+
+	<xf:pagenav page="{$page}" perpage="{$perPage}" total="{$total}" link="online" params="{$linkParams}"
+		wrapperclass="block-outer block-outer--after" />
+</div>
+
+<xf:widgetpos id="online_list_sidebar" position="sidebar" />

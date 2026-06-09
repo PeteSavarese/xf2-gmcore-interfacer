@@ -1,0 +1,28 @@
+<xf:title>{{ phrase('continue_with_x', {'provider': $provider.title}) }}</xf:title>
+
+<xf:wrap template="account_wrapper">
+	<xf:set var="$pageSelected" value="connected_account" />
+</xf:wrap>
+
+<xf:form action="{{ link('register/connected-accounts/associate', $provider) }}" ajax="true" class="block">
+
+	<div class="block-container">
+		<div class="block-body">
+			<xf:if is="$passwordEmailed">
+				<xf:inforow>
+					<div class="blockMessage blockMessage--important blockMessage--iconic">{{ phrase('to_confirm_your_identity_we_have_sent_email_to_x', {'email': $user.email|email_display}) }}</div>
+				</xf:inforow>
+			</xf:if>
+
+			<xf:formrow label="{{ phrase('associate_with') }}">
+				{$xf.visitor.username}
+			</xf:formrow>
+
+			<xf:passwordboxrow name="password"
+				label="{{ phrase('password') }}"
+				explain="{{ phrase('password_of_x_account_wish_to_associate_with', {'board_title': $xf.options.boardTitle}) }}" />
+		</div>
+		<xf:submitrow submit="{{ phrase('associate') }}" />
+	</div>
+	<xf:redirect url="{$redirect}" />
+</xf:form>

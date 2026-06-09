@@ -1,0 +1,122 @@
+{
+    "admin_navigation.shoutboxBans.txt": {
+        "global_cache": false,
+        "version_id": 1000100,
+        "version_string": "1.0.1",
+        "hash": "5b6b3b8d7166d3fc3a3ad6ea0e1ab33d"
+    },
+    "admin_navigation.shoutbox_bans_active.txt": {
+        "global_cache": false,
+        "version_id": 1000100,
+        "version_string": "1.0.1",
+        "hash": "cf2170be160592bbcb2b36d2535ead7b"
+    },
+    "admin_navigation.shoutbox_bans_expired.txt": {
+        "global_cache": false,
+        "version_id": 1000100,
+        "version_string": "1.0.1",
+        "hash": "416e04064ca7139b15776b8718a828de"
+    },
+    "admin_navigation.shoutbox_bans_history.txt": {
+        "global_cache": false,
+        "version_id": 1000100,
+        "version_string": "1.0.1",
+        "hash": "eb80cff94cea647e0824e7dcc672ddad"
+    },
+    "api_scope.shoutbox_read.txt": {
+        "global_cache": false,
+        "version_id": 1000100,
+        "version_string": "1.0.1",
+        "hash": "5f1a5fe5572d70a59df64451fffcd7c7"
+    },
+    "api_scope.shoutbox_write.txt": {
+        "global_cache": false,
+        "version_id": 1000100,
+        "version_string": "1.0.1",
+        "hash": "d21d59c164b06ad245e431863901e667"
+    },
+    "cron_entry.shoutboxUnbanExpired.txt": {
+        "global_cache": false,
+        "version_id": 1000100,
+        "version_string": "1.0.1",
+        "hash": "42958ea8520cdab5d77b472cd795548e"
+    },
+    "mod_log.user_shoutbox_ban.txt": {
+        "global_cache": false,
+        "version_id": 1000100,
+        "version_string": "1.0.1",
+        "hash": "e57a317c94723151fcc1c4209897d0c1"
+    },
+    "option.shoutbox_discord_channel_id.txt": {
+        "global_cache": false,
+        "version_id": 1000100,
+        "version_string": "1.0.1",
+        "hash": "c108340d1841c6aa4dd8e3308bf5f743"
+    },
+    "option_explain.shoutbox_discord_channel_id.txt": {
+        "global_cache": false,
+        "version_id": 1000100,
+        "version_string": "1.0.1",
+        "hash": "7305a0a2e34caf8cdefa02baf6d3190d"
+    },
+    "option_group.shoutbox_settings.txt": {
+        "global_cache": false,
+        "version_id": 1000100,
+        "version_string": "1.0.1",
+        "hash": "e9ba72d1d0f7f3b7093bb0572c43effe"
+    },
+    "option_group_description.shoutbox_settings.txt": {
+        "global_cache": false,
+        "version_id": 1000100,
+        "version_string": "1.0.1",
+        "hash": "6ec31be137fe4c351e94a91b980ca9db"
+    },
+    "permission.shoutbox_can_ban_user.txt": {
+        "global_cache": false,
+        "version_id": 1000100,
+        "version_string": "1.0.1",
+        "hash": "08dcb02b134c367a50e9eab6790ed095"
+    },
+    "permission.shoutbox_can_delete_messages.txt": {
+        "global_cache": false,
+        "version_id": 1000100,
+        "version_string": "1.0.1",
+        "hash": "6f005aec272490ad61cba0adedb15496"
+    },
+    "permission.shoutbox_force_update.txt": {
+        "global_cache": false,
+        "version_id": 1000100,
+        "version_string": "1.0.1",
+        "hash": "1101319f3e595fad4c22a92f6cf48f06"
+    },
+    "permission_interface.shoutbox.txt": {
+        "global_cache": false,
+        "version_id": 1000100,
+        "version_string": "1.0.1",
+        "hash": "5b6b3b8d7166d3fc3a3ad6ea0e1ab33d"
+    },
+    "this_user_is_already_banned_from_shoutbox.txt": {
+        "global_cache": false,
+        "version_id": 1000100,
+        "version_string": "1.0.1",
+        "hash": "465aa89eb0befbf924568302dfb453d7"
+    },
+    "user_has_been_banned_from_shoutbox.txt": {
+        "global_cache": false,
+        "version_id": 1000100,
+        "version_string": "1.0.1",
+        "hash": "995b55dc678492b6f333abbd1b05f332"
+    },
+    "widget_def.shoutbox_full.txt": {
+        "global_cache": false,
+        "version_id": 1000100,
+        "version_string": "1.0.1",
+        "hash": "3a723edc0d87b682285a76cd0edaa849"
+    },
+    "widget_def_desc.shoutbox_full.txt": {
+        "global_cache": false,
+        "version_id": 1000100,
+        "version_string": "1.0.1",
+        "hash": "15f97b76cadbc4dff81752f5443ab0b1"
+    }
+}

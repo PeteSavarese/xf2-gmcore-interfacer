@@ -1,0 +1,356 @@
+{
+    "admin_navigation.gmodinterfacer_discord.txt": {
+        "global_cache": false,
+        "version_id": 1011000,
+        "version_string": "1.1.10",
+        "hash": "4afcdf53383b1d01163d0b71e4404c73"
+    },
+    "admin_navigation.gmodinterfacer_settings.txt": {
+        "global_cache": false,
+        "version_id": 1010600,
+        "version_string": "1.1.6",
+        "hash": "f4f70727dc34561dfde1a3c529b6205c"
+    },
+    "admin_navigation.gmodinterfacer_store_mange_ranks.txt": {
+        "global_cache": false,
+        "version_id": 1010800,
+        "version_string": "1.1.8",
+        "hash": "9b6bc2e6c12a2831f84cbbb546a2c6ce"
+    },
+    "admin_navigation.gmodinterfacer_store_options.txt": {
+        "global_cache": false,
+        "version_id": 1000020,
+        "version_string": "1.0.2 Alpha",
+        "hash": "fdb0c388de01d545017cdf9ccf00eb72"
+    },
+    "admin_navigation.gmodinterfacer_store_view_transactions.txt": {
+        "global_cache": false,
+        "version_id": 1010800,
+        "version_string": "1.1.8",
+        "hash": "73c6e2259df7e2ff5d6e21ade4a2f56b"
+    },
+    "admin_navigation.petersav_gmodinterfacer.txt": {
+        "global_cache": false,
+        "version_id": 1000020,
+        "version_string": "1.0.2 Alpha",
+        "hash": "fae588348f1be35fd20fab37cbb6b7f1"
+    },
+    "admin_permission.gmod_db_options.txt": {
+        "global_cache": false,
+        "version_id": 1010700,
+        "version_string": "1.1.7",
+        "hash": "bab60634304a612396c9f6601692f4d2"
+    },
+    "admin_permission.gmod_manage_store_ranks.txt": {
+        "global_cache": false,
+        "version_id": 1010900,
+        "version_string": "1.1.9",
+        "hash": "9b6bc2e6c12a2831f84cbbb546a2c6ce"
+    },
+    "api_scope.discord_read.txt": {
+        "global_cache": false,
+        "version_id": 1011000,
+        "version_string": "1.1.10",
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    "api_scope.discord_write.txt": {
+        "global_cache": false,
+        "version_id": 1011000,
+        "version_string": "1.1.10",
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    "cron_entry.gmodLotteryWinnerPicking.txt": {
+        "global_cache": false,
+        "version_id": 1000020,
+        "version_string": "1.0.2 Alpha",
+        "hash": "8edac5977c7815bbb6fe638695afa21a"
+    },
+    "cron_entry.gmodStoreExpireCheck.txt": {
+        "global_cache": false,
+        "version_id": 1010400,
+        "version_string": "1.1.4",
+        "hash": "0b003ddc84a787013557cb886d91146b"
+    },
+    "nav.dimeHLogsSearch.txt": {
+        "global_cache": false,
+        "version_id": 1010400,
+        "version_string": "1.1.4",
+        "hash": "d4d9ed946926ed1f2b172d3aa91cdea1"
+    },
+    "nav.gmodDiscord.txt": {
+        "global_cache": false,
+        "version_id": 1010200,
+        "version_string": "1.1.2",
+        "hash": "8f5cc6430613f1c12f36965050bb7197"
+    },
+    "nav.gmodServerBans.txt": {
+        "global_cache": false,
+        "version_id": 1010300,
+        "version_string": "1.1.3",
+        "hash": "d5b11d379e7872645508ebf1d6585c55"
+    },
+    "nav.gmodServerStats.txt": {
+        "global_cache": false,
+        "version_id": 1011000,
+        "version_string": "1.1.10",
+        "hash": "452a7601dbc6f2c38aa89e68bda8b603"
+    },
+    "nav.gmodServers.txt": {
+        "global_cache": false,
+        "version_id": 1010200,
+        "version_string": "1.1.2",
+        "hash": "ac659513b2353187192e88c5d1988228"
+    },
+    "nav.gmodStaffTools.txt": {
+        "global_cache": false,
+        "version_id": 1010400,
+        "version_string": "1.1.4",
+        "hash": "a950a1fa6c0484aefee1a0012f794cef"
+    },
+    "nav.gmodStore.txt": {
+        "global_cache": false,
+        "version_id": 1010200,
+        "version_string": "1.1.2",
+        "hash": "fdb0c388de01d545017cdf9ccf00eb72"
+    },
+    "option.gmod_interfacer_db_host.txt": {
+        "global_cache": false,
+        "version_id": 1010600,
+        "version_string": "1.1.6",
+        "hash": "c09dc65f11b833ce038cb60f2a40807e"
+    },
+    "option.gmod_interfacer_db_name.txt": {
+        "global_cache": false,
+        "version_id": 1010600,
+        "version_string": "1.1.6",
+        "hash": "fbcd2999bd5f07eea19e90cc74611688"
+    },
+    "option.gmod_interfacer_db_password.txt": {
+        "global_cache": false,
+        "version_id": 1010600,
+        "version_string": "1.1.6",
+        "hash": "f606eede393acf6072ff2743e4fb4cac"
+    },
+    "option.gmod_interfacer_db_port.txt": {
+        "global_cache": false,
+        "version_id": 1010600,
+        "version_string": "1.1.6",
+        "hash": "4c9eadd9a3272794bf7b6bb49bde4eae"
+    },
+    "option.gmod_interfacer_db_username.txt": {
+        "global_cache": false,
+        "version_id": 1010600,
+        "version_string": "1.1.6",
+        "hash": "24bf91d84bd34402dde384d4fd507f4e"
+    },
+    "option.gmod_interfacer_discord_bot_client_id.txt": {
+        "global_cache": false,
+        "version_id": 1010900,
+        "version_string": "1.1.9",
+        "hash": "461210a76b2b540fd75966805284237e"
+    },
+    "option.gmod_interfacer_discord_bot_client_secret.txt": {
+        "global_cache": false,
+        "version_id": 1011000,
+        "version_string": "1.1.10",
+        "hash": "c0f51ed9e409536e7168e9d5390294c5"
+    },
+    "option.gmod_interfacer_discord_bot_token.txt": {
+        "global_cache": false,
+        "version_id": 1010900,
+        "version_string": "1.1.9",
+        "hash": "69206e3286c4425b4cceed5409c8ee91"
+    },
+    "option.gmod_interfacer_discord_server_guild.txt": {
+        "global_cache": false,
+        "version_id": 1010900,
+        "version_string": "1.1.9",
+        "hash": "a8e908b0778f5792250e5a4596ac6851"
+    },
+    "option.gmod_interfacer_store_active.txt": {
+        "global_cache": false,
+        "version_id": 1000020,
+        "version_string": "1.0.2 Alpha",
+        "hash": "16c71c836ec3724ecc4079e6998c8bb1"
+    },
+    "option.gmod_interfacer_store_production_check.txt": {
+        "global_cache": false,
+        "version_id": 1000020,
+        "version_string": "1.0.2 Alpha",
+        "hash": "9ee3fe8bedaf7b328862790a4aae6451"
+    },
+    "option.gmod_interfacer_store_production_client_id.txt": {
+        "global_cache": false,
+        "version_id": 1000020,
+        "version_string": "1.0.2 Alpha",
+        "hash": "86c739b4b8c6990fce9620314da8f204"
+    },
+    "option.gmod_interfacer_store_production_secret_key.txt": {
+        "global_cache": false,
+        "version_id": 1000020,
+        "version_string": "1.0.2 Alpha",
+        "hash": "0deffcc3d8afd38d10a23de5ccdd1ca9"
+    },
+    "option.gmod_interfacer_store_sandbox_client_id.txt": {
+        "global_cache": false,
+        "version_id": 1000020,
+        "version_string": "1.0.2 Alpha",
+        "hash": "a0bd7d42b20f8ca0c6f28bdd30a1af1f"
+    },
+    "option.gmod_interfacer_store_sandbox_secret_key.txt": {
+        "global_cache": false,
+        "version_id": 1000020,
+        "version_string": "1.0.2 Alpha",
+        "hash": "8c9952079f4bd6acb39f6bdf0425aa38"
+    },
+    "option_explain.gmod_interfacer_db_host.txt": {
+        "global_cache": false,
+        "version_id": 1010600,
+        "version_string": "1.1.6",
+        "hash": "bff85b4a7ac6a32e1e5d45ea03b70032"
+    },
+    "option_explain.gmod_interfacer_db_name.txt": {
+        "global_cache": false,
+        "version_id": 1010600,
+        "version_string": "1.1.6",
+        "hash": "8373c5c41e1ff18b8eacfa79106b58ab"
+    },
+    "option_explain.gmod_interfacer_db_password.txt": {
+        "global_cache": false,
+        "version_id": 1010600,
+        "version_string": "1.1.6",
+        "hash": "fd48023c07eafebb727d85e6a95623c7"
+    },
+    "option_explain.gmod_interfacer_db_port.txt": {
+        "global_cache": false,
+        "version_id": 1010600,
+        "version_string": "1.1.6",
+        "hash": "a8e7149da488774c09204ea570c44260"
+    },
+    "option_explain.gmod_interfacer_db_username.txt": {
+        "global_cache": false,
+        "version_id": 1010600,
+        "version_string": "1.1.6",
+        "hash": "fd48023c07eafebb727d85e6a95623c7"
+    },
+    "option_explain.gmod_interfacer_discord_bot_client_id.txt": {
+        "global_cache": false,
+        "version_id": 1011000,
+        "version_string": "1.1.10",
+        "hash": "e078e9b67cc47a2d1c3118de750334d9"
+    },
+    "option_explain.gmod_interfacer_discord_bot_client_secret.txt": {
+        "global_cache": false,
+        "version_id": 1011000,
+        "version_string": "1.1.10",
+        "hash": "f684abba3384e8ad962bfd2eae54a260"
+    },
+    "option_explain.gmod_interfacer_discord_bot_token.txt": {
+        "global_cache": false,
+        "version_id": 1011000,
+        "version_string": "1.1.10",
+        "hash": "3a9086927e01f6b2af965e6e9e2b293e"
+    },
+    "option_explain.gmod_interfacer_discord_server_guild.txt": {
+        "global_cache": false,
+        "version_id": 1011000,
+        "version_string": "1.1.10",
+        "hash": "43b754545e79010f3c2dd04d550c50bc"
+    },
+    "option_explain.gmod_interfacer_store_active.txt": {
+        "global_cache": false,
+        "version_id": 1000020,
+        "version_string": "1.0.2 Alpha",
+        "hash": "0295674ce1aca876404708058ea06b14"
+    },
+    "option_explain.gmod_interfacer_store_production_check.txt": {
+        "global_cache": false,
+        "version_id": 1000020,
+        "version_string": "1.0.2 Alpha",
+        "hash": "79395ec25e36bb5c43c4df9eb60b8cc6"
+    },
+    "option_explain.gmod_interfacer_store_production_client_id.txt": {
+        "global_cache": false,
+        "version_id": 1000020,
+        "version_string": "1.0.2 Alpha",
+        "hash": "279725c2b7634bcf7f7ca8cffdc4484e"
+    },
+    "option_explain.gmod_interfacer_store_production_secret_key.txt": {
+        "global_cache": false,
+        "version_id": 1000020,
+        "version_string": "1.0.2 Alpha",
+        "hash": "aba34cf0189307ce4fa69f64ebd136ee"
+    },
+    "option_explain.gmod_interfacer_store_sandbox_client_id.txt": {
+        "global_cache": false,
+        "version_id": 1000020,
+        "version_string": "1.0.2 Alpha",
+        "hash": "c6f1f39f62317e43989451b8550ef883"
+    },
+    "option_explain.gmod_interfacer_store_sandbox_secret_key.txt": {
+        "global_cache": false,
+        "version_id": 1000020,
+        "version_string": "1.0.2 Alpha",
+        "hash": "12224162d5e6d99fb43f92ad3e2ff214"
+    },
+    "option_group.gmod_interfacer_discord.txt": {
+        "global_cache": false,
+        "version_id": 1011000,
+        "version_string": "1.1.10",
+        "hash": "608141b0c708e22bb3381b7d51d376e1"
+    },
+    "option_group.gmod_interfacer_settings.txt": {
+        "global_cache": false,
+        "version_id": 1010600,
+        "version_string": "1.1.6",
+        "hash": "fae588348f1be35fd20fab37cbb6b7f1"
+    },
+    "option_group.gmod_interfacer_store_options.txt": {
+        "global_cache": false,
+        "version_id": 1011000,
+        "version_string": "1.1.10",
+        "hash": "a7ac8f3638261fd436e089fba85705d0"
+    },
+    "option_group_description.gmod_interfacer_discord.txt": {
+        "global_cache": false,
+        "version_id": 1011000,
+        "version_string": "1.1.10",
+        "hash": "aff58f4c6a23f5e336c39d608eb8df3c"
+    },
+    "option_group_description.gmod_interfacer_settings.txt": {
+        "global_cache": false,
+        "version_id": 1010600,
+        "version_string": "1.1.6",
+        "hash": "bca0d03f6e0cf1fa0819202c1d446b05"
+    },
+    "option_group_description.gmod_interfacer_store_options.txt": {
+        "global_cache": false,
+        "version_id": 1000020,
+        "version_string": "1.0.2 Alpha",
+        "hash": "bbbfbe066f7da7bf7d709bf4df38376d"
+    },
+    "permission.gmodUserPerms_view_hlogs.txt": {
+        "global_cache": false,
+        "version_id": 1000010,
+        "version_string": "1.0.0 Alpha",
+        "hash": "2c703b611edec879360b00860480347b"
+    },
+    "permission_interface.gmodUserPerms.txt": {
+        "global_cache": false,
+        "version_id": 1000010,
+        "version_string": "1.0.0 Alpha",
+        "hash": "fae588348f1be35fd20fab37cbb6b7f1"
+    },
+    "widget_def.gmod_servers_widget.txt": {
+        "global_cache": false,
+        "version_id": 1000010,
+        "version_string": "1.0.0 Alpha",
+        "hash": "56716699adc8b696e0dd122eec3b1921"
+    },
+    "widget_def_desc.gmod_servers_widget.txt": {
+        "global_cache": false,
+        "version_id": 1000010,
+        "version_string": "1.0.0 Alpha",
+        "hash": "a55e6108d5edfa108de6bcb2e0fcd703"
+    }
+}

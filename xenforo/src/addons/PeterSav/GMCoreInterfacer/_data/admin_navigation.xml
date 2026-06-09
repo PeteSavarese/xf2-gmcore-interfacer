@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<admin_navigation>
+  <admin_navigation_entry navigation_id="gmodinterfacer_discord" parent_navigation_id="petersav_gmodinterfacer" display_order="200" link="discord/manage" admin_permission_id="gmod_manage_store_ranks" debug_only="0" development_only="0" hide_no_children="0"/>
+  <admin_navigation_entry navigation_id="gmodinterfacer_settings" parent_navigation_id="petersav_gmodinterfacer" display_order="100" link="options/groups/gmod_interfacer_settings/" admin_permission_id="gmod_db_options" debug_only="0" development_only="0" hide_no_children="0"/>
+  <admin_navigation_entry navigation_id="gmodinterfacer_store_mange_ranks" parent_navigation_id="gmodinterfacer_store_options" display_order="100" link="gl-store/manage" admin_permission_id="gmod_manage_store_ranks" debug_only="0" development_only="0" hide_no_children="0"/>
+  <admin_navigation_entry navigation_id="gmodinterfacer_store_manual_apply" parent_navigation_id="gmodinterfacer_store_options" display_order="300" link="gl-store/manualapply" admin_permission_id="gmod_manage_store_ranks" debug_only="0" development_only="0" hide_no_children="0"/>
+  <admin_navigation_entry navigation_id="gmodinterfacer_store_options" parent_navigation_id="petersav_gmodinterfacer" display_order="200" link="gl-store" icon="fa-sliders-h" admin_permission_id="gmod_manage_store_ranks" debug_only="0" development_only="0" hide_no_children="1"/>
+  <admin_navigation_entry navigation_id="gmodinterfacer_store_recovery" parent_navigation_id="gmodinterfacer_store_options" display_order="250" link="gl-store/recovery" admin_permission_id="gmod_manage_store_ranks" debug_only="0" development_only="0" hide_no_children="0"/>
+  <admin_navigation_entry navigation_id="gmodinterfacer_store_view_transactions" parent_navigation_id="gmodinterfacer_store_options" display_order="200" link="gl-store/purchases" admin_permission_id="gmod_manage_store_ranks" debug_only="0" development_only="0" hide_no_children="0"/>
+  <admin_navigation_entry navigation_id="petersav_gmodinterfacer" display_order="1" icon="fab fa-goodreads-g" debug_only="0" development_only="0" hide_no_children="0"/>
+</admin_navigation>

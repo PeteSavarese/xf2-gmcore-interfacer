@@ -1,0 +1,9 @@
+{
+    "template": "connected_account_macros",
+    "description": "Adds the ability for administrators to remove Steam disassociation",
+    "execution_order": 10,
+    "enabled": true,
+    "action": "preg_replace",
+    "find": "/<xf:form [\\s\\S]*?<\\/xf:form>/",
+    "replace": "<xf:if is=\"$provider.getValue('provider_id') !== 'steam' || can_disassociate_steam()\">\n<xf:css src=\"public:login_steam.less\" />\n$0\n</xf:if>"
+}

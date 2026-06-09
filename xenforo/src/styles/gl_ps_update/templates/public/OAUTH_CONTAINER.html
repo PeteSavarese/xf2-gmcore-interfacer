@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html id="XF" lang="{$xf.language.language_code}" dir="{$xf.language.text_direction}"
+	data-app="public"
+	{{ ($xf.style.isVariationsEnabled() && $xf.visitor.style_variation) ? 'data-variation="' . $xf.visitor.style_variation . '"' : '' }}
+{{ ($xf.style.isVariationsEnabled() && $xf.visitor.style_variation) ? 'data-color-scheme="' . property_variation('styleType', $xf.visitor.style_variation) . '"' : '' }}
+data-template="{$template}"
+data-cookie-prefix="{$xf.cookie.prefix}"
+class="{{ $template ? 'template-' . $template : '' }}">
+
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>{{ phrase('authorize_access_to_your_account') }} | {$xf.options.boardTitle}</title>
+
+	<xf:if is="$xf.style.isVariationsEnabled()">
+		<xf:if is="$xf.visitor.style_variation">
+			<meta name="theme-color" content="{{ parse_less_color(property_variation('metaThemeColor', $xf.visitor.style_variation)) }}" />
+			<xf:else />
+			<xf:if is="$xf.style.hasAlternateStyleTypeVariation()">
+				<meta name="theme-color" media="(prefers-color-scheme: {{ $xf.style.getDefaultStyleType() }})" content="{{ parse_less_color(property_variation('metaThemeColor', 'default')) }}" />
+				<meta name="theme-color" media="(prefers-color-scheme: {{ $xf.style.getAlternateStyleType() }})" content="{{ parse_less_color(property_variation('metaThemeColor', $xf.style.getAlternateStyleTypeVariation())) }}" />
+				<xf:else />
+				<meta name="theme-color" content="{{ parse_less_color(property_variation('metaThemeColor', 'default')) }}" />
+			</xf:if>
+		</xf:if>
+		<xf:else />
+		<meta name="theme-color" content="{{ parse_less_color(property_variation('metaThemeColor', 'default')) }}" />
+	</xf:if>
+
+	<xf:foreach loop="$head" value="$headTag">
+		{$headTag}
+	</xf:foreach>
+
+	<xf:macro id="helper_js_global::head" arg-app="public" />
+</head>
+
+<body data-template="{$template}">
+<div>
+	<h1><xf:h1 fallback="{$xf.options.boardTitle}" /></h1>
+
+	<div>
+		{$content|raw}
+	</div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,46 @@
+<xf:title>{{ phrase('ban_user') }}</xf:title>
+
+<xf:form action="{{ link('shoutbox/' . $message.id . '/ban') }}" ajax="true" class="block">
+    <div class="block-container">
+        <div class="block-body">
+            <xf:inforow rowtype="confirm">
+                Please confirm that you want to ban the following user from the shoutbox:
+                <strong>{{ $user.username }}</strong>
+            </xf:inforow>
+
+            <xf:textarearow
+                name="reason"
+                value=""
+                label="{{ phrase('reason') }}"
+                rows="3"
+            />
+
+            <xf:radiorow name="ban_length" value="permanent" label="Ban length">
+                <xf:option value="permanent">{{ phrase('permanent') }}</xf:option>
+                <xf:option value="temporary" label="{{ phrase('for_length:') }}">
+                    <xf:dependent>
+                        <div class="inputGroup">
+                            <xf:numberbox name="ban_length_value" value="1" min="1" />
+                            <span class="inputGroup-splitter"></span>
+                            <xf:select name="ban_length_unit" value="days" class="input--inline">
+                                <xf:option value="minutes">{{ phrase('minutes') }}</xf:option>
+                                <xf:option value="hours">{{ phrase('hours') }}</xf:option>
+                                <xf:option value="days">{{ phrase('days') }}</xf:option>
+                                <xf:option value="weeks">{{ phrase('weeks') }}</xf:option>
+                                <xf:option value="months">{{ phrase('months') }}</xf:option>
+                                <xf:option value="years">{{ phrase('years') }}</xf:option>
+                            </xf:select>
+                        </div>
+                    </xf:dependent>
+                </xf:option>
+            </xf:radiorow>
+
+            <div class="blockMessage blockMessage--important blockMessage--iconic">
+                This will not stop a user from posting in the Discord shoutbox. To also prevent messaging in Discord, you
+                will need to timeout the user in the Discord server as well.
+            </div>
+        </div>
+
+        <xf:submitrow rowtype="simple" icon="ban" submit="{{ phrase('ban_user') }}" />
+    </div>
+</xf:form>

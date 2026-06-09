@@ -1,0 +1,9 @@
+{
+    "template": "account_privacy",
+    "description": "Adds user privacy fields",
+    "execution_order": 10,
+    "enabled": true,
+    "action": "preg_replace",
+    "find": "/view_your_identities:'\\) }}\" \\/>/",
+    "replace": "$0\n<xf:include template=\"blacktea_steamauth_flags_privacy_view\" />"
+}

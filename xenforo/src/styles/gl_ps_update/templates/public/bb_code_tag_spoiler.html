@@ -1,0 +1,14 @@
+<xf:css src="bb_code.less" />
+
+<div class="bbCodeSpoiler">
+	<xf:button class="bbCodeSpoiler-button{{ $title ? ' button--longText' : '' }}" data-xf-click="toggle"
+		data-xf-init="tooltip" title="{{ phrase('click_to_reveal_spoiler') }}">
+
+		<span>{{ phrase('spoiler') }}<xf:if is="$title">: <span class="bbCodeSpoiler-button-title">{$title}</span></xf:if></span>
+	</xf:button>
+	<div class="bbCodeSpoiler-content">
+		<div class="bbCodeBlock bbCodeBlock--spoiler">
+			<div class="bbCodeBlock-content">{$content}</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<api_scopes>
+  <api_scope api_scope_id="discord:read"/>
+  <api_scope api_scope_id="discord:write"/>
+</api_scopes>

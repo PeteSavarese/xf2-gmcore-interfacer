@@ -1,0 +1,89 @@
+<xf:set var="$userIp" value="{{ $user.getIp('register') }}" />
+<xf:set var="$headerPhraseHtml"><xf:trim>
+	<xf:if is="$xf.visitor.canViewIps() AND $userIp">
+		<a href="{{ link('misc/ip-info', null, {'ip': $userIp|ip}) }}" target="_blank">{$userIp|ip}</a>
+	</xf:if>
+	<xf:if is="$xf.visitor.canBypassUserPrivacy() AND $user.email">
+		{$user.email|email_display}
+	</xf:if>
+</xf:trim></xf:set>
+
+<xf:set var="$messageHtml"><xf:trim>
+
+	<xf:macro id="custom_fields_macros::custom_fields_view"
+		arg-type="users" arg-group="{{ null }}"
+		arg-set="{$user.Profile.custom_fields}"
+		arg-additionalFilters="{{ ['registration'] }}" />
+
+	<xf:if is="$preRegAction AND $preRegHandler">
+		{$preRegHandler.renderApprovalQueueInfo($preRegAction)|raw}
+	</xf:if>
+
+	<xf:if is="$changesGrouped">
+		<br />
+		<xf:datalist data-xf-init="responsive-data-list" class="dataList--separated">
+			<thead>
+			<xf:datarow rowtype="subSection">
+				<xf:cell colspan="3">{{ phrase('change_log') }}</xf:cell>
+			</xf:datarow>
+			<xf:datarow rowtype="header">
+				<xf:cell>{{ phrase('field_name') }}</xf:cell>
+				<xf:cell>{{ phrase('old_value') }}</xf:cell>
+				<xf:cell>{{ phrase('new_value') }}</xf:cell>
+			</xf:datarow>
+			</thead>
+			<xf:foreach loop="$changesGrouped" value="$group">
+				<tbody class="dataList-rowGroup">
+				<xf:foreach loop="$group.changes" value="$change">
+					<xf:datarow>
+						<xf:cell>{$change.label}</xf:cell>
+						<xf:cell>{$change.old}</xf:cell>
+						<xf:cell>{$change.new}</xf:cell>
+					</xf:datarow>
+				</xf:foreach>
+				</tbody>
+			</xf:foreach>
+		</xf:datalist>
+	</xf:if>
+
+</xf:trim></xf:set>
+
+<xf:set var="$actionsHtml">
+
+	<xf:radio name="queue[{$unapprovedItem.content_type}][{$unapprovedItem.content_id}]">
+
+		<xf:option value="" checked="checked" label="{{ phrase('do_nothing') }}" data-xf-click="approval-control" />
+		<xf:option value="approve" label="{{ phrase('approve') }}" data-xf-click="approval-control" />
+		<xf:if is="$xf.visitor.canCleanSpam() AND $unapprovedItem.Content.isPossibleSpammer()">
+			<xf:option value="spam_clean" label="{{ phrase('spam_clean') }}" data-xf-click="approval-control" />
+		</xf:if>
+		<xf:option value="reject" label="{{ phrase('reject_with_reason:') }}"
+			title="{{ phrase('rejected_users_will_not_be_deleted_user_state_will_be_set_to_rejected') }}"
+			data-xf-init="tooltip"
+			data-xf-click="approval-control">
+			<xf:textbox name="reason[{$unapprovedItem.content_type}][{$unapprovedItem.content_id}]"
+				maxlength="{{ max_length('XF:UserReject', 'reject_reason') }}"
+				placeholder="{{ phrase('optional') }}" />
+			<xf:html>
+				<div class="formRow-explain">{{ phrase('this_will_be_shown_to_user_if_provided') }}</div>
+			</xf:html>
+		</xf:option>
+	</xf:radio>
+
+	<xf:checkbox>
+		<xf:option name="notify[{$unapprovedItem.content_type}][{$unapprovedItem.content_id}]" value="1" checked="{{ !$spamDetails }}">
+			{{ phrase('notify_user_if_action_was_taken') }}
+		</xf:option>
+	</xf:checkbox>
+
+</xf:set>
+
+<xf:macro id="approval_queue_macros::item_message_type"
+	arg-content="{$content}"
+	arg-contentDate="{$user.register_date}"
+	arg-user="{$user}"
+	arg-messageHtml="{$messageHtml}"
+	arg-typePhraseHtml="{{ phrase('user') }}"
+	arg-actionsHtml="{$actionsHtml}"
+	arg-spamDetails="{$spamDetails}"
+	arg-headerPhraseHtml="{$headerPhraseHtml}"/>

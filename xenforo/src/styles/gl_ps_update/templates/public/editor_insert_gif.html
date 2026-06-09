@@ -1,0 +1,49 @@
+<xf:css src="editor_insert_gif.less" />
+
+<div class="menu-row menu-row--alt menu-row--close menu-row--search">
+	<div class="inputGroup">
+		<xf:textbox class="js-gifSearch" placeholder="{{ phrase('search...') }}" autofocus="autofocus" />
+		<xf:button icon="close" class="button--iconOnly button--plain js-gifCloser" title="{{ phrase('close') }}"
+			data-no-auto-focus="true" data-menu-closer="true">
+			<span class="u-srOnly">{{ phrase('close') }}</span>
+		</xf:button>
+	</div>
+</div>
+<div class="menu-scroller">
+	<div class="menu-row js-gifFullRow">
+		<div class="gifContainer js-gifContainer">
+			<xf:foreach loop="$trending" value="$image" key="$id">
+				<a class="gifContainer-item js-gif">
+					<span class="gifContainer-cover">
+						<xf:fa icon="fa-spinner-third fa-3x" />
+					</span>
+					<img src="{$image.thumb}" data-id="{$id}"
+						data-src="{$image.src}"
+						data-insert="{$image.insert}"
+						alt="{$image.title}" title="{$image.title}" />
+				</a>
+			</xf:foreach>
+			<xf:if is="$trending">
+				<a class="gifContainer-item js-gifLoadMore is-loading" data-href="{{ link('editor/insert-gif', null, {'offset': $nextOffset}) }}">
+					<span class="gifContainer-cover">
+						<xf:fa icon="fa-spinner-third fa-3x" />
+					</span>
+				</a>
+			</xf:if>
+		</div>
+	</div>
+	<div class="menu-row js-gifSearchRow" style="display: none"></div>
+</div>
+<div class="menu-footer menu-footer--close menu-footer--split">
+	<div class="menu-footer-opposite">
+		<a href="https://giphy.com" target="_blank">
+			<xf:macro id="style_variation_macros::picture_color_scheme"
+				arg-light="styles/default/xenforo/giphy.png"
+				arg-dark="styles/default/xenforo/giphy_dark.png"
+				arg-width="100"
+				arg-height="11"
+				arg-alt="{{ phrase('powered_by_giphy') }}"
+				arg-lazy="true" />
+		</a>
+	</div>
+</div>

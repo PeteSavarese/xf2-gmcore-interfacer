@@ -1,0 +1,32 @@
+<div class="inlineModBar">
+	<div class="inlineModBar-inner">
+		<div class="inlineModBar-close">
+			<xf:button class="js-inlineModClose" aria-label="{{ phrase('close')|for_attr }}">X</xf:button>
+		</div>
+
+		<ul class="inlineModBar-controls">
+			<li class="inlineModBar-title">{$title} {$total|number|parens}</li>
+			<li><xf:checkbox standalone="true">
+				<xf:option labelclass="iconic--inherit-color" class="js-inlineModSelectAll" label="{{ phrase('select_all') }}" />
+			</xf:checkbox></li>
+			<li>
+				<select class="input input--inline js-inlineModAction">
+					<optgroup>
+						<option value="" hidden="hidden">{{ phrase('choose_action...') }}</option>
+						<xf:foreach loop="$actions" key="$id" value="$action">
+							<option value="{$id}">{$action}</option>
+						</xf:foreach>
+					</optgroup>
+					<xf:if is="!$actions.deselect">
+						<optgroup>
+							<option value="deselect">{{ phrase('deselect_all') }}</option>
+						</optgroup>
+					</xf:if>
+				</select>
+			</li>
+			<li>
+				<xf:button type="submit" class="button--primary inlineModBar-goButton">{{ phrase('go') }}</xf:button>
+			</li>
+		</ul>
+	</div>
+</div>

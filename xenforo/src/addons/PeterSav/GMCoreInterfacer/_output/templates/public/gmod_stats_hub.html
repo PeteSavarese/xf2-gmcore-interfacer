@@ -1,0 +1,221 @@
+<xf:title>TTT Stats</xf:title>
+<xf:css src="gmod_interfacer.less"/>
+
+<div class="header">
+    <div class="header-content">
+        <h1 class="header-title">TTT Stats</h1>
+        <p class="store-subtitle">Search for any player, track stats, and compare how cracked you are with TTT leaderboards.</p>
+
+        <div class="gmod-statsHubSearch">
+            <xf:form action="/gl/stats" method="get" class="gmod-statsHubSearchForm">
+                <div class="gmod-statsHubSearchRow">
+                    <div class="gmod-statsHubSearchInput">
+                        <xf:textbox name="q" value="{$searchQuery}"
+                                    placeholder="SteamID64, STEAM_0:1:12345, or player name"/>
+                    </div>
+                    <div class="gmod-statsHubSearchBtn">
+                        <xf:button type="submit" class="button--cta button--icon button--icon--search">
+                            Search
+                        </xf:button>
+                    </div>
+                </div>
+            </xf:form>
+        </div>
+
+        <div class="header-badges">
+            <div class="header-badge">
+                <xf:fa icon="fa-clock" aria-hidden="true"/>
+                Playtime
+            </div>
+            <div class="header-badge">
+                <xf:fa icon="fa-crosshairs" aria-hidden="true"/>
+                Kills
+            </div>
+            <div class="header-badge">
+                <xf:fa icon="fa-chart-line" aria-hidden="true"/>
+                K/D
+            </div>
+            <div class="header-badge">
+                <xf:fa icon="fa-trophy" aria-hidden="true"/>
+                Win rate
+            </div>
+            <xf:if is="$mySteamId">
+                <a class="header-badge" href="/gl/stats?steamid={$mySteamId}">
+                    <xf:fa icon="fa-user" aria-hidden="true"/>
+                    My stats</a>
+            </xf:if>
+        </div>
+    </div>
+</div>
+
+<xf:if is="$searchQuery">
+    <div class="u-marginTop20">
+        <div class="card">
+            <div class="card-header">
+                <span><xf:fa icon="fa-search" aria-hidden="true"/> Search results</span>
+                <span class="badge badge-primary">{$searchQuery}</span>
+            </div>
+            <div class="card-content">
+                <xf:if is="$searchResults is not empty">
+                    <div class="table-height-scrollable">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>Player</th>
+                                <th>SteamID64</th>
+                                <th>Last seen</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <xf:foreach loop="$searchResults" value="$row">
+                                <tr>
+                                    <td><a href="/gl/stats?steamid={$row.steamid64}">{$row.in_game_name}</a></td>
+                                    <td><span class="badge badge-primary">{$row.steamid64}</span></td>
+                                    <td>
+                                        <xf:if is="$row.last_seen">{{ date_time($row.last_seen) }}
+                                            <xf:else/>
+                                            -
+                                        </xf:if>
+                                    </td>
+                                </tr>
+                            </xf:foreach>
+                            </tbody>
+                        </table>
+                    </div>
+                    <xf:else/>
+                    <div class="gmod-emptyState">
+                        No players matched that name
+                    </div>
+                </xf:if>
+            </div>
+        </div>
+    </div>
+</xf:if>
+
+<xf:if is="$searchResults is empty">
+    <div class="gmod-leaderGrid">
+        <div class="card">
+            <div class="card-header">
+                <span><xf:fa icon="fa-clock" aria-hidden="true"/> Most playtime</span>
+                <span class="badge badge-primary">Top 10</span>
+            </div>
+            <div class="card-content">
+                <div class="table-height-scrollable">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Player</th>
+                            <th>Playtime</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <xf:foreach loop="$leaderboards.mostPlaytime" value="$row">
+                            <tr>
+                                <td class="gmod-leaderRank">{$row.rank}</td>
+                                <td><a href="/gl/stats?steamid={$row.steamid64}">{$row.in_game_name}</a></td>
+                                <td><span class="badge badge-primary">{$row.derived.playTime}</span></td>
+                            </tr>
+                        </xf:foreach>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span><xf:fa icon="fa-crosshairs" aria-hidden="true"/> Most kills</span>
+                <span class="badge badge-primary">Top 10</span>
+            </div>
+            <div class="card-content">
+                <div class="table-height-scrollable">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Player</th>
+                            <th>Kills</th>
+                            <th>HS%</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <xf:foreach loop="$leaderboards.mostKills" value="$row">
+                            <tr>
+                                <td class="gmod-leaderRank">{$row.rank}</td>
+                                <td><a href="/gl/stats?steamid={$row.steamid64}">{$row.in_game_name}</a></td>
+                                <td><span class="badge badge-primary">{$row.kills}</span></td>
+                                <td>{$row.derived.headshotPct}%</td>
+                            </tr>
+                        </xf:foreach>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <xf:comment>
+            <div class="card">
+                <div class="card-header">
+                    <span><xf:fa icon="fa-chart-line" aria-hidden="true"/> Best K/D</span>
+                    <span class="badge badge-primary">Kills &gt;= 250</span>
+                </div>
+                <div class="card-content">
+                    <div class="table-height-scrollable">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Player</th>
+                                <th>K/D</th>
+                                <th>Kills</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <xf:foreach loop="$leaderboards.bestKd" value="$row">
+                                <tr>
+                                    <td class="gmod-leaderRank">{$row.rank}</td>
+                                    <td><a href="/gl/stats?steamid={$row.steamid64}">{$row.in_game_name}</a></td>
+                                    <td><span class="badge badge-primary">{$row.derived.kdRatio}</span></td>
+                                    <td>{$row.kills}</td>
+                                </tr>
+                            </xf:foreach>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <span><xf:fa icon="fa-trophy" aria-hidden="true"/> Best win rate</span>
+                    <span class="badge badge-primary">Rounds &gt;= 250</span>
+                </div>
+                <div class="card-content">
+                    <div class="table-height-scrollable">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Player</th>
+                                <th>Win%</th>
+                                <th>Rounds</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <xf:foreach loop="$leaderboards.bestWinRate" value="$row">
+                                <tr>
+                                    <td class="gmod-leaderRank">{$row.rank}</td>
+                                    <td><a href="/gl/stats?steamid={$row.steamid64}">{$row.in_game_name}</a></td>
+                                    <td><span class="badge badge-primary">{$row.derived.winRate}%</span></td>
+                                    <td>{$row.rounds}</td>
+                                </tr>
+                            </xf:foreach>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </xf:comment>
+    </div>
+</xf:if>

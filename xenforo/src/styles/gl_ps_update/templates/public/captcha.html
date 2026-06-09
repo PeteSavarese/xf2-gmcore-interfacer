@@ -1,0 +1,6 @@
+<xf:if is="$withRow">
+	<xf:captcharow label="{{ $phrase ? $phrase : phrase('verification') }}" rowtype="{$rowType}" force="true" context="{$context}" />
+
+<xf:else />
+	<xf:captcha force="true" context="{$context}" />
+</xf:if>

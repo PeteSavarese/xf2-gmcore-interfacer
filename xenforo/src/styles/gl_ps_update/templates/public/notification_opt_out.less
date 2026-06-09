@@ -1,0 +1,29 @@
+.notificationChoices
+{
+	.m-listPlain();
+	.m-clearFix();
+
+	> li
+	{
+		float: left;
+		margin-left: 1em;
+		padding: 0 @xf-paddingMedium;
+
+		&:first-child
+		{
+			margin-left: 0;
+		}
+	}
+
+	label
+	{
+		display: block;
+		text-align: center;
+	}
+}
+
+.notificationOptOut {
+    border-radius: 12px;
+    border: 1px solid rgba(52, 73, 94, 0.7);
+    padding: 16px;
+}

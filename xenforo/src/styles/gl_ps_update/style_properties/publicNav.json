@@ -1,0 +1,21 @@
+{
+    "group_name": "headerNav",
+    "title": "Navigation row",
+    "description": "The navigation row sits below the header and contains the primary site navigation tabs and menus",
+    "property_type": "css",
+    "css_components": [
+        "text",
+        "background",
+        "extra"
+    ],
+    "value_type": "",
+    "value_parameters": "",
+    "has_variations": false,
+    "depends_on": "",
+    "value_group": "",
+    "property_value": {
+        "color": "@xf-paletteColor2",
+        "background-color": "rgba(23, 32, 48, 0.75)"
+    },
+    "display_order": 20100
+}

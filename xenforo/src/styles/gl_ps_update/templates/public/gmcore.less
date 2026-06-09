@@ -1,0 +1,854 @@
+body,
+.p-body,
+.message-content,
+.block,
+.input,
+input,
+select,
+textarea,
+button,
+.button {
+	font-family: "Space Grotesk", "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.p-title-value,
+.block-header,
+.memberHeader-name,
+h1,
+h2:not(.bbHeading),
+h3:not(.bbHeading) {
+	font-family: "Unbounded", "Space Grotesk", "Segoe UI", sans-serif;
+}
+
+.fr-box h2:not(.bbHeading),
+.fr-box h3:not(.bbHeading) {
+	font-family: @xf-fontFamilyBody;
+}
+
+.node--forum,
+.node--category,
+.node--page,
+.node--link {
+	position: relative;
+}
+
+.node--forum .node-body {
+	transition: all 0.2s ease;
+}
+
+.node--forum:hover .node-body {
+	background: rgba(52, 152, 219, 0.03);
+}
+
+.node-icon i,
+.node-icon .fa {
+	color: #3498db;
+	transition: all 0.2s ease;
+}
+
+.node:hover .node-icon i,
+.node:hover .node-icon .fa {
+	color: #5dade2;
+	transform: scale(1.1);
+}
+
+.node-subNodeList a {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	padding: 3px 10px;
+	border-radius: 999px;
+	font-size: 11px;
+	font-weight: 600;
+	background: rgba(52, 152, 219, 0.1);
+	border: 1px solid rgba(52, 73, 94, 0.5);
+	color: #bdc3c7;
+	transition: all 0.2s ease;
+	margin: 2px;
+}
+
+.node-subNodeList a:hover {
+	background: rgba(52, 152, 219, 0.2);
+	border-color: rgba(52, 152, 219, 0.45);
+	color: #ecf0f1;
+}
+
+.structItem-cell--icon .avatar {
+	border-radius: @gl-avatar-radius-sm;
+	border: 1px solid rgba(52, 73, 94, 0.7);
+	transition: all 0.2s ease;
+}
+
+.structItem-cell--iconEnd .avatar {
+	border-radius: @gl-avatar-radius-sm;
+}
+
+.structItem-cell--icon .avatar:hover {
+	border-color: rgba(52, 152, 219, 0.45);
+	transform: scale(1.05);
+}
+
+.structItem-title {
+	font-size: 15px;
+}
+
+.structItem-cell--meta .pairs dt {
+	color: #95a5a6;
+	font-size: 10px;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.structItem-cell--meta .pairs dd {
+	color: #bdc3c7;
+	font-weight: 600;
+}
+
+.structItem-cell--latest {
+	color: #95a5a6;
+}
+
+.structItem-cell--latest a {
+	color: #bdc3c7;
+}
+
+.structItem-cell--latest a:hover {
+	color: #3498db;
+}
+
+.message:nth-child(even) {
+	background: linear-gradient(160deg, rgba(28, 40, 54, 0.96), rgba(20, 28, 40, 0.92)) !important;
+}
+
+.message:first-child {
+	border-top: 2px solid rgba(52, 152, 219, 0.35) !important;
+}
+
+#js-solutionHighlightBlock .message:first-child {
+	border-top: none !important;
+}
+
+.message-userExtras dt {
+	color: #95a5a6;
+	font-size: 10px;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.message-userExtras dd {
+	color: #bdc3c7;
+	font-weight: 600;
+}
+
+.message .reactionsBar-link {
+	color: #bdc3c7;
+	transition: color 0.2s ease;
+}
+
+.message .reactionsBar-link:hover {
+	color: #3498db;
+	text-decoration: none;
+}
+
+.block--popularContributors .contentRow,
+.block--onlineStatistics .block-row,
+.block--onlineNow .block-row {
+	border-bottom: 1px solid rgba(52, 73, 94, 0.3);
+}
+
+.p-body-sidebar .block-header {
+	font-size: 12px;
+	letter-spacing: 1px;
+}
+
+.block--stats .pairs dd {
+	font-size: 16px;
+	font-weight: 700;
+	color: #3498db;
+}
+
+.block--poll .pollBlock-option--hasVote .pollBlock-option-bar {
+	background: linear-gradient(90deg, rgba(52, 152, 219, .9), rgba(35, 163, 147, 0.9));
+	border-radius: 4px;
+}
+
+.buttonGroup {
+	display: inline-flex;
+	gap: 0;
+	align-items: center;
+}
+
+.buttonGroup .button,
+.buttonGroup a.button {
+	padding: 8px 12px;
+	min-height: 36px;
+	background: @gl-bg-card;
+	border: 1px solid @gl-border;
+	border-radius: 0;
+	font-size: 12px;
+	font-weight: 600;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	line-height: 1;
+	transition: all 0.15s;
+}
+
+.buttonGroup .button:hover,
+.buttonGroup a.button:hover {
+	transform: none;
+}
+
+.buttonGroup > .button:not(:first-child),
+.buttonGroup > .buttonGroup-buttonWrapper:not(:first-child) {
+	margin-left: -1px;
+}
+
+.buttonGroup > .button:first-child,
+.buttonGroup > a.button:first-child,
+.buttonGroup > .buttonGroup-buttonWrapper:first-child > .button {
+	border-top-left-radius: @gl-radius;
+	border-bottom-left-radius: @gl-radius;
+}
+
+.buttonGroup > .button:last-child,
+.buttonGroup > a.button:last-child,
+.buttonGroup > .buttonGroup-buttonWrapper:last-child > .button {
+	border-top-right-radius: @gl-radius;
+	border-bottom-right-radius: @gl-radius;
+}
+
+.buttonGroup .button:hover,
+.buttonGroup a.button:hover {
+	background: @gl-bg-card-hover;
+	border-color: @gl-border-accent;
+	z-index: 1;
+}
+
+.buttonGroup .buttonGroup-buttonWrapper {
+	display: inline-flex;
+	position: relative;
+}
+
+.badge--alert,
+.badge--conversation {
+	background: linear-gradient(90deg, rgba(52, 152, 219, .9), rgba(35, 163, 147, 0.9)) !important;
+	border: none !important;
+	font-weight: 700;
+	font-size: 10px;
+	letter-spacing: 0.3px;
+	padding: 2px 7px;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25), 0 0 8px rgba(52, 152, 219, 0.3);
+	animation: gl-notification-pulse 2s ease infinite;
+}
+
+@keyframes gl-notification-pulse {
+	0%, 100% { box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25), 0 0 8px rgba(52, 152, 219, 0.3); }
+	50%      { box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25), 0 0 16px rgba(52, 152, 219, 0.5); }
+}
+
+.attachment {
+	border: 1px solid rgba(52, 73, 94, 0.7);
+	border-radius: 12px;
+	background: linear-gradient(160deg, rgba(30, 42, 56, 0.96), rgba(22, 30, 42, 0.92));
+	overflow: hidden;
+	transition: all 0.2s ease;
+}
+
+.attachment:hover {
+	border-color: rgba(52, 152, 219, 0.45);
+	box-shadow: 0 6px 12px rgba(10, 14, 20, 0.32);
+}
+
+.attachment-icon {
+	color: #3498db;
+}
+
+.is-watched {
+	position: relative;
+}
+
+.is-watched::before {
+	content: "";
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	width: 3px;
+	background: linear-gradient(180deg, #3498db, #23a393);
+	border-radius: 0 2px 2px 0;
+}
+
+.p-title {
+	padding: 8px 0;
+}
+
+.p-title-value {
+	font-size: 22px;
+	font-weight: 700;
+	letter-spacing: 0.5px;
+}
+
+.p-description {
+	color: #95a5a6;
+	font-size: 13px;
+	margin-top: 4px;
+}
+
+.block--messages .message:target {
+	border-color: rgba(52, 152, 219, 0.6) !important;
+	box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15), 0 6px 12px rgba(10, 14, 20, 0.32);
+}
+
+:target {
+	scroll-margin-top: 80px;
+}
+
+.smilie {
+	vertical-align: middle;
+}
+
+.bbCodeInline {
+	background: rgba(52, 73, 94, 0.3);
+	border: 1px solid rgba(52, 73, 94, 0.5);
+	border-radius: 6px;
+	padding: 1px 6px;
+	font-size: 0.9em;
+	color: #5dade2;
+}
+
+.button,
+a,
+.node,
+.structItem,
+.message,
+.block-row,
+.menu-row,
+.alert,
+input,
+textarea,
+select {
+	transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease,
+		box-shadow 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
+}
+
+img {
+	max-width: 100%;
+	height: auto;
+}
+
+body[data-template="forum_list"] .p-body-pageContent,
+body[data-template="forum_view"] .block[data-type="thread"],
+body[data-template="thread_view"] .block--messages[data-type="post"],
+body[data-template="category_view"] .p-body-pageContent,
+body[data-template="whats_new"] .p-body-pageContent,
+body[data-template="search_results"] .p-body-pageContent,
+body[data-template="member_list"] .p-body-pageContent,
+body[data-template="online_list"] .p-body-pageContent,
+body[data-template="conversation_list"] .block[data-type="conversation"],
+body[data-template="conversation_view"] .block--messages,
+body[data-template="featured_content_list"] .block--articles {
+	animation: gl-pageIn 0.4s ease both;
+}
+
+@keyframes gl-pageIn {
+	from { opacity: 0; transform: translateY(10px); }
+	to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes gl-msgSlide {
+	from { opacity: 0; transform: translateY(8px); }
+	to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes gl-fadeSlide {
+	from { opacity: 0; transform: translateX(-8px); }
+	to   { opacity: 1; transform: translateX(0); }
+}
+
+body[data-template="thread_view"] .block--messages .block-container,
+body[data-template="thread_view"] .js-quickReply .block-container {
+	background: transparent;
+	border: none;
+	box-shadow: none;
+	border-radius: 0;
+}
+
+body[data-template="thread_view"] .block--messages[data-type="post"] .block-outer:not(.block-outer--after) {
+	padding: 8px 0 12px;
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 6px;
+}
+
+body[data-template="thread_view"] .block--messages[data-type="post"] .block-outer:not(.block-outer--after) .block-outer-opposite {
+	float: none;
+	margin-left: auto;
+}
+
+body[data-template="thread_view"] .block--messages[data-type="post"] .block-outer:empty {
+	display: none;
+}
+
+body[data-template="thread_view"] .block--messages[data-type="post"] .block-outer--after {
+	padding: 12px 0 8px;
+}
+
+body[data-template="thread_view"] .block--messages[data-type="post"] .tabs--standalone {
+	background: rgba(52, 73, 94, 0.2);
+	border: 1px solid rgba(52, 73, 94, 0.5);
+	border-radius: 999px;
+	padding: 3px;
+	display: inline-flex;
+	gap: 2px;
+}
+
+body[data-template="thread_view"] .block--messages[data-type="post"] .tabs--standalone .tabs-tab {
+	border-radius: 999px;
+	padding: 3px 14px;
+	font-size: 12px;
+	border: none;
+}
+
+body[data-template="thread_view"] .block--messages[data-type="post"] .blockStatus {
+	border-radius: 999px;
+	padding: 5px 16px;
+	border: 1px solid rgba(52, 73, 94, 0.6);
+	display: inline-flex;
+	align-items: center;
+	gap: 10px;
+	font-size: 12px;
+	background: rgba(52, 73, 94, 0.15);
+}
+
+body[data-template="thread_view"] .block--messages[data-type="post"] .blockStatus-message--locked::before {
+	.m-faBase();
+	.m-faContent(@fa-var-lock);
+	color: @gl-accent;
+	margin-right: 6px;
+	font-size: 11px;
+}
+
+body[data-template="thread_view"] .block--messages[data-type="post"] .blockStatus-message--deleted {
+	color: #e74c3c;
+
+	&::before {
+		.m-faBase();
+		.m-faContent(@fa-var-trash-alt);
+		color: @gl-accent;
+		margin-right: 6px;
+		font-size: 11px;
+	}
+}
+
+body[data-template="thread_view"] .block--messages[data-type="post"] .blockStatus-message--moderated {
+	color: #e67e22;
+
+	&::before {
+		.m-faBase();
+		.m-faContent(@fa-var-clock);
+		color: @gl-accent;
+		margin-right: 6px;
+		font-size: 11px;
+	}
+}
+
+body[data-template="thread_view"] .block--messages[data-type="post"] .block-body > .message {
+	margin-bottom: 8px;
+}
+
+body[data-template="thread_view"] .block--messages[data-type="post"] .block-body > .message:last-child {
+	margin-bottom: 0;
+}
+
+body[data-template="thread_view"] .block--messages[data-type="post"] .block-body > .message:first-child {
+	border-top-left-radius: @gl-radius !important;
+	border-top-right-radius: @gl-radius !important;
+}
+
+body[data-template="thread_view"] .block--messages[data-type="post"] .block-body > .message:last-child {
+	border-bottom-left-radius: @gl-radius !important;
+	border-bottom-right-radius: @gl-radius !important;
+}
+
+body[data-template="thread_view"] .block--messages[data-type="post"] .block-body > .message:not(:first-child):not(:last-child) {
+	border-radius: 0 !important;
+}
+
+body[data-template="thread_view"] .block--messages:not([data-type="post"]) .block-container {
+	border-top: 2px solid rgba(52, 152, 219, 0.5);
+	border-radius: 0;
+}
+
+body[data-template="thread_view"] .block.js-quickReply {
+	margin-top: 24px;
+	border-radius: 16px;
+	box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+	transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* Match the outer 16px radius on the block-container so its background
+clips to the outer block's corners without needing overflow:hidden above it */
+body[data-template="thread_view"] .block.js-quickReply > .block-container {
+	border-radius: 16px;
+}
+
+.block.js-quickReply:focus-within {
+	border-color: rgba(52, 152, 219, 0.45);
+	box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.08);
+}
+
+body[data-template="thread_view"] .blockMessage--none {
+	background: transparent;
+	border: none;
+	box-shadow: none;
+	border-radius: 0;
+	padding: 14px 0;
+	margin-top: 20px;
+	text-align: center;
+}
+
+body[data-template="thread_view"] .block--messages[data-type="post"] .block-outer--after .block-outer-opposite {
+	display: flex;
+	justify-content: center;
+	width: 100%;
+}
+
+body[data-template="thread_view"] .block--messages[data-type="post"] .block-outer--after .button--wrap {
+	min-width: 220px;
+	text-align: center;
+	border-radius: 999px;
+}
+
+body[data-template="member_view"] .block {
+	animation: gl-pageIn 0.5s ease both;
+}
+
+body[data-template="account_wrapper"] .block {
+	animation: gl-pageIn 0.35s ease both;
+}
+
+body[data-template="account_details"] .block,
+body[data-template="account_security"] .block,
+body[data-template="account_preferences"] .block,
+body[data-template="account_privacy"] .block,
+body[data-template="account_connected"] .block,
+body[data-template="account_following"] .block,
+body[data-template="account_ignored"] .block,
+body[data-template="account_alerts"] .block,
+body[data-template="account_bookmarks"] .block,
+body[data-template="account_reactions"] .block,
+body[data-template="account_avatar"] .block,
+body[data-template="account_banner"] .block,
+body[data-template="account_signature"] .block,
+body[data-template="account_email"] .block,
+body[data-template="account_username"] .block,
+body[data-template="account_two_step"] .block,
+body[data-template="account_upgrades"] .block {
+	animation: gl-fadeSlide 0.3s ease both;
+}
+
+.menu--account .menu-row--alt {
+	border-radius: 16px;
+	overflow: hidden;
+}
+
+.widget .block {
+	border-radius: 12px;
+	overflow: hidden;
+	transition: border-color 0.2s ease;
+}
+
+.widget .block:hover {
+	border-color: rgba(52, 73, 94, 0.85);
+}
+
+.js-memberTabPanes .block--messages .block-container {
+	background: transparent;
+	border: none;
+	box-shadow: none;
+	border-radius: 0;
+}
+
+body[data-template="whats_new_profile_posts"] .block[data-type="profile_post"] .block-container .message {
+	border-radius: 0 !important;
+	box-shadow: none !important;
+	background: transparent !important;
+	border-top: @xf-borderSize solid @xf-borderColorFaint;
+	margin-bottom: 0;
+}
+
+body[data-template="whats_new_profile_posts"] .block[data-type="profile_post"] .block-container .message:first-child {
+	border-top: none;
+}
+
+.js-replyNewMessageContainer > .message {
+	border-radius: 0 !important;
+	box-shadow: none !important;
+	background: transparent !important;
+	border-top: @xf-borderSize solid @xf-borderColorFaint;
+	margin-bottom: 0;
+}
+
+.js-replyNewMessageContainer > .message:first-child {
+	border-top: none;
+}
+
+.js-replyNewMessageContainer .message--quickReply {
+	border-radius: 0 !important;
+	box-shadow: none !important;
+}
+
+.js-replyNewMessageContainer .message-avatar .avatar {
+	transition: all 0.2s ease;
+	box-shadow: none;
+}
+
+body[data-template="report_list"] .p-body-pageContent,
+body[data-template="report_view"] .p-body-pageContent,
+body[data-template="report_create"] .p-body-pageContent {
+	animation: gl-pageIn 0.35s ease both;
+}
+
+body[data-template="login"] .p-body-pageContent,
+body[data-template="register_form"] .p-body-pageContent,
+body[data-template="register_complete"] .p-body-pageContent,
+body[data-template="register_confirm"] .p-body-pageContent,
+body[data-template="register_connected_account"] .p-body-pageContent,
+body[data-template="lost_password"] .p-body-pageContent {
+	animation: gl-pageIn 0.4s ease both;
+}
+
+body[data-template="help_index"] .p-body-pageContent,
+body[data-template="help_page"] .p-body-pageContent,
+body[data-template="help_wrapper"] .p-body-pageContent {
+	animation: gl-pageIn 0.35s ease both;
+}
+
+body[data-template="search_results"] .block,
+body[data-template="search"] .p-body-pageContent {
+	animation: gl-pageIn 0.35s ease both;
+}
+
+.editor-popup {
+	border-radius: 12px;
+	overflow: hidden;
+}
+
+.bookmark-edit,
+.bookmark-delete {
+	border-radius: 12px;
+}
+
+.share-tooltip {
+	border-radius: 12px;
+	border: 1px solid rgba(52, 73, 94, 0.7);
+	box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+}
+
+.tooltip--basic.tooltip--top {
+	margin-bottom: 0;
+}
+
+.tooltip--basic .tooltip-content {
+	background: transparent !important;
+	border: none !important;
+	box-shadow: none !important;
+	padding: 6px 10px;
+	text-align: center;
+}
+
+body[data-template="tag_list"] .p-body-pageContent,
+body[data-template="tag_view"] .p-body-pageContent {
+	animation: gl-pageIn 0.35s ease both;
+}
+
+.tag-macros {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+}
+
+.featured-content-item {
+	border: 1px solid rgba(52, 73, 94, 0.7);
+	border-radius: 12px;
+	overflow: hidden;
+	transition: all 0.2s ease;
+}
+
+.featured-content-item:hover {
+	border-color: rgba(52, 152, 219, 0.45);
+	transform: translateY(-2px);
+	box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+}
+
+.poll-macros {
+	border-radius: 12px;
+}
+
+body[data-template="style_chooser"] .block,
+body[data-template="language_chooser"] .block {
+	border-radius: 12px;
+	overflow: hidden;
+}
+
+body[data-template="watched_threads"] .p-body-pageContent,
+body[data-template="watched_forums"] .p-body-pageContent {
+	animation: gl-pageIn 0.35s ease both;
+}
+
+body[data-template="error"] .p-body-pageContent {
+	text-align: center;
+	padding: 40px 20px;
+}
+
+body[data-template="news_feed"] .p-body-pageContent,
+body[data-template="latest_activity"] .p-body-pageContent {
+	animation: gl-pageIn 0.35s ease both;
+}
+
+body[data-template="news_feed"] .contentRow {
+	border-bottom: 1px solid rgba(52, 73, 94, 0.3);
+	padding: 12px 0;
+}
+
+body[data-template="approval_queue"] .block {
+	animation: gl-pageIn 0.35s ease both;
+}
+
+.js-approvalQueue-itemControls,
+body[data-template="approval_queue"] .menu-row--separated {
+	border-radius: 12px;
+}
+
+body[data-template="two_step_totp"] .p-body-pageContent,
+body[data-template="login_two_step"] .p-body-pageContent {
+	animation: gl-pageIn 0.3s ease both;
+}
+
+body[data-template="contact"] .p-body-pageContent {
+	animation: gl-pageIn 0.35s ease both;
+}
+
+body[data-template="edit_history"] .p-body-pageContent {
+	animation: gl-pageIn 0.35s ease both;
+}
+
+.edit-history-compare {
+	border-radius: 12px;
+	overflow: hidden;
+}
+
+.attachment-macros,
+.attachment-upload {
+	border-radius: 12px;
+}
+
+.alerts-popup {
+	max-height: 480px;
+	overflow-y: auto;
+}
+
+.color-picker-macros {
+	border-radius: 12px;
+	overflow: hidden;
+}
+
+body[data-template="oauth_authorize"] .p-body-pageContent {
+	animation: gl-pageIn 0.4s ease both;
+}
+
+body[data-template="service_worker_offline"] .p-body-pageContent {
+	text-align: center;
+	padding: 60px 20px;
+}
+
+.env-banner {
+	position: fixed;
+	top: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	padding: 8px 16px;
+	font-weight: 700;
+	font-size: 13px;
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+	text-align: center;
+	color: #fff;
+	z-index: 10000;
+	width: auto;
+	max-width: 90vw;
+	border-radius: 0 0 @gl-radius @gl-radius;
+	box-shadow: @gl-shadow-sm;
+	backdrop-filter: blur(8px);
+	font-family: @xf-fontFamilyBody;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	transition: transform 0.3s ease;
+}
+
+.env-banner--hidden {
+	transform: translateX(-50%) translateY(-100%);
+}
+
+.env-banner__close {
+	background: rgba(255, 255, 255, 0.2);
+	border: none;
+	color: #fff;
+	font-size: 20px;
+	line-height: 1;
+	width: 24px;
+	height: 24px;
+	border-radius: 3px;
+	cursor: pointer;
+	padding: 0;
+	transition: background 0.2s;
+}
+
+.env-banner__close:hover {
+	background: rgba(255, 255, 255, 0.3);
+}
+
+.env-banner__restore {
+	position: fixed;
+	top: 0;
+	left: 50%;
+	transform: translateX(-50%) translateY(-100%);
+	background: rgba(0, 0, 0, 0.6);
+	border: none;
+	color: #fff;
+	font-size: 16px;
+	padding: 4px 12px;
+	border-radius: 0 0 @gl-radius @gl-radius;
+	cursor: pointer;
+	z-index: 9999;
+	transition: transform 0.3s ease;
+}
+
+.env-banner__restore--visible {
+	transform: translateX(-50%) translateY(0);
+}
+
+.env-banner__restore:hover {
+	background: rgba(0, 0, 0, 0.8);
+}
+
+.env-banner--local {
+	background: rgba(183, 28, 28, 0.9);
+	border: 1px solid rgba(255, 82, 82, 0.3);
+	border-top: none;
+}
+
+.env-banner--staging {
+	background: rgba(245, 124, 0, 0.9);
+	border: 1px solid rgba(255, 183, 77, 0.3);
+	border-top: none;
+}
+
+body[data-template="gmod_store"] .p-body-header,
+body[data-template="gmod_stats_hub"] .p-body-header,
+body[data-template="gmod_discord_link_landing"] .p-body-header {
+	display: none !important;
+}

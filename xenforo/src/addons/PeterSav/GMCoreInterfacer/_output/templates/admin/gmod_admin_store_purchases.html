@@ -1,0 +1,52 @@
+<xf:title>Store Rank Transaction Log</xf:title>
+
+<xf:form action="" class="block">
+	<div class="block-outer">
+		<div class="block-container">
+			<div class="block-body">
+				<xf:datalist>
+					<xf:foreach loop="$transactions" value="$transaction">
+						<xf:datarow>
+							<xf:cell class="dataList-cell--min dataList-cell--image dataList-cell--imageSmall" href="{{ link('users/edit', $transaction.user_ent) }}">
+								<xf:avatar user="$transaction.user_ent" size="s" href="" />
+							</xf:cell>
+							
+							<xf:main href="/admin.php?gl-store/purchases/view&transaction_id={$transaction.transaction_id}" label="{$transaction.user_ent.username}" hint="{$transaction.user_ent.email}" />
+							
+							<xf:if is="$transaction.receiver_user_ent AND $transaction.receiver_user_ent.user_id != $transaction.user_ent.user_id">
+								<xf:cell class="dataList-cell--min dataList-cell--image dataList-cell--imageSmall" href="{{ link('users/edit', $transaction.receiver_user_ent) }}">
+									<xf:avatar user="$transaction.receiver_user_ent" size="s" href="" />
+								</xf:cell>
+								<xf:cell>
+									<div class="u-muted">
+										<xf:fa icon="fa-gift" /> Gift to: <a href="{{ link('users/edit', $transaction.receiver_user_ent) }}">{$transaction.receiver_user_ent.username}</a>
+									</div>
+								</xf:cell>
+							<xf:else />
+								<xf:cell></xf:cell>
+								<xf:cell></xf:cell>
+							</xf:if>
+							
+							<xf:cell>
+								<a href="/admin.php?gl-store/purchases/view&transaction_id={$transaction.transaction_id}">{$transaction.transaction_id}</a>
+							</xf:cell>
+							
+							<xf:cell>
+								<xf:date time="{$transaction.transaction_time}" />
+							</xf:cell>
+						</xf:datarow>
+					</xf:foreach>
+				</xf:datalist>
+			</div>
+		</div>
+	</div>
+	
+	<xf:pagenav
+	page="{$page}"
+	perpage="{$perPage}"
+	total="{$total}"
+	link="gl-store/purchases"
+	wrapperclass="js-filterHide block-outer block-outer--after" />
+</xf:form>
+
+	{{dump($transactions)}}

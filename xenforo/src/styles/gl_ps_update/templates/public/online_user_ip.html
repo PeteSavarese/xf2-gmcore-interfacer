@@ -1,0 +1,5 @@
+<xf:title>{{ phrase('ip_information_for_online_user', {'user': $user.username}) }}</xf:title>
+
+<xf:breadcrumb href="{{ link('online') }}">{{ phrase('current_visitors') }}</xf:breadcrumb>
+
+<xf:macro id="helper_ip::ip_block" arg-ip="{$activity.ip}" arg-user="{$user}" />

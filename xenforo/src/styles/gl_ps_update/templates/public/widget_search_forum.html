@@ -1,0 +1,88 @@
+<xf:if is="$style != 'expanded'">
+	<div class="block" {{ widget_data($widget) }}>
+		<div class="block-container">
+			<xf:if is="$style == 'full'">
+				<h3 class="block-header">
+					<a href="{{ link('search-forums', $searchForum) }}">
+						{{ $title ?: $searchForum.title }}
+					</a>
+				</h3>
+
+				<div class="block-body">
+					<div class="structItemContainer">
+						<xf:foreach loop="$threads" value="$thread">
+							<xf:macro id="thread_list_macros::item"
+								arg-allowInlineMod="{{ false }}"
+								arg-thread="{$thread}" />
+						</xf:foreach>
+					</div>
+				</div>
+			<xf:else />
+				<h3 class="block-minorHeader">
+					<a href="{{ link('search-forums', $searchForum) }}">
+						{{ $title ?: $searchForum.title }}
+					</a>
+				</h3>
+
+				<ul class="block-body">
+					<xf:foreach loop="$threads" value="$thread">
+						<li class="block-row">
+							<xf:macro id="thread_list_macros::item_new_threads"
+								arg-thread="{$thread}" />
+						</li>
+					</xf:foreach>
+				</ul>
+			</xf:if>
+		</div>
+	</div>
+<xf:else />
+	<xf:css src="message.less" />
+
+	<div class="blocks" {{ widget_data($widget) }}>
+		<xf:if is="$showExpandedTitle">
+			<h2 class="blocks-header">
+				{{ $title ?: $searchForum.title }}
+			</h2>
+		</xf:if>
+
+		<xf:foreach loop="$threads" value="$thread">
+			<xf:set var="$post" value="{$thread.FirstPost}" />
+
+			<div class="block">
+				<div class="block-container" data-xf-init="lightbox">
+					<h4 class="block-header">
+						<a href="{{ link('threads', $thread) }}">{$thread.title}</a>
+					</h4>
+
+					<div class="block-body">
+						<div class="message message--post">
+							<div class="message-inner">
+								<div class="message-cell message-cell--main">
+									<div class="message-content js-messageContent">
+										<header class="message-attribution">
+											<ul class="listInline listInline--bullet u-muted">
+												<li><xf:username user="{$thread.User}" defaultname="{$thread.username}" /></li>
+												<li><xf:date time="{$post.post_date}" /></li>
+												<li><a href="{{ link('forums', $thread.Forum) }}">{$thread.Forum.title}</a></li>
+												<li>{{ phrase('replies:') }} {$thread.reply_count|number}</li>
+											</ul>
+										</header>
+
+										<div class="message-userContent lbContainer js-lbContainer"
+											data-lb-id="post-{$post.post_id}"
+											data-lb-caption-desc="{{ $post.User ? $post.User.username : $post.username }} &middot; {{ date_time($post.post_date) }}">
+
+											<article class="message-body">
+												{{ bb_code($post.message, 'post', $post) }}
+											</article>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</xf:foreach>
+	</div>
+</xf:if>

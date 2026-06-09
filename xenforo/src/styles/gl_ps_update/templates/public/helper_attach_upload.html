@@ -1,0 +1,313 @@
+<xf:macro id="upload_link"
+	arg-type="!"
+	arg-hash="!"
+	arg-context="!"
+	arg-constraints="!"
+	arg-hiddenName="attachment_hash">
+
+	<xf:js prod="vendor/exif-reader/exif-reader.js, xf/attachment_manager-compiled.js" dev="vendor/exif-reader/exif-reader.js, vendor/flow.js/flow.min.js, xf/attachment_manager.js" />
+
+	<xf:button href="{{ link('attachments/upload', null, {'type': $type, 'context': $context, 'hash': $hash}) }}"
+		target="_blank" class="button--link js-attachmentUpload" icon="attach"
+		data-accept=".{$constraints.extensions|join(',.')}"
+		data-video-size="{$constraints.video_size}" />
+	<xf:hiddenval name="{$hiddenName}">{$hash}</xf:hiddenval>
+	<xf:hiddenval name="{$hiddenName}_combined">{{ {'type': $type, 'context': $context, 'hash': $hash}|json }}</xf:hiddenval>
+</xf:macro>
+
+<xf:macro id="upload_link_from_data" arg-attachmentData="!" arg-forceHash="" arg-hiddenName="attachment_hash">
+	<xf:macro id="upload_link"
+		arg-type="{$attachmentData.type}"
+		arg-hash="{{ $forceHash ? $forceHash : $attachmentData.hash }}"
+		arg-context="{$attachmentData.context}"
+		arg-constraints="{$attachmentData.constraints}"
+		arg-hiddenName="{$hiddenName}" />
+</xf:macro>
+
+
+
+<xf:macro id="uploaded_files_list" arg-attachments="{{ [] }}" arg-class="">
+	<xf:css src="attachments.less" />
+	<div class="attachmentUploads js-attachmentUploads {$class} {{ $attachments is not empty ? 'is-active' : '' }}">
+		<div class="hScroller" data-xf-init="h-scroller">
+			<div class="hScroller-scroll">
+				<ul class="attachUploadList js-attachmentFiles">
+				<xf:foreach loop="$attachments" value="$attachment">
+					<xf:macro id="uploaded_file" arg-attachment="{$attachment}" />
+				</xf:foreach>
+				</ul>
+			</div>
+		</div>
+
+		<div class="attachmentUploads-banner js-attachmentInsertMultiRow u-hidden">
+			<xf:button class="button--link js-attachmentSelect" data-toggle="{{ phrase('button.cancel') }}">
+				{{ phrase('insert_multiple...') }}
+			</xf:button>
+			<ul class="attachmentUploads-selectActions js-attachmentSelectActions">
+				<li>
+					<span class="button button--link selectAll">
+						<span class="button-text">
+							<xf:checkbox standalone="true">
+								<xf:option check-all="< .attachmentUploads" label="{{ phrase('select_all') }}" />
+							</xf:checkbox>
+						</span>
+					</span>
+				</li>
+				<li class="js-attachmentSelectInsertActions">
+					<span class="insert-label">{{ phrase('insert:') }}</span>
+					<span class="buttonGroup">
+						<xf:button class="button--link js-attachmentSelectAction" data-action="thumbnail">
+							{{ phrase('thumbnail') }}
+						</xf:button>
+						<xf:button class="button--link js-attachmentSelectAction" data-action="full">
+							{{ phrase('full_image') }}
+						</xf:button>
+					</span>
+				</li>
+				<li>
+					<xf:button class="button--link button--iconOnly js-attachmentSelectAction" fa="fa-trash-alt" data-action="delete">
+						<span class="u-srOnly">{{ phrase('button.delete') }}</span>
+					</xf:button>
+				</li>
+			</ul>
+		</div>
+
+	</div>
+	<xf:macro id="uploaded_file_template" />
+</xf:macro>
+
+
+
+<xf:macro id="uploaded_file" arg-attachment="!" arg-noJsFallback="{{ false }}">
+	<li class="js-attachmentFile file" data-attachment-id="{$attachment.attachment_id}">
+		<xf:if is="$attachment.has_thumbnail">
+			<a class="file-preview js-attachmentView" href="{$attachment.direct_url}" target="_blank">
+				<img src="{{ base_url($attachment.thumbnail_url) }}"
+					srcset="{{ $attachment.has_retina_thumbnail ? base_url($attachment.retina_thumbnail_url) . ' 2x' : '' }}"
+					class="js-attachmentThumb"
+					alt="{$attachment.filename}"
+					width="{$attachment.thumbnail_width}" height="{$attachment.thumbnail_height}" loading="lazy" />
+			</a>
+		<xf:elseif is="$attachment.is_video" />
+			<a class="file-preview js-attachmentView" href="{$attachment.direct_url}" target="_blank">
+				<video title="{$attachment.filename}" data-xf-init="video-init">
+					<source src="{$attachment.direct_url}" />
+				</video>
+			</a>
+		<xf:else />
+			<a class="file-preview js-attachmentView" href="{$attachment.direct_url}" target="_blank">
+				<span class="file-typeIcon">
+					<xf:fa icon="{$attachment.icon}" title="{$attachment.filename}" />
+				</span>
+			</a>
+		</xf:if>
+
+		<div class="file-content">
+
+			<xf:if is="!$noJsFallback">
+				<xf:if is="$attachment.has_thumbnail">
+					<div class="file-insert js-attachmentInsert">
+						<a class="file-insertLink"
+							data-xf-click="toggle"
+							data-target="< .js-attachmentInsert"
+							role="button"
+							tabindex="0">
+							{{ phrase('insert...') }}
+						</a>
+						<div class="file-menuOptions">
+							<a class="js-attachmentAction" data-action="thumbnail" role="button" tabindex="0"
+								data-xf-click="toggle" data-target="< .js-attachmentInsert">{{ phrase('thumbnail') }}</a>
+							<a class="js-attachmentAction" data-action="full" role="button" tabindex="0"
+								data-xf-click="toggle" data-target="< .js-attachmentInsert">{{ phrase('full_image') }}</a>
+						</div>
+					</div>
+				<xf:elseif is="$attachment.is_video" />
+					<div class="file-insert js-attachmentInsert">
+						<a class="file-insertLink js-attachmentAction" data-action="full" data-type="video" role="button" tabindex="0">
+							{{ phrase('insert') }}
+						</a>
+					</div>
+				<xf:elseif is="$attachment.is_audio" />
+					<div class="file-insert js-attachmentInsert">
+						<a class="file-insertLink js-attachmentAction" data-action="full" data-type="audio" role="button" tabindex="0">
+							{{ phrase('insert') }}
+						</a>
+					</div>
+				</xf:if>
+
+				<div class="file-checkbox">
+					<xf:checkbox standalone="true">
+						<xf:option value="" />
+					</xf:checkbox>
+				</div>
+			</xf:if>
+
+			<span class="file-delete">
+				<xf:if is="$noJsFallback">
+					<xf:button type="submit" class="button--small button--link" name="delete" value="{$attachment.attachment_id}">
+						<xf:fa icon="fa-trash-alt" />
+						<span class="u-srOnly">{{ phrase('button.delete') }}</span>
+					</xf:button>
+				<xf:else />
+					<a class="file-deleteLink js-attachmentAction"
+						data-action="delete"
+						data-type="{$attachment.type_grouping}"
+						role="button"
+						tabindex="0">
+						<xf:fa icon="fa-trash-alt" />
+						<span class="u-srOnly">{{ phrase('button.delete') }}</span>
+					</a>
+				</xf:if>
+			</span>
+
+			<a class="file-info"
+				href="{$attachment.direct_url}"
+				target="_blank">
+
+				<span class="file-name">{$attachment.filename}</span>
+
+				<div class="file-meta">
+					<xf:if is="$attachment.Data.width">{$attachment.Data.width} x {$attachment.Data.height} &middot; </xf:if>
+					{$attachment.file_size|file_size}
+				</div>
+			</a>
+		</div>
+	</li>
+</xf:macro>
+
+
+
+<xf:macro id="uploaded_file_template">
+	<script type="text/template" class="js-attachmentUploadTemplate">
+		<li class="file js-attachmentFile" {{ mustache('#attachment_id', 'data-attachment-id="{{attachment_id}}"') }}>
+			<xf:mustache name="#uploading">
+				<div class="file-preview">
+					<div class="file-progress js-attachmentProgress"></div>
+					<span class="file-error js-attachmentError"></span>
+				</div>
+			</xf:mustache>
+			<xf:mustache name="^uploading">
+				<xf:mustache name="#thumbnail_url">
+					<xf:mustache name="#retina_thumbnail_url">
+						<a class="file-preview js-attachmentView" href="{{ mustache('link') }}" target="_blank">
+							<img src="{{ mustache('thumbnail_url') }}" srcset="{{ mustache('retina_thumbnail_url') }} 2x" class="js-attachmentThumb" alt="{{ mustache('filename') }}" />
+						</a>
+					</xf:mustache>
+					<xf:mustache name="^retina_thumbnail_url">
+						<a class="file-preview js-attachmentView" href="{{ mustache('link') }}" target="_blank">
+							<img src="{{ mustache('thumbnail_url') }}" class="js-attachmentThumb" alt="{{ mustache('filename') }}" />
+						</a>
+					</xf:mustache>
+				</xf:mustache>
+				<xf:mustache name="^thumbnail_url">
+					<xf:mustache name="#is_video">
+						<a class="file-preview js-attachmentView" href="{{ mustache('link') }}" target="_blank">
+							<video data-xf-init="video-init">
+								<source src="{{ mustache('link') }}" />
+							</video>
+						</a>
+					</xf:mustache>
+					<xf:mustache name="^is_video">
+						<a class="file-preview js-attachmentView" href="{{ mustache('link') }}" target="_blank">
+							<span class="file-typeIcon">
+								<i class="fa--xf fa{{ fa_weight() }} {{ mustache('icon') }}">
+									<svg xmlns="http://www.w3.org/2000/svg" role="img">
+										<title>{{ mustache('filename') }}</title>
+										<use href="{{ icon_url(null, mustache('icon_name')) }}"></use>
+									</svg>
+								</i>
+							</span>
+						</a>
+					</xf:mustache>
+				</xf:mustache>
+			</xf:mustache>
+
+			<div class="file-content">
+
+				<xf:mustache name="#thumbnail_url">
+					<div class="file-insert js-attachmentInsert">
+						<a class="file-insertLink"
+							data-xf-click="toggle"
+							data-target="< .js-attachmentInsert"
+							role="button"
+							tabindex="0">
+							{{ phrase('insert...') }}
+						</a>
+						<div class="file-menuOptions">
+							<a class="js-attachmentAction" data-action="thumbnail" role="button" tabindex="0"
+								data-xf-click="toggle" data-target="< .js-attachmentInsert">{{ phrase('thumbnail') }}</a>
+							<a class="js-attachmentAction" data-action="full" role="button" tabindex="0"
+								data-xf-click="toggle" data-target="< .js-attachmentInsert">{{ phrase('full_image') }}</a>
+						</div>
+					</div>
+				</xf:mustache>
+				<xf:mustache name="^thumbnail_url">
+					<xf:mustache name="#is_video">
+						<div class="file-insert js-attachmentInsert">
+							<a class="file-insertLink js-attachmentAction" data-action="full" data-type="video" role="button" tabindex="0">
+								{{ phrase('insert') }}
+							</a>
+						</div>
+					</xf:mustache>
+					<xf:mustache name="#is_audio">
+						<div class="file-insert js-attachmentInsert">
+							<a class="file-insertLink js-attachmentAction" data-action="full" data-type="audio" role="button" tabindex="0">
+								{{ phrase('insert') }}
+							</a>
+						</div>
+					</xf:mustache>
+				</xf:mustache>
+
+				<div class="file-checkbox">
+					<xf:checkbox standalone="true">
+						<xf:option value="" />
+					</xf:checkbox>
+				</div>
+
+				<span class="file-delete">
+					<xf:mustache name="#uploading">
+						<a class="file-deleteLink js-attachmentAction"
+							data-action="cancel"
+							role="button"
+							tabindex="0">
+							<xf:fa icon="fa-trash-alt" />
+							<span class="u-srOnly">{{ phrase('button.cancel') }}</span>
+						</a>
+					</xf:mustache>
+					<xf:mustache name="^uploading">
+						<a class="file-deleteLink js-attachmentAction"
+							data-action="delete"
+							data-type="{{ mustache('type_grouping') }}"
+							role="button"
+							tabindex="0">
+							<xf:fa icon="fa-trash-alt" />
+							<span class="u-srOnly">{{ phrase('button.delete') }}</span>
+						</a>
+					</xf:mustache>
+				</span>
+
+				<a class="file-info" href="{{ mustache('link') }}" target="_blank">
+					<span class="file-name">{{ mustache('filename') }}</span>
+
+					<div class="file-meta">
+						<xf:mustache name="#thumbnail_url">{{ mustache('width') }} x {{ mustache('height') }} &middot; </xf:mustache>
+						{{ mustache('file_size_printable') }}
+					</div>
+				</a>
+
+			</div>
+		</li>
+	</script>
+</xf:macro>
+
+
+
+
+<xf:macro id="upload_block" arg-attachmentData="!" arg-forceHash="" arg-hiddenName="attachment_hash">
+	<xf:macro id="uploaded_files_list" arg-attachments="{$attachmentData.attachments}" />
+
+	<xf:macro id="upload_link_from_data"
+		arg-attachmentData="{$attachmentData}"
+		arg-forceHash="{$forceHash}"
+		arg-hiddenName="{$hiddenName}" />
+</xf:macro>

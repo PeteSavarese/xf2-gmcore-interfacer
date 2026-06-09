@@ -1,0 +1,14 @@
+<xf:if is="$xf.visitor.user_id == $content.ProfileUser.user_id">
+	{{ phrase('push_x_reacted_to_your_status', {
+		'name': $user.username ?: $alert.username,
+		'reaction': reaction_title($extra.reaction_id)
+	}) }}
+<xf:else />
+	{{ phrase('push_x_reacted_to_your_post_on_ys_profile', {
+		'name': $user.username ?: $alert.username,
+		'profile': $content.ProfileUser.username,
+		'reaction': reaction_title($extra.reaction_id)
+	}) }}
+</xf:if>
+<push:url>{{ link('canonical:profile-posts', $content) }}</push:url>
+<push:tag>profile_post_reaction_{$content.profile_post_id}_{$extra.reaction_id}</push:tag>

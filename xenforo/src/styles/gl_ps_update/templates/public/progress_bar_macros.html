@@ -1,0 +1,15 @@
+<xf:macro id="progress_bar" arg-percentage="!" arg-tooltip="" arg-label="">
+	<xf:css src="progress_bar.less" />
+
+	<div class="progressBar">
+		<div class="progressBar-progress" style="width: {$percentage}%">
+			<span class="progressBar-label"
+				data-xf-init="{{ $tooltip ? 'tooltip' : '' }}" data-trigger="{{ $tooltip ? 'hover focus click' : '' }}"
+				title="{{ $tooltip ?: '' }}">
+
+				<xf:if is="$label">{$label}</xf:if>
+				<xf:if is="$label AND $tooltip"><xf:fa icon="far fa-question-circle" /></xf:if>
+			</span>
+		</div>
+	</div>
+</xf:macro>

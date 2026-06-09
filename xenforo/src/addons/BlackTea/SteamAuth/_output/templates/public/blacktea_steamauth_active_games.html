@@ -1,0 +1,66 @@
+<xf:title page="{$page}">{{ phrase('blacktea_steamauth_active_games') }}</xf:title>
+
+<xf:js src="xf/inline_mod.js" min="1" />
+<xf:css src="public:blacktea_steamauth_list.less" />
+
+<div class="block" data-xf-init="inline-mod" data-type="active_games" data-href="{{ link('inline-mod') }}">
+	<div class="block-outer">
+		<xf:pagenav
+			page="{$page}" perpage="{$perPage}" total="{$total}"
+			link="steam/active-games"
+			wrapperclass="block-outer-main" />
+	</div>
+
+	<div class="block-container">
+		<div class="block-body">
+			<xf:if is="$games is not empty">
+				<div class="structItemContainer">
+					<xf:foreach loop="$games" value="$game">
+						<xf:css src="structured_list.less" />
+						<div class="structItem js-inlineModContainer">
+							<div class="structItem-cell structItem-cell--icon game-image-container">
+								<div class="structItem-iconContainer">
+									<a href="{{$game.url}}" target="_blank">
+										<img class="game-image" src="{{$game.image}}" onerror="this.style.display='none'"/>
+									</a>
+								</div>
+							</div>
+							<div class="structItem-cell structItem-cell--main" data-xf-init="touch-proxy">
+								<a href="{{$game.url}}" target="_blank" class="structItem-title">{{$game.label}}</a>
+								<div class="structItem-minor">
+									<ul class="structItem-parts">
+										<li>
+											<ul class="listInline listInline--comma listInline--selfInline">
+												<li>
+													<a href="{{$game.url}}" target="_blank">
+														{{$game.url}}
+													</a>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<div class="structItem-cell structItem-cell--latest structItem-cell--meta">
+								<dl class="pairs pairs--justified">
+									<dt>{{ phrase('blacktea_steamauth_recent_hours') }}</dt>
+									<dd>
+										<a href="{{$game.url}}" target="_blank">
+											{{$game.playtime_formatted}} {{ phrase('blacktea_steamauth_hours') }}
+										</a>
+									</dd>
+								</dl>
+							</div>
+						</div>
+					</xf:foreach>
+				</div>
+			<xf:else />
+				<div class="block-row">{{ phrase('blacktea_steamauth_no_active_games') }}</div>
+			</xf:if>
+		</div>
+	</div>
+
+	<xf:pagenav page="{$page}" perpage="{$perPage}" total="{$total}"
+		link="steam/active-games"
+		wrapperclass="block-outer block-outer--after" />
+</div>

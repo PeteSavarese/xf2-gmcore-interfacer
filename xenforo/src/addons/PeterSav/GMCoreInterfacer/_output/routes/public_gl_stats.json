@@ -1,0 +1,11 @@
+{
+    "route_type": "public",
+    "route_prefix": "gl",
+    "sub_name": "stats",
+    "format": "stats",
+    "build_class": "",
+    "build_method": "",
+    "controller": "PeterSav\\GModInterface:Stats",
+    "context": "gmodStats",
+    "action_prefix": ""
+}

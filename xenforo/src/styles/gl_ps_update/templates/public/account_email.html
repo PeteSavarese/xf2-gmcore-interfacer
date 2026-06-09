@@ -1,0 +1,31 @@
+<xf:title>{{ phrase('change_email') }}</xf:title>
+
+<xf:wrap template="account_wrapper" />
+
+<xf:form action="{{ link('account/email') }}" ajax="true" class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:if is="$hasPassword">
+
+				<xf:textboxrow name="email" value="{$xf.visitor}" dir="ltr" autofocus="autofocus"
+					label="{{ phrase('email') }}"
+					explain="{{ phrase('if_you_change_your_email_you_may_need_to_reconfirm_your_account') }}" />
+
+				<xf:passwordboxrow name="password"
+					label="{{ phrase('current_password') }}" />
+
+			<xf:else />
+
+				<xf:formrow
+					label="{{ phrase('email') }}"
+					explain="{{ phrase('your_email_cannot_be_changed_while_your_account_does_not_have_password') }}">
+
+					{$xf.visitor.email|email_display}
+				</xf:formrow>
+
+			</xf:if>
+		</div>
+
+		<xf:submitrow icon="save" sticky="true" />
+	</div>
+</xf:form>

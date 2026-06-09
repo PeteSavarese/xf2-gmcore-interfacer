@@ -1,0 +1,40 @@
+<xf:title>{{ phrase('two_step_verification_required') }}</xf:title>
+
+<xf:if is="$provider.isDeprecated()">
+	<div class="blockMessage blockMessage--error blockMessage--iconic">
+		{{ phrase('two_step_provider_is_deprecated_user') }}
+	</div>
+</xf:if>
+
+<xf:form action="{{ link('login/two-step') }}" class="block" ajax="true">
+
+	<div class="block-container">
+		<h2 class="block-tabHeader tabs hScroller" data-xf-init="h-scroller">
+			<span class="hScroller-scroll">
+			<xf:foreach loop="$providers" value="$tabProvider">
+				<a href="{{ link('login/two-step', null, {'provider': $tabProvider.provider_id, 'remember': $remember ? 1 : null, '_xfRedirect': $redirect}) }}" class="tabs-tab {{ $tabProvider.provider_id == $providerId ? 'is-active' : '' }}">{$tabProvider.title}</a>
+			</xf:foreach>
+			</span>
+		</h2>
+
+		<div class="block-body">
+			<xf:formrow label="{{ phrase('logging_in_as') }}">{$user.username}</xf:formrow>
+
+			{{ $provider.render('login', $user, $providerData, $triggerData)|raw }}
+
+			<xf:checkboxrow>
+				<xf:option name="trust" value="1" checked="{$trustChecked}"
+					label="{{ phrase('trust_this_device_for_30_days') }}"
+					hint="{{ phrase('trust_device_desc') }}" />
+			</xf:checkboxrow>
+		</div>
+
+		<xf:submitrow submit="{{ phrase('confirm') }}" icon="login" />
+	</div>
+
+	<xf:hiddenval name="confirm">1</xf:hiddenval>
+	<xf:hiddenval name="provider">{$providerId}</xf:hiddenval>
+	<xf:hiddenval name="remember">{{ $remember ? 1 : 0 }}</xf:hiddenval>
+
+	<xf:redirect url="{$redirect}" />
+</xf:form>

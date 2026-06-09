@@ -1,0 +1,35 @@
+<xf:if is="$title">
+	<xf:title>{$title}</xf:title>
+<xf:else />
+	<xf:title>{{ phrase('members_who_liked_this') }}</xf:title>
+</xf:if>
+
+<xf:head option="metaNoindex"><meta name="robots" content="noindex" /></xf:head>
+
+<xf:if is="$breadcrumbs">
+	<xf:breadcrumb source="$breadcrumbs" />
+</xf:if>
+
+<div class="block">
+	<div class="block-container js-likeList-{$type}{$id}">
+		<ol class="block-body">
+			<xf:foreach loop="$likes" value="$like">
+				<li class="block-row block-row--separated">
+					<xf:macro id="member_list_macros::item"
+						arg-user="{$like.Liker}"
+						arg-extraData="{{ date_dynamic($like.like_date)|preescaped }}" />
+				</li>
+			</xf:foreach>
+		</ol>
+		<xf:if is="$hasNext">
+			<div class="block-footer">
+				<span class="block-footer-controls"><xf:button href="{{ link($linkRoute, $linkData, $linkParams + {'page': $page + 1}) }}"
+					data-xf-click="inserter"
+					data-replace=".js-likeList-{$type}{$id}"
+					data-scroll-target="< .overlay">
+					{{ phrase('continue...') }}
+				</xf:button></span>
+			</div>
+		</xf:if>
+	</div>
+</div>

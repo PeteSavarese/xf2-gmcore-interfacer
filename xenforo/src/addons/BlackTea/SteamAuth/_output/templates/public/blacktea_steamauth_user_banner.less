@@ -1,0 +1,127 @@
+.message-user .steam-user-banner {
+	min-width: 0;
+	width: 100%;
+	max-width: 260px;
+}
+
+.steam-user-banner
+{
+	display: flex;
+	align-items: center;
+	gap: @xf-paddingSmall;
+	max-width: 100%;
+	padding: @xf-paddingSmall;
+	margin: 7px 0;
+	min-height: 48px;
+	overflow: hidden;
+	text-decoration: none;
+	background: @xf-contentAltBg;
+	border: @xf-borderSize solid @xf-borderColorFaint;
+	border-left: @xf-borderSizeFeature solid fade(@xf-textColorMuted, 35%);
+	border-radius: @xf-borderRadiusMedium;
+	color: @xf-textColor;
+
+	&:empty
+	{
+		display: none;
+	}
+
+	&:hover
+	{
+		background: @xf-contentHighlightBg;
+		border-color: @xf-borderColorHighlight;
+		text-decoration: none;
+	}
+
+	// Status accents
+	&.visibility-1, &.visibility-2, &.visibility-3, &.visibility-4, &.visibility-5, &.visibility-6
+	{
+		border-left-color: #50beff;
+	}
+	&.visibility-7
+	{
+		border-left-color: @xf-paletteAccent3;
+	}
+
+	.image-container
+	{
+		flex: 0 0 auto;
+		width: 36px;
+		height: 36px;
+		border-radius: @xf-borderRadiusSmall;
+		overflow: hidden;
+		background: fade(@xf-paletteNeutral3, 12%);
+		border: 1px solid @xf-borderColorFaint;
+
+		img
+		{
+			display: block;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+	}
+
+	.info-container
+	{
+		min-width: 0;
+		line-height: 1.2;
+
+		.name
+		{
+			font-size: @xf-fontSizeSmall;
+			font-weight: @xf-fontWeightHeavy;
+			color: #50beff;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		.visibility
+		{
+			margin-top: 2px;
+			font-size: @xf-fontSizeSmaller;
+			color: @xf-textColorMuted;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+
+			&:before
+			{
+				content: "";
+				display: inline-block;
+				width: 8px;
+				height: 8px;
+				margin-right: @xf-paddingSmall;
+				border-radius: 50%;
+				background: currentColor;
+				vertical-align: middle;
+			}
+		}
+
+		.game
+		{
+			margin-top: 2px;
+			font-size: @xf-fontSizeSmaller;
+			color: @xf-textColorMuted;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+	}
+}
+
+.steam-user-banner.visibility-7 .info-container .visibility
+{
+	color: @xf-paletteAccent3;
+}
+
+.steam-user-banner.visibility-1 .info-container .visibility,
+.steam-user-banner.visibility-2 .info-container .visibility,
+.steam-user-banner.visibility-3 .info-container .visibility,
+.steam-user-banner.visibility-4 .info-container .visibility,
+.steam-user-banner.visibility-5 .info-container .visibility,
+.steam-user-banner.visibility-6 .info-container .visibility
+{
+	color: #50beff;
+}

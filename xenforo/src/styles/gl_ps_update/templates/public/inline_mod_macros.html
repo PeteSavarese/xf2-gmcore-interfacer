@@ -1,0 +1,17 @@
+<xf:macro id="button"
+	arg-buttonClass="button--link"
+	arg-variant=""
+	arg-label="{{ null }}"
+	arg-tooltip="{{ null }}">
+
+	<xf:button class="{$buttonClass} js-inlineModTrigger"
+		data-xf-init="{{ $tooltip === false ? '' : 'tooltip' }}"
+		title="{{ $tooltip === false ? '' : ($tooltip ?: phrase('selected_for_moderation')) }}">
+
+		<span class="inlineModButton {$variant}">
+			<i aria-hidden="true"></i>
+			<span class="inlineModButton-label">{{ $label ?: phrase('moderation') }}</span>
+			<span class="inlineModButton-count js-inlineModCounter">0</span>
+		</span>
+	</xf:button>
+</xf:macro>

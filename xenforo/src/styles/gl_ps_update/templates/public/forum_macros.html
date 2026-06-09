@@ -1,0 +1,16 @@
+<xf:macro id="forum_page_options" arg-forum="!" arg-thread="">
+	<xf:page option="forum" value="{$forum}" />
+
+	<xf:if is="{$thread}">
+		<xf:page option="searchConstraints" value="{{ {
+			phrase('threads'): {'search_type': 'post'},
+			phrase('this_forum'): {'search_type': 'post', 'c': {'nodes': [$forum.node_id], 'child_nodes': 1}},
+			phrase('this_thread'): {'search_type': 'post', 'c': {'thread': $thread.thread_id}}
+		} }}" />
+	<xf:else />
+		<xf:page option="searchConstraints" value="{{ {
+			phrase('threads'): {'search_type': 'post'},
+			phrase('this_forum'): {'search_type': 'post', 'c': {'nodes': [$forum.node_id], 'child_nodes': 1}}
+		} }}" />
+	</xf:if>
+</xf:macro>

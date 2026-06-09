@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Deployment in Progress</title>
+
+		<link rel="preconnect" href="https://fonts.googmcoreeapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googmcoreeapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Unbounded:wght@500;700&display=swap" rel="stylesheet">
+
+		<style>
+			:root {
+				--gmcore-primary: #3498db;
+				--gmcore-teal: #23a393;
+				--gmcore-bg-deep: #0f1822;
+				--gmcore-bg-card: rgba(30, 42, 56, 0.92);
+				--gmcore-border: rgba(52, 73, 94, 0.7);
+				--gmcore-border-accent: rgba(52, 152, 219, 0.45);
+				--gmcore-text: #ecf0f1;
+				--gmcore-text-secondary: #bdc3c7;
+				--gmcore-text-muted: #95a5a6;
+				--gmcore-gradient: linear-gradient(90deg, rgba(52, 152, 219, .9), rgba(35, 163, 147, 0.9));
+				--gmcore-gradient-header: linear-gradient(135deg, rgba(23, 32, 48, 0.98) 0%, rgba(30, 42, 56, 0.9) 100%);
+			}
+
+			* {
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+
+			body {
+				font-family: "Space Grotesk", "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+				background: var(--gmcore-bg-deep);
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				min-height: 100vh;
+				color: var(--gmcore-text);
+				padding: 20px;
+				position: relative;
+			}
+
+			body::before {
+				content: "";
+				position: fixed;
+				inset: 0;
+				background:
+					radial-gradient(900px circle at 15% -10%, rgba(52, 152, 219, 0.12), transparent 55%),
+					radial-gradient(700px circle at 85% 10%, rgba(52, 152, 219, 0.08), transparent 50%),
+					radial-gradient(600px circle at 50% 90%, rgba(52, 73, 94, 0.15), transparent 60%);
+				pointer-events: none;
+				z-index: 0;
+			}
+
+			.card {
+				background: var(--gmcore-bg-card);
+				border-radius: 18px;
+				box-shadow: 0 24px 50px rgba(0, 0, 0, 0.45);
+				overflow: hidden;
+				max-width: 560px;
+				width: 100%;
+				backdrop-filter: blur(10px);
+				position: relative;
+				z-index: 1;
+			}
+
+			.card-header {
+				background: var(--gmcore-gradient-header);
+				border-bottom: 2px solid var(--gmcore-border-accent);
+				padding: 24px 28px;
+				text-align: center;
+			}
+
+			h1 {
+				font-family: "Unbounded", "Space Grotesk", sans-serif;
+				font-size: 1.6rem;
+				font-weight: 700;
+				color: var(--gmcore-text);
+				letter-spacing: 0.5px;
+				margin-bottom: 6px;
+			}
+
+			.subtitle {
+				font-size: 1rem;
+				color: var(--gmcore-text-secondary);
+				margin-top: 6px;
+				font-weight: 500;
+			}
+
+			.card-content {
+				padding: 32px 28px;
+				text-align: center;
+			}
+
+			.icon {
+				width: 72px;
+				height: 72px;
+				margin: 0 auto 24px;
+				position: relative;
+			}
+
+			.icon svg {
+				width: 100%;
+				height: 100%;
+				animation: spin 2s linear infinite;
+			}
+
+			@keyframes spin {
+				0% { transform: rotate(0deg); }
+				100% { transform: rotate(360deg); }
+			}
+
+			.info-item {
+				background: rgba(34, 51, 68, 0.5);
+				border: 1px solid var(--gmcore-border);
+				border-radius: 12px;
+				padding: 16px 20px;
+				margin: 16px 0;
+			}
+
+			.info-value {
+				font-size: 1rem;
+				color: var(--gmcore-text);
+				line-height: 1.7;
+			}
+
+			.refresh-note {
+				margin-top: 20px;
+				font-size: 0.85rem;
+				color: var(--gmcore-text-muted);
+				font-weight: 500;
+				letter-spacing: 0.3px;
+			}
+
+			@media (max-width: 600px) {
+				h1 {
+					font-size: 1.25rem;
+				}
+
+				.card-content {
+					padding: 24px 20px;
+				}
+
+				.card-header {
+					padding: 20px;
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="card">
+			<div class="card-header">
+				<h1>Update in Progress</h1>
+				<div class="subtitle">Sorry about that...</div>
+			</div>
+
+			<div class="card-content">
+				<div class="icon">
+					<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+						<circle cx="12" cy="12" r="10" stroke="url(#grad)" stroke-width="2.5" stroke-linecap="round"
+							stroke-dasharray="60" stroke-dashoffset="15" />
+						<defs>
+							<linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="0%">
+								<stop offset="0%" stop-color="#3498db" />
+								<stop offset="100%" stop-color="#23a393" />
+							</linearGradient>
+						</defs>
+					</svg>
+				</div>
+
+				<div class="info-item">
+					<div class="info-value">We're currently deploying an update to our website. While you wait, feel free to join our <a href="https://discord.gg/" style="color: #5dade2; text-decoration: underline;">Discord server</a>.</div>
+				</div>
+
+				<p class="refresh-note">This page will automatically refresh when complete.</p>
+			</div>
+		</div>
+
+		<script>
+			function checkSiteStatus() {
+				fetch('/', {
+					method: 'HEAD',
+					cache: 'no-cache'
+				})
+					.then(response => {
+						if (response.status !== 503) {
+							location.reload();
+						}
+					})
+					.catch(() => {
+					});
+			}
+
+			setInterval(checkSiteStatus, 2000);
+			setTimeout(checkSiteStatus, 1000);
+		</script>
+	</body>
+</html>

@@ -1,0 +1,194 @@
+@_memberTooltip-padding: @xf-paddingMedium;
+@_memberTooltip-avatarSize: @avatar-m;
+
+.memberTooltip-header
+{
+	display: flex;
+	padding: @_memberTooltip-padding;
+	.xf-memberTooltipHeader();
+}
+
+.memberTooltip-avatar
+{
+	width: (@_memberTooltip-padding * 2 + @_memberTooltip-avatarSize);
+}
+
+.memberTooltip-headerInfo
+{
+	flex: 1;
+	min-width: 0;
+}
+
+.memberTooltip-name
+{
+	margin: 0;
+	margin-top: -.15em;
+	padding: 0;
+	font-weight: @xf-fontWeightNormal;
+	line-height: (@xf-lineHeightDefault * 0.8);
+	.xf-memberTooltipName();
+
+	.m-hiddenLinks();
+
+	.memberTooltip-nameChangeIndicator
+	{
+		color: @xf-textColorMuted;
+		font-size: 75%;
+
+		&:hover
+		{
+			color: @xf-textColorMuted;
+		}
+	}
+
+	.memberTooltip--withBanner &
+	{
+		.xf-memberTooltipNameBanner();
+
+		.memberTooltip-nameChangeIndicator
+		{
+			color: darken(xf-default(@xf-memberTooltipNameBanner--color, white), 20%);
+
+			&:hover
+			{
+				color: darken(xf-default(@xf-memberTooltipNameBanner--color, white), 20%);
+			}
+		}
+	}
+}
+
+// See XF-197998
+@_memberTooltip-textStroke: 0 #000;
+
+.memberTooltip-textStroke()
+{
+	text-shadow:
+		-1px -1px @_memberTooltip-textStroke,
+		1px -1px @_memberTooltip-textStroke,
+		-1px 1px @_memberTooltip-textStroke,
+		1px 1px @_memberTooltip-textStroke;
+}
+
+.memberTooltip--withBanner
+{
+	.memberTooltip-nameWrapper
+	{
+		.username:hover
+		{
+			text-decoration: none;
+		}
+	}
+
+	.username
+	{
+		.memberTooltip-textStroke();
+	}
+
+	.memberTooltip-nameChangeIndicator .fa-history
+	{
+		.memberTooltip-textStroke();
+	}
+}
+
+.memberTooltip-headerAction
+{
+	float: right;
+}
+
+.memberTooltip-blurbContainer
+{
+	.memberTooltip--withBanner &
+	{
+		.xf-memberTooltipBlurbContainerBanner();
+
+		.memberTooltip-blurb
+		{
+			&:first-child
+			{
+				margin-top: 0;
+			}
+
+			.pairs dt, a
+			{
+				color: darken(xf-default(@xf-memberTooltipBlurbContainerBanner--color, white), 20%);
+			}
+		}
+	}
+}
+
+.memberTooltip-banners,
+.memberTooltip-blurb
+{
+	margin-top: .25em;
+}
+
+.memberTooltip-blurb
+{
+	font-size: @xf-fontSizeSmall;
+}
+
+.memberTooltip-stats
+{
+	font-size: @xf-fontSizeSmall;
+
+	dl.pairs.pairs--rows > dt
+	{
+		font-size: @xf-fontSizeSmaller;
+	}
+}
+
+.memberTooltip-info,
+.memberTooltip-actions
+{
+	padding: @_memberTooltip-padding;
+}
+
+.memberTooltip-separator
+{
+	margin: (@xf-borderSize * -1) @_memberTooltip-padding 0;
+	border: none;
+	border-top: @xf-borderSize solid @xf-borderColorLight;
+}
+
+@media (max-width: @xf-responsiveNarrow)
+{
+	.memberTooltip-avatar
+	{
+		width: (@_memberTooltip-padding * 2 + @_memberTooltip-avatarSize * 2 / 3);
+
+		.avatar
+		{
+			.m-avatarSize((@_memberTooltip-avatarSize * 2 / 3));
+		}
+	}
+}
+
+.memberTooltip {
+	background: linear-gradient(160deg, rgba(30, 42, 56, 0.98), rgba(22, 30, 42, 0.96));
+	box-shadow: @gl-shadow-lg;
+	backdrop-filter: blur(18px);
+}
+
+.memberTooltip .memberTooltip-headerArea {
+	background: @gl-gradient-header;
+	border-bottom: 1px solid @gl-border;
+}
+
+.memberTooltip .memberTooltip-info {
+	border-top: 1px solid @gl-border;
+}
+
+.memberTooltip-separator {
+	border-top-color: rgba(52, 73, 94, 0.5);
+	margin-left: 0;
+	margin-right: 0;
+}
+
+.memberTooltip-name {
+	font-weight: 700;
+}
+
+.memberTooltip-actions .button {
+	border-radius: 8px;
+	font-size: 12px;
+}

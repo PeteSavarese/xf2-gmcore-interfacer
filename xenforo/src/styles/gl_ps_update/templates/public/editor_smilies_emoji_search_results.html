@@ -1,0 +1,13 @@
+<div class="block-body block-body--emoji js-emojiSearchResults">
+	<div class="block-row">
+		<xf:if is="$results">
+			<ul class="emojiList">
+				<xf:foreach loop="$results" value="{$result}">
+					<li><a class="js-emoji" data-shortname="{$result.shortname}">{$result.html|raw}</a></li>
+				</xf:foreach>
+			</ul>
+		<xf:else />
+			{{ phrase('no_results_found') }}
+		</xf:if>
+	</div>
+</div>

@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template_modifications>
+  <modification type="admin" template="PAGE_CONTAINER" modification_key="gmod_env_banner_admin" description="Adds environment banner to admin panel header" execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[<header class="p-header">]]></find>
+    <replace><![CDATA[<xf:set var="$environment" value="{{ get_env('ENVIRONMENT') ?: 'production' }}" />
+
+<xf:if is="$environment != 'prod' AND $environment != 'production'">
+    <div class="env-banner env-banner--{$environment}" id="envBanner">
+        <span class="env-banner__text">
+            <xf:if is="$environment == 'local'">
+          		🚧 LOCAL DEVELOPMENT - NON-PRODUCTION 🚧
+            <xf:elseif is="$environment == 'staging'" />
+          		🧪 STAGING - NON-PRODUCTION 🧪
+        <xf:else />
+                ⚠️ UNKNOWN NON-PRODUCTION ENVIRONMENT - {$environment|escape} ⚠️
+        </xf:if>
+        </span>
+        <button class="env-banner__close" onclick="toggleEnvBanner()" title="Hide banner">×</button>
+  </div>
+  <button class="env-banner__restore" id="envBannerRestore" onclick="toggleEnvBanner()" title="Show environment banner">↓</button>
+  <script>
+  function toggleEnvBanner() {
+    var banner = document.getElementById('envBanner');
+    var restore = document.getElementById('envBannerRestore');
+    banner.classList.toggle('env-banner--hidden');
+    restore.classList.toggle('env-banner__restore--visible');
+    var isHidden = banner.classList.contains('env-banner--hidden');
+    localStorage.setItem('envBannerHidden', isHidden);
+  }
+  (function() {
+    if (localStorage.getItem('envBannerHidden') === 'true') {
+      document.getElementById('envBanner').classList.add('env-banner--hidden');
+      document.getElementById('envBannerRestore').classList.add('env-banner__restore--visible');
+    }
+  })();
+  </script>
+</xf:if>
+
+$0]]></replace>
+  </modification>
+  <modification type="admin" template="app.less" modification_key="gmod_env_banner_admin_css" description="Adds CSS for environment banner in admin panel" execution_order="10" enabled="1" action="preg_replace">
+    <find><![CDATA[/@_adminPage-maxWidth: /]]></find>
+    <replace><![CDATA[/* Environment tag */
+.env-banner {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 8px 16px;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-align: center;
+    color: #fff;
+    z-index: 500;
+    width: auto;
+    max-width: 90vw;
+    background-color: brown;
+    border-radius: 0px 0px 4px 4px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: transform 0.3s ease;
+}
+
+.env-banner--hidden {
+    transform: translateX(-50%) translateY(-100%);
+}
+
+.env-banner__close {
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    line-height: 1;
+    width: 24px;
+    height: 24px;
+    border-radius: 3px;
+    cursor: pointer;
+    padding: 0;
+    transition: background 0.2s;
+}
+
+.env-banner__close:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.env-banner__restore {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100%);
+    background: rgba(0, 0, 0, 0.6);
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    padding: 4px 12px;
+    border-radius: 0px 0px 4px 4px;
+    cursor: pointer;
+    z-index: 499;
+    transition: transform 0.3s ease;
+}
+
+.env-banner__restore--visible {
+    transform: translateX(-50%) translateY(0);
+}
+
+.env-banner__restore:hover {
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.env-banner--local {
+    background: #b71c1c;
+}
+
+.env-banner--staging {
+    background: #f57c00;
+}
+
+$0]]></replace>
+  </modification>
+  <modification type="public" template="member_about" modification_key="gmod_hlogs_link_member_about_page" description="Adds link to user's history logs under on the about page of their profile" execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[					<xf:macro id="custom_fields_macros::custom_fields_view"
+						arg-type="users"
+						arg-group="personal"
+						arg-set="{$user.Profile.custom_fields}"
+						arg-additionalFilters="{{ ['profile'] }}" />]]></find>
+    <replace><![CDATA[$0
+<xf:if is="{{ $xf.visitor->hasPermission('gmodUserPerms', 'view_hlogs') }}">
+						<dl class="pairs pairs--columns pairs--fixedSmall">
+							<dt>History Logs</dt>
+							<dd><a href="/gl/hlogs/results?steamid={{user_to_steamid64($user)}}">History Logs</a></dd>
+						</dl>
+</xf:if>]]></replace>
+  </modification>
+  <modification type="public" template="message_macros" modification_key="gmod_hlogs_link_belowname" description="Adds link to user's history logs under their username on a forum post" execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[		<span class="message-userArrow"></span>
+	</section>]]></find>
+    <replace><![CDATA[$0
+<xf:if is="{{ $xf.visitor->hasPermission('gmodUserPerms', 'view_hlogs') }}">
+	<xf:css src="public:message_macros_steam.less" />
+	<center><a href="/gl/hlogs/results?steamid={{user_to_steamid64($user)}}">History Logs</a></center>
+</xf:if>]]></replace>
+  </modification>
+</template_modifications>

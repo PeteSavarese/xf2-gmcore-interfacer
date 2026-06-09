@@ -1,0 +1,14 @@
+{
+    "group_name": "fonts",
+    "title": "User Interface Font",
+    "description": "The font list for your main text",
+    "property_type": "value",
+    "css_components": [],
+    "value_type": "string",
+    "value_parameters": "",
+    "has_variations": false,
+    "depends_on": "",
+    "value_group": "font",
+    "property_value": "\"Space Grotesk\", \"Segoe UI\", -apple-system, sans-serif",
+    "display_order": 100
+}

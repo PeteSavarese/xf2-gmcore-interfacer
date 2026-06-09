@@ -1,0 +1,14 @@
+<xf:macro id="approval_queue_macros::item_message_type"
+	arg-content="{$content}"
+	arg-user="{$content.User}"
+	arg-messageHtml="{{ bb_code($content.message, 'post', $content) }}"
+	arg-typePhraseHtml="{{ phrase('post_noun') }}"
+	arg-spamDetails="{$spamDetails}"
+	arg-unapprovedItem="{$unapprovedItem}"
+	arg-handler="{$handler}"
+	arg-headerPhraseHtml="{{ phrase('posted_in_thread_x_in_forum_y', {
+		'postLink': link('posts', $content),
+		'threadTitle': $content.Thread.title,
+		'forumLink': link('forums', $content.Thread.Forum),
+		'forumTitle': $content.Thread.Forum.title
+	}) }}" />

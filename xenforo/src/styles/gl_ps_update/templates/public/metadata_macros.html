@@ -1,0 +1,88 @@
+<xf:macro id="metadata"
+	arg-siteName=""
+	arg-title=""
+	arg-description=""
+	arg-type=""
+	arg-shareUrl=""
+	arg-canonicalUrl=""
+	arg-imageUrl=""
+	arg-twitterCard="summary">
+
+	<xf:if is="$siteName is not empty">
+		<xf:macro id="site_name" arg-siteName="{$siteName}" />
+	</xf:if>
+	<xf:if is="$title is not empty">
+		<xf:macro id="title" arg-title="{$title}" />
+	</xf:if>
+	<xf:if is="$description is not empty">
+		<xf:macro id="description" arg-description="{$description}" />
+	</xf:if>
+	<xf:if is="$type is not empty">
+		<xf:macro id="type" arg-type="{$type}" />
+	</xf:if>
+	<xf:if is="$shareUrl is not empty">
+		<xf:macro id="share_url" arg-shareUrl="{$shareUrl}" />
+	</xf:if>
+	<xf:if is="$canonicalUrl is not empty">
+		<xf:macro id="canonical_url" arg-canonicalUrl="{$canonicalUrl}" />
+	</xf:if>
+	<xf:if is="$imageUrl is not empty">
+		<xf:macro id="image_url" arg-imageUrl="{$imageUrl}" arg-twitterCard="{$twitterCard}" />
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="site_name" arg-siteName="!" arg-output="{{ false }}">
+	<xf:set var="$meta"><meta property="og:site_name" content="{$siteName|for_attr}" /></xf:set>
+	<xf:macro id="output" arg-option="meta_site_name" arg-meta="{$meta}" arg-output="{$output}" />
+</xf:macro>
+
+<xf:macro id="title" arg-title="!" arg-output="{{ false }}">
+	<xf:set var="$meta">
+		<meta property="og:title" content="{$title|for_attr}" />
+		<meta property="twitter:title" content="{{ snippet($title, 70)|for_attr }}" />
+	</xf:set>
+	<xf:macro id="output" arg-option="meta_title" arg-meta="{$meta}" arg-output="{$output}" />
+</xf:macro>
+
+<xf:macro id="description" arg-description="!" arg-output="{{ false }}">
+	<xf:set var="$meta">
+		<meta name="description" content="{{ snippet($description|strip_tags, 160)|for_attr }}" />
+		<meta property="og:description" content="{{ snippet($description|strip_tags, 300)|for_attr }}" />
+		<meta property="twitter:description" content="{{ snippet($description|strip_tags, 200)|for_attr }}" />
+	</xf:set>
+	<xf:macro id="output" arg-option="meta_description" arg-meta="{$meta}" arg-output="{$output}" />
+</xf:macro>
+
+<xf:macro id="type" arg-type="!" arg-output="{{ false }}">
+	<xf:set var="$meta"><meta property="og:type" content="{$type}" /></xf:set>
+	<xf:macro id="output" arg-option="meta_type" arg-meta="{$meta}" arg-output="{$output}" />
+</xf:macro>
+
+<xf:macro id="share_url" arg-shareUrl="!" arg-output="{{ false }}">
+	<xf:set var="$meta"><meta property="og:url" content="{$shareUrl}" /></xf:set>
+	<xf:macro id="output" arg-option="meta_share_url" arg-meta="{$meta}" arg-output="{$output}" />
+</xf:macro>
+
+<xf:macro id="canonical_url" arg-canonicalUrl="!" arg-output="{{ false }}">
+	<xf:set var="$meta"><link rel="canonical" href="{$canonicalUrl}" /></xf:set>
+	<xf:macro id="output" arg-option="meta_canonical_url" arg-meta="{$meta}" arg-output="{$output}" />
+</xf:macro>
+
+<xf:macro id="image_url" arg-imageUrl="!" arg-twitterCard="summary" arg-output="{{ false }}">
+	<xf:set var="$meta">
+		<meta property="og:image" content="{$imageUrl}" />
+		<meta property="twitter:image" content="{$imageUrl}" />
+		<meta property="twitter:card" content="{$twitterCard}" />
+	</xf:set>
+	<xf:macro id="output" arg-option="meta_image_url" arg-meta="{$meta}" arg-output="{$output}" />
+</xf:macro>
+
+<xf:macro id="output" arg-option="!" arg-meta="!" arg-output="{{ false }}">
+	<xf:if is="$output">{$meta|raw}<xf:else /><xf:head option="{$option}">{$meta|raw}</xf:head></xf:if>
+</xf:macro>
+
+<xf:macro id="oembed" arg-oembedUrl="!" arg-title="!">
+	<xf:if is="$oembedUrl && $xf.options.allowExternalEmbed">
+		<link rel="alternate" type="application/json+oembed" href="{$oembedUrl|for_attr}" title="{$title|for_attr}" />
+	</xf:if>
+</xf:macro>

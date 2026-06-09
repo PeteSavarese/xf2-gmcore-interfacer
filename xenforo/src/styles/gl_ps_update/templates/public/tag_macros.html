@@ -1,0 +1,99 @@
+<xf:macro id="edit_rows"
+	arg-uneditableTags="!"
+	arg-editableTags="!"
+	arg-minTags="{{ 0 }}"
+	arg-tagList="">
+
+	<xf:js src="xf/tag.js" />
+
+	<xf:if is="$uneditableTags">
+		<xf:formrow label="{{ phrase('uneditable_tags') }}">
+			{$uneditableTags|pluck('tag')|join(', ')}
+		</xf:formrow>
+	</xf:if>
+
+	<xf:tokeninputrow name="tags" value="{$editableTags|pluck('tag')|join(', ')}" href="{{ link('misc/tag-auto-complete') }}"
+		label="{{ phrase('tags') }}">
+
+		<xf:explain>
+			{{ phrase('multiple_tags_may_be_separated_by_commas') }}
+			<xf:if is="$minTags">
+				{{ phrase('this_content_must_have_at_least_x_tags', {'min': $minTags}) }}
+			</xf:if>
+		</xf:explain>
+	</xf:tokeninputrow>
+</xf:macro>
+
+<xf:macro id="edit_form"
+	arg-action="!"
+	arg-uneditableTags="!"
+	arg-editableTags="!"
+	arg-minTags="{{ 0 }}"
+	arg-tagList="">
+
+	<xf:form action="{$action}" class="block" ajax="true" data-xf-init="tagger" data-tag-list="{$tagList}">
+		<div class="tag-macros block-container">
+			<div class="block-body">
+				<xf:macro id="edit_rows"
+					arg-uneditableTags="{$uneditableTags}"
+					arg-editableTags="{$editableTags}"
+					arg-minTags="{$minTags}"
+					arg-listElement="{$listElement}" />
+			</div>
+			<xf:submitrow icon="save" />
+		</div>
+	</xf:form>
+</xf:macro>
+
+<xf:macro id="list"
+	arg-tags="!"
+	arg-tagList="!"
+	arg-editLink="!"
+	arg-containerClass=""
+	arg-highlightTerm="">
+
+	<xf:set var="$tagIcon">
+		<xf:fa icon="fa-tags" title="{{ phrase('tags')|for_attr }}" />
+		<span class="u-srOnly">{{ phrase('tags') }}</span>
+	</xf:set>
+
+	<dl class="tagList {$tagList} {{ $containerClass ?: '' }}">
+		<dt>
+			<xf:if is="$editLink">
+				<a href="{$editLink}" class="u-concealed--icon"
+					data-xf-click="overlay"
+					data-xf-init="tooltip" title="{{ phrase('edit_tags')|for_attr }}">{$tagIcon}</a>
+			<xf:else />
+				{$tagIcon}
+			</xf:if>
+		</dt>
+		<dd>
+			<span class="js-tagList">
+				<xf:if is="$tags">
+					<xf:foreach loop="$tags" value="$tag">
+						<a href="{{ link('tags', $tag) }}" class="tagItem tagItem--tag_{$tag.tag_url}" dir="auto">
+							{{ $highlightTerm ? highlight($tag.tag, $highlightTerm) : $tag.tag }}
+						</a>
+					</xf:foreach>
+				<xf:else />
+					{{ phrase('none') }}
+				</xf:if>
+			</span>
+		</dd>
+	</dl>
+
+</xf:macro>
+
+<xf:macro id="simple_list"
+	arg-tags="!"
+	arg-containerClass=""
+	arg-highlightTerm="">
+
+	<xf:if is="$tags">
+		<xf:foreach loop="$tags" value="$tag">
+			<span class="tagItem tagItem--tag_{$tag.tag_url}" dir="auto">
+				{{ $highlightTerm ? highlight($tag.tag, $highlightTerm) : $tag.tag }}
+			</span>
+		</xf:foreach>
+	</xf:if>
+</xf:macro>

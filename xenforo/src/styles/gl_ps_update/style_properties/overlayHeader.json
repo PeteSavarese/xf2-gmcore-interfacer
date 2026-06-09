@@ -1,0 +1,31 @@
+{
+    "group_name": "overlay",
+    "title": "Overlay header",
+    "description": "Overlays use a header element to identify their contents, styled here",
+    "property_type": "css",
+    "css_components": [
+        "text",
+        "background",
+        "border",
+        "padding",
+        "extra"
+    ],
+    "value_type": "",
+    "value_parameters": "",
+    "has_variations": false,
+    "depends_on": "",
+    "value_group": "",
+    "property_value": {
+        "font-size": "@xf-fontSizeLargest",
+        "color": "@xf-textColorEmphasized",
+        "background-color": "rgba(23, 32, 48, 0.98)",
+        "border-bottom-width": "@xf-borderSize",
+        "border-bottom-color": "@xf-borderColorLight",
+        "padding-top": "@xf-paddingMedium",
+        "padding-right": "@xf-paddingLarge",
+        "padding-bottom": "@xf-paddingMedium",
+        "padding-left": "@xf-paddingLarge",
+        "extra": "background: linear-gradient(135deg, rgba(23, 32, 48, 0.98), rgba(30, 42, 56, 0.95));\nborder-bottom: 2px solid rgba(52, 152, 219, 0.45);"
+    },
+    "display_order": 20000
+}

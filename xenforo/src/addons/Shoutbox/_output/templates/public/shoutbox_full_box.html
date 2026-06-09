@@ -1,0 +1,71 @@
+<xf:css src="shoutbox_box.less" />
+<xf:css src="editor.less" />
+<xf:js prod="shoutbox/shoutbox.min.js" dev="shoutbox/shoutbox.js" />
+
+<div class="block shoutbox_box_main" data-xf-init="shoutbox" data-poll-url="{{ link('shoutbox/poll') }}"
+     data-send-url="{{ link('shoutbox/sendmessage') }}" data-older-url="{{ link('shoutbox/older') }}">
+    <div class="block-container">
+        <h2 class="block-header">Shoutbox
+            <xf:if is="$xf.visitor.hasPermission('shoutbox', 'can_ban_user')">
+                <xf:button href="{{ link('shoutbox/bans') }}" class="button--small" icon="ban">Bans</xf:button>
+            </xf:if>
+            <span class="block-desc">A quick way to live chat with the community! Come join our Discord too by clicking <a
+                    href="{{ link('discord') }}">here</a>!</span>
+        </h2>
+        <div class="block-body block-body-shoutbox">
+            <div class="shoutbox-messages-box">
+                <ol class="shoutbox-entries">
+                    <xf:include template="shoutbox_messages"/>
+                </ol>
+            </div>
+            <div class="shoutbox-input-container">
+                <xf:if is="{$xf.visitor.user_id}">
+                    <xf:if is="$activeBan">
+                        <div class="blockMessage blockMessage--important blockMessage--iconic">
+                            You are banned from posting in the shoutbox.
+                            <xf:if is="$activeBan.expires_on">
+                                Ban ends: {{ shoutbox_date_dynamic($activeBan.expires_on) }}.
+                                <xf:else/>
+                                Ban length: Permanent.
+                            </xf:if>
+                            <a href="{{ link('shoutbox/ban-info') }}" data-xf-click="overlay">Details</a>
+                        </div>
+                    </xf:if>
+                    <span class="shoutbox-input-message-holder">
+                      <input aria-label="Enter message" class="input shoutbox-input-message<xf:if is=" $activeBan"> disabled
+                </xf:if>
+                " id="shoutbox_input_message"
+                name="keywords" placeholder="<xf:if is="$activeBan">You are banned from posting in the shoutbox.<xf:else/>Enter your message…</xf:if>" type="text"
+                <xf:if is="$activeBan"> disabled="disabled"</xf:if>
+                autocomplete="off">
+                <a class="button button--cta shoutbox-bbcode-button<xf:if is=" $activeBan"> disabled</xf:if>"
+                id="shoutbox_send_msg_button"
+                <xf:if is="$activeBan"> aria-disabled="true"</xf:if>
+                >Send</a>
+                <xf:button class="button--iconOnly shoutbox-bbcode-button" title="{{ phrase('smilies') }}"
+                           data-xf-init="tooltip" data-xf-click="menu" aria-expanded="false" aria-haspopup="true"
+                           fa="fal fa-smile"/>
+                <div class="menu menu--emoji" data-menu="menu" aria-hidden="true" data-xf-init="shoutbox-emoji-button"
+                     data-href="{{ link('editor/smilies-emoji') }}" data-load-target=".js-xfSmilieMenuBody">
+                    <div class="menu-content">
+                        <div class="js-xfSmilieMenuBody">
+                            <div class="menu-row">{{ phrase('loading...') }}</div>
+                        </div>
+                    </div>
+                </div>
+                <xf:button type="button" id="shoutbox_resize_button" class="button--iconOnly shoutbox-bbcode-button"
+                           title="Resize shoutbox" data-xf-init="tooltip" fa="fal fa-arrows-alt-v"/>
+                </span>
+                <xf:else/>
+                <span class="shoutbox-input-message-holder">
+          <input aria-label="Enter message" class="input shoutbox-input-message disabled" id="shoutbox_input_message"
+                 name="keywords" placeholder="You must be logged in to post in the shoutbox." type="text" disabled/>
+                    <a class="button button--cta shoutbox-bbcode-button disabled" id="shoutbox_send_msg_button" disabled>Send</a>
+                    <xf:button type="button" id="shoutbox_resize_button" class="button--iconOnly shoutbox-bbcode-button"
+                               title="Resize shoutbox" data-xf-init="tooltip" fa="fal fa-arrows-alt-v"/>
+        </span>
+                </xf:if>
+            </div>
+        </div>
+    </div>
+</div>

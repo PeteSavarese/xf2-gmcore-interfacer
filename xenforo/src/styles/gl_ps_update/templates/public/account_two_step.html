@@ -1,0 +1,90 @@
+<xf:title>{{ phrase('two_step_verification') }}</xf:title>
+
+<xf:wrap template="account_wrapper" />
+
+<xf:if is="$deprecatedProviders">
+	<div class="blockMessage blockMessage--error blockMessage--iconic">
+		{{ phrase('following_two_step_verification_providers_are_deprecated_x', {'deprecatedProviders': $deprecatedProviders|join(', ')}) }}
+	</div>
+</xf:if>
+
+<xf:if is="$backupAdded">
+	<div class="blockMessage blockMessage--important blockMessage--iconic">
+		{{ phrase('verification_backup_codes_automatically_generated') }}
+		<a href="{{ link('account/two-step/manage', {'provider_id': 'backup'}) }}">{{ phrase('view_your_backup_codes') }}</a>
+		<a href="{{ link('account/two-step/backup-codes') }}" data-xf-click="overlay" data-overlay-config="{{ {'backdropClose': false, 'escapeClose': false}|json }}" data-load-auto-click="true" style="display: none"></a>
+	</div>
+</xf:if>
+
+<xf:description>{{ phrase('two_step_verification_desc') }}</xf:description>
+
+<div class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:foreach loop="$providers" value="$provider" if="$provider.isEnabled() OR $provider.canEnable()">
+				<div class="block-row block-row--separated">
+					<div class="contentRow">
+						<div class="contentRow-main contentRow-main--close">
+							<div class="contentRow-extra">
+								<xf:if is="$provider.canEnable()">
+									<xf:form action="{{ link('account/two-step/enable', $provider) }}">
+										<xf:button type="submit">{{ phrase('enable') }}</xf:button>
+									</xf:form>
+								</xf:if>
+								<xf:if is="$provider.canDisable()">
+									<xf:button href="{{ link('account/two-step/disable', $provider) }}" overlay="true">
+										{{ phrase('disable') }}
+									</xf:button>
+								</xf:if>
+								<xf:if is="$provider.canManage()">
+									<xf:button href="{{ link('account/two-step/manage', $provider) }}">
+										{{ phrase('manage') }}
+									</xf:button>
+								</xf:if>
+							</div>
+							<h2 class="contentRow-title">{$provider.title}</h2>
+							<div class="contentRow-minor">{$provider.description}</div>
+						</div>
+					</div>
+				</div>
+			</xf:foreach>
+		</div>
+		<xf:if is="$xf.visitor.Option.use_tfa">
+			<div class="block-footer">
+				<span class="block-footer-controls"><xf:button href="{{ link('account/two-step/disable') }}" overlay="true">
+					{{ phrase('disable_two_step_verification') }}
+				</xf:button></span>
+			</div>
+		</xf:if>
+	</div>
+</div>
+
+<xf:if is="$currentTrustRecord OR $hasOtherTrusted">
+	<div class="block">
+		<div class="block-container">
+			<h2 class="block-header">{{ phrase('trusted_devices') }}</h2>
+			<div class="block-body">
+				<xf:if is="$currentTrustRecord">
+					<div class="block-row block-row--separated">
+						{{ phrase('device_trusted_until_x_disable_desc', {'until': date($currentTrustRecord.trusted_until)}) }}
+
+						<xf:form action="{{ link('account/two-step/trusted-disable') }}">
+							<xf:button type="submit">{{ phrase('stop_trusting_this_device') }}</xf:button>
+						</xf:form>
+					</div>
+				</xf:if>
+				<xf:if is="$hasOtherTrusted">
+					<div class="block-row block-row--separated">
+						{{ phrase('other_devices_trusted_disable_desc') }}
+						<xf:if is="$currentTrustRecord">{{ phrase('this_device_will_remain_trusted') }}</xf:if>
+
+						<xf:form action="{{ link('account/two-step/trusted-disable') }}">
+							<xf:button type="submit">{{ phrase('stop_trusting_other_devices') }}</xf:button>
+							<xf:hiddenval name="others">1</xf:hiddenval>
+						</xf:form>
+					</div>
+				</xf:if>
+			</div>
+		</div>
+	</div>
+</xf:if>

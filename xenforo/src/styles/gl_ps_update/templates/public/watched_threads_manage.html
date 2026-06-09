@@ -1,0 +1,16 @@
+<xf:title>{{ phrase('manage_watched_threads') }}</xf:title>
+
+<xf:form action="{{ link('watched/threads/manage', null, {'state': $state}) }}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-row">
+			<xf:inforow rowtype="confirm">
+				<xf:if is="$state == 'delete'">
+					{{ phrase('you_sure_you_want_to_stop_watching_all_threads') }}
+				<xf:else />
+					{{ phrase('you_sure_you_want_to_update_notification_settings_for_all_threads') }}
+				</xf:if>
+			</xf:inforow>
+		</div>
+		<xf:submitrow submit="{{ phrase('proceed') }}" icon="notificationsOff" rowtype="simple" />
+	</div>
+</xf:form>

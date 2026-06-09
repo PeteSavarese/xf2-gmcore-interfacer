@@ -1,0 +1,5 @@
+{{ phrase('alert_profile_post_insert', {
+		'username': username_link($user, false, {'defaultname': $alert.username}),
+		'profilePageLinkAttributes': 'href="' . link('profile-posts', $content) . '" class="fauxBlockLink-blockLink"'
+	})
+}}

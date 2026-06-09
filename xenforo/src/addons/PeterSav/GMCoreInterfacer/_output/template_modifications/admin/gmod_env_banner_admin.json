@@ -1,0 +1,9 @@
+{
+    "template": "PAGE_CONTAINER",
+    "description": "Adds environment banner to admin panel header",
+    "execution_order": 10,
+    "enabled": true,
+    "action": "str_replace",
+    "find": "<header class=\"p-header\">",
+    "replace": "<xf:set var=\"$environment\" value=\"{{ get_env('ENVIRONMENT') ?: 'production' }}\" />\n\n<xf:if is=\"$environment != 'prod' AND $environment != 'production'\">\n    <div class=\"env-banner env-banner--{$environment}\" id=\"envBanner\">\n        <span class=\"env-banner__text\">\n            <xf:if is=\"$environment == 'local'\">\n          \t\t\ud83d\udea7 LOCAL DEVELOPMENT - NON-PRODUCTION \ud83d\udea7\n            <xf:elseif is=\"$environment == 'staging'\" />\n          \t\t\ud83e\uddea STAGING - NON-PRODUCTION \ud83e\uddea\n        <xf:else />\n                \u26a0\ufe0f UNKNOWN NON-PRODUCTION ENVIRONMENT - {$environment|escape} \u26a0\ufe0f\n        </xf:if>\n        </span>\n        <button class=\"env-banner__close\" onclick=\"toggleEnvBanner()\" title=\"Hide banner\">\u00d7</button>\n  </div>\n  <button class=\"env-banner__restore\" id=\"envBannerRestore\" onclick=\"toggleEnvBanner()\" title=\"Show environment banner\">\u2193</button>\n  <script>\n  function toggleEnvBanner() {\n    var banner = document.getElementById('envBanner');\n    var restore = document.getElementById('envBannerRestore');\n    banner.classList.toggle('env-banner--hidden');\n    restore.classList.toggle('env-banner__restore--visible');\n    var isHidden = banner.classList.contains('env-banner--hidden');\n    localStorage.setItem('envBannerHidden', isHidden);\n  }\n  (function() {\n    if (localStorage.getItem('envBannerHidden') === 'true') {\n      document.getElementById('envBanner').classList.add('env-banner--hidden');\n      document.getElementById('envBannerRestore').classList.add('env-banner__restore--visible');\n    }\n  })();\n  </script>\n</xf:if>\n\n$0"
+}

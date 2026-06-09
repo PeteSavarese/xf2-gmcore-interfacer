@@ -1,0 +1,6 @@
+<xf:if is="$providerData.avatar_url">
+	<a href="https://profile.live.com/{$connectedAccounts.microsoft}" target="_blank">
+		<img src="{$providerData.avatar_url}" width="48" alt="" />
+	</a>
+</xf:if>
+<div><a href="https://profile.live.com/{$connectedAccounts.microsoft}" target="_blank">{{ $providerData.username ?: phrase('view_account') }}</a></div>

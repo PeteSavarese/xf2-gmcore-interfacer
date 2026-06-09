@@ -1,0 +1,32 @@
+<xf:macro id="select" arg-prefixes="!" arg-selected="0" arg-withRow="1">
+
+	<xf:set var="$prefixesGrouped" value="{$prefixes.prefixesGrouped}" />
+	<xf:set var="$prefixGroups" value="{$prefixes.prefixGroups}" />
+
+	<xf:if is="$prefixesGrouped is not empty">
+		<xf:set var="$inner">
+			<xf:select name="prefix_id" value="{$selected}">
+				<xf:option value="0">{{ phrase('(no_prefix)') }}</xf:option>
+				<xf:foreach loop="$prefixGroups" key="$prefixGroupId" value="$prefixGroup" if="{{ count($prefixesGrouped.{$prefixGroupId}) > 0 }}">
+					<xf:if is="{{ $prefixGroupId > 0 }}">
+						<xf:option value="" disabled="disabled">{$prefixGroup.title}</xf:option>
+					<xf:else />
+						<xf:option value="" disabled="disabled">{{ phrase('(ungrouped)') }}</xf:option>
+					</xf:if>
+					<xf:foreach loop="{$prefixesGrouped.{$prefixGroupId}}" key="$prefixId" value="$prefix">
+						<xf:option value="{$prefixId}">&nbsp;&nbsp; {$prefix.title}</xf:option>
+					</xf:foreach>
+				</xf:foreach>
+			</xf:select>
+		</xf:set>
+
+		<xf:if is="$withRow">
+			<xf:formrow label="{{ phrase('prefix') }}" rowtype="input">
+				{$inner|raw}
+			</xf:formrow>
+		<xf:else />
+			{$inner|raw}
+		</xf:if>
+
+	</xf:if>
+</xf:macro>

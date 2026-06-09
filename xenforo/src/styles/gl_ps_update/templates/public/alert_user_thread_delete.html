@@ -1,0 +1,4 @@
+{{ phrase('your_thread_x_was_deleted', {
+	'title': prefix('thread', $extra.prefix_id) . $extra.title
+}) }}
+<xf:if is="$extra.reason">{{ phrase('reason:') }} {$extra.reason}</xf:if>

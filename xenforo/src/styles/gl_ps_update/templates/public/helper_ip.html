@@ -1,0 +1,25 @@
+<xf:macro id="ip_block" arg-ip="!" arg-user="{{ null }}" arg-heading="">
+<div class="block">
+	<div class="block-container">
+		<xf:if is="$heading is not empty">
+			<div class="block-header">
+				{$heading}
+			</div>
+		</xf:if>
+		<div class="block-body">
+			<xf:formrow label="{{ phrase('content_ip') }}">
+				<strong><a class="ip" href="{{ link('misc/ip-info', null, {'ip': $ip|ip}) }}" target="_blank">{$ip|ip}</a></strong> {$ip|host|parens}
+			</xf:formrow>
+
+			<xf:if is="$user">
+				<xf:set var="$registerIp" value="{$user.getIp('register')}" />
+				<xf:if is="$registerIp">
+					<xf:formrow label="{{ phrase('user_registration_ip') }}">
+						<strong><a class="ip" href="{{ link('misc/ip-info', null, {'ip': $registerIp|ip}) }}" target="_blank">{$registerIp|ip}</a></strong> {$registerIp|host|parens}
+					</xf:formrow>
+				</xf:if>
+			</xf:if>
+		</div>
+	</div>
+</div>
+</xf:macro>

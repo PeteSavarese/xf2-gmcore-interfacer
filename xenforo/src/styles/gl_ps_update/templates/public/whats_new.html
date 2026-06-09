@@ -1,0 +1,17 @@
+<xf:title>{{ phrase('whats_new') }}</xf:title>
+
+<xf:wrap template="whats_new_wrapper">
+	<xf:set var="$pageSelected" value="overview" />
+</xf:wrap>
+
+<xf:if contentcheck="true">
+	<xf:contentcheck>
+		<xf:widgetpos id="whats_new_sidebar" position="sidebar" />
+
+		<xf:widgetpos id="whats_new_overview" />
+	</xf:contentcheck>
+<xf:else />
+	<div class="blockMessage">
+		{{ phrase('no_results_found') }}
+	</div>
+</xf:if>

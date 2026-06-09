@@ -1,0 +1,21 @@
+{
+    "group_name": "input",
+    "title": "Form input - focused",
+    "description": "These rules are applied to text boxes when they are selected for input",
+    "property_type": "css",
+    "css_components": [
+        "text",
+        "background",
+        "border",
+        "extra"
+    ],
+    "value_type": "",
+    "value_parameters": "",
+    "has_variations": false,
+    "depends_on": "",
+    "value_group": "",
+    "property_value": {
+        "background-color": "#172030"
+    },
+    "display_order": 20100
+}

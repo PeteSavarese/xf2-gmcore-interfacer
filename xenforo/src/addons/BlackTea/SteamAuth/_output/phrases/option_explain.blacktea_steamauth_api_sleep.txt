@@ -1,0 +1,1 @@
+The amount of time, in seconds, to pause between each Steam API call when performing the game statistics update. If you run a large forum and are experiencing issues with the Steam API, you can try increasing the delay between each API call.

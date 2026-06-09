@@ -1,0 +1,56 @@
+<xf:macro id="dob_privacy_row" arg-hint="">
+	<xf:checkboxrow hint="{{ $hint ? $hint : ''  }}">
+		<xf:option value="1" name="option[show_dob_date]" checked="{$xf.visitor.Option.show_dob_date}"
+			label="{{ phrase('show_day_and_month_of_birth') }}">
+
+			<xf:checkbox>
+				<xf:option value="1" name="option[show_dob_year]" checked="{$xf.visitor.Option.show_dob_year}"
+					label="{{ phrase('show_year_of_birth') }}"
+					hint="{{ phrase('this_will_allow_people_to_see_your_age') }}" />
+			</xf:checkbox>
+		</xf:option>
+	</xf:checkboxrow>
+</xf:macro>
+
+<xf:macro id="activity_privacy_row">
+	<xf:checkboxrow label="{{ phrase('privacy_options') }}">
+		<xf:option name="user[visible]" checked="{$xf.visitor.visible}"
+			label="{{ phrase('show_your_online_status') }}"
+			hint="{{ phrase('this_will_allow_other_people_to_see_when_you_online') }}">
+
+			<xf:checkbox>
+				<xf:option name="user[activity_visible]" checked="{$xf.visitor.activity_visible}"
+					label="{{ phrase('show_your_current_activity') }}"
+					hint="{{ phrase('this_will_allow_other_people_to_see_what_page_you_currently_viewing') }}" />
+			</xf:checkbox>
+		</xf:option>
+	</xf:checkboxrow>
+</xf:macro>
+
+<xf:macro id="email_options_row" arg-showExplain="{{ false }}" arg-showConversationOption="{{ false }}">
+	<xf:checkboxrow label="{{ phrase('email_options') }}">
+		<xf:option name="option[receive_admin_email]" selected="$xf.visitor.Option.receive_admin_email"
+			label="{{ phrase('receive_site_mailings_option') }}"
+			hint="{{ phrase('receive_site_mailings_hint') }}" />
+
+		<xf:if is="$xf.options.activitySummaryEmail.enabled">
+			<xf:option name="enable_activity_summary_email"
+				selected="$xf.visitor.last_summary_email_date !== null"
+				label="{{ phrase('receive_summary_activity_email') }}"
+				hint="{{ phrase('we_will_keep_you_updated_new_content_when_not_visited') }}" />
+		</xf:if>
+
+		<xf:if is="$showConversationOption">
+			<xf:option name="option[email_on_conversation]" selected="$xf.visitor.Option.email_on_conversation"
+				label="{{ phrase('receive_email_when_new_direct_message_is_received') }}" />
+		</xf:if>
+
+		<xf:explain><xf:if is="$showExplain">{{ phrase('email_options_row_explain', {'preferencesLink': link('account/preferences')}) }}</xf:if></xf:explain>
+	</xf:checkboxrow>
+
+	<xf:if is="!$xf.options.activitySummaryEmail.enabled">
+		<xf:if is="$xf.visitor.last_summary_email_date !== null">
+			<xf:hiddenval name="enable_activity_summary_email">1</xf:hiddenval>
+		</xf:if>
+	</xf:if>
+</xf:macro>

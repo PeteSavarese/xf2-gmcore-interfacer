@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<options>
+  <option option_id="blacktea_steamauth_actions" edit_format="template" data_type="string" advanced="0">
+    <default_value></default_value>
+    <edit_format_params>blacktea_steamauth_actions</edit_format_params>
+    <relation group_id="blacktea_steamauth_options" display_order="0"/>
+  </option>
+  <option option_id="blacktea_steamauth_api_sleep" edit_format="textbox" data_type="numeric" advanced="0">
+    <default_value>5</default_value>
+    <relation group_id="blacktea_steamauth_options" display_order="520"/>
+  </option>
+  <option option_id="blacktea_steamauth_enabled_pages" edit_format="checkbox" data_type="array" advanced="0">
+    <default_value>{"active_players":true,"active_games":true,"played_games":true,"owned_games":true}</default_value>
+    <edit_format_params>active_players={{ phrase('blacktea_steamauth_active_players') }}
+active_games={{ phrase('blacktea_steamauth_active_games') }}
+played_games={{ phrase('blacktea_steamauth_played_games') }}
+owned_games={{ phrase('blacktea_steamauth_owned_games') }}</edit_format_params>
+    <sub_options>active_players
+active_games
+played_games
+owned_games</sub_options>
+    <relation group_id="blacktea_steamauth_options" display_order="400"/>
+  </option>
+  <option option_id="blacktea_steamauth_force_registration" edit_format="onoff" data_type="boolean" advanced="0">
+    <default_value>0</default_value>
+    <relation group_id="blacktea_steamauth_options" display_order="100"/>
+  </option>
+  <option option_id="blacktea_steamauth_game_update_frequency" edit_format="textbox" data_type="positive_integer" advanced="0">
+    <default_value>7200</default_value>
+    <relation group_id="blacktea_steamauth_options" display_order="500"/>
+  </option>
+  <option option_id="blacktea_steamauth_message_macro" edit_format="onoff" data_type="boolean" advanced="0">
+    <default_value>1</default_value>
+    <relation group_id="blacktea_steamauth_options" display_order="200"/>
+  </option>
+  <option option_id="blacktea_steamauth_message_macro_steamid" edit_format="onoff" data_type="boolean" advanced="0">
+    <default_value>0</default_value>
+    <relation group_id="blacktea_steamauth_options" display_order="210"/>
+  </option>
+  <option option_id="blacktea_steamauth_user_banner" edit_format="template" data_type="integer" advanced="0">
+    <default_value>1</default_value>
+    <edit_format_params>option_template_steamauthUserBannerLocation</edit_format_params>
+    <relation group_id="blacktea_steamauth_options" display_order="300"/>
+  </option>
+  <option option_id="blacktea_steamauth_user_update_limit" edit_format="textbox" data_type="positive_integer" advanced="0">
+    <default_value>45</default_value>
+    <relation group_id="blacktea_steamauth_options" display_order="510"/>
+  </option>
+  <option option_id="blacktea_steamauth_verbose_log" edit_format="onoff" data_type="boolean" advanced="0">
+    <default_value>0</default_value>
+    <relation group_id="blacktea_steamauth_options" display_order="600"/>
+  </option>
+</options>

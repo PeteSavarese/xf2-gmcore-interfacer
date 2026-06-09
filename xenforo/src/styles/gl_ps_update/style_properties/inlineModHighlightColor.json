@@ -1,0 +1,16 @@
+{
+    "group_name": "color",
+    "title": "Inline moderation highlight color",
+    "description": "When content is selected for inline moderation, its background color will be replaced with this",
+    "property_type": "value",
+    "css_components": [],
+    "value_type": "color",
+    "value_parameters": "",
+    "has_variations": true,
+    "depends_on": "",
+    "value_group": "contentBackground",
+    "property_value": {
+        "default": "@xf-paletteNeutral3"
+    },
+    "display_order": 2500
+}

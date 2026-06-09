@@ -1,0 +1,19 @@
+<xf:set var="$messageHtml">
+	<h4 class="message-title"><a href="{{ link('threads', $content) }}">{$content.title}</a></h4>
+	{{ bb_code($content.FirstPost.message, 'post', $content.FirstPost) }}
+</xf:set>
+
+<xf:macro id="approval_queue_macros::item_message_type"
+	arg-content="{$content}"
+	arg-user="{$content.User}"
+	arg-messageHtml="{$messageHtml}"
+	arg-typePhraseHtml="{{ phrase('thread') }}"
+	arg-spamDetails="{$spamDetails}"
+	arg-unapprovedItem="{$unapprovedItem}"
+	arg-handler="{$handler}"
+	arg-headerPhraseHtml="{{ phrase('thread_x_posted_in_forum_y', {
+		'threadLink': link('threads', $content),
+		'threadTitle': $content.title,
+		'forumLink': link('forums', $content.Forum),
+		'forumTitle': $content.Forum.title
+	}) }}"/>

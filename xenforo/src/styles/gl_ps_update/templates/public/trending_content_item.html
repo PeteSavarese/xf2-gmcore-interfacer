@@ -1,0 +1,32 @@
+<xf:macro id="article" extends="content_display_macros::article"
+	arg-result="!"
+	arg-content="!"
+	arg-snippetLength="{{ 0 }}">
+
+	<xf:extension id="title">
+		<xf:extensionparent />
+		<a href="{{ $content.getContentUrl() }}">{{ $content.getContentTitle() }}</a>
+	</xf:extension>
+</xf:macro>
+
+<xf:macro id="simple" extends="content_display_macros::simple"
+	arg-result="!"
+	arg-content="!"
+	arg-snippetLength="{{ 0 }}">
+
+	<xf:extension id="title">
+		<xf:extensionparent />
+		<a href="{{ $content.getContentUrl() }}">{{ $content.getContentTitle() }}</a>
+	</xf:extension>
+</xf:macro>
+
+<xf:macro id="carousel" extends="content_display_macros::carousel"
+	arg-result="!"
+	arg-content="!"
+	arg-snippetLength="{{ 0 }}">
+
+	<xf:extension id="title">
+		<xf:extensionparent />
+		<a href="{{ $content.getContentUrl() }}">{{ $content.getContentTitle() }}</a>
+	</xf:extension>
+</xf:macro>

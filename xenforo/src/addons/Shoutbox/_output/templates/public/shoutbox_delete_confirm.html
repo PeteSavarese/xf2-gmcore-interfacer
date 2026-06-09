@@ -1,0 +1,12 @@
+<xf:title>{{ phrase('delete') }}</xf:title>
+
+<xf:form action="shoutbox/{$message.id}/delete" ajax="true" class="block">
+    <div class="block-container">
+        <div class="block-body">
+            <div class="blockMessage blockMessage--warning">
+                Please confirm that you want to delete this message from the shoutbox.
+            </div>
+        </div>
+        <xf:submitrow submit="{{ phrase('delete') }}" icon="delete"/>
+    </div>
+</xf:form>

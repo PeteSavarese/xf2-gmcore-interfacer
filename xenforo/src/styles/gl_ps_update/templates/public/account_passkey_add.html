@@ -1,0 +1,31 @@
+<xf:title>{{ phrase('add_passkey') }}</xf:title>
+
+<xf:js src="xf/webauthn.js" min="1" />
+
+<xf:form action="{{ link('account/passkey/add') }}" ajax="true" class="block"
+	data-xf-init="webauthn"
+	data-existing-credentials="{$existingCredentials|json}"
+	data-rp-name="{$xf.options.boardTitle}"
+	data-user-id="{$xf.visitor.secret_key}"
+	data-user-name="{$xf.visitor.email}"
+	data-user-display-name="{$xf.visitor.username}"
+	data-verifying="{{ phrase('verifying...') }}">
+
+	<div class="block-container">
+		<div class="block-body">
+			<xf:inforow>
+				{{ phrase('if_you_have_not_been_prompted_automatically_to_create_passkey_for_this') }}
+			</xf:inforow>
+			<xf:formrow label="{{ phrase('register_this_passkey') }}">
+				<xf:button class="button--link js-webauthnStart">{{ phrase('add') }}</xf:button>
+			</xf:formrow>
+
+			<xf:textboxrow name="passkey_name" label="{{ phrase('name_this_passkey') }}" hint="{{ phrase('optional') }}" />
+		</div>
+		
+		<xf:hiddenval name="webauthn_payload" />
+		<xf:hiddenval name="webauthn_challenge" value="{{ $newPasskey ? $newPasskey.getChallenge() : '' }}" />
+
+		<xf:submitrow icon="save" />
+	</div>
+</xf:form>

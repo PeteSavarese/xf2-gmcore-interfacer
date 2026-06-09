@@ -1,0 +1,17 @@
+<xf:title>{{ phrase('delete_profile_post') }}</xf:title>
+
+<xf:breadcrumb href="{{ link('members', $profileUser) }}">{$profileUser.username}</xf:breadcrumb>
+
+<xf:form action="{{ link('profile-posts/delete', $profilePost) }}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:macro id="helper_action::delete_type" arg-canHardDelete="{$profilePost.canDelete('hard')}" />
+
+			<xf:if is="$profilePost.canSendModeratorActionAlert()">
+				<xf:macro id="helper_action::author_alert" />
+			</xf:if>
+		</div>
+		<xf:submitrow icon="delete" />
+	</div>
+	<xf:redirect />
+</xf:form>

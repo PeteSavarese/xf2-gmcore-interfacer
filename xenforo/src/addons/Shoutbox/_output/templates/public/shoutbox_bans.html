@@ -1,0 +1,54 @@
+<xf:title>Shoutbox bans</xf:title>
+
+<xf:css src="gmod_interfacer.less" />
+
+<xf:if is="!$xf.visitor.hasPermission('shoutbox', 'can_ban_user')">
+	<xf:comment>Safety: controller already blocks, but keep template defensive.</xf:comment>
+	<xf:macro template="public:error" name="simple" arg-message="{{ phrase('no_permission') }}" />
+<xf:else />
+	<div class="card" style="margin-bottom: 0;">
+		<div class="card-header">
+			<span><xf:fa icon="fa-gavel" aria-hidden="true"/> Active bans</span>
+		</div>
+		<div class="card-content">
+			<xf:if is="$bans is empty">
+				<div class="block-row">No active shoutbox bans.</div>
+			<xf:else />
+				<div class="table-container">
+					<table>
+						<thead>
+						<tr>
+							<th>User</th>
+							<th>Banned</th>
+							<th>Expires</th>
+							<th>Reason</th>
+							<th>Staff</th>
+							<th>Actions</th>
+						</tr>
+						</thead>
+						<tbody>
+						<xf:foreach loop="$bans" value="$ban">
+							<tr>
+								<td>
+									<xf:if is="$ban.User">{{ username_link($ban.User, true) }}<xf:else />User #{$ban.user_id}</xf:if>
+								</td>
+								<td>{{ shoutbox_date_dynamic($ban.banned_on) }}</td>
+								<td><xf:if is="$ban.expires_on">{{ shoutbox_date_dynamic($ban.expires_on) }}<xf:else />Never (Permanent)</xf:if></td>
+								<td><xf:if is="$ban.reason">{$ban.reason|escape}<xf:else />-</xf:if></td>
+								<td>
+									<xf:if is="$ban.BannedBy">{{ username_link($ban.BannedBy, true) }}<xf:else />-</xf:if>
+								</td>
+								<td>
+									<xf:button href="{{ link('shoutbox/unban', null, {'user_id': $ban.user_id}) }}" class="button--cta" overlay="true" rel="nofollow">
+										Unban
+									</xf:button>
+								</td>
+							</tr>
+						</xf:foreach>
+						</tbody>
+					</table>
+				</div>
+			</xf:if>
+		</div>
+	</div>
+</xf:if>

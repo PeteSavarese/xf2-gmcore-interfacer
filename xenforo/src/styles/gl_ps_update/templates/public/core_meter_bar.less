@@ -1,0 +1,82 @@
+meter.meterBar
+{
+	margin: @xf-paddingSmall auto @xf-paddingSmall;
+	width: 100%;
+	height: 10px;
+
+	&::-webkit-meter-bar
+	{
+		.m-meterVariantEmpty();
+	}
+
+	&::-webkit-meter-optimum-value
+	{
+		.m-meterVariantOptimum();
+	}
+
+	&::-webkit-meter-suboptimum-value
+	{
+		.m-meterVariantSubOptimum();
+	}
+
+	&::-webkit-meter-even-less-good-value
+	{
+		.m-meterVariantSubSubOptimum();
+	}
+}
+
+:-moz-meter-optimum::-moz-meter-bar
+{
+	.m-meterVariantOptimum();
+}
+
+:-moz-meter-sub-optimum::-moz-meter-bar
+{
+	.m-meterVariantSubOptimum();
+}
+
+:-moz-meter-sub-sub-optimum::-moz-meter-bar
+{
+	.m-meterVariantSubSubOptimum();
+}
+
+@_emptyColor: xf-intensify(@xf-paletteNeutral1, 6%);
+@_optimumColor: #63b265;
+@_subOptimumColor: #dcda54;
+@_subSubOptimumColor: #c84448;
+
+.meterBarLabel
+{
+	font-size: @xf-fontSizeSmall;
+}
+
+.m-meterVariantEmpty()
+{
+	background: none;
+	background-color: @_emptyColor;
+}
+
+.m-meterVariantOptimum()
+{
+	background: @_optimumColor;
+}
+
+.m-meterVariantSubOptimum()
+{
+	background: @_subOptimumColor;
+}
+
+.m-meterVariantSubSubOptimum()
+{
+	background: @_subSubOptimumColor;
+}
+
+.meterBar-bar {
+    background: linear-gradient(90deg, rgba(52,152,219,.9), rgba(35,163,147,0.9));
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+.meterBar {
+    border-radius: 4px;
+    overflow: hidden;
+}

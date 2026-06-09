@@ -1,0 +1,55 @@
+<xf:title>{{ phrase('feature_content') }}</xf:title>
+
+<xf:breadcrumb source="$breadcrumbs" />
+
+<xf:form action="{$confirmUrl}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:inforow rowtype="confirm">
+				{{ phrase('you_sure_you_want_to_feature_this_content') }}
+			</xf:inforow>
+
+			<xf:if is="$showVisibilityToggle">
+				<xf:checkboxrow>
+					<xf:option name="always_visible" 
+						label="{{ phrase('always_visible') }}"
+						hint="{{ phrase('if_selected_feature_will_be_visible_even_if_member_does_not_have') }}" />
+				</xf:checkboxrow>
+			</xf:if>
+		</div>
+
+		<h3 class="block-formSectionHeader">
+			<span class="collapseTrigger collapseTrigger--block"
+				data-xf-click="toggle" data-target="< :up:next">
+
+				<span class="block-formSectionHeader-aligner">{{ phrase('customize') }}</span>
+			</span>
+		</h3>
+
+		<div class="block-body block-body--collapsible">
+			<xf:formrow>
+				{{ phrase('if_you_leave_these_values_blank_feature_will_automatically_derive_them') }}
+			</xf:formrow>
+
+			<xf:textboxrow name="title"
+				maxlength="{{ max_length('XF:FeaturedContent', 'title') }}"
+				label="{{ phrase('feature_title') }}" />
+
+			<xf:textarearow name="snippet"
+				rows="2" autosize="true"
+				maxlength="{{ max_length('XF:FeaturedContent', 'snippet') }}"
+				label="{{ phrase('feature_snippet') }}" />
+
+			<xf:uploadrow name="image" accept=".gif,.jpeg,.jpg,.jpe,.png"
+				label="{{ phrase('feature_image') }}"
+				explain="{{ phrase('it_is_recommended_that_you_use_image_that_is_at_least_x_pixels', {
+					'width': 640,
+					'height': 640
+				}) }}" />
+		</div>
+
+		<xf:redirect />
+
+		<xf:submitrow fa="fa-award" submit="{{ phrase('feature') }}" />
+	</div>
+</xf:form>

@@ -1,0 +1,22 @@
+<xf:css src="tagify.less" />
+
+<xf:js prod="xf/token_input-compiled.js" dev="vendor/tagify/tagify.min.js, xf/token_input.js" />
+
+<input type="hidden" name="{$name}" value="{$value}" class="input {$inputClass}"
+	data-xf-init="token-input"
+	data-ac-url="{$hrefAttr}"
+	data-min-length="{$minLength}"
+	{{ $maxLength ? 'data-max-length="' . $maxLength . '"' : '' }}
+	{{ $maxTokens ? 'data-max-tokens="' . $maxTokens . '"' : '' }}
+	{{ $listData ? 'data-list-data="' . $listData . '"' : '' }}
+	{$attrsHtml|raw} />
+
+<script class="js-extraPhrases" type="application/json">
+{
+	"tagify_empty": "{{ phrase('tagify_empty')|escape('js') }}",
+	"tagify_limit_reached": "{{ phrase('tagify_limit_reached')|escape('js') }}",
+	"tagify_pattern_mismatch": "{{ phrase('tagify_pattern_mismatch')|escape('js') }}",
+	"tagify_already_exists": "{{ phrase('tagify_already_exists')|escape('js') }}",
+	"tagify_not_allowed": "{{ phrase('tagify_not_allowed')|escape('js') }}"
+}
+</script>

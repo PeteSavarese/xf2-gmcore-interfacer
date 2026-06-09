@@ -1,0 +1,14 @@
+<xf:macro name="setup">
+	<xf:css src="carousel.less" />
+
+	<xf:js prod="xf/carousel-compiled.js" dev="vendor/fancyapps/carousel/carousel.umd.js, vendor/fancyapps/carousel/carousel.autoplay.umd.js" />
+	<xf:js src="xf/carousel.js" min="1" />
+
+	<xf:js>
+		XF.extendObject(XF.phrases, {
+			next_slide: "{{ phrase('next_slide')|escape('js') }}",
+			previous_slide: "{{ phrase('previous_slide')|escape('js') }}",
+			go_to_slide_x: "{{ phrase('go_to_slide_x')|escape('js') }}"
+		});
+	</xf:js>
+</xf:macro>

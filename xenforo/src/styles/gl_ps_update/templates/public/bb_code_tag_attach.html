@@ -1,0 +1,65 @@
+<xf:if is="!$attachment"><xf:trim>
+	<a href="{{ link('full:attachments', {'attachment_id': $id}) }}" target="_blank">{{ phrase('view_attachment_x', {'name': $id}) }}</a>
+</xf:trim><xf:elseif is="$attachment.is_video AND $full AND $canView" /><xf:trim>
+	<div class="bbMediaWrapper bbMediaWrapper--inline {$alignClass}">
+		<div class="bbMediaWrapper-inner">
+			<video controls data-xf-init="video-init"
+				style="{$styleAttr}">
+				<source src="{$attachment.direct_url}" />
+				<div class="bbMediaWrapper-fallback">{{ phrase('your_browser_is_not_able_to_display_this_video') }}</div>
+			</video>
+		</div>
+	</div>
+</xf:trim><xf:elseif is="$attachment.is_audio AND $full AND $canView" /><xf:trim>
+	<div class="bbMediaWrapper bbMediaWrapper--inline {$alignClass}">
+		<div class="bbMediaWrapper-inner bbMediaWrapper-inner--audio">
+			<audio controls
+				style="{$styleAttr}">
+				<source src="{$attachment.direct_url}" />
+				<div class="bbMediaWrapper-fallback">{{ phrase('your_browser_is_not_able_to_play_this_audio') }}</div>
+			</audio>
+		</div>
+	</div>
+</xf:trim><xf:elseif is="!$attachment.has_thumbnail" /><xf:trim>
+	<a href="{{ link('full:attachments', $attachment, {'hash': $attachment.temp_hash}) }}" target="_blank">{{ phrase('view_attachment_x', {'name': $attachment.filename}) }}</a>
+</xf:trim><xf:elseif is="$canView AND $full" /><xf:trim>
+	<xf:if is="$noLightbox">
+		<img src="{{ link('full:attachments', $attachment, {'hash': $attachment.temp_hash}) }}"
+			class="bbImage {$alignClass}"
+			style="{$styleAttr}"
+			alt="{$alt}"
+			title="{$alt}"
+			width="{$attachment.width}" height="{$attachment.height}" loading="lazy" />
+	<xf:else />
+		<xf:macro id="lightbox_macros::single_image"
+			arg-canViewAttachments="{$canView}"
+			arg-id="attachment{$attachment.attachment_id}"
+			arg-src="{{ link('full:attachments', $attachment, {'hash': $attachment.temp_hash}) }}"
+			arg-width="{$attachment.width}"
+			arg-height="{$attachment.height}"
+			arg-alt="{$alt}"
+			arg-title="{$alt}"
+			arg-styleAttr="{$styleAttr}"
+			arg-alignClass="{$alignClass}" />
+	</xf:if>
+</xf:trim><xf:elseif is="$canView AND !$noLightbox" /><xf:trim>
+	<xf:macro id="lightbox_macros::setup" arg-canViewAttachments="{$canView}" />
+	<a href="{{ link('full:attachments', $attachment, {'hash': $attachment.temp_hash}) }}"
+		target="_blank" class="js-lbImage"><img src="{$attachment.thumbnail_url_full}"
+		srcset="{{ $attachment.has_retina_thumbnail ? $attachment.retina_thumbnail_url_full . ' 2x' : '' }}"
+		class="bbImage {$alignClass}"
+		data-type="image"
+		style="{$styleAttr}"
+		alt="{$alt}"
+		title="{$alt}"
+		width="{$attachment.thumbnail_width}" height="{$attachment.thumbnail_height}" loading="lazy" /></a>
+</xf:trim><xf:else /><xf:trim>
+	<a href="{{ link('full:attachments', $attachment, {'hash': $attachment.temp_hash}) }}"
+		target="_blank"><img src="{$attachment.thumbnail_url_full}"
+		srcset="{{ $attachment.has_retina_thumbnail ? $attachment.retina_thumbnail_url_full . ' 2x' : '' }}"
+		class="bbImage {$alignClass}"
+		style="{$styleAttr}"
+		alt="{$alt}"
+		title="{$alt}"
+		width="{$attachment.thumbnail_width}" height="{$attachment.thumbnail_height}" loading="lazy" /></a>
+</xf:trim></xf:if>

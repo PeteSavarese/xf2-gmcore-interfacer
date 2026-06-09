@@ -1,0 +1,19 @@
+<xf:title>{{ prefix('thread', $thread, 'escaped') }}{$thread.title}</xf:title>
+<xf:h1>{{ prefix('thread', $thread) }}{$thread.title}</xf:h1>
+
+<xf:macro id="thread_view::thread_custom_fields_status"
+	arg-thread="{$thread}"
+	arg-forum="{$thread.Forum}"
+	arg-wrapperClass="block-outer" />
+
+<xf:if is="$isPinnedFirstPost">
+	<xf:macro id="{{ $templateOverrides.pinned_first_post_macro ?: 'post_macros::post' }}"
+		arg-post="{$post}"
+		arg-thread="{$thread}"
+		args="{$templateOverrides.pinned_first_post_macro_args}" />
+<xf:else />
+	<xf:macro id="{{ $templateOverrides.post_macro ?: 'post_macros::post' }}"
+		arg-post="{$post}"
+		arg-thread="{$thread}"
+		args="{$templateOverrides.post_macro_args}" />
+</xf:if>

@@ -1,0 +1,44 @@
+<xf:title>{{ phrase('style_chooser') }}</xf:title>
+
+<xf:head option="metaNoindex"><meta name="robots" content="noindex" /></xf:head>
+
+<div class="block">
+	<div class="block-container">
+		<xf:if is="$style">
+			<div class="block-body">
+				<xf:inforow rowtype="confirm">
+					{{ phrase('please_confirm_that_you_would_like_to_change_to_following_style:') }}
+					<strong>{$style.title}</strong>
+				</xf:inforow>
+			</div>
+
+			<xf:submitrow rowtype="simple"><xf:html>
+				<xf:button href="{{ link('misc/style', null, {
+					'style_id': $style.style_id,
+					't': csrf_token(),
+					'_xfRedirect': $redirect})
+				}}" class="button--primary" icon="save" />
+			</xf:html></xf:submitrow>
+		<xf:else />
+			<a href="{{ link('misc/style', null, {'style_id': 0, '_xfRedirect': $redirect, 't': csrf_token()}) }}"
+				class="menu-linkRow menu-linkRow--alt {{ $xf.visitor.style_id == 0 ? 'is-selected' : '' }}">
+
+				{{ phrase('use_default_style') }}
+			</a>
+
+			<div class="block-body">
+				<ul class="listPlain listColumns">
+					<xf:foreach loop="$styles" value="$style">
+						<li>
+							<a href="{{ link('misc/style', null, {'style_id': $style.style_id, '_xfRedirect': $redirect, 't': csrf_token()}) }}"
+								class="menu-linkRow {{ $style.style_id == $xf.visitor.style_id ? 'is-selected' : '' }}">
+
+								{$style.title}{{ !$style.user_selectable ? ' *' : '' }}
+							</a>
+						</li>
+					</xf:foreach>
+				</ul>
+			</div>
+		</xf:if>
+	</div>
+</div>

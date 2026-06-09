@@ -1,0 +1,11 @@
+{
+    "parent_navigation_id": "",
+    "display_order": 800,
+    "navigation_type_id": "basic",
+    "type_config": {
+        "link": "",
+        "display_condition": "$xf.visitor->hasPermission('gmodUserPerms', 'view_hlogs')",
+        "extra_attributes": []
+    },
+    "enabled": true
+}

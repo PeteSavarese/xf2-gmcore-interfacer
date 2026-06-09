@@ -1,0 +1,24 @@
+<xf:if is="$forum">
+	<xf:title>{{ phrase('mark_forum_read') }}</xf:title>
+<xf:else />
+	<xf:title>{{ phrase('mark_forums_read') }}</xf:title>
+</xf:if>
+
+<xf:form action="{{ link('forums/mark-read', $forum, {'date': $date}) }}" class="block" ajax="true">
+	<div class="block-container">
+		<xf:if is="$forum">
+			<div class="block-body">
+				<xf:inforow rowtype="confirm">
+					{{ phrase('you_sure_you_want_to_mark_this_forum_read') }}
+					<strong><a href="{{ link('forums', $forum) }}">{$forum.title}</a></strong>
+				</xf:inforow>
+			</div>
+			<xf:submitrow submit="{{ phrase('mark_forum_read') }}" rowtype="simple" icon="markRead" />
+		<xf:else />
+			<div class="block-body">
+				<xf:inforow rowtype="confirm">{{ phrase('you_sure_you_want_to_mark_all_forums_read') }}</xf:inforow>
+			</div>
+			<xf:submitrow submit="{{ phrase('mark_forums_read') }}" rowtype="simple" icon="markRead" />
+		</xf:if>
+	</div>
+</xf:form>

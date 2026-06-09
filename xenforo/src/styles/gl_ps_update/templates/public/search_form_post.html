@@ -1,0 +1,57 @@
+<xf:title>{{ phrase('search_threads') }}</xf:title>
+
+<xf:macro id="search_form_macros::keywords" arg-input="{$input}" />
+<xf:macro id="search_form_macros::user" arg-input="{$input}" />
+<xf:macro id="search_form_macros::date" arg-input="{$input}" />
+
+<xf:numberboxrow name="c[min_reply_count]" value="{$input.c.min_reply_count|default(0)}" min="0"
+	label="{{ phrase('minimum_number_of_replies') }}" />
+
+<xf:if is="$prefixesGrouped is not empty">
+	<xf:selectrow name="c[prefixes][]" size="7" multiple="true" value="{$input.c.prefixes|default([0])}"
+		label="{{ phrase('prefixes') }}">
+
+		<xf:option value="">{{ phrase('(any)') }}</xf:option>
+		<xf:foreach loop="$prefixGroups" key="$groupId" value="$prefixGroup" if="{{ count($prefixesGrouped.{$groupId}) > 0 }}">
+			<xf:optgroup label="{{ prefix_group('thread', $groupId) }}">
+				<xf:foreach loop="{$prefixesGrouped.{$groupId}}" key="$prefixId" value="$prefix">
+					<xf:option value="{$prefixId}">{{ prefix_title('thread', $prefixId) }}</xf:option>
+				</xf:foreach>
+			</xf:optgroup>
+		</xf:foreach>
+	</xf:selectrow>
+</xf:if>
+
+<xf:if is="$input.c.thread">
+	<xf:checkboxrow>
+		<xf:option name="c[thread]" value="{$input.c.thread}" selected="true">{{ phrase('restrict_search_to_specified_thread') }}</xf:option>
+	</xf:checkboxrow>
+</xf:if>
+
+<xf:set var="$forumsControlId" value="{{ unique_id() }}" />
+<xf:formrow rowtype="input"
+	label="{{ phrase('search_in_forums') }}" controlid="{$forumsControlId}">
+
+	<ul class="inputList">
+		<li><xf:select name="c[nodes][]" size="7" multiple="multiple" value="{$input.c.nodes|default([0])}" id="{$forumsControlId}">
+			<xf:option value="">{{ phrase('all_forums') }}</xf:option>
+			<xf:foreach loop="$nodeTree.getFlattened(0)" value="$treeEntry">
+				<xf:option value="{$treeEntry.record.node_id}">{{ repeat('&nbsp;&nbsp;', $treeEntry.depth)|raw }} {$treeEntry.record.title}</xf:option>
+			</xf:foreach>
+		</xf:select></li>
+		<li><xf:checkbox standalone="true">
+			<xf:option name="c[child_nodes]" selected="{{ (!$input.c || $input.c.child_nodes) }}" label="{{ phrase('search_sub_forums_as_well') }}" />
+		</xf:checkbox></li>
+	</ul>
+</xf:formrow>
+
+<xf:macro id="search_form_macros::order"
+	arg-isRelevanceSupported="{$isRelevanceSupported}"
+	arg-options="{{ {
+		'replies': phrase('most_replies')
+	} }}"
+	arg-input="{$input}" />
+
+<xf:macro id="search_form_macros::grouped"
+	arg-label="{{ phrase('display_results_as_threads') }}"
+	arg-input="{$input}" />

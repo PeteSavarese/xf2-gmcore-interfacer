@@ -1,0 +1,5 @@
+{{ phrase('your_post_in_thread_x_was_edited', {
+	'title': prefix('thread', $extra.prefix_id, 'plain') . $extra.title
+}) }}
+<xf:if is="$extra.reason">{{ phrase('reason:') }} {$extra.reason}</xf:if>
+<push:url>{{ base_url($extra.link, 'canonical') }}</push:url>

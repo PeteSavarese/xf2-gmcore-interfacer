@@ -1,0 +1,23 @@
+<xf:title page="{$page}">{{ phrase('registered_members') }}</xf:title>
+
+<xf:wrap template="member_wrapper">
+	<xf:set var="$pageSelected" value="member_list" />
+</xf:wrap>
+
+<xf:macro id="metadata_macros::canonical_url" arg-canonicalUrl="{{ link('canonical:members/list', null, {'page': $page}) }}" />
+
+<div class="block">
+	<div class="block-container">
+		<ol class="block-body">
+			<xf:foreach loop="$users" key="$userId" value="$user">
+				<li class="block-row block-row--separated">
+					<xf:macro id="member_list_macros::item" arg-user="{$user}" />
+				</li>
+			</xf:foreach>
+		</ol>
+	</div>
+	<xf:pagenav link="members/list" page="{$page}" perpage="{$perPage}" total="{$total}"
+		wrapperclass="block-outer block-outer--after" />
+</div>
+
+<xf:widgetpos id="member_list_sidebar" position="sidebar" />

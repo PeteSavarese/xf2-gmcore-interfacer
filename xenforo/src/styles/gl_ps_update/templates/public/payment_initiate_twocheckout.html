@@ -1,0 +1,38 @@
+<!-- 2Checkout insert begins here -->
+<form action="{{ $xf.livePayments ? 'https://2checkout.com/checkout/purchase' : 'https://sandbox.2checkout.com/checkout/purchase' }}" method="post" style="display: none" id="js-2CheckoutForm">
+	<xf:hiddenval name="sid">{$paymentProfile.options.account_number}</xf:hiddenval>
+	<xf:hiddenval name="mode">2CO</xf:hiddenval>
+	<xf:hiddenval name="li_0_type">product</xf:hiddenval>
+	<xf:hiddenval name="li_0_name">{$purchase.title}</xf:hiddenval>
+	<xf:hiddenval name="li_0_price">{$purchase.cost}</xf:hiddenval>
+	<xf:hiddenval name="li_0_tangible">N</xf:hiddenval>
+
+	<xf:if is="{$recurrence}">
+		<xf:hiddenval name="li_0_recurrence">{$recurrence}</xf:hiddenval>
+	</xf:if>
+
+	<xf:hiddenval name="currency_code">{$purchase.currency}</xf:hiddenval>
+	<xf:hiddenval name="email">{$xf.visitor.email}</xf:hiddenval>
+	<xf:hiddenval name="merchant_order_id">{$purchaseRequest.request_key}</xf:hiddenval>
+	<xf:hiddenval name="x_receipt_link_url">{{ link('canonical:purchase/process', null, {'request_key': $purchaseRequest.request_key}) }}</xf:hiddenval>
+
+		<!-- TODO: If we provide a way to input address details, the inline checkout can be used. -->
+		<input type="hidden" name="card_holder_name" value="" />
+		<input type="hidden" name="street_address" value="" />
+		<input type="hidden" name="street_address2" value="" />
+		<input type="hidden" name="city" value="" />
+		<input type="hidden" name="state" value="" />
+		<input type="hidden" name="zip" value="" />
+		<input type="hidden" name="country" value="" />
+
+	<xf:js>
+		XF.loadScript('https://www.2checkout.com/static/checkout/javascript/direct.min.js', () =>
+		{
+			const form = document.querySelector('#js-2CheckoutForm')
+			if (XF.trigger(form, 'submit'))
+			{
+				form.submit()
+			}
+		});
+	</xf:js>
+</form>

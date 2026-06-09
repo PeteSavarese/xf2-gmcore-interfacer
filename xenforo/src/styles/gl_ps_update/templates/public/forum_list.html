@@ -1,0 +1,101 @@
+<xf:if is="$xf.options.forumsDefaultPage != 'forums' OR ($xf.options.indexRoute AND $xf.options.indexRoute != 'forums/')">
+	<xf:title>{{ phrase('forum_list') }}</xf:title>
+<xf:else />
+	<xf:h1>{$xf.options.boardTitle}</xf:h1>
+</xf:if>
+
+<xf:macro id="metadata_macros::metadata"
+	arg-description="{$xf.options.boardDescription}"
+	arg-canonicalUrl="{{ link('canonical:' . $selfRoute) }}" />
+
+
+<xf:wrap template="forum_overview_wrapper">
+	<xf:set var="$pageSelected">forums</xf:set>
+</xf:wrap>
+
+<xf:widgetpos id="forum_list_sidebar" position="sidebar" />
+
+<xf:widgetpos id="forum_list_above_nodes" />
+<xf:macro id="node_list" arg-children="{$nodeTree}" arg-extras="{$nodeExtras}" />
+<xf:widgetpos id="forum_list_below_nodes" />
+
+<xf:head option="rss_forum"><link rel="alternate" type="application/rss+xml" title="{{ phrase('rss_feed_for_x', {'title': $xf.options.boardTitle})|for_attr }}" href="{{ link('forums/index.rss', '-') }}" /></xf:head>
+
+<xf:macro id="node_list_entry" arg-node="!" arg-extras="!" arg-children="!" arg-childExtras="!" arg-depth="1">
+	<xf:css src="node_list.less" />
+	<xf:set var="$nodeTemplate" value="{{ $node.getNodeTemplateRenderer($depth) }}" />
+	<xf:if is="$nodeTemplate.macro">
+		<xf:macro id="{$nodeTemplate.template}::{$nodeTemplate.macro}"
+			arg-node="{$node}"
+			arg-extras="{$extras}"
+			arg-children="{$children}"
+			arg-childExtras="{$childExtras}"
+			arg-depth="{$depth}" />
+	<xf:elseif is="{$nodeTemplate.template}" />
+		<xf:include template="{$nodeTemplate.template}" />
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="node_list" arg-children="!" arg-extras="!" arg-depth="1">
+	<xf:css src="node_list.less" />
+	<xf:foreach loop="$children" key="$id" value="$child">
+		<xf:macro id="node_list_entry"
+			arg-node="{$child.record}"
+			arg-extras="{$extras.{$id}}"
+			arg-children="{$child.children}"
+			arg-childExtras="{$extras}"
+			arg-depth="{$depth}" />
+	</xf:foreach>
+</xf:macro>
+
+<xf:macro id="sub_node_list" arg-children="!" arg-childExtras="!" arg-depth="3">
+	<xf:if contentcheck="true">
+		<ol>
+		<xf:contentcheck>
+			<xf:macro id="forum_list::node_list"
+				arg-children="{$children}"
+				arg-extras="{$childExtras}"
+				arg-depth="{{ $depth + 1 }}" />
+		</xf:contentcheck>
+		</ol>
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="sub_nodes_flat" arg-children="!" arg-childExtras="!" arg-depth="3">
+	<xf:css src="node_list.less" />
+	<xf:if contentcheck="true">
+		<div class="node-subNodesFlat">
+			<span class="node-subNodesLabel">{{ phrase('sub_forums:') }}</span>
+			<ol class="node-subNodeFlatList">
+			<xf:contentcheck>
+				<xf:macro id="forum_list::node_list"
+					arg-children="{$children}"
+					arg-extras="{$childExtras}"
+					arg-depth="{{ $depth + 1 }}" />
+			</xf:contentcheck>
+			</ol>
+		</div>
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="sub_nodes_menu" arg-children="!" arg-childExtras="!" arg-depth="3">
+	<xf:css src="node_list.less" />
+	<xf:if contentcheck="true">
+		<div class="node-subNodeMenu">
+			<a class="menuTrigger" data-xf-click="menu" role="button" tabindex="0" aria-expanded="false" aria-haspopup="true">{{ phrase('sub_forums') }}</a>
+			<div class="menu" data-menu="menu" aria-hidden="true">
+				<div class="menu-content">
+					<h4 class="menu-header">{{ phrase('sub_forums') }}</h4>
+					<ol class="subNodeMenu">
+					<xf:contentcheck>
+						<xf:macro id="forum_list::node_list"
+							arg-children="{$children}"
+							arg-extras="{$childExtras}"
+							arg-depth="{{ $depth + 1 }}" />
+					</xf:contentcheck>
+					</ol>
+				</div>
+			</div>
+		</div>
+	</xf:if>
+</xf:macro>

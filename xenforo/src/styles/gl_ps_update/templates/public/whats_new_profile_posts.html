@@ -1,0 +1,128 @@
+<xf:title page="{$page}">{{ phrase('new_profile_posts') }}</xf:title>
+
+<xf:wrap template="whats_new_wrapper">
+	<xf:set var="$pageSelected">new_profile_post</xf:set>
+</xf:wrap>
+
+<xf:if is="$canInlineMod">
+	<xf:js src="xf/inline_mod.js" min="1" />
+</xf:if>
+
+<xf:macro id="lightbox_macros::setup" arg-canViewAttachments="{$canViewAttachments}" />
+
+<div class="block" data-xf-init="lightbox {{ $canInlineMod ? 'inline-mod' : '' }}" data-type="profile_post" data-href="{{ link('inline-mod') }}">
+	<xf:if is="$findNew.result_count">
+		<div class="block-outer">
+			<xf:pagenav
+				page="{$page}" perpage="{$perPage}" total="{$findNew.result_count}"
+				link="whats-new/profile-posts" data="{$findNew}"
+				wrapperclass="block-outer-main" />
+
+			<xf:if contentcheck="true">
+				<div class="block-outer-opposite">
+					<div class="buttonGroup">
+					<xf:contentcheck>
+						<xf:macro id="buttons"
+							arg-findNew="{$findNew}"
+							arg-canInlineMod="{$canInlineMod}" />
+					</xf:contentcheck>
+					</div>
+				</div>
+			</xf:if>
+		</div>
+	</xf:if>
+
+	<div class="block-container">
+		<xf:macro id="filter_bar"
+			arg-findNew="{$findNew}"
+			arg-filterRoute="whats-new/profile-posts" />
+
+		<xf:macro id="results"
+			arg-findNew="{$findNew}"
+			arg-profilePosts="{$profilePosts}"
+			arg-profilePostAttachData="{$profilePostAttachData}" />
+	</div>
+
+	<xf:if is="$findNew.result_count">
+		<div class="block-outer block-outer--after">
+			<xf:pagenav
+				page="{$page}" perpage="{$perPage}" total="{$findNew.result_count}"
+				link="whats-new/profile-posts" data="{$findNew}"
+				wrapperclass="block-outer-main" />
+			<xf:showignored wrapperclass="block-outer-opposite" />
+		</div>
+	</xf:if>
+</div>
+
+<xf:macro id="buttons"
+	arg-findNew="!"
+	arg-canInlineMod="{{ false }}">
+
+	<xf:if is="$canInlineMod">
+		<xf:macro id="inline_mod_macros::button" />
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="filter_bar"
+	arg-findNew="!"
+	arg-filterRoute="!">
+
+	<xf:if is="$xf.visitor.user_id">
+		<div class="block-filterBar">
+			<div class="filterBar">
+				<xf:if contentcheck="true">
+					<ul class="filterBar-filters">
+					<xf:contentcheck>
+						<!--[XF:filters:top]-->
+						<xf:if is="$findNew.filters.followed">
+							<li><a href="{{ link($filterRoute, $findNew, {'remove': 'followed'}) }}"
+								class="filterBar-filterToggle" data-xf-init="tooltip" title="{{ phrase('remove_this_filter')|for_attr }}">
+								<span class="filterBar-filterToggle-label">{{ phrase('show_only') }}</span>
+								{{ phrase('filter_followed_members') }}</a></li>
+						</xf:if>
+						<!--[XF:filters:bottom]-->
+					</xf:contentcheck>
+					</ul>
+				</xf:if>
+
+				<a class="filterBar-menuTrigger" data-xf-click="menu" role="button" tabindex="0" aria-expanded="false" aria-haspopup="true">{{ phrase('filters') }}</a>
+				<xf:macro id="filter_menu" arg-findNew="{$findNew}" arg-submitRoute="{$filterRoute}" />
+			</div>
+		</div>
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="filter_menu" arg-findNew="!" arg-submitRoute="!">
+	<div class="menu" data-menu="menu" aria-hidden="true">
+		<div class="menu-content">
+			<h4 class="menu-header">{{ phrase('show_only:') }}</h4>
+			<xf:form action="{{ link($submitRoute) }}">
+				<div class="menu-row">
+					<xf:checkbox>
+						<xf:option name="followed" selected="{$findNew.filters.followed}">{{ phrase('members_you_follow') }}</xf:option>
+						<!--[XF:filter_menu:filters_extra]-->
+					</xf:checkbox>
+				</div>
+
+				<xf:macro id="filter_macros::find_new_filter_footer" />
+			</xf:form>
+		</div>
+	</div>
+</xf:macro>
+
+<xf:macro id="results"
+	arg-findNew="!"
+	arg-profilePosts="!"
+	arg-profilePostAttachData="{{ [] }}">
+
+	<xf:if is="$findNew.result_count">
+		<xf:foreach loop="$profilePosts" value="$profilePost">
+			<xf:macro id="profile_post_macros::profile_post"
+				arg-profilePost="{$profilePost}"
+				arg-attachmentData="{$profilePostAttachData.{$profilePost.profile_post_id}}"
+				arg-showTargetUser="{{ true }}" />
+		</xf:foreach>
+	<xf:else />
+		<div class="block-row">{{ phrase('no_results_found') }}</div>
+	</xf:if>
+</xf:macro>

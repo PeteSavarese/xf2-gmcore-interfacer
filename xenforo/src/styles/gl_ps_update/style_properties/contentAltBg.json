@@ -1,0 +1,17 @@
+{
+    "group_name": "color",
+    "title": "Alternate content background color",
+    "description": "In order to differentiate it, some content will be presented on this alternate background",
+    "property_type": "value",
+    "css_components": [],
+    "value_type": "color",
+    "value_parameters": "",
+    "has_variations": true,
+    "depends_on": "",
+    "value_group": "contentBackground",
+    "property_value": {
+        "default": "#192433",
+        "alternate": "#172030"
+    },
+    "display_order": 2200
+}

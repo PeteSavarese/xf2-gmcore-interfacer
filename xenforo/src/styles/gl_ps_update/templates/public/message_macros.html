@@ -1,0 +1,162 @@
+<xf:macro id="user_info"
+	arg-user="!"
+	arg-fallbackName=""
+	arg-includeMicrodata="{{ true }}"
+	arg-itemProp="">
+
+	<section class="message-user"
+		{{ ($includeMicrodata && $itemProp) ? 'itemprop="' . $itemProp . '"' : '' }}
+		{{ $includeMicrodata ? 'itemscope itemtype="https://schema.org/Person"' : '' }}
+		{{ ($includeMicrodata && $user) ? 'itemid="' . link('canonical:members', $user) . '"' : '' }}>
+
+		<xf:if is="$includeMicrodata && $user">
+			<meta itemprop="url" content="{{ link('canonical:members', $user) }}" />
+		</xf:if>
+
+		<div class="message-avatar {{ ($xf.options.showMessageOnlineStatus && $user && $user.isOnline()) ? 'message-avatar--online' : '' }}">
+			<div class="message-avatar-wrapper">
+				<xf:avatar user="$user" size="m" defaultname="{$fallbackName}" itemprop="{{ $includeMicrodata ? 'image' : '' }}" />
+				<xf:if is="$xf.options.showMessageOnlineStatus && $user && $user.isOnline()">
+					<span class="message-avatar-online" tabindex="0" data-xf-init="tooltip" data-trigger="auto" title="{{ phrase('online_now')|for_attr }}"></span>
+				</xf:if>
+			</div>
+		</div>
+		<div class="message-userDetails">
+			<h4 class="message-name"><xf:username user="$user" rich="true" defaultname="{$fallbackName}" itemprop="{{ $includeMicrodata ? 'name' : '' }}" /></h4>
+			<xf:usertitle user="$user" tag="h5" class="message-userTitle" banner="true" itemprop="{{ $includeMicrodata ? 'jobTitle' : '' }}" />
+			<xf:userbanners user="$user" tag="div" class="message-userBanner" itemprop="{{ $includeMicrodata ? 'jobTitle' : '' }}" />
+		</div>
+		<xf:if is="$user.user_id">
+			<xf:set var="$extras" value="{{ property('messageUserElements') }}" />
+			<xf:if contentcheck="true">
+				<div class="message-userExtras">
+				<xf:contentcheck>
+					<xf:if is="$extras.register_date">
+						<dl class="pairs pairs--justified">
+							<dt>{{ phrase('joined') }}</dt>
+							<dd>{{ date($user.register_date) }}</dd>
+						</dl>
+					</xf:if>
+					<xf:if is="$extras.message_count">
+						<dl class="pairs pairs--justified">
+							<dt>{{ phrase('messages') }}</dt>
+							<dd>{$user.message_count|number}</dd>
+						</dl>
+					</xf:if>
+					<xf:if is="$extras.solutions AND $user.question_solution_count">
+						<dl class="pairs pairs--justified">
+							<dt>{{ phrase('solutions') }}</dt>
+							<dd>{$user.question_solution_count|number}</dd>
+						</dl>
+					</xf:if>
+					<xf:if is="$extras.reaction_score">
+						<dl class="pairs pairs--justified">
+							<dt>{{ phrase('reaction_score') }}</dt>
+							<dd>{$user.reaction_score|number}</dd>
+						</dl>
+					</xf:if>
+					<xf:if is="$extras.trophy_points && $xf.options.enableTrophies">
+						<dl class="pairs pairs--justified">
+							<dt>{{ phrase('points') }}</dt>
+							<dd>{$user.trophy_points|number}</dd>
+						</dl>
+					</xf:if>
+					<xf:if is="$extras.age && $user.Profile.age">
+						<dl class="pairs pairs--justified">
+							<dt>{{ phrase('age') }}</dt>
+							<dd>{$user.Profile.age}</dd>
+						</dl>
+					</xf:if>
+					<xf:if is="$extras.location && $user.Profile.location">
+						<dl class="pairs pairs--justified">
+							<dt>{{ phrase('location') }}</dt>
+							<dd>
+								<xf:if is="$xf.options.geoLocationUrl">
+									<a href="{{ link('misc/location-info', '', {'location': $user.Profile.location}) }}" rel="nofollow noreferrer" target="_blank" class="u-concealed">{$user.Profile.location}</a>
+								<xf:else />
+									{$user.Profile.location}
+								</xf:if>
+							</dd>
+						</dl>
+					</xf:if>
+					<xf:if is="$extras.website && $user.Profile.website">
+						<dl class="pairs pairs--justified">
+							<dt>{{ phrase('website') }}</dt>
+							<dd><a href="{$user.Profile.website}" rel="nofollow" target="_blank">{$user.Profile.website|url_display('host', phrase('visit_site'))}</a></dd>
+						</dl>
+					</xf:if>
+					<xf:if is="$extras.custom_fields">
+						<xf:macro id="custom_fields_macros::custom_fields_values"
+							arg-type="users"
+							arg-group="personal"
+							arg-set="{$user.Profile.custom_fields}"
+							arg-additionalFilters="{{ ['message'] }}"
+							arg-valueClass="pairs pairs--justified" />
+						<xf:if is="$user.canViewIdentities()">
+							<xf:macro id="custom_fields_macros::custom_fields_view"
+								arg-type="users"
+								arg-group="contact"
+								arg-set="{$user.Profile.custom_fields}"
+								arg-additionalFilters="{{ ['message'] }}"
+								arg-valueClass="pairs pairs--justified" />
+						</xf:if>
+					</xf:if>
+				</xf:contentcheck>
+				</div>
+			</xf:if>
+		</xf:if>
+		<span class="message-userArrow"></span>
+	</section>
+</xf:macro>
+
+<xf:macro id="user_info_simple" arg-user="!" arg-fallbackName="" arg-includeMicrodata="{{ true }}" arg-itemProp="">
+	<header class="message-user"
+		{{ ($includeMicrodata && $itemProp) ? 'itemprop="' . $itemProp . '"' : '' }}
+		{{ $includeMicrodata ? 'itemscope itemtype="https://schema.org/Person"' : '' }}
+		{{ ($includeMicrodata && $user) ? 'itemid="' . link('canonical:members', $user) . '"' : '' }}>
+
+		<xf:if is="$includeMicrodata">
+			<meta itemprop="name" content="{{ $user.username ?: $fallbackName }}" />
+			<xf:if is="$user">
+				<meta itemprop="url" content="{{ link('canonical:members', $user) }}" />
+			</xf:if>
+		</xf:if>
+
+		<div class="message-avatar">
+			<div class="message-avatar-wrapper">
+				<xf:avatar user="$user" size="s" defaultname="{$fallbackName}" itemprop="{{ $includeMicrodata ? 'image' : '' }}" />
+			</div>
+		</div>
+		<span class="message-userArrow"></span>
+	</header>
+</xf:macro>
+
+<xf:macro id="attachments" arg-attachments="!" arg-message="!" arg-canView="!">
+	<xf:if contentcheck="true">
+		<xf:css src="attachments.less" />
+		<section class="message-attachments">
+			<h4 class="block-textHeader">{{ phrase('attachments') }}</h4>
+			<ul class="attachmentList">
+				<xf:contentcheck>
+					<xf:foreach loop="$attachments" value="$attachment" if="!$message.isAttachmentEmbedded($attachment)">
+						<xf:macro id="attachment_macros::attachment_list_item"
+							arg-attachment="{$attachment}"
+							arg-canView="{$canView}" />
+					</xf:foreach>
+				</xf:contentcheck>
+			</ul>
+		</section>
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="signature" arg-user="!">
+	<xf:if is="$xf.visitor.Option.content_show_signature AND $user.Profile.signature != ''">
+		<xf:if contentcheck="true">
+			<aside class="message-signature">
+			<xf:contentcheck>
+				{{ bb_code($user.Profile.signature, 'user:signature', $user) }}
+			</xf:contentcheck>
+			</aside>
+		</xf:if>
+	</xf:if>
+</xf:macro>

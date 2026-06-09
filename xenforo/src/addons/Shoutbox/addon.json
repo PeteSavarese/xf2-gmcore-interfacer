@@ -1,0 +1,14 @@
+{
+    "legacy_addon_id": "",
+    "title": "Shoutbox",
+    "description": "A live chat (shoutbox) that syncs to/from Discord using the Discord bot.",
+    "version_id": 1010000,
+    "version_string": "1.1.0",
+    "dev": "Peter Savarese (My Dime Is Up)",
+    "dev_url": "https://petersav.com/",
+    "faq_url": "",
+    "support_url": "https://steamcommunity.com/profiles/76561198180838111",
+    "extra_urls": [],
+    "require": [],
+    "icon": "fa-megaphone"
+}

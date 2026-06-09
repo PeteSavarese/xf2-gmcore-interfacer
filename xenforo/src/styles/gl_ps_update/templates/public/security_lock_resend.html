@@ -1,0 +1,12 @@
+<xf:title>{{ phrase('resend_security_lock_reset_email') }}</xf:title>
+
+<xf:form action="{{ link('security-lock/resend') }}" class="block" ajax="true" data-redirect="off" data-reset-complete="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:inforow rowtype="confirm">
+				{{ phrase('you_sure_you_want_to_resend_security_lock_reset_email', {'email': $xf.visitor.email|email_display}) }}
+			</xf:inforow>
+		</div>
+		<xf:submitrow submit="{{ phrase('resend_email') }}" rowtype="simple" />
+	</div>
+</xf:form>

@@ -1,0 +1,14 @@
+<xf:title>{{ phrase('create_poll') }}</xf:title>
+
+<xf:breadcrumb source="$breadcrumbs" />
+
+<xf:form action="{$createFormUrl}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:macro id="poll_macros::add_edit_inputs" />
+		</div>
+
+		<xf:redirect url="{$redirect}" />
+		<xf:submitrow sticky="true" icon="save" />
+	</div>
+</xf:form>

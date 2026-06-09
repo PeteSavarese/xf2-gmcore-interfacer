@@ -1,0 +1,62 @@
+<xf:title>{$title} - {{ phrase('edit_history') }}</xf:title>
+
+<xf:breadcrumb source="$breadcrumbs" />
+
+<xf:form action="{{ link('edit-history') }}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:datalist>
+				<xf:datarow rowtype="header">
+					<xf:cell class="dataList-cell--min">{{ phrase('old') }}</xf:cell>
+					<xf:cell class="dataList-cell--min">{{ phrase('new') }}</xf:cell>
+					<xf:cell width="30%">{{ phrase('edit_date') }}</xf:cell>
+					<xf:cell colspan="2">{{ phrase('member') }}</xf:cell>
+				</xf:datarow>
+				<xf:datarow rowclass="dataList-row--noHover">
+					<xf:cell class="dataList-cell--min dataList-cell--alt dataList-cell--action">
+						&nbsp;
+					</xf:cell>
+					<xf:cell class="dataList-cell--min dataList-cell--alt dataList-cell--action">
+						<label><input type="radio" name="new" value="0" checked="true" /></label>
+					</xf:cell>
+					<xf:cell colspan="3">
+						<em>{{ phrase('current_version') }}</em>
+					</xf:cell>
+				</xf:datarow>
+				<xf:foreach loop="$editHistory" key="$historyId" value="$history">
+					<xf:datarow rowclass="dataList-row--noHover">
+						<xf:cell class="dataList-cell--min dataList-cell--alt dataList-cell--action">
+							<label><input type="radio" name="old" value="{$historyId}" {{ $oldId == $historyId ? "checked" : "" }} /></label>
+						</xf:cell>
+						<xf:cell class="dataList-cell--min dataList-cell--alt dataList-cell--action">
+							<label><input type="radio" name="new" value="{$historyId}" /></label>
+						</xf:cell>
+						<xf:cell>
+							<xf:date time="{$history.edit_date}" />
+						</xf:cell>
+						<xf:cell>
+							<xf:username user="{$history.User}" />
+						</xf:cell>
+						<xf:action href="{{ link('edit-history/view', $history) }}" overlay="true" >
+							{{ phrase('view') }}
+						</xf:action>
+					</xf:datarow>
+				</xf:foreach>
+				<xf:if is="$editCount && $editCount > $editHistory.count()">
+					<xf:datarow>
+						<xf:cell class="dataList-cell--alt" colspan="5">
+							{{ phrase('this_content_edited_total_of_x_times_old_records_removed', {'count': $editCount|number}) }}
+						</xf:cell>
+					</xf:datarow>
+				</xf:if>
+			</xf:datalist>
+		</div>
+		<div class="block-footer">
+			<span class="block-footer-controls">
+				<xf:button type="submit" name="compare" value="1" class="button--primary">{{ phrase('compare_versions') }}</xf:button>
+			</span>
+		</div>
+	</div>
+	<xf:hiddenval name="content_type">{$contentType}</xf:hiddenval>
+	<xf:hiddenval name="content_id">{$contentId}</xf:hiddenval>
+</xf:form>

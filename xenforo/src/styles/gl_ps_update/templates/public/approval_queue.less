@@ -1,0 +1,48 @@
+.approvalQueue
+{
+	.block-container.approvalQueue-item--approve
+	{
+		.message,
+		.message-cell--user,
+		.message-cell--extra
+		{
+			background: @xf-inlineModHighlightColor;
+		}
+
+		.message .message-userArrow:after
+		{
+			border-right-color: @xf-inlineModHighlightColor;
+		}
+	}
+
+	.block-container.approvalQueue-item--delete
+	{
+		.message-cell--user,
+		.message-cell--main
+		{
+			opacity: 0.25;
+		}
+	}
+
+	.block-container.approvalQueue-item--spam
+	{
+		border-color: red;
+
+		.message-cell--user,
+		.message-cell--main
+		{
+			opacity: 0.25;
+		}
+	}
+}
+
+.approvalQueue-item {
+    border: 1px solid rgba(52, 73, 94, 0.7);
+    border-radius: 12px;
+    margin-bottom: 12px;
+    padding: 16px;
+    transition: border-color 0.2s ease;
+}
+.approvalQueue-item:hover {
+    border-color: rgba(52, 152, 219, 0.45);
+}

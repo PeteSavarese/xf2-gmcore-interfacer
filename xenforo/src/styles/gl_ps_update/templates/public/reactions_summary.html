@@ -1,0 +1,13 @@
+<xf:macro id="summary" arg-reactionIds="!">
+	<xf:if contentcheck="true">
+		<ul class="reactionSummary">
+		<xf:contentcheck>
+			<xf:foreach loop="$reactionIds" value="$reactionId"><xf:trim>
+				<li><xf:reaction id="{$reactionId}" small="true" /></li>
+			</xf:trim></xf:foreach>
+		</xf:contentcheck>
+		</ul>
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="summary" arg-reactionIds="{$reactionIds}" />

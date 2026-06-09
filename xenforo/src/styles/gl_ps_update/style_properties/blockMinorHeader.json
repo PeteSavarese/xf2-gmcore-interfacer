@@ -1,0 +1,23 @@
+{
+    "group_name": "block",
+    "title": "Block minor header",
+    "description": "Sub-headings in blocks use these settings",
+    "property_type": "css",
+    "css_components": [
+        "text",
+        "background",
+        "border",
+        "extra"
+    ],
+    "value_type": "",
+    "value_parameters": "",
+    "has_variations": false,
+    "depends_on": "",
+    "value_group": "",
+    "property_value": {
+        "font-size": "@xf-fontSizeLarge",
+        "color": "@xf-textColorFeature",
+        "background-color": "#223344"
+    },
+    "display_order": 20400
+}

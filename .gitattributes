@@ -1,0 +1,17 @@
+# Force LF line endings for shell scripts (prevents Windows CRLF issues in containers)
+*.sh text eol=lf
+
+# Force LF for other scripts/config
+*.py text eol=lf
+*.xml text eol=lf
+*.sql text eol=lf
+*.properties text eol=lf
+
+# Docker and compose files
+Dockerfile text eol=lf
+*.dockerfile text eol=lf
+docker-compose*.yaml text eol=lf
+docker-compose*.yml text eol=lf
+
+# Let Git handle line endings for other text files
+* text=auto

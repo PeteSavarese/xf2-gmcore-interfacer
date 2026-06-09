@@ -1,0 +1,21 @@
+<xf:if is="$trophies is not empty">
+	<div class="ps--help-page-trophies block">
+		<div class="block-container">
+			<ol class="block-body">
+				<xf:foreach loop="$trophies" value="$trophy">
+					<li class="block-row block-row--separated">
+						<div class="contentRow">
+							<span class="contentRow-figure contentRow-figure--text contentRow-figure--fixedSmall">{$trophy.trophy_points}</span>
+							<div class="contentRow-main">
+								<h2 class="contentRow-header">{$trophy.title}</h2>
+								<div class="contentRow-minor">{$trophy.description|raw}</div>
+							</div>
+						</div>
+					</li>
+				</xf:foreach>
+			</ol>
+		</div>
+	</div>
+<xf:else />
+	<div class="blockMessage">{{ phrase('no_items_have_been_created_yet') }}</div>
+</xf:if>

@@ -1,0 +1,125 @@
+<xf:js src="xf/prefix_menu.js" min="1" />
+<xf:css src="prefix_menu.less" />
+
+<xf:set var="$textbox">
+	<xf:if is="$rows">
+		<textarea rows="{$rows}" name="{$textboxName}"
+			data-xf-init="textarea-handler {$xfInit}" data-single-line="true"
+			class="input js-titleInput {$textboxClass}"
+			autocomplete="off"
+			{$attrsHtml|raw}>{$textboxValue}</textarea>
+	<xf:else />
+		<input type="text" name="{$textboxName}"
+			data-xf-init="{$xfInit}"
+			class="input js-titleInput {$textboxClass}"
+			value="{$textboxValue}"
+			autocomplete="off"
+			{$attrsHtml|raw} />
+	</xf:if>
+</xf:set>
+<xf:set var="$selectbox">
+	<xf:macro id="prefix_macros::select"
+		arg-name="{$prefixName}"
+		arg-prefixes="{$prefixes}"
+		arg-selected="{$prefixValue}"
+		arg-type="{$prefixType}"
+		arg-class="js-prefixSelect u-noJsOnly"
+		arg-helpHref="{$helpHref}" />
+</xf:set>
+
+<xf:if is="$prefixes || $href">
+	<div class="js-prefixContainer">
+		<div class="inputGroup inputGroup--joined u-jsOnly">
+			<div class="inputGroup-text">
+				<div class="{$prefixClass}" data-xf-init="prefix-menu"
+					{{ $href ? ' data-href="' . $href . '" data-listen-to="' . $listenTo . '"' : '' }}
+					{{ $helpHref ? ' data-help-href="' . $helpHref . '"' : '' }}
+					{{ $helpSkipInitial ? ' data-help-skip-initial="yes"' : '' }}
+				>
+					<a class="menuTrigger menuTrigger--prefix" data-xf-click="menu" role="button" tabindex="0" aria-expanded="false" aria-haspopup="true">
+						<span class="js-activePrefix">{{ phrase('(no_prefix)') }}</span>
+					</a>
+					<div class="menu" data-menu="menu" aria-hidden="true">
+						<div class="menu-content">
+							<div class="menu-scroller js-prefixMenuContent" role="listbox">
+								<xf:macro id="template" />
+							</div>
+						</div>
+					</div>
+				</div>
+				{$selectbox|raw}
+			</div>
+			{$textbox|raw}
+		</div>
+		<xf:if is="$helpHref">
+			<div class="js-prefixHelp"></div>
+		</xf:if>
+		<noscript>
+			<div class="inputGroup">
+				{$selectbox|raw}
+				<span class="inputGroup-splitter"></span>
+				{$textbox|raw}
+			</div>
+		</noscript>
+	</div>
+<xf:else />
+	{$textbox|raw}
+</xf:if>
+
+<xf:macro id="template">
+	<script type="text/template">
+		<xf:mustache name="#groups">
+			<xf:mustache name="#title">
+				<h3 class="menu-header">{{ mustache('title') }}</h3>
+			</xf:mustache>
+			<xf:mustache name="#prefixes">
+				<div class="menu-row">
+					<a class="menuPrefix {{ mustache('css_class') }}"
+						data-prefix-id="{{ mustache('prefix_id') }}"
+						data-prefix-class="{{ mustache('css_class') }}"
+						role="option">{{ mustache('title') }}</a>
+				</div>
+			</xf:mustache>
+			<hr class="menu-separator" />
+		</xf:mustache>
+		<div class="menu-row">
+			<a class="menuPrefix menuPrefix--none"
+				data-prefix-id="0"
+				data-prefix-class=""
+				role="option">{{ phrase('(no_prefix)') }}</a>
+		</div>
+	</script>
+</xf:macro>
+
+<xf:macro id="menu_prefixes" arg-prefixes="!" arg-prefixType="!">
+	<xf:foreach loop="array_keys($prefixes)" value="$groupId">
+		<xf:if is="$groupId > 0">
+			<h3 class="menu-header">{{ prefix_group($prefixType, $groupId) }}</h3>
+			<div class="menu-row">
+				<xf:foreach loop="{$prefixes.{$groupId}}" key="$prefixId" value="$prefix">
+					<a class="menuPrefix {$prefix.css_class}"
+						data-prefix-id="{$prefixId}"
+						data-prefix-class="{$prefix.css_class}"
+						role="option">{{ prefix_title($prefixType, $prefixId) }}</a>
+				</xf:foreach>
+			</div>
+			<hr class="menu-separator" />
+		<xf:else />
+			<div class="menu-row">
+				<xf:foreach loop="{$prefixes.{$groupId}}" key="$prefixId" value="$prefix">
+					<a class="menuPrefix {$prefix.css_class}"
+						data-prefix-id="{$prefixId}"
+						data-prefix-class="{$prefix.css_class}"
+						role="option">{{ prefix_title($prefixType, $prefixId) }}</a>
+				</xf:foreach>
+			</div>
+			<hr class="menu-separator" />
+		</xf:if>
+	</xf:foreach>
+	<div class="menu-row">
+		<a class="menuPrefix menuPrefix--none"
+			data-prefix-id="0"
+			data-prefix-class=""
+			role="option">{{ phrase('(no_prefix)') }}</a>
+	</div>
+</xf:macro>

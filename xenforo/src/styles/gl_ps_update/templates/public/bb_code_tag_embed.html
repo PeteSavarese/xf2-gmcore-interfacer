@@ -1,0 +1,5 @@
+<xf:css src="embed_resolver.less" />
+
+<div class="embed fauxBlockLink" data-embed-content="{$content.getEntityContentTypeId()}" data-embed-content-url="{$contentUrl}">
+	{$content.renderEmbed()|raw}
+</div>

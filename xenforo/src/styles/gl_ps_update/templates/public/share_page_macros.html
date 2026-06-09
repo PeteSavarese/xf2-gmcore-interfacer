@@ -1,0 +1,139 @@
+<xf:macro id="buttons"
+	arg-iconic="{{ false }}"
+	arg-hideLink="{{ false }}"
+	arg-label=""
+	arg-pageUrl=""
+	arg-pageTitle=""
+	arg-pageDesc=""
+	arg-pageImage="">
+
+	<xf:set var="$id">{{ unique_id() }}</xf:set>
+
+	<xf:if contentcheck="true">
+		<xf:css src="share_controls.less" />
+
+		<div class="shareButtons {{ $iconic ? 'shareButtons--iconic' : '' }}" data-xf-init="share-buttons" data-page-url="{$pageUrl}" data-page-title="{$pageTitle}" data-page-desc="{$pageDesc}" data-page-image="{$pageImage}">
+			<span class="u-anchorTarget" id="{$id}"></span>
+
+			<xf:if is="$label is not empty">
+				<span class="shareButtons-label">{$label}</span>
+			</xf:if>
+
+			<div class="shareButtons-buttons">
+				<xf:contentcheck>
+					<xf:if is="$xf.options.facebookLike">
+						<a class="shareButtons-button shareButtons-button--brand shareButtons-button--facebook" href="#{$id}" data-href="https://www.facebook.com/sharer.php?u={url}">
+							<xf:fa icon="fab fa-facebook-f" />
+							<span>{{ phrase('facebook') }}</span>
+						</a>
+					</xf:if>
+
+					<xf:if is="$xf.options.tweet.enabled">
+						<a class="shareButtons-button shareButtons-button--brand shareButtons-button--twitter" href="#{$id}" data-href="https://x.com/intent/tweet?url={url}&amp;text={title}{{ $xf.options.tweet.via ? '&amp;via=' . $xf.options.tweet.via : '' }}{{ $xf.options.tweet.related ? '&amp;related=' . $xf.options.tweet.related : '' }}">
+							<xf:fa icon="fab fa-x" />
+							<span>{{ phrase('x_twitter') }}</span>
+						</a>
+					</xf:if>
+
+					<xf:if is="$xf.options.blueskyShare">
+						<a class="shareButtons-button shareButtons-button--brand shareButtons-button--bluesky" href="#{$id}" data-href="https://bsky.app/intent/compose?text={url}">
+							<xf:fa icon="fab fa-bluesky" />
+							<span>{{ phrase('bluesky') }}</span>
+						</a>
+					</xf:if>
+
+					<xf:if is="$xf.options.linkedinShare">
+						<a class="shareButtons-button shareButtons-button--brand shareButtons-button--linkedin" href="#{$id}" data-href="https://www.linkedin.com/sharing/share-offsite/?url={url}">
+							<xf:fa icon="fab fa-linkedin" />
+							<span>{{ phrase('linkedin') }}</span>
+						</a>
+					</xf:if>
+
+					<xf:if is="$xf.options.redditShare">
+						<a class="shareButtons-button shareButtons-button--brand shareButtons-button--reddit" href="#{$id}" data-href="https://reddit.com/submit?url={url}&amp;title={title}">
+							<xf:fa icon="fab fa-reddit-alien" />
+							<span>{{ phrase('reddit') }}</span>
+						</a>
+					</xf:if>
+
+					<xf:if is="$xf.options.pinterestShare">
+						<a class="shareButtons-button shareButtons-button--brand shareButtons-button--pinterest" href="#{$id}" data-href="https://pinterest.com/pin/create/bookmarklet/?url={url}&amp;description={title}&amp;media={image}">
+							<xf:fa icon="fab fa-pinterest-p" />
+							<span>{{ phrase('pinterest') }}</span>
+						</a>
+					</xf:if>
+
+					<xf:if is="$xf.options.tumblrShare">
+						<a class="shareButtons-button shareButtons-button--brand shareButtons-button--tumblr" href="#{$id}" data-href="https://www.tumblr.com/widgets/share/tool?canonicalUrl={url}&amp;title={title}">
+							<xf:fa icon="fab fa-tumblr" />
+							<span>{{ phrase('tumblr') }}</span>
+						</a>
+					</xf:if>
+
+					<xf:if is="$xf.options.whatsAppShare">
+						<a class="shareButtons-button shareButtons-button--brand shareButtons-button--whatsApp" href="#{$id}" data-href="https://api.whatsapp.com/send?text={title}&nbsp;{url}">
+							<xf:fa icon="fab fa-whatsapp" />
+							<span>{{ phrase('whatsapp') }}</span>
+						</a>
+					</xf:if>
+
+					<xf:if is="$xf.options.emailShare">
+						<a class="shareButtons-button shareButtons-button--email" href="#{$id}" data-href="mailto:?subject={title}&amp;body={url}">
+							<xf:fa icon="far fa-envelope" />
+							<span>{{ phrase('email') }}</span>
+						</a>
+					</xf:if>
+
+					<xf:if is="$xf.options.webShare">
+						<a class="shareButtons-button shareButtons-button--share is-hidden" href="#{$id}"
+							data-xf-init="web-share"
+							data-title="{$pageTitle}" data-text="{$pageDesc}" data-url="{$pageUrl}"
+							data-hide=".shareButtons-button:not(.shareButtons-button--share)">
+
+							<xf:fa icon="far fa-share-alt" />
+							<span>{{ phrase('share') }}</span>
+						</a>
+					</xf:if>
+
+					<xf:if is="$xf.options.linkShare AND !$hideLink">
+						<a class="shareButtons-button shareButtons-button--link is-hidden" href="#{$id}" data-clipboard="{url}">
+							<xf:fa icon="far fa-link" />
+							<span>{{ phrase('link') }}</span>
+						</a>
+					</xf:if>
+				</xf:contentcheck>
+			</div>
+		</div>
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="share_clipboard_input" arg-label="!" arg-text="!" arg-successText="">
+	<xf:css src="share_controls.less" />
+
+	<xf:set var="$id">{{ unique_id() }}</xf:set>
+
+	<div class="shareInput" data-xf-init="share-input" data-success-text="{$successText}">
+		<xf:if is="$label">
+			<label class="shareInput-label" for="{$id}">{$label}</label>
+		</xf:if>
+		<div class="inputGroup inputGroup--joined">
+			<div class="shareInput-button inputGroup-text js-shareButton is-hidden"
+				data-xf-init="tooltip" title="{{ phrase('copy_to_clipboard')|for_attr }}">
+
+				<xf:fa icon="far fa-copy" />
+			</div>
+			<xf:textbox class="shareInput-input js-shareInput"
+				value="{$text}" readonly="true" id="{$id}" />
+		</div>
+	</div>
+</xf:macro>
+
+<xf:macro id="share_clipboard_text" arg-text="!" arg-successText="!" arg-class="">
+	<a href="javascript:"
+		data-xf-init="copy-to-clipboard"
+		data-copy-text="{$text}"
+		data-success="{$successText}"
+		class="{$class}">
+		<xf:fa icon="fa-code" />
+	</a>
+</xf:macro>

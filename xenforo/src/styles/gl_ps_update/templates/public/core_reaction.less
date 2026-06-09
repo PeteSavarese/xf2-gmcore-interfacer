@@ -1,0 +1,207 @@
+.reaction
+{
+	display: flex;
+	-webkit-touch-callout: none;
+
+	&.reaction--imageHidden
+	{
+		img
+		{
+			display: none;
+		}
+
+		&.reaction--1
+		{
+			i
+			{
+				.m-faBefore(@fa-var-thumbs-up, 1em);
+				.m-faBase();
+			}
+		}
+	}
+
+	&.reaction--small,
+	&.reaction--medium
+	{
+		display: inline-block;
+
+		.reaction-text
+		{
+			margin-left: 0;
+		}
+	}
+
+	&.reaction--right
+	{
+		justify-content: flex-end;
+	}
+
+	&.reaction--inline
+	{
+		display: inline-flex;;
+	}
+
+	a&:hover,
+	a&:focus
+	{
+		text-decoration: none;
+
+		.reaction-text
+		{
+			text-decoration: none;
+		}
+	}
+}
+
+.reactionScore
+{
+	display: inline-block;
+	padding: 2px 3px;
+	min-width: 16px;
+	text-align: center;
+	vertical-align: text-bottom;
+	border-radius: @xf-borderRadiusMedium;
+	font-size: @xf-fontSizeSmallest;
+	.xf-chip();
+
+	&:hover
+	{
+		.xf-chipHover();
+	}
+}
+
+.reaction-image
+{
+	vertical-align: text-bottom;
+
+	&.reaction-image--emoji
+	{
+		width: 32px;
+	}
+
+	.reaction--small &
+	{
+		max-width: 16px;
+		max-height: 16px;
+	}
+
+	.reaction--medium &
+	{
+		max-width: 21px;
+		max-height: 21px;
+	}
+}
+
+.reaction-sprite
+{
+	vertical-align: text-bottom;
+
+	<xf:if is="$reactionSprites">
+		<xf:foreach loop="$reactionSprites" key="$reactionId" value="$reactionSprite">
+			<xf:if is="$reactionSprite.sprite_css">
+				.reaction--{$reactionId} &
+				{
+					{$reactionSprite.sprite_css|raw}
+				}
+			</xf:if>
+			<xf:if is="$reactionSprite.small_sprite_css">
+				.reaction--small.reaction--{$reactionId} &
+				{
+					{$reactionSprite.small_sprite_css|raw}
+				}
+			</xf:if>
+			<xf:if is="$reactionSprite.medium_sprite_css">
+				.reaction--medium.reaction--{$reactionId} &
+				{
+					{$reactionSprite.medium_sprite_css|raw}
+				}
+			</xf:if>
+		</xf:foreach>
+	</xf:if>
+}
+
+.reaction-text
+{
+	margin-left: 10px;
+	align-self: center;
+
+	// note: when we add a reaction we make the text bold
+	// the below approach sets the space for that to ensure
+	// the text doesn't jump when the bold happens.
+	&::after
+	{
+		content: " ";
+		font-weight: @xf-fontWeightHeavy;
+		height: 1px;
+		color: transparent;
+		overflow: hidden;
+		visibility: hidden;
+	}
+
+	.has-reaction &
+	{
+		font-weight: @xf-fontWeightHeavy;
+	}
+
+	.reaction--small &
+	{
+		margin-left: 0;
+	}
+}
+
+<xf:if is="$reactionColors">
+	<xf:foreach loop="$reactionColors" key="$reactionId" value="$reactionColor">
+		<xf:if is="$reactionColor">
+			.is-active.tabs-tab--reaction{$reactionId}
+			{
+				border-color: {$reactionColor} !important;
+			}
+		</xf:if>
+	</xf:foreach>
+</xf:if>
+
+.reactSummary {
+	color: @gl-text-muted;
+}
+
+.reactionsBar.is-active {
+	background: 1px solid rgba(52, 73, 94, 0.7);
+	border: 1px solid @gl-border;
+	border-radius: @gl-radius;
+	padding: 6px 10px;
+	margin-top: 8px;
+	display: flex;
+	align-items: center;
+	gap: 6px;
+}
+
+.reactionsBar-link {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	color: @gl-text-secondary;
+	text-decoration: none;
+}
+
+.reactionItem {
+	display: inline-flex;
+	align-items: center;
+	gap: 3px;
+	padding: 2px 8px;
+	background: rgba(255, 255, 255, 0.04);
+	border: 1px solid @gl-border;
+	border-radius: @gl-radius-pill;
+	transition: all 0.2s ease;
+}
+
+.reactionItem:hover {
+	border-color: @gl-border-accent;
+	background: @gl-accent-soft;
+}
+
+.reactionItem-count {
+	font-size: @xf-fontSizeSmaller;
+	color: @gl-text-muted;
+	font-weight: 600;
+}
+

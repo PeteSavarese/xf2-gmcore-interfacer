@@ -1,0 +1,735 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+  <template type="admin" title="blacktea_steamauth_actions" version_id="10300070" version_string="1.3.0"><![CDATA[<dl class="formRow">
+	<dt>
+		<div class="formRow-labelWrapper">
+			<dfn class="formRow-hint">
+				Actions
+			</dfn>
+		</div>
+	</dt>
+	<dd>
+		<ul class="inputChoices">
+			<a href="{{ link('steam/migrate') }}"
+			   class="button"
+			   onclick="return confirm('This will migrate the Xenforo 1 Steam Authentication addon data into our addon. This will only work if the XF1 module was not removed before upgrading to XF2. Once the migration is complete you will be redirected to the ACP homepage.')">
+				<span class="button-text">XF1 Migration</span>
+			</a>
+		</ul>
+	</dd>
+</dl>]]></template>
+  <template type="admin" title="blacktea_steamauth_steam_list" version_id="10401070" version_string="1.4.1"><![CDATA[<xf:title>{{ phrase('blacktea_steamauth_list_users') }}</xf:title>
+<xf:css>
+	.dataList-cell.dataList-cell--image img {
+		margin-right: 8px;
+	}
+</xf:css>
+<xf:if is="!$items || empty($items)">
+	<div class="blockMessage">{{ phrase('no_items_have_been_created_yet') }}</div>
+<xf:else />
+	<xf:form action="" class="block">
+		<div class="block-outer">
+			<xf:macro template="filter_macros"
+					  name="quick_filter"
+					  arg-key="items"
+					  arg-ajax="{{ link('steam/list', null, {'criteria': $criteria}) }}"
+					  arg-class="block-outer-opposite" />
+		</div>
+		<div class="block-container">
+			<div class="block-body">
+				<xf:datalist>
+					<xf:foreach loop="$items" value="$item">
+						<xf:datarow>
+							<xf:cell class="dataList-cell--min dataList-cell--image dataList-cell--imageSmall" href="{{ link('users/edit', $item) }}">
+								<xf:avatar user="$item" size="s" href="" />
+							</xf:cell>
+							<xf:main href="{{ link('users/edit', $item) }}" label="{$item.username}" hint="{$item.email}" />
+							<xf:cell href="https://steamcommunity.com/profiles/{$connectedAccounts.{$item.user_id}.provider_key}/">
+								{$connectedAccounts.{$item.user_id}.provider_key}
+							</xf:cell>
+						</xf:datarow>
+					</xf:foreach>
+				</xf:datalist>
+			</div>
+			<div class="block-footer block-footer--split">
+				<span class="block-footer-counter">{{ display_totals($items, $total) }}</span>
+			</div>
+		</div>
+		<xf:pagenav
+			page="{$page}"
+			perpage="{$perPage}"
+			total="{$total}"
+			link="steam/list"
+			wrapperclass="js-filterHide block-outer block-outer--after" />
+	</xf:form>
+</xf:if>]]></template>
+  <template type="admin" title="blacktea_steamauth_steam_support" version_id="10709070" version_string="1.7.9"><![CDATA[<xf:title>{{ phrase('blacktea_steamauth_support') }}</xf:title>
+<div class="block-container">
+	<div class="support-notice formInfoRow">
+		<span>If you are having trouble with the add-on, please refrain from asking for support on the discussion thread itself. Troubleshooting can involve sensitive information and other things that are not ideal for public view.</span>
+		<span>Instead, we offer support via the following:</span>
+		<ul>
+			<li>Discord: <a href="https://discord.gg/cUtwu2J" target="_blank">Join server</a></li>
+			<li>E-Mail: <a href="mailto:omar@assadi.co.il" target="_blank">omar@assadi.co.il</a></li>
+			<li>Slack: <a href="https://join.slack.com/t/s70/shared_invite/enQtMzAyMjM4MTA2MjEwLTJkZTY5YTg4NWIyYzQ5YjJlZmYzMGJlN2Q3YTYwZTRmMjJmMmI3MTVhZDQwYTY0MzEwZDUyMDZjZmMxZmU2ZWQ" target="_blank">Join server</a></li>
+			<li>Private Message: <a href="https://xenforo.com/community/conversations/add?to=Assadi,^Alex,dubwub" target="_blank">https://xenforo.com/community/conversations/add?to=Assadi,^Alex,dubwub</a></li>
+		</ul>
+		<span>To aid the support request, please provide a data export using the form below:</span>
+	</div>
+	<xf:form action="" class="block">
+		<div class="block-body">
+			<xf:checkboxrow label="{{ phrase('blacktea_steamauth_support_export_options') }}" hint="{{ phrase('blacktea_steamauth_data_anonymised') }}">
+				<xf:option name="export_addon_setup" selected="true" label="{{ phrase('blacktea_steamauth_export_addon_setup') }}" />
+				<xf:option name="export_addon_settings" selected="true" label="{{ phrase('blacktea_steamauth_export_addon_settings') }}" />
+				<xf:option name="export_addon_permissions" selected="true" label="{{ phrase('blacktea_steamauth_export_addon_permissions') }}" />
+				<xf:option name="export_addon_users" selected="true" label="{{ phrase('blacktea_steamauth_export_addon_users') }}" />
+				<xf:option name="export_website_configuration" selected="true" label="{{ phrase('blacktea_steamauth_export_website_configuration') }}" />
+				<xf:option name="export_enabled_addons" selected="true" label="{{ phrase('blacktea_steamauth_export_enabled_addons') }}" />
+			</xf:checkboxrow>
+		</div>
+		<xf:submitrow icon="export" sticky="true" />
+	</xf:form>
+</div>]]></template>
+  <template type="admin" title="connected_account_provider_steam" version_id="10000010" version_string="1.0.0"><![CDATA[
+        
+<xf:textboxrow name="options[client_id]"
+               value="{$options.client_id}"
+               label="{{ phrase('Domain Name') }}"
+               hint="{{ phrase('required') }}"
+               explain="{{ phrase('con_acc_steam_domain_explain') }}" />
+<xf:textboxrow name="options[client_secret]"
+               value="{$options.client_secret}"
+               label="{{ phrase('API Key') }}"
+               hint="{{ phrase('required') }}"
+               explain="{{ phrase('con_acc_steam_apikey_explain') }}" />
+        
+    ]]></template>
+  <template type="admin" title="connected_account_provider_test_steam" version_id="10000010" version_string="1.0.0"><![CDATA[
+        
+<xf:if is="!$providerData">
+	<xf:macro template="connected_account_provider_test_macros"
+	          name="explain"
+		      arg-providerTitle="{$provider.title}"
+		      arg-keyName="{{ phrase('app_id') }}"
+		      arg-keyValue="{$provider.options.app_id}" />
+<xf:else />
+    <xf:macro template="connected_account_provider_test_macros" name="success" />
+    <xf:macro template="connected_account_provider_test_macros"
+    	      name="display_name"
+    		  arg-name="{$providerData.username}" />
+    <xf:macro template="connected_account_provider_test_macros"
+    	      name="picture"
+    		  arg-url="{$providerData.avatar_url}" />
+</xf:if>
+        
+    ]]></template>
+  <template type="admin" title="option_template_steamauthUserBannerLocation" version_id="10504070" version_string="1.5.4"><![CDATA[<xf:radiorow name="{$inputName}" value="{$option.option_value}"
+	hint="{$hintHtml}"
+	explain="{$explainHtml}"
+	html="{$listedHtml}">
+	<xf:option value="0" label="{{ phrase('blacktea_steamauth_no_banner') }}" />
+	<xf:option value="1" label="{{ phrase('blacktea_steamauth_banner_above') }}" />
+	<xf:option value="2" label="{{ phrase('blacktea_steamauth_banner_below') }}" />
+</xf:radiorow>]]></template>
+  <template type="public" title="blacktea_steamauth_active_games" version_id="10707080" version_string="1.7.8"><![CDATA[<xf:title page="{$page}">{{ phrase('blacktea_steamauth_active_games') }}</xf:title>
+
+<xf:js src="xf/inline_mod.js" min="1" />
+<xf:css src="public:blacktea_steamauth_list.less" />
+
+<div class="block" data-xf-init="inline-mod" data-type="active_games" data-href="{{ link('inline-mod') }}">
+	<div class="block-outer">
+		<xf:pagenav
+			page="{$page}" perpage="{$perPage}" total="{$total}"
+			link="steam/active-games"
+			wrapperclass="block-outer-main" />
+	</div>
+
+	<div class="block-container">
+		<div class="block-body">
+			<xf:if is="$games is not empty">
+				<div class="structItemContainer">
+					<xf:foreach loop="$games" value="$game">
+						<xf:css src="structured_list.less" />
+						<div class="structItem js-inlineModContainer">
+							<div class="structItem-cell structItem-cell--icon game-image-container">
+								<div class="structItem-iconContainer">
+									<a href="{{$game.url}}" target="_blank">
+										<img class="game-image" src="{{$game.image}}" onerror="this.style.display='none'"/>
+									</a>
+								</div>
+							</div>
+							<div class="structItem-cell structItem-cell--main" data-xf-init="touch-proxy">
+								<a href="{{$game.url}}" target="_blank" class="structItem-title">{{$game.label}}</a>
+								<div class="structItem-minor">
+									<ul class="structItem-parts">
+										<li>
+											<ul class="listInline listInline--comma listInline--selfInline">
+												<li>
+													<a href="{{$game.url}}" target="_blank">
+														{{$game.url}}
+													</a>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<div class="structItem-cell structItem-cell--latest structItem-cell--meta">
+								<dl class="pairs pairs--justified">
+									<dt>{{ phrase('blacktea_steamauth_recent_hours') }}</dt>
+									<dd>
+										<a href="{{$game.url}}" target="_blank">
+											{{$game.playtime_formatted}} {{ phrase('blacktea_steamauth_hours') }}
+										</a>
+									</dd>
+								</dl>
+							</div>
+						</div>
+					</xf:foreach>
+				</div>
+			<xf:else />
+				<div class="block-row">{{ phrase('blacktea_steamauth_no_active_games') }}</div>
+			</xf:if>
+		</div>
+	</div>
+
+	<xf:pagenav page="{$page}" perpage="{$perPage}" total="{$total}"
+		link="steam/active-games"
+		wrapperclass="block-outer block-outer--after" />
+</div>]]></template>
+  <template type="public" title="blacktea_steamauth_active_players" version_id="10700070" version_string="1.7.0"><![CDATA[<xf:title page="{$page}">{{ phrase('blacktea_steamauth_active_players') }}</xf:title>
+
+<xf:js src="xf/inline_mod.js" min="1" />
+
+<div class="block" data-xf-init="inline-mod" data-type="active_users" data-href="{{ link('inline-mod') }}">
+	<div class="block-outer">
+		<xf:pagenav
+			page="{$page}" perpage="{$perPage}" total="{$total}"
+			link="steam/active-players"
+			wrapperclass="block-outer-main" />
+	</div>
+
+	<div class="block-container">
+		<div class="block-body">
+			<xf:if is="$userPlaytimes is not empty">
+				<div class="structItemContainer">
+					<xf:foreach loop="$userPlaytimes" value="$userPlaytime">
+						<xf:css src="structured_list.less" />
+						<div class="structItem js-inlineModContainer">
+							<div class="structItem-cell structItem-cell--icon">
+								<div class="structItem-iconContainer">
+									<xf:avatar user="{$users.{$userPlaytime.user_id}}" size="s" />
+								</div>
+							</div>
+							<div class="structItem-cell structItem-cell--main" data-xf-init="touch-proxy">
+								<a href="{{ link('members', $users.{$userPlaytime.user_id}) }}" class="structItem-title">{$users.{$userPlaytime.user_id}.username}</a>
+								<div class="structItem-minor">
+									<ul class="structItem-parts">
+										<li>
+											<ul class="listInline listInline--comma listInline--selfInline">
+												<li>
+													<a href="https://steamcommunity.com/profiles/{$userPlaytime.provider_key}" target="_blank">
+														{$userPlaytime.provider_key}
+													</a>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<div class="structItem-cell structItem-cell--latest structItem-cell--meta">
+								<dl class="pairs pairs--justified">
+									<dt>{{ phrase('blacktea_steamauth_recent_hours') }}</dt>
+									<dd>
+										<a href="https://steamcommunity.com/profiles/{$userPlaytime.provider_key}/games/?tab=recent" target="_blank">
+										{$userPlaytime.recent_hours_formatted} {{ phrase('blacktea_steamauth_hours') }}
+										</a>
+									</dd>
+								</dl>
+								<dl class="pairs pairs--justified structItem-minor">
+									<dt>{{ phrase('blacktea_steamauth_last_updated') }}</dt>
+									<dd><xf:date time="{$userPlaytime.last_updated}" /></dd>
+								</dl>
+							</div>
+						</div>
+					</xf:foreach>
+				</div>
+			<xf:else />
+				<div class="block-row">{{ phrase('blacktea_steamauth_no_active_players') }}</div>
+			</xf:if>
+		</div>
+	</div>
+
+	<xf:pagenav page="{$page}" perpage="{$perPage}" total="{$total}"
+		link="steam/active-players"
+		wrapperclass="block-outer block-outer--after" />
+</div>]]></template>
+  <template type="public" title="blacktea_steamauth_flags_privacy_view" version_id="10501070" version_string="1.5.0"><![CDATA[<xf:if is="can_change_steam_profile_privacy()">
+	<dl class="inputLabelPair">
+		<dt>{{ phrase('allow_view_steam') }}:</dt>
+		<dd>
+			<xf:select name="privacy[allow_view_steam]" value="{$xf.visitor.Privacy.allow_view_steam}">
+				<xf:option value="everyone">{{ phrase('all_visitors') }}</xf:option>
+				<xf:option value="members">{{ phrase('members_only') }}</xf:option>
+				<xf:option value="none">{{ phrase('nobody') }}</xf:option>
+			</xf:select>
+		</dd>
+	</dl>
+</xf:if>
+<xf:if is="can_change_steam_banner_privacy()">
+	<dl class="inputLabelPair">
+		<dt>{{ phrase('allow_view_steam_banner') }}:</dt>
+		<dd>
+			<xf:select name="privacy[allow_view_steam_banner]" value="{$xf.visitor.Privacy.allow_view_steam_banner}">
+				<xf:option value="everyone">{{ phrase('all_visitors') }}</xf:option>
+				<xf:option value="members">{{ phrase('members_only') }}</xf:option>
+				<xf:option value="none">{{ phrase('nobody') }}</xf:option>
+			</xf:select>
+		</dd>
+	</dl>
+</xf:if>]]></template>
+  <template type="public" title="blacktea_steamauth_list.less" version_id="10700070" version_string="1.7.0"><![CDATA[.structItem-cell.structItem-cell--icon.game-image-container {
+	width: 84px;
+}]]></template>
+  <template type="public" title="blacktea_steamauth_notice_cannot_fetch" version_id="10704070" version_string="1.7.4"><![CDATA[{{ phrase('blacktea_steamauth_notice_cannot_fetch') }}]]></template>
+  <template type="public" title="blacktea_steamauth_owned_games" version_id="10707080" version_string="1.7.8"><![CDATA[<xf:title page="{$page}">{{ phrase('blacktea_steamauth_owned_games') }}</xf:title>
+
+<xf:js src="xf/inline_mod.js" min="1" />
+<xf:css src="public:blacktea_steamauth_list.less" />
+
+<div class="block" data-xf-init="inline-mod" data-type="owned_games" data-href="{{ link('inline-mod') }}">
+	<div class="block-outer">
+		<xf:pagenav
+			page="{$page}" perpage="{$perPage}" total="{$total}"
+			link="steam/owned-games"
+			wrapperclass="block-outer-main" />
+	</div>
+
+	<div class="block-container">
+		<div class="block-body">
+			<xf:if is="$games is not empty">
+				<div class="structItemContainer">
+					<xf:foreach loop="$games" value="$game">
+						<xf:css src="structured_list.less" />
+						<div class="structItem js-inlineModContainer">
+							<div class="structItem-cell structItem-cell--icon game-image-container">
+								<div class="structItem-iconContainer">
+									<a href="{{$game.url}}" target="_blank">
+										<img class="game-image" src="{{$game.image}}" onerror="this.style.display='none'"/>
+									</a>
+								</div>
+							</div>
+							<div class="structItem-cell structItem-cell--main" data-xf-init="touch-proxy">
+								<a href="{{$game.url}}" target="_blank" class="structItem-title">{{$game.label}}</a>
+								<div class="structItem-minor">
+									<ul class="structItem-parts">
+										<li>
+											<ul class="listInline listInline--comma listInline--selfInline">
+												<li>
+													<a href="{{$game.url}}" target="_blank">
+														{{$game.url}}
+													</a>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<div class="structItem-cell structItem-cell--latest structItem-cell--meta">
+								<dl class="pairs pairs--justified">
+									<dt>{{ phrase('blacktea_steamauth_total') }}</dt>
+									<dd>
+										<a href="{{$game.url}}" target="_blank">
+											{{$game.user_count}} {{ phrase('blacktea_steamauth_users') }}
+										</a>
+									</dd>
+								</dl>
+							</div>
+						</div>
+					</xf:foreach>
+				</div>
+			<xf:else />
+				<div class="block-row">{{ phrase('blacktea_steamauth_total') }}</div>
+			</xf:if>
+		</div>
+	</div>
+
+	<xf:pagenav page="{$page}" perpage="{$perPage}" total="{$total}"
+		link="steam/owned-games"
+		wrapperclass="block-outer block-outer--after" />
+</div>]]></template>
+  <template type="public" title="blacktea_steamauth_played_games" version_id="10707080" version_string="1.7.8"><![CDATA[<xf:title page="{$page}">{{ phrase('blacktea_steamauth_played_games') }}</xf:title>
+
+<xf:js src="xf/inline_mod.js" min="1" />
+<xf:css src="public:blacktea_steamauth_list.less" />
+
+<div class="block" data-xf-init="inline-mod" data-type="played_games" data-href="{{ link('inline-mod') }}">
+	<div class="block-outer">
+		<xf:pagenav
+			page="{$page}" perpage="{$perPage}" total="{$total}"
+			link="steam/played-games"
+			wrapperclass="block-outer-main" />
+	</div>
+
+	<div class="block-container">
+		<div class="block-body">
+			<xf:if is="$games is not empty">
+				<div class="structItemContainer">
+					<xf:foreach loop="$games" value="$game">
+						<xf:css src="structured_list.less" />
+						<div class="structItem js-inlineModContainer">
+							<div class="structItem-cell structItem-cell--icon game-image-container">
+								<div class="structItem-iconContainer">
+									<a href="{{$game.url}}" target="_blank">
+										<img class="game-image" src="{{$game.image}}" onerror="this.style.display='none'"/>
+									</a>
+								</div>
+							</div>
+							<div class="structItem-cell structItem-cell--main" data-xf-init="touch-proxy">
+								<a href="{{$game.url}}" target="_blank" class="structItem-title">{{$game.label}}</a>
+								<div class="structItem-minor">
+									<ul class="structItem-parts">
+										<li>
+											<ul class="listInline listInline--comma listInline--selfInline">
+												<li>
+													<a href="{{$game.url}}" target="_blank">
+														{{$game.url}}
+													</a>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</div>
+							</div>
+							<div class="structItem-cell structItem-cell--latest structItem-cell--meta">
+								<dl class="pairs pairs--justified">
+									<dt>{{ phrase('blacktea_steamauth_total_hours') }}</dt>
+									<dd>
+										<a href="{{$game.url}}" target="_blank">
+											{{$game.playtime_formatted}} {{ phrase('blacktea_steamauth_hours') }}
+										</a>
+									</dd>
+								</dl>
+							</div>
+						</div>
+					</xf:foreach>
+				</div>
+			<xf:else />
+				<div class="block-row">{{ phrase('blacktea_steamauth_no_played_games') }}</div>
+			</xf:if>
+		</div>
+	</div>
+
+	<xf:pagenav page="{$page}" perpage="{$perPage}" total="{$total}"
+		link="steam/played-games"
+		wrapperclass="block-outer block-outer--after" />
+</div>]]></template>
+  <template type="public" title="blacktea_steamauth_user_banner" version_id="10709070" version_string="1.7.9"><![CDATA[<xf:css src="blacktea_steamauth_user_banner.less" />
+<xf:js src="blacktea/steamauth/userbanner.js" addon="BlackTea/SteamAuth"/>
+<a class="steam-user steam-user-banner"
+   data-steamid="{{$steamid}}"
+   href="https://steamcommunity.com/profiles/{{$steamid}}/"
+   target="_blank" rel="noopener noreferrer"></a>]]></template>
+  <template type="public" title="blacktea_steamauth_user_banner.less" version_id="10709070" version_string="1.7.9"><![CDATA[.message-user .steam-user-banner {
+	min-width: 0;
+	width: 100%;
+	max-width: 260px;
+}
+
+.steam-user-banner
+{
+	display: flex;
+	align-items: center;
+	gap: @xf-paddingSmall;
+	max-width: 100%;
+	padding: @xf-paddingSmall;
+	margin: 7px 0;
+	min-height: 48px;
+	overflow: hidden;
+	text-decoration: none;
+	background: @xf-contentAltBg;
+	border: @xf-borderSize solid @xf-borderColorFaint;
+	border-left: @xf-borderSizeFeature solid fade(@xf-textColorMuted, 35%);
+	border-radius: @xf-borderRadiusMedium;
+	color: @xf-textColor;
+
+	&:empty
+	{
+		display: none;
+	}
+
+	&:hover
+	{
+		background: @xf-contentHighlightBg;
+		border-color: @xf-borderColorHighlight;
+		text-decoration: none;
+	}
+
+	// Status accents
+	&.visibility-1, &.visibility-2, &.visibility-3, &.visibility-4, &.visibility-5, &.visibility-6
+	{
+		border-left-color: #50beff;
+	}
+	&.visibility-7
+	{
+		border-left-color: @xf-paletteAccent3;
+	}
+
+	.image-container
+	{
+		flex: 0 0 auto;
+		width: 36px;
+		height: 36px;
+		border-radius: @xf-borderRadiusSmall;
+		overflow: hidden;
+		background: fade(@xf-paletteNeutral3, 12%);
+		border: 1px solid @xf-borderColorFaint;
+
+		img
+		{
+			display: block;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+	}
+
+	.info-container
+	{
+		min-width: 0;
+		line-height: 1.2;
+
+		.name
+		{
+			font-size: @xf-fontSizeSmall;
+			font-weight: @xf-fontWeightHeavy;
+			color: #50beff;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+
+		.visibility
+		{
+			margin-top: 2px;
+			font-size: @xf-fontSizeSmaller;
+			color: @xf-textColorMuted;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+
+			&:before
+			{
+				content: "";
+				display: inline-block;
+				width: 8px;
+				height: 8px;
+				margin-right: @xf-paddingSmall;
+				border-radius: 50%;
+				background: currentColor;
+				vertical-align: middle;
+			}
+		}
+
+		.game
+		{
+			margin-top: 2px;
+			font-size: @xf-fontSizeSmaller;
+			color: @xf-textColorMuted;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
+	}
+}
+
+.steam-user-banner.visibility-7 .info-container .visibility
+{
+	color: @xf-paletteAccent3;
+}
+
+.steam-user-banner.visibility-1 .info-container .visibility,
+.steam-user-banner.visibility-2 .info-container .visibility,
+.steam-user-banner.visibility-3 .info-container .visibility,
+.steam-user-banner.visibility-4 .info-container .visibility,
+.steam-user-banner.visibility-5 .info-container .visibility,
+.steam-user-banner.visibility-6 .info-container .visibility
+{
+	color: #50beff;
+}]]></template>
+  <template type="public" title="connected_account_associated_steam" version_id="10506070" version_string="1.5.6"><![CDATA[{{steam_user_banner_by_steam_id($providerData.provider_key)}}]]></template>
+  <template type="public" title="login_steam.less" version_id="10709070" version_string="1.7.9"><![CDATA[.button.button--provider--steam,
+a.button.button--provider--steam {
+	color: #ffffff;
+	background-color: #171a21;
+	border-color: #171a21;
+	&:hover, &:active, &:focus {
+		background-color: #2c303a;
+	}
+}]]></template>
+  <template type="public" title="message_macros_steam.less" version_id="10001070" version_string="1.1.0"><![CDATA[.steam {
+	padding: 0;
+	margin: 0;
+	overflow: hidden;
+
+	&.steam--plainLabel
+	{
+		> dt
+		{
+			color: inherit;
+		}
+	}
+
+	&.steam--spaced + .steam
+	{
+		margin-top: @xf-paddingMedium;
+	}
+
+	&.steam--noColon
+	{
+		> dt
+		{
+			&:after
+			{
+				content: "";
+			}
+		}
+	}
+
+	> dt
+	{
+		padding: 0;
+		margin: 0;
+		color: @xf-textColorMuted;
+
+		.m-appendColon();
+	}
+
+	> dd
+	{
+		padding: 0;
+		margin: 0;
+	}
+
+	&.steam--inline
+	{
+		display: inline;
+
+		> dt,
+		> dd
+		{
+			display: inline;
+		}
+	}
+
+	&.steam--columns
+	{
+		display: table;
+		table-layout: fixed;
+		width: 100%;
+
+		> dt,
+		> dd
+		{
+			display: table-cell;
+		}
+
+		> dt
+		{
+			width: 50%;
+			padding-right: @xf-paddingMedium;
+		}
+
+		&.steam--fixedSmall > dt
+		{
+			width: 200px;
+		}
+		&.steam--fluidSmall > dt
+		{
+			width: 25%;
+		}
+		&.steam--fluidHuge > dt
+		{
+			width: 70%;
+		}
+
+		@media (max-width: 500px)
+		{
+			display: block;
+
+			> dt,
+			> dd
+			{
+				display: block;
+			}
+
+			&.steam > dt
+			{
+				width: auto;
+				padding-right: 0;
+			}
+
+			& + .steam
+			{
+				margin-top: @xf-paddingMedium;
+			}
+		}
+	}
+
+	&.steam--justified
+	{
+		.m-clearFix();
+
+		> dt
+		{
+			float: left;
+			max-width: 100%;
+			margin-right: @xf-paddingMedium;
+		}
+
+		> dd
+		{
+			float: right;
+			text-align: right;
+			max-width: 100%;
+		}
+	}
+
+	&.steam--rows
+	{
+		display: inline-table;
+		margin-right: @xf-paddingMedium;
+
+		&.steam--rows--centered
+		{
+			> dt,
+			> dd
+			{
+				text-align: center;
+			}
+		}
+
+		&:last-of-type
+		{
+			margin-right: 0;
+		}
+
+		> dt
+		{
+			display: table-row;
+			font-size: 80%;
+
+			&:after
+			{
+				content: '';
+				display: none;
+			}
+		}
+
+		> dd
+		{
+			display: table-row;
+		}
+	}
+}]]></template>
+</templates>

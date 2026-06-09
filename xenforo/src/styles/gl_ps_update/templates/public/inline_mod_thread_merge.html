@@ -1,0 +1,33 @@
+<xf:title>{{ phrase('inline_moderation_merge_threads') }}</xf:title>
+
+<xf:form action="{{ link('inline-mod') }}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:inforow rowtype="confirm">{{ phrase('you_sure_you_want_to_merge_x_threads', {'count': $total}) }}</xf:inforow>
+
+			<xf:selectrow name="target_thread_id" value="{$first.thread_id}"
+				label="{{ phrase('destination_thread') }}"
+				explain="{{ phrase('all_posts_from_other_threads_will_be_merged_into_this_thread') }}">
+
+				<xf:foreach loop="$threads" value="$thread">
+					<xf:option value="{$thread.thread_id}">{{ prefix('thread', $thread, 'escaped') }}{$thread.title}</xf:option>
+				</xf:foreach>
+			</xf:selectrow>
+
+			<xf:macro id="helper_action::thread_redirect" arg-label="{{ phrase('leave_redirect_for_merged_threads') }}" />
+
+			<xf:macro id="helper_action::thread_alert" arg-selected="{{ $total == 1 }}" />
+		</div>
+		<xf:submitrow icon="merge" />
+	</div>
+
+	<xf:foreach loop="$threads" value="$thread">
+		<xf:hiddenval name="ids[]">{$thread.thread_id}</xf:hiddenval>
+	</xf:foreach>
+
+	<xf:hiddenval name="type">thread</xf:hiddenval>
+	<xf:hiddenval name="action">merge</xf:hiddenval>
+	<xf:hiddenval name="confirmed">1</xf:hiddenval>
+
+	<xf:redirect url="{$redirect}" />
+</xf:form>

@@ -1,0 +1,100 @@
+<xf:title page="{$page}">{$searchForum.Node.title}</xf:title>
+<xf:description>{$searchForum.Node.description|raw}</xf:description>
+
+<xf:css src="structured_list.less" />
+
+<xf:macro id="metadata_macros::canonical_url"
+	arg-canonicalUrl="{{ link('canonical:search-forums', $searchForum, {'page': $page}) }}" />
+<xf:head option="metaNoindex"><meta name="robots" content="noindex" /></xf:head>
+
+<xf:head option="rss_forum">
+	<link
+		rel="alternate"
+		type="application/rss+xml"
+		title="{{ phrase('rss_feed_for_x', {'title': $searchForum.title})|for_attr }}"
+		href="{{ link('search-forums/index.rss', $searchForum) }}" />
+</xf:head>
+
+<xf:breadcrumb source="$searchForum.getBreadcrumbs(false)" />
+
+<xf:pageaction>
+	<xf:if is="$xf.visitor.canCreateThread()">
+		<xf:button href="{{ link('forums/create-thread') }}" class="button--cta" icon="write" overlay="true" rel="nofollow">
+			{{ phrase('post_thread...') }}
+		</xf:button>
+	</xf:if>
+</xf:pageaction>
+
+<xf:if is="$nodeTree">
+	<xf:ad position="forum_view_above_node_list" arg-forum="{$searchForum}" />
+
+	<div class="block">
+		<div class="block-container">
+			<div class="block-body">
+				<xf:macro id="forum_list::node_list"
+					arg-children="{$nodeTree}"
+					arg-extras="{$nodeExtras}"
+					arg-depth="2" />
+			</div>
+		</div>
+	</div>
+
+	<xf:ad position="forum_view_below_node_list" arg-forum="{$searchForum}" />
+</xf:if>
+
+<xf:if is="$canInlineMod">
+	<xf:js src="xf/inline_mod.js" min="1" />
+</xf:if>
+
+<xf:ad position="forum_view_above_thread_list" arg-forum="{$searchForum}" />
+
+<div class="block" data-xf-init="{{ $canInlineMod ? 'inline-mod' : '' }}" data-type="thread" data-href="{{ link('inline-mod') }}">
+	<div class="block-outer"><xf:trim>
+		<xf:pagenav page="{$page}" perpage="{$perPage}" total="{$total}"
+			link="search-forums" data="{$searchForum}"
+			wrapperclass="block-outer-main" />
+
+		<xf:if contentcheck="true">
+			<div class="block-outer-opposite">
+				<div class="buttonGroup">
+					<xf:contentcheck>
+						<xf:if is="$canInlineMod">
+							<xf:macro id="inline_mod_macros::button" />
+						</xf:if>
+					</xf:contentcheck>
+				</div>
+			</div>
+		</xf:if>
+	</xf:trim></div>
+
+	<div class="block-container">
+		<div class="block-body">
+			<div class="structItemContainer">
+				<xf:if is="$threads is not empty">
+					<xf:foreach loop="$threads" value="$thread">
+						<xf:macro id="thread_list_macros::item"
+							arg-thread="{$thread}"
+							arg-showVoteCount="{{ true }}" />
+					</xf:foreach>
+				<xf:else />
+					<div class="structItem">
+						<div class="structItem-cell">{{ phrase('there_no_threads_matching_this_search_forum') }}</div>
+					</div>
+				</xf:if>
+			</div>
+		</div>
+	</div>
+
+	<div class="block-outer block-outer--after">
+		<xf:pagenav
+			page="{$page}" perpage="{$perPage}" total="{$total}"
+			link="search-forums" data="{$searchForum}"
+			wrapperclass="block-outer-main" />
+
+		<xf:showignored wrapperclass="block-outer-opposite" />
+	</div>
+</div>
+
+<xf:ad position="forum_view_below_thread_list" arg-forum="{$searchForum}" />
+
+<xf:widgetpos id="forum_view_sidebar" context-forum="{$searchForum}" position="sidebar" />

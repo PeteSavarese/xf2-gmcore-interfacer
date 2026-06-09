@@ -1,0 +1,80 @@
+<xf:title>{{ phrase('shared_ips_for_x', {'name': $user.username}) }}</xf:title>
+
+<xf:breadcrumb href="{{ link('full:members', $user) }}">{$user.username}</xf:breadcrumb>
+
+<xf:macro id="shared_block" arg-user="{$user}" arg-shared="{$shared}" />
+
+<xf:macro id="shared_block" arg-user="!" arg-shared="!">
+	<div class="block">
+		<div class="block-container">
+			<xf:if is="$shared">
+				<ol class="block-body">
+					<xf:foreach loop="$shared" value="$share">
+						<li class="block-row block-row--separated">
+							<div class="contentRow">
+								<div class="contentRow-figure">
+									<xf:avatar user="$share.user" size="s" notooltip="true" />
+								</div>
+								<div class="contentRow-main">
+									<xf:if is="$xf.visitor.canCleanSpam() AND $share.user.isPossibleSpammer()">
+										<span class="contentRow-extra">
+											<xf:button href="{{ link('spam-cleaner', $share.user) }}"
+												class="button--link" overlay="true">
+												{{ phrase('spam') }}
+											</xf:button>
+										</span>
+									</xf:if>
+
+									<h3 class="contentRow-header"><xf:username user="$share.user" rich="true" notooltip="true" /></h3>
+
+									<xf:userblurb user="$share.user" class="contentRow-lesser" />
+
+									<div class="contentRow-minor">
+										<ul class="listInline listInline--bullet">
+											<li><dl class="pairs pairs--inline">
+												<dt>{{ phrase('joined') }}</dt>
+												<dd><xf:date time="{$share.user.register_date}" /></dd>
+											</dl></li>
+											<li><dl class="pairs pairs--inline">
+												<dt>{{ phrase('messages') }}</dt>
+												<dd>{$share.user.message_count|number}</dd>
+											</dl></li>
+											<li><dl class="pairs pairs--inline">
+												<dt>{{ phrase('reaction_score') }}</dt>
+												<dd>{$share.user.reaction_score|number}</dd>
+											</dl></li>
+										</ul>
+									</div>
+
+									<div class="contentRow-lesser">
+										<ol>
+											<xf:foreach loop="{$share.ips}" value="$ip">
+												<li>
+													<ul class="listInline listInline--bullet">
+														<li><a href="{{ link('misc/ip-info', '', {'ip': $ip.ip|ip}) }}" target="_blank">{$ip.ip|ip}</a></li>
+														<xf:if is="$ip.total > 1">
+															<li>{{ phrase('x_times', {'total': $ip.total|number}) }}</li>
+															<li><xf:date time="{$ip.first_date}" /> - <xf:date time="{$ip.last_date}" /></li>
+														<xf:else />
+															<li>{{ phrase('1_time') }}</li>
+															<li><xf:date time="{$ip.first_date}" /></li>
+														</xf:if>
+													</ul>
+												</li>
+											</xf:foreach>
+										</ol>
+									</div>
+								</div>
+							</div>
+						</li>
+					</xf:foreach>
+				</ol>
+				<div class="block-footer">
+					<span class="block-footer-counter">{{ phrase('matched_x_users', {'count': count($shared)}) }}</span>
+				</div>
+			<xf:else />
+				<div class="block-body block-row">{{ phrase('no_matching_users_were_found') }}</div>
+			</xf:if>
+		</div>
+	</div>
+</xf:macro>

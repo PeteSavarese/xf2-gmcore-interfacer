@@ -1,0 +1,21 @@
+<div class="block-row block-row--separated">
+	{{ bb_code($report.content_info.message, 'profile_post', $content ?: $report.User) }}
+</div>
+
+<xf:if is="$report.content_info.user">
+	<xf:if is="$report.content_info.user.user_id != $report.content_info.profileUser.user_id">
+		<div class="block-row block-row--separated block-row--minor">
+			<dl class="pairs pairs--inline">
+				<dt>{{ phrase('receiving_member') }}</dt>
+				<dd><a href="{{ link('members', $report.content_info.profileUser) }}">{$report.content_info.profileUser.username}</a></dd>
+			</dl>
+		</div>
+	</xf:if>
+<xf:else />
+	<div class="block-row block-row--separated block-row--minor">
+		<dl class="pairs pairs--inline">
+			<dt>{{ phrase('receiving_member') }}</dt>
+			<dd>{$report.content_info.profile_username}</dd>
+		</dl>
+	</div>
+</xf:if>

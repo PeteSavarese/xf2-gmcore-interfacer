@@ -1,0 +1,11 @@
+{
+    "route_type": "public",
+    "route_prefix": "steam",
+    "sub_name": "getsummaries",
+    "format": "getsummaries/:str<steamids>/",
+    "build_class": "",
+    "build_method": "",
+    "controller": "BlackTea\\SteamAuth:Steam",
+    "context": "",
+    "action_prefix": "getsummaries"
+}

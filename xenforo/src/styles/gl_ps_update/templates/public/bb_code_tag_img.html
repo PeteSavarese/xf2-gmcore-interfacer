@@ -1,0 +1,15 @@
+<xf:if is="$lightbox">
+	<xf:macro id="lightbox_macros::single_image"
+		arg-canViewAttachments="{{ true }}"
+		arg-src="{$imageUrl}"
+		arg-dataUrl="{$validUrl}"
+		arg-alt="{{ $alt ?: $altFallback }}"
+		arg-title="{$alt}"
+		arg-styleAttr="{$styleAttr}"
+		arg-alignClass="{$alignClass}"
+		arg-width="{$width}"
+		arg-height="{$height}" />
+<xf:else />
+	<img src="{$imageUrl}" data-url="{$validUrl}" class="bbImage {$alignClass}" loading="lazy"
+		{{ $alt ? ('alt="' . $alt|for_attr . '" title="' . $alt|for_attr . '"') : '' }} style="{$styleAttr}" width="{$width}" height="{$height}" />
+</xf:if>

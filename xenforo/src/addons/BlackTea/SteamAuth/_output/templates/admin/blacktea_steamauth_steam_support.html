@@ -1,0 +1,27 @@
+<xf:title>{{ phrase('blacktea_steamauth_support') }}</xf:title>
+<div class="block-container">
+	<div class="support-notice formInfoRow">
+		<span>If you are having trouble with the add-on, please refrain from asking for support on the discussion thread itself. Troubleshooting can involve sensitive information and other things that are not ideal for public view.</span>
+		<span>Instead, we offer support via the following:</span>
+		<ul>
+			<li>Discord: <a href="https://discord.gg/cUtwu2J" target="_blank">Join server</a></li>
+			<li>E-Mail: <a href="mailto:omar@assadi.co.il" target="_blank">omar@assadi.co.il</a></li>
+			<li>Slack: <a href="https://join.slack.com/t/s70/shared_invite/enQtMzAyMjM4MTA2MjEwLTJkZTY5YTg4NWIyYzQ5YjJlZmYzMGJlN2Q3YTYwZTRmMjJmMmI3MTVhZDQwYTY0MzEwZDUyMDZjZmMxZmU2ZWQ" target="_blank">Join server</a></li>
+			<li>Private Message: <a href="https://xenforo.com/community/conversations/add?to=Assadi,^Alex,dubwub" target="_blank">https://xenforo.com/community/conversations/add?to=Assadi,^Alex,dubwub</a></li>
+		</ul>
+		<span>To aid the support request, please provide a data export using the form below:</span>
+	</div>
+	<xf:form action="" class="block">
+		<div class="block-body">
+			<xf:checkboxrow label="{{ phrase('blacktea_steamauth_support_export_options') }}" hint="{{ phrase('blacktea_steamauth_data_anonymised') }}">
+				<xf:option name="export_addon_setup" selected="true" label="{{ phrase('blacktea_steamauth_export_addon_setup') }}" />
+				<xf:option name="export_addon_settings" selected="true" label="{{ phrase('blacktea_steamauth_export_addon_settings') }}" />
+				<xf:option name="export_addon_permissions" selected="true" label="{{ phrase('blacktea_steamauth_export_addon_permissions') }}" />
+				<xf:option name="export_addon_users" selected="true" label="{{ phrase('blacktea_steamauth_export_addon_users') }}" />
+				<xf:option name="export_website_configuration" selected="true" label="{{ phrase('blacktea_steamauth_export_website_configuration') }}" />
+				<xf:option name="export_enabled_addons" selected="true" label="{{ phrase('blacktea_steamauth_export_enabled_addons') }}" />
+			</xf:checkboxrow>
+		</div>
+		<xf:submitrow icon="export" sticky="true" />
+	</xf:form>
+</div>

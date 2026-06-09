@@ -1,0 +1,29 @@
+<div class="share-tooltip tooltip-content-inner">
+	<div class="block-minorHeader">{$tooltipTitle}</div>
+	<xf:if contentcheck="true">
+		<div class="block-body block-row block-row--separated block-row--separated--mergePrev">
+			<xf:contentcheck>
+				<xf:macro id="share_page_macros::buttons"
+					arg-iconic="{{ true }}"
+					arg-hideLink="{{ true }}"
+					arg-pageUrl="{$contentUrl}"
+					arg-pageTitle="{$contentTitle}"
+					arg-pageDesc="{$contentDesc}" />
+			</xf:contentcheck>
+		</div>
+	</xf:if>
+	<div class="block-body block-row block-row--separated">
+		<xf:macro id="share_page_macros::share_clipboard_input"
+			arg-label="{{ phrase('copy_link') }}"
+			arg-text="{$contentUrl}"
+			arg-successText="{{ phrase('link_copied_to_clipboard') }}" />
+	</div>
+	<xf:if is="$xf.options.embedCodeShare AND $contentEmbedCode">
+		<div class="block-body block-row block-row--separated">
+			<xf:macro id="share_page_macros::share_clipboard_input"
+				arg-label="{{ phrase('copy_embed_code_html') }}"
+				arg-text="{$contentEmbedCode}"
+				arg-successText="{{ phrase('embed_code_html_copied_to_clipboard') }}" />
+		</div>
+	</xf:if>
+</div>

@@ -1,0 +1,18 @@
+<xf:title>{$title} - {{ phrase('version_comparison') }}</xf:title>
+
+<xf:breadcrumb source="$breadcrumbs" />
+
+<xf:css src="public:diff.less" />
+
+<div class="block">
+	<div class="block-container">
+		<div class="block-body block-row">
+			<ul class="diffList">
+				<xf:foreach loop="$diffs" value="$diff">
+					<xf:set var="$diffHtml">{{ $diff.1|join('<br />') }}</xf:set>
+					<li class="diffList-line diffList-line--{$diff.0}">{{ trim($diffHtml) !== '' ? $diffHtml : '&nbsp;' }}</li>
+				</xf:foreach>
+			</ul>
+		</div>
+	</div>
+</div>

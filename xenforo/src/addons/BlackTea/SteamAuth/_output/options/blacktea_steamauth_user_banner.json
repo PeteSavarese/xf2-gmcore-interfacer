@@ -1,0 +1,13 @@
+{
+    "edit_format": "template",
+    "edit_format_params": "option_template_steamauthUserBannerLocation",
+    "data_type": "integer",
+    "sub_options": [],
+    "validation_class": "",
+    "validation_method": "",
+    "advanced": false,
+    "default_value": "1",
+    "relations": {
+        "blacktea_steamauth_options": 300
+    }
+}

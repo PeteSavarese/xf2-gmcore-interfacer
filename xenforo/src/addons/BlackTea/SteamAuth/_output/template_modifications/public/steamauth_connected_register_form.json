@@ -1,0 +1,9 @@
+{
+    "template": "register_form",
+    "description": "Adds the ability for administrators to remove non-steam connected account providers",
+    "execution_order": 10,
+    "enabled": true,
+    "action": "preg_replace",
+    "find": "/(?<=<xf:foreach loop=\"\\$providers\" value=\"\\$provider\">).+?(?=<\\/xf:foreach)/s",
+    "replace": "<xf:if is=\"!$xf.options.blacktea_steamauth_force_registration || $provider.getValue('provider_id') == 'steam'\">\n$0\n</xf:if>"
+}

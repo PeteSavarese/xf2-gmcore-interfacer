@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<routes>
+  <route route_type="admin" route_prefix="discord" format=":int&lt;mapping_id&gt;/" controller="PeterSav\GModInterface:Discord"/>
+  <route route_type="admin" route_prefix="gl-store" format=":int&lt;group_id&gt;/" controller="PeterSav\GModInterface:Store"/>
+  <route route_type="api" route_prefix="discord" sub_name="-" format=":str&lt;discord_id&gt;/" controller="PeterSav\GModInterface:Discord"/>
+  <route route_type="api" route_prefix="discord" sub_name="remove_roles" format=":str&lt;discord_id&gt;/remove-roles" controller="PeterSav\GModInterface:Discord" action_prefix="RemoveRoles"/>
+  <route route_type="api" route_prefix="discord" sub_name="sync" format=":str&lt;discord_id&gt;/sync" controller="PeterSav\GModInterface:Discord" action_prefix="Sync"/>
+  <route route_type="public" route_prefix="discord" controller="PeterSav\GModInterface:Discord" context="gmodDiscord"/>
+  <route route_type="public" route_prefix="gl" format=":int&lt;message_id&gt;/" controller="PeterSav\GModInterface:Index" context="ahgServers"/>
+  <route route_type="public" route_prefix="gl" sub_name="lottery" format="lottery" controller="PeterSav\GModInterface:Lottery" context="ahgServers"/>
+  <route route_type="public" route_prefix="gl" sub_name="servers" format="servers" controller="PeterSav\GModInterface:Servers" context="gmodServers"/>
+  <route route_type="public" route_prefix="gl" sub_name="stats" format="stats" controller="PeterSav\GModInterface:Stats" context="gmodStats"/>
+  <route route_type="public" route_prefix="store" format=":int&lt;user_id&gt;/" controller="PeterSav\GModInterface:Store" context="gmodStore"/>
+</routes>

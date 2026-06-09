@@ -1,0 +1,2 @@
+
+        Full shoutbox, placed above the node list

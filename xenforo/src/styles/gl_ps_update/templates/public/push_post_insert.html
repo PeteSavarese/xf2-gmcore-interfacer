@@ -1,0 +1,15 @@
+<xf:if is="$content.isFirstPost()">
+	{{ phrase('x_started_thread_y_may_be_more', {
+		'name': $user.username ?: $alert.username,
+		'title': prefix('thread', $content.Thread, 'plain') . $content.Thread.title
+	}) }}
+	<push:url>{{ link('canonical:threads', $content.Thread) }}</push:url>
+	<push:tag>post_insert_forum_{$content.Thread.node_id}</push:tag>
+<xf:else />
+	{{ phrase('x_replied_to_thread_y_may_be_more', {
+		'name': $user.username ?: $alert.username,
+		'title': prefix('thread', $content.Thread, 'plain') . $content.Thread.title
+	}) }}
+	<push:url>{{ link('canonical:posts', $content) }}</push:url>
+	<push:tag>post_insert_thread_{$content.thread_id}</push:tag>
+</xf:if>

@@ -1,0 +1,38 @@
+.git
+.gitignore
+.gitattributes
+.github
+
+# Docker
+.dockerignore
+docker-compose*.yaml
+
+# XenForo data (mounted at runtime)
+xenforo/data
+xenforo/internal_data
+
+# Database data
+.data/
+mariadb/*.sql
+mariadb/dumps
+mariadb/initdb
+
+# Logs
+*.log
+logs/
+nginx/logs
+
+# Editors / OS
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Temp files
+tmp/
+cache/
+
+# Docs
+README.md
+*.md
+!mariadb/flyway/gmcore_core/sql/*.sql

@@ -1,0 +1,52 @@
+<xf:css src="help_page_smilies.less" />
+
+<div class="embed-container contentRow contentRow--alignMiddle">
+	<div class="contentRow-figure">
+		<xf:avatar user="$content.User" size="s" defaultname="{$content.username}" />
+	</div>
+	<div class="contentRow-main">
+		<h3 class="contentRow-header">
+			<xf:if is="$content.prefix_id">
+				{{ prefix('thread', $content, 'html', '') }}
+			</xf:if>
+			<a href="{$content.getContentUrl()}" class="fauxBlockLink-blockLink u-cloaked">{$content.getContentTitle()}</a>
+		</h3>
+
+		<div class="contentRow-minor contentRow-minor--hideLinks">
+			<xf:date time="{$content.post_date}" />
+		</div>
+	</div>
+</div>
+
+<xf:if is="$content.FirstPost.message">
+	<div class="embed-preview">
+			{{ bb_code_snippet($content.FirstPost.message, 'post', $content.FirstPost, 600, {'withinEmbedResolver': true}) }}
+	</div>
+</xf:if>
+
+<xf:comment>
+<xf:if is="$content.cover_image_data.src">
+	<div class="embed-cover">
+		<img src="{$content.cover_image_data.src}" width="{$content.cover_image_data.width}" height="{$content.cover_image_data.height}" loading="lazy" />
+	</div>
+</xf:if>
+</xf:comment>
+
+<div class="embed-footer">
+	<div class="embed-footer-main">
+		<ul class="listInline listInline--bullet">
+			<li><xf:username user="{$content.User}" defaultname="{$content.username}" /></li>
+			<xf:if is="$xf.options.enableTagging && $content.tags">
+				<li>
+					<xf:macro template="tag_macros" name="simple_list"
+						arg-tags="{$content.tags}" />
+				</li>
+			</xf:if>
+			<li>{{ phrase('replies:') }} {$content.reply_count|number}</li>
+			<li>{{ phrase('forum:') }} <a href="{{ link('forums', $content.Forum) }}">{$content.Forum.title}</a></li>
+		</ul>
+	</div>
+	<div class="embed-footer-opposite">
+		<xf:reactions summary="true" reactions="{$content.first_post_reactions}" />
+	</div>
+</div>

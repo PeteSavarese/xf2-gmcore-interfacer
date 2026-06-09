@@ -1,0 +1,21 @@
+<div class="block-row block-row--separated">
+	{{ bb_code($report.content_info.message, 'profile_post_comment', $content ?: $report.User) }}
+</div>
+
+<xf:if is="$report.content_info.user">
+	<xf:if is="$report.content_info.user.user_id != $report.content_info.profileUser.user_id">
+		<div class="block-row block-row--separated block-row--minor">
+			<dl class="pairs pairs--inline">
+				<dt>{{ phrase('profile_post') }}</dt>
+				<dd><a href="{{ link('profile-posts', $report.content_info) }}">{{ phrase('profile_post_for_x', {'username': {$report.content_info.profileUser.username}}) }}</a></dd>
+			</dl>
+		</div>
+	</xf:if>
+<xf:else />
+	<div class="block-row block-row--separated block-row--minor">
+		<dl class="pairs pairs--inline">
+			<dt>{{ phrase('profile_post') }}</dt>
+			<dd><a href="{{ link('profile-posts', $report.content_info) }}">{{ phrase('profile_post_for_x', {'username': {$report.content_info.profile_username}}) }}</a></dd>
+		</dl>
+	</div>
+</xf:if>

@@ -1,0 +1,21 @@
+<xf:title>{{ $isIgnoring ? phrase('stop_ignoring_x', {'name': $user.username}) : phrase('ignore_x', {'name': $user.username}) }}</xf:title>
+
+<xf:breadcrumb href="{{ link('members', $user) }}">{$user.username}</xf:breadcrumb>
+
+<xf:form action="{{ link('members/ignore', $user) }}" ajax="true" class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:inforow rowtype="confirm">
+				<xf:if is="$isIgnoring">
+					{{ phrase('please_confirm_that_you_wish_to_stop_ignoring_this_user:') }}
+				<xf:else />
+					{{ phrase('please_confirm_that_you_wish_to_start_ignoring_this_user:') }}
+				</xf:if>
+				<strong><a href="{{ link('members', $user) }}">{$user.username}</a></strong>
+			</xf:inforow>
+		</div>
+		<xf:submitrow submit="{{ $isIgnoring ? phrase('unignore') : phrase('ignore') }}" rowtype="simple" />
+	</div>
+
+	<xf:redirect />
+</xf:form>

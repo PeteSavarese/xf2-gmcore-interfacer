@@ -1,0 +1,22 @@
+{
+    "group_name": "input",
+    "title": "Form input - disabled",
+    "description": "When text boxes are disabled, these rules are applied",
+    "property_type": "css",
+    "css_components": [
+        "text",
+        "background",
+        "border",
+        "extra"
+    ],
+    "value_type": "",
+    "value_parameters": "",
+    "has_variations": false,
+    "depends_on": "",
+    "value_group": "",
+    "property_value": {
+        "color": "@xf-linkColor",
+        "background-color": "#1a2535"
+    },
+    "display_order": 20200
+}

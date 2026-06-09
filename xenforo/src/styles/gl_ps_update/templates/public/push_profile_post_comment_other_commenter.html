@@ -1,0 +1,12 @@
+<xf:if is="$content.ProfilePost.ProfileUser.user_id == $content.ProfilePost.user_id">
+	{{ phrase('push_x_also_commented_on_ys_status', {
+		'name': $user.username ?: $alert.username,
+		'poster': $content.ProfilePost.username
+	}) }}
+<xf:else />
+	{{ phrase('push_x_also_commented_on_ys_profile_post', {
+		'name': $user.username ?: $alert.username,
+		'poster': $content.ProfilePost.username
+	}) }}
+</xf:if>
+<push:url>{{ link('canonical:profile-posts/comments', $content) }}</push:url>

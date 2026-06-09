@@ -1,0 +1,67 @@
+<xf:extends template="forum_view" />
+
+<xf:extension id="thread_list_header">
+	<h2 class="block-tabHeader tabs">
+		<div class="hScroller" data-xf-init="h-scroller">
+			<span class="hScroller-scroll">
+				<!--[XF:type_tabs:start]-->
+				<a href="{{ link('forums', $forum, $questionTabs.latest.filters) }}" class="tabs-tab {{ $questionTabs.latest.selected ? 'is-active' : '' }}">{{ phrase('latest_updates') }}</a>
+				<a href="{{ link('forums', $forum, $questionTabs.popular.filters) }}" class="tabs-tab {{ $questionTabs.popular.selected ? 'is-active' : '' }}" rel="nofollow">{{ phrase('popular') }}</a>
+				<a href="{{ link('forums', $forum, $questionTabs.newest.filters) }}" class="tabs-tab {{ $questionTabs.newest.selected ? 'is-active' : '' }}" rel="nofollow">{{ phrase('newest') }}</a>
+				<a href="{{ link('forums', $forum, $questionTabs.unanswered.filters) }}" class="tabs-tab {{ $questionTabs.unanswered.selected ? 'is-active' : '' }}" rel="nofollow">{{ phrase('unanswered') }}</a>
+				<a href="{{ link('forums', $forum, $questionTabs.unsolved.filters) }}" class="tabs-tab {{ $questionTabs.unsolved.selected ? 'is-active' : '' }}" rel="nofollow">{{ phrase('unsolved') }}</a>
+				<xf:if is="$questionTabs.yourQuestions">
+					<a href="{{ link('forums', $forum, $questionTabs.yourQuestions.filters) }}" class="tabs-tab {{ $questionTabs.yourQuestions.selected ? 'is-active' : '' }}" rel="nofollow">{{ phrase('your_questions') }}</a>
+				</xf:if>
+				<xf:if is="$questionTabs.yourAnswers">
+					<a href="{{ link('forums', $forum, $questionTabs.yourAnswers.filters) }}" class="tabs-tab {{ $questionTabs.yourAnswers.selected ? 'is-active' : '' }}" rel="nofollow">{{ phrase('your_answers') }}</a>
+				</xf:if>
+				<!--[XF:type_tabs:end]-->
+			</span>
+		</div>
+
+		<div class="tabs-extra tabs-extra--minor">
+			<a class="menuTrigger" data-xf-click="menu" role="button" tabindex="0" aria-expanded="false" aria-haspopup="true">{{ phrase('filters') }}</a>
+			<div class="menu menu--wide" data-menu="menu" aria-hidden="true"
+				data-href="{{ link('forums/filters', $forum, $filters) }}"
+				data-load-target=".js-filterMenuBody">
+				<div class="menu-content">
+					<h4 class="menu-header">{{ phrase('show_only:') }}</h4>
+					<div class="js-filterMenuBody">
+						<div class="menu-row">{{ phrase('loading...') }}</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</h2>
+
+	<xf:if contentcheck="true">
+		<div class="block-filterBar">
+			<div class="filterBar">
+				<ul class="filterBar-filters">
+				<xf:contentcheck>
+					<xf:extension id="filters">
+						<xf:macro id="filters"
+							arg-forum="{$forum}"
+							arg-filters="{$filters}"
+							arg-starterFilter="{$starterFilter}"
+							arg-questionTabs="{$questionTabs}" />
+					</xf:extension>
+				</xf:contentcheck>
+				</ul>
+			</div>
+		</div>
+	</xf:if>
+</xf:extension>
+
+<xf:macro id="filters" extends="forum_view::filters" arg-questionTabs="!">
+	<xf:extension id="order">
+		<xf:if is="
+			$questionTabs.latest.selected
+			OR $questionTabs.popular.selected
+			OR $questionTabs.newest.selected
+		"><xf:else />
+			<xf:extensionparent />
+		</xf:if>
+	</xf:extension>
+</xf:macro>

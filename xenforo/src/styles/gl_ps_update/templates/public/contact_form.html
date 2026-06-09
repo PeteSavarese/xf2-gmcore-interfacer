@@ -1,0 +1,37 @@
+<xf:title>{{ phrase('contact_us') }}</xf:title>
+
+<xf:form action="{{ link('misc/contact') }}" class="block" ajax="true" data-force-flash-message="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:if is="!$xf.visitor.user_id">
+				<xf:textboxrow name="username" autocomplete="username" autofocus="autofocus" maxlength="{{ max_length($xf.visitor, 'username') }}"
+					label="{{ phrase('your_name') }}" required="required" hint="{{ phrase('required') }}" />
+
+				<xf:textboxrow type="email" name="email" autocomplete="email" maxlength="{{ max_length($xf.visitor, 'email') }}"
+					label="{{ phrase('your_email_address') }}" required="required" hint="{{ phrase('required') }}" />
+			<xf:else />
+				<xf:formrow label="{{ phrase('your_name') }}">{$xf.visitor.username}</xf:formrow>
+				<xf:if is="$xf.visitor.email">
+
+					<xf:formrow label="{{ phrase('your_email_address') }}">{$xf.visitor.email|email_display}</xf:formrow>
+
+				<xf:else />
+
+					<xf:textboxrow type="email" name="email" autocomplete="email"
+						label="{{ phrase('your_email_address') }}" required="required" hint="{{ phrase('required') }}" />
+
+				</xf:if>
+			</xf:if>
+
+			<xf:captcharow label="{{ phrase('verification') }}" hint="{{ phrase('required') }}" force="{$forceCaptcha}" context="xf_contact_form" />
+
+			<xf:textboxrow name="subject"
+				label="{{ phrase('subject') }}" required="required" hint="{{ phrase('required') }}" />
+
+			<xf:textarearow name="message" rows="5" autosize="true"
+				label="{{ phrase('message') }}" required="required" hint="{{ phrase('required') }}" />
+		</div>
+		<xf:submitrow submit="{{ phrase('send') }}" />
+	</div>
+	<xf:redirect />
+</xf:form>

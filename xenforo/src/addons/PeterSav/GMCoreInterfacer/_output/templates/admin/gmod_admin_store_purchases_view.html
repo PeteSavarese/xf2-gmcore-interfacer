@@ -1,0 +1,80 @@
+<xf:title>View Store Rank Transaction</xf:title>
+<xf:css>
+.column {
+  float: left;
+  width: 50%;
+}
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+</xf:css>
+<div class="block-container" style="padding:15px">
+	<h1 style="text-align:center">Transaction <code class="u-textSmaller">{$transactionInfoPP.id}</code></h1>
+  <div class="row">
+    <div class="column">
+      <!-- Purchaser -->
+      <div class="contentRow">
+        <span><b>Purchaser</b>:</span>
+        <div class="contentRow-figure" style="margin-left:5px">
+          <xf:avatar user="{{ userid_to_user($transactionInfoDb.purchaser_user_id) }}" size="xs" />
+        </div>
+        <div class="contentRow-main contentRow-main--close">
+          <xf:username user="{{ userid_to_user($transactionInfoDb.purchaser_user_id) }}" rich="true" />
+        </div>
+      </div>
+      <!-- Receiver -->
+      <div class="contentRow">
+        <span><b>Receiver</b>:</span>
+        <div class="contentRow-figure" style="margin-left:5px">
+          <xf:avatar user="{{ userid_to_user($transactionInfoDb.receiver_user_id) }}" size="xs" />
+        </div>
+        <div class="contentRow-main contentRow-main--close">
+          <xf:username user="{{ userid_to_user($transactionInfoDb.receiver_user_id) }}" rich="true" />
+        </div>
+      </div>
+      <!-- Rank -->
+      <xf:if is="$groupInfo">
+        <div class="contentRow">
+          <span><b>Rank Purchased</b>: {$groupInfo.title}</span>
+        </div>
+      </xf:if>
+    </div>
+    <div class="column">
+      <!-- Payment Info -->
+      <div class="contentRow">
+        <span><b>Price</b>: {$transactionLog.amount} {$transactionLog.currency}</span>
+      </div>
+			<xf:if is="$isGift">
+				<div class="contentRow">
+					<span><b>Gifted Purchase</b>: Yes</span>
+				</div>
+			</xf:if>
+			<xf:if is="$discountAmount">
+				<div class="contentRow">
+					<span><b>Discount</b>: Saved {$discountAmount} {$transactionLog.currency}<xf:if is="$discountPercent"> ({$discountPercent}% off)</xf:if></span>
+				</div>
+			</xf:if>
+      <xf:if is="{$transactionInfoPP.seller_receivable_breakdown.net_amount}">
+        <div class="contentRow">
+          <span><b>Net Amount</b>: {$transactionInfoPP.seller_receivable_breakdown.net_amount.value} {$transactionLog.currency}</span>
+        </div>
+      </xf:if>
+      <div class="contentRow">
+        <span><b>Time of Purchase</b>: <xf:date time="{$transactionInfoDb.transaction_time}" /></span>
+      </div>
+      <xf:if is="{$transactionLog.payer_id}">
+        <div class="contentRow">
+			<span><b>PayPal Payer ID</b>: <code class="u-textSmaller">{$transactionLog.payer_id}</code></span>
+        </div>
+      </xf:if>
+    </div>
+  </div>
+</div>
+<xf:if is="{$showDebug}">
+  <h3>Debug Info</h3>
+  <pre>{{ dump($transactionLog) }}</pre>
+  <pre>{{ dump($transactionInfoDb) }}</pre>
+  <pre>{{ dump($transactionInfoPP) }}</pre>
+</xf:if>

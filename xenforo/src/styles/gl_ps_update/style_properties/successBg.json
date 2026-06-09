@@ -1,0 +1,17 @@
+{
+    "group_name": "color",
+    "title": "Success message background",
+    "description": "",
+    "property_type": "value",
+    "css_components": [],
+    "value_type": "color",
+    "value_parameters": "",
+    "has_variations": true,
+    "depends_on": "",
+    "value_group": "successMessage",
+    "property_value": {
+        "default": "rgba(39, 174, 96, 0.1)",
+        "alternate": "hsl(122, 70%, 20%)"
+    },
+    "display_order": 10210
+}

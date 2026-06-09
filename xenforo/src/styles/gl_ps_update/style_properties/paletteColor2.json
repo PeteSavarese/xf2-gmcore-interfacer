@@ -1,0 +1,16 @@
+{
+    "group_name": "palette",
+    "title": "Color 2",
+    "description": "",
+    "property_type": "value",
+    "css_components": [],
+    "value_type": "color",
+    "value_parameters": "hidePalette=true",
+    "has_variations": true,
+    "depends_on": "",
+    "value_group": "primary",
+    "property_value": {
+        "default": "#ecf0f1"
+    },
+    "display_order": 1100
+}

@@ -1,0 +1,9 @@
+{
+    "template": "login",
+    "description": "Adds login button CSS",
+    "execution_order": 10,
+    "enabled": true,
+    "action": "preg_replace",
+    "find": "/<xf:title>/",
+    "replace": "<xf:css src=\"public:login_steam.less\" />\n$0"
+}

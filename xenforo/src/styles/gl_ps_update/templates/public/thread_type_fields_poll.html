@@ -1,0 +1,12 @@
+<xf:if is="$context == 'create' AND $subContext == 'quick'">
+	<xf:set var="$rowType" value="fullWidth noGutter mergeNext" />
+<xf:elseif is="$context == 'edit' AND $subContext == 'first_post_quick'" />
+	<xf:set var="$rowType" value="fullWidth mergeNext" />
+<xf:else />
+	<xf:set var="$rowType" value="" />
+</xf:if>
+
+<xf:macro id="poll_macros::add_edit_inputs"
+	arg-draft="{$pollDraft}"
+	arg-rowType="{$rowType}"
+/>

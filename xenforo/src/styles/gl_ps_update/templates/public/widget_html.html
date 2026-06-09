@@ -1,0 +1,14 @@
+<xf:if is="!$options.advanced_mode">
+	<div class="block">
+		<div class="block-container" {{ widget_data($widget) }}>
+			<xf:if is="$title">
+				<h3 class="block-minorHeader">{$title}</h3>
+			</xf:if>
+			<div class="block-body block-row">
+				{$template|raw}
+			</div>
+		</div>
+	</div>
+<xf:else />
+	{$template|raw}
+</xf:if>

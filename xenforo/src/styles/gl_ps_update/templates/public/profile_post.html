@@ -1,0 +1,19 @@
+<xf:title>{{ phrase('profile_post_for_x', {'username': $profilePost.ProfileUser.username}) }}</xf:title>
+
+<xf:if is="$canInlineMod">
+	<xf:js src="xf/inline_mod.js" min="1" />
+</xf:if>
+
+<xf:macro id="lightbox_macros::setup" arg-canViewAttachments="{$profilePost.canViewAttachments()}" />
+
+<div class="block" data-xf-init="lightbox {{ $canInlineMod ? 'inline-mod' : '' }}" data-type="profile_post" data-href="{{ link('inline-mod') }}">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:macro id="profile_post_macros::profile_post"
+				arg-attachmentData="{$profilePostAttachData.{$profilePost.profile_post_id}}"
+				arg-profilePost="{$profilePost}"
+				arg-showTargetUser="{$showTargetUser}"
+				arg-allowInlineMod="{$allowInlineMod}" />
+		</div>
+	</div>
+</div>

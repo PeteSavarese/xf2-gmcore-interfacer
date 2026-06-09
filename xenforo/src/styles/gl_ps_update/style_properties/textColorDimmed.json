@@ -1,0 +1,16 @@
+{
+    "group_name": "color",
+    "title": "Dimmed text color",
+    "description": "Used when less-important text is placed next to normal text",
+    "property_type": "value",
+    "css_components": [],
+    "value_type": "color",
+    "value_parameters": "",
+    "has_variations": true,
+    "depends_on": "",
+    "value_group": "textBasic",
+    "property_value": {
+        "default": "#bdc3c7"
+    },
+    "display_order": 200
+}

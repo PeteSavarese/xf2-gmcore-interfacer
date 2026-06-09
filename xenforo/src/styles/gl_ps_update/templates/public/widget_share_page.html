@@ -1,0 +1,12 @@
+<xf:if contentcheck="true">
+	<div class="block"{{ widget_data($widget) }}>
+		<div class="block-container">
+			<h3 class="block-minorHeader">{$title}</h3>
+			<div class="block-body block-row">
+				<xf:contentcheck>
+					<xf:macro id="share_page_macros::buttons" arg-iconic="{$options.iconic}" />
+				</xf:contentcheck>
+			</div>
+		</div>
+	</div>
+</xf:if>

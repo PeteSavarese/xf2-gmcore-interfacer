@@ -1,0 +1,20 @@
+<xf:ad position="forum_overview_top" />
+<xf:widgetpos id="forum_overview_top" />
+
+<xf:pageaction>
+	<xf:if is="$pageSelected == 'new_posts' ">
+		<xf:button href="{{ link('forums/list') }}" icon="list">
+			{{ phrase('forum_list') }}
+		</xf:button>
+	</xf:if>
+	<xf:if is="$xf.visitor.canCreateThread() OR $xf.visitor.canCreateThreadPreReg()">
+		<xf:button href="{{ link('forums/create-thread') }}" class="button--cta" icon="write" overlay="true" rel="nofollow">
+			{{ phrase('post_thread...') }}
+		</xf:button>
+	</xf:if>
+</xf:pageaction>
+
+{$innerContent|raw}
+
+<xf:ad position="forum_overview_bottom" />
+<xf:widgetpos id="forum_overview_bottom" />

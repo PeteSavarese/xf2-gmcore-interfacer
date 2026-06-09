@@ -1,0 +1,42 @@
+<xf:title>{{ $title ? $title . ' - ' : '' }}{{ phrase('moderator_actions') }}</xf:title>
+
+<xf:breadcrumb source="$breadcrumbs" />
+
+<xf:if is="$logs">
+	<div class="block">
+		<div class="block-container js-logList-{$type}{$id}">
+			<div class="block-body">
+				<xf:datalist data-xf-init="responsive-data-list">
+					<xf:datarow rowtype="header">
+						<xf:cell>{{ phrase('moderator') }}</xf:cell>
+						<xf:cell>{{ phrase('action') }}</xf:cell>
+						<xf:cell>{{ phrase('date') }}</xf:cell>
+						<xf:cell>&nbsp;</xf:cell>
+					</xf:datarow>
+					<xf:foreach loop="$logs" value="$entry">
+						<xf:datarow>
+							<xf:cell><xf:username user="$entry.User" /></xf:cell>
+							<xf:cell>{$entry.action_text}</xf:cell>
+							<xf:cell><xf:date time="{$entry.log_date}" /></xf:cell>
+							<xf:action href="{{ base_url($entry.content_url) }}">{{ phrase('view') }}</xf:action>
+						</xf:datarow>
+					</xf:foreach>
+				</xf:datalist>
+			</div>
+			<div class="block-footer">
+				<xf:if is="$hasNext">
+					<span class="block-footer-controls"><xf:button href="{{ link($linkRoute, $linkData, $linkParams + {'page': $page + 1}) }}"
+						data-xf-click="inserter"
+						data-replace=".js-logList-{$type}{$id}"
+						data-scroll-target="< .overlay">
+						{{ phrase('continue...') }}
+					</xf:button></span>
+				<xf:else />
+					{{ phrase('previous_moderation_action_logs_may_have_been_removed') }}
+				</xf:if>
+			</div>
+		</div>
+	</div>
+<xf:else />
+	<div class="blockMessage">{{ phrase('no_moderator_actions_have_been_logged') }}</div>
+</xf:if>

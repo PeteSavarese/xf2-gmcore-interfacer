@@ -1,0 +1,429 @@
+@_nodeList-statsCellBreakpoint: 1000px;
+
+.node
+{
+	& + .node
+	{
+		border-top: @xf-borderSize solid @xf-borderColorFaint;
+	}
+}
+
+.node-body
+{
+	display: table;
+	table-layout: fixed;
+	width: 100%;
+}
+
+.node-icon
+{
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+	width: 46px;
+	padding: @xf-paddingLarge 0 @xf-paddingLarge @xf-paddingLarge;
+
+	i
+	{
+		display: block;
+		color: @xf-nodeIconReadColor;
+		line-height: 1.125;
+		font-size: 36px;
+
+		.node--unread &
+		{
+			opacity: 1;
+			color: @xf-nodeIconUnreadColor;
+		}
+	}
+}
+
+.node-main
+{
+	display: table-cell;
+	vertical-align: middle;
+	padding: @xf-paddingLarge;
+}
+
+.node-stats
+{
+	display: table-cell;
+	width: 140px;
+	vertical-align: middle;
+	text-align: center;
+	padding: @xf-paddingLarge 0;
+
+	> dl.pairs.pairs--rows
+	{
+		width: 50%;
+		float: left;
+		margin: 0;
+		padding: 0 (@xf-paddingMedium / 2);
+
+		&:first-child
+		{
+			padding-left: 0;
+		}
+
+		&:last-child
+		{
+			padding-right: 0;
+		}
+	}
+
+	&.node-stats--single
+	{
+		width: 100px;
+
+		> dl.pairs.pairs--rows
+		{
+			width: 100%;
+			float: none;
+		}
+	}
+
+	&.node-stats--triple
+	{
+		width: 240px;
+
+		> dl.pairs.pairs--rows
+		{
+			width: 33.333%;
+		}
+	}
+
+	@media (max-width: @_nodeList-statsCellBreakpoint)
+	{
+		display: none;
+	}
+}
+
+@_nodeExtra-avatarSize: 36px;
+
+.node-extra
+{
+	display: table-cell;
+	vertical-align: middle;
+	width: 280px;
+	padding: @xf-paddingLarge;
+
+	font-size: @xf-fontSizeSmall;
+}
+
+.node-extra-row
+{
+	.m-overflowEllipsis();
+	color: @xf-textColorMuted;
+}
+
+.node-extra-icon
+{
+	padding-right: @xf-paddingLarge;
+	float: left;
+
+	.avatar
+	{
+		.m-avatarSize(@_nodeExtra-avatarSize);
+	}
+}
+
+.node-title
+{
+	margin: 0;
+	padding: 0;
+	font-size: @xf-fontSizeLarge;
+	font-weight: @xf-fontWeightNormal;
+
+	.node--unread &
+	{
+		font-weight: @xf-fontWeightHeavy;
+	}
+}
+
+.node-description
+{
+	font-size: @xf-fontSizeSmall;
+	color: @xf-textColorDimmed;
+
+	&.node-description--tooltip
+	{
+		.has-js:not(.has-touchevents) &
+		{
+			display: none;
+		}
+	}
+}
+
+.node-meta
+{
+	font-size: @xf-fontSizeSmall;
+}
+
+.node-statsMeta
+{
+	display: none;
+
+	@media (max-width: @_nodeList-statsCellBreakpoint)
+	{
+		display: inline;
+	}
+}
+
+.node-bonus
+{
+	font-size: @xf-fontSizeSmall;
+	color: @xf-textColorMuted;
+	text-align: right;
+}
+
+.node-subNodesFlat
+{
+	font-size: @xf-fontSizeSmall;
+	margin-top: .3em;
+
+	.node-subNodesLabel
+	{
+		display: none;
+	}
+}
+
+.node-subNodeMenu
+{
+	display: inline;
+
+	.menuTrigger
+	{
+		color: @xf-textColorMuted;
+	}
+}
+
+@media (max-width: @xf-responsiveMedium)
+{
+	.node-main
+	{
+		display: block;
+		width: auto;
+
+		.node--link &,
+		.node--page &
+		{
+			// #168882: we only display the title for these types
+			// so keep these as table-cells for vertical alignment
+			display: table-cell;
+		}
+	}
+
+	.node-extra
+	{
+		display: block;
+		width: auto;
+		// this gives an equivalent of medium padding between main and extra, with main still having large
+		margin-top: (@xf-paddingMedium - @xf-paddingLarge);
+		padding-top: 0;
+	}
+
+	.node-extra-row
+	{
+		display: inline-block;
+		vertical-align: top;
+		max-width: 100%;
+	}
+
+	.node-extra-icon
+	{
+		display: none;
+	}
+
+	.node-description,
+	.node-stats,
+	.node-subNodesFlat
+	{
+		display: none;
+	}
+}
+
+@media (max-width: @xf-responsiveNarrow)
+{
+	.node-subNodeMenu
+	{
+		display: none;
+	}
+}
+
+.subNodeLink
+{
+	&:before,
+	.subNodeLink-icon
+	{
+		display: inline-block;
+		width: 1.28571429em;
+		margin-right: .3em;
+		text-decoration: none;
+		text-align: center;
+
+		color: @xf-nodeIconReadColor;
+	}
+
+	&:before
+	{
+		.m-faBase();
+	}
+
+	&:hover:before
+	{
+		&:before,
+		.subNodeLink-icon
+		{
+			text-decoration: none;
+		}
+	}
+
+	&.subNodeLink--unread
+	{
+		font-weight: @xf-fontWeightHeavy;
+
+		&:before,
+		.subNodeLink-icon
+		{
+			color: @xf-nodeIconUnreadColor;
+		}
+	}
+
+	&.subNodeLink--category:before
+	{
+		.m-faContent(@fa-var-comments);
+	}
+
+	&.subNodeLink--page:before
+	{
+		.m-faContent(@fa-var-file-alt);
+	}
+
+	&.subNodeLink--link:before
+	{
+		.m-faContent(@fa-var-link);
+	}
+
+	&.subNodeLink--search::before
+	{
+		.m-faContent(@fa-var-search);
+	}
+}
+
+.node-subNodeFlatList
+{
+	.m-listPlain();
+	.m-clearFix();
+
+	> li
+	{
+		display: inline-block;
+		margin-right: 1em;
+
+		&:last-child
+		{
+			margin-right: 0;
+		}
+	}
+
+	ol,
+	ul,
+	.node-subNodes
+	{
+		display: none;
+	}
+}
+
+.subNodeMenu
+{
+	.m-listPlain();
+
+	ol,
+	ul
+	{
+		.m-listPlain();
+	}
+
+	.subNodeLink
+	{
+		display: block;
+		padding: @xf-blockPaddingV @xf-blockPaddingH;
+		text-decoration: none;
+		cursor: pointer;
+
+		&:hover
+		{
+			text-decoration: none;
+			background: @xf-contentHighlightBg;
+		}
+	}
+
+	li li .subNodeLink { padding-left: 1.5em; }
+	li li li .subNodeLink { padding-left: 3em; }
+	li li li li .subNodeLink { padding-left: 4.5em; }
+	li li li li li .subNodeLink { padding-left: 6em; }
+	li li li li li li .subNodeLink { padding-left: 7.5em; }
+}
+
+.node {
+	transition: all 0.2s ease;
+}
+
+.node:hover {
+	background: rgba(52, 152, 219, 0.03);
+}
+
+.node-icon {
+	border-radius: @gl-radius;
+	border: none;
+	background: transparent;
+	box-shadow: none;
+	transition: all 0.2s ease;
+}
+
+.node:hover .node-icon {
+	border-color: transparent;
+	box-shadow: none;
+}
+
+.node-title,
+.node-title a {
+	font-family: @xf-fontFamilyBody;
+}
+
+.node-title a {
+	font-weight: 600;
+	transition: color 0.2s ease;
+	color: #fff;
+}
+
+.node--unread {
+	border-left: 4px solid @gl-accent;
+}
+
+.node--unread .node-title a {
+	color: @gl-accent !important;
+	font-weight: 700;
+}
+
+.node-title a:hover {
+	color: @gl-accent;
+}
+
+.node-description {
+	color: @gl-text-muted;
+	font-size: 12px;
+}
+
+.node-stats {
+	color: @gl-text-muted;
+}
+
+.node-stats dt {
+	color: @gl-text-secondary;
+	font-weight: 600;
+}
+
+.node-extra {
+	color: @gl-text-muted;
+}

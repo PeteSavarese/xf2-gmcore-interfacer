@@ -1,0 +1,30 @@
+<xf:title>{{ phrase('ignoring') }}</xf:title>
+
+<xf:wrap template="account_wrapper" />
+
+<div class="block">
+	<div class="block-container">
+		<ol class="block-body">
+			<xf:foreach loop="$ignoring" value="$user">
+				<li class="block-row block-row--separated">
+					<xf:set var="$switchLink">
+						<xf:if is="$xf.visitor.isIgnoring($user) OR $xf.visitor.canIgnoreUser($user)">
+							<xf:button href="{{ link('members/ignore', $user) }}"
+								class="button--link"
+								data-xf-click="switch"
+								data-sk-ignore="{{ phrase('ignore') }}"
+								data-sk-unignore="{{ phrase('unignore') }}">
+								{{ $xf.visitor.isIgnoring($user) ? phrase('unignore') : phrase('ignore') }}
+							</xf:button>
+						</xf:if>
+					</xf:set>
+					<xf:macro id="member_list_macros::item"
+						arg-user="{$user}"
+						arg-extraData="{$switchLink}" />
+				</li>
+			<xf:else />
+				<div class="block-row">{{ phrase('you_not_currently_ignoring_any_members') }}</div>
+			</xf:foreach>
+		</ol>
+	</div>
+</div>

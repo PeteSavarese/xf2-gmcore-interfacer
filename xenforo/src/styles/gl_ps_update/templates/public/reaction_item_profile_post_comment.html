@@ -1,0 +1,36 @@
+<xf:macro id="reaction_snippet" arg-reactionUser="!" arg-reactionId="!" arg-comment="!" arg-date="!" arg-fallbackName="{{ phrase('unknown_member') }}">
+	<div class="contentRow-title">
+		<xf:if is="$comment.user_id == $xf.visitor.user_id">
+			{{ phrase('x_reacted_to_your_comment_on_ys_profile_post', {
+				'name': username_link($reactionUser, false, {'defaultname': $fallbackName}),
+				'post_attributes': 'href="' . link('profile-posts/comments', $comment) . '"',
+				'poster': $comment.ProfilePost.username,
+				'reaction': alert_reaction($reactionId, 'medium')|preescaped
+			}) }}
+		<xf:elseif is="$comment.ProfilePost.user_id == $xf.visitor.user_id" />
+			{{ phrase('x_reacted_to_ys_comment_on_your_profile_post', {
+				'name': username_link($reactionUser, false, {'defaultname': $fallbackName}),
+				'post_params': 'href="' . link('profile-posts/comments', $comment) . '"',
+				'poster': $comment.username,
+				'reaction': alert_reaction($reactionId, 'medium')|preescaped
+			}) }}
+		<xf:else />
+
+			{{ phrase('x_reacted_to_ys_comment_on_zs_profile_post', {
+				'name': username_link($reactionUser, false, {'defaultname': $fallbackName}),
+				'post_params': 'href="' . link('profile-posts/comments', $comment) . '"',
+				'poster': $comment.username,
+				'profile': $comment.ProfilePost.username,
+				'reaction': alert_reaction($reactionId, 'medium')|preescaped
+			}) }}
+		</xf:if>
+	</div>
+
+	<div class="contentRow-snippet">{{
+		snippet($comment.message, $xf.options.newsFeedMessageSnippetLength, {'stripQuote': true})
+	}}</div>
+
+	<div class="contentRow-minor"><xf:date time="{$date}" /></div>
+</xf:macro>
+
+<xf:macro id="reaction_snippet" arg-reactionUser="{$reaction.ReactionUser}" arg-reactionId="{$reaction.reaction_id}" arg-comment="{$content}" arg-date="{$reaction.reaction_date}" />

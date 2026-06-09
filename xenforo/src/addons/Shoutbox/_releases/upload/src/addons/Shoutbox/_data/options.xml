@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<options>
+    <option option_id="shoutbox_discord_channel_id" edit_format="textbox" data_type="string" advanced="0">
+        <default_value></default_value>
+        <relation group_id="gmod_interfacer_discord" display_order="50"/>
+    </option>
+</options>

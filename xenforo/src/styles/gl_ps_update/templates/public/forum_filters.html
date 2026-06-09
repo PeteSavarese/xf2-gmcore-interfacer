@@ -1,0 +1,106 @@
+<xf:form action="{{ link('forums/filters', $forum) }}">
+	<xf:extension id="start"></xf:extension>
+
+	<div class="menu-row menu-row--separated">
+		<xf:checkbox>
+			<xf:option name="featured" selected="{$filters.featured}" label="{{ phrase('featured_threads') }}" />
+		</xf:checkbox>
+	</div>
+
+	<!--[XF:above_prefixes]-->
+	<xf:if is="$prefixes is not empty">
+		<div class="menu-row menu-row--separated">
+			{{ phrase('prefix:') }}
+			<div class="u-inputSpacer">
+				<xf:macro id="prefix_macros::select"
+					arg-prefixes="{$prefixes}"
+					arg-type="thread"
+					arg-selected="{{ $filters.prefix_id ? $filters.prefix_id : 0 }}"
+					arg-name="prefix_id"
+					arg-noneLabel="{{ phrase('(any)') }}" />
+			</div>
+		</div>
+	</xf:if>
+
+	<xf:extension id="before_started_by"></xf:extension>
+
+	<!--[XF:above_started_by]-->
+	<div class="menu-row menu-row--separated">
+		<label for="ctrl_started_by">{{ phrase('started_by:') }}</label>
+		<div class="u-inputSpacer">
+			<xf:textbox name="starter" value="{{ $starterFilter ? $starterFilter.username : '' }}" ac="single"
+				maxlength="{{ max_length($xf.visitor, 'username') }}" id="ctrl_started_by" />
+		</div>
+	</div>
+
+	<xf:extension id="before_date_limit"></xf:extension>
+
+	<!--[XF:above_last_updated]-->
+	<div class="menu-row menu-row--separated">
+		<label for="ctrl_last_updated">{{ phrase('last_updated:') }}</label>
+		<div class="u-inputSpacer">
+			<xf:if is="$filters.no_date_limit">
+				<xf:set var="$lastDays" value="" />
+			<xf:else />
+				<xf:set var="$lastDays" value="{{ $filters.last_days ?: $forum.list_date_limit_days }}" />
+			</xf:if>
+			<xf:select name="last_days" value="{$lastDays}" id="ctrl_last_updated">
+				<xf:option value="-1">{{ phrase('any_time') }}</xf:option>
+				<xf:option value="7">{{ phrase('x_days', {'days': '7'}) }}</xf:option>
+				<xf:option value="14">{{ phrase('x_days', {'days': '14'}) }}</xf:option>
+				<xf:option value="30">{{ phrase('x_days', {'days': '30'}) }}</xf:option>
+				<xf:option value="60">{{ phrase('x_months', {'months': '2'}) }}</xf:option>
+				<xf:option value="90">{{ phrase('x_months', {'months': '3'}) }}</xf:option>
+				<xf:option value="182">{{ phrase('x_months', {'months': '6'}) }}</xf:option>
+				<xf:option value="365">{{ phrase('1_year') }}</xf:option>
+			</xf:select>
+		</div>
+	</div>
+
+	<xf:extension id="before_type"></xf:extension>
+
+	<!--[XF:above_allowed_thread_types]-->
+	<xf:if is="count($allowedThreadTypes) > 1">
+		<div class="menu-row menu-row--separated">
+			<label for="ctrl_thread_type">{{ phrase('thread_type_filter:') }}</label>
+			<div class="u-inputSpacer">
+				<xf:select name="thread_type" value="{$filters.thread_type}" id="ctrl_thread_type">
+					<xf:option value="">{{ phrase('(any)') }}</xf:option>
+					<xf:foreach loop="$allowedThreadTypes" key="$threadTypeId" value="$threadType">
+						<xf:option value="{$threadTypeId}">{{ $threadType.getTypeTitle() }}</xf:option>
+					</xf:foreach>
+				</xf:select>
+			</div>
+		</div>
+	</xf:if>
+
+	<xf:extension id="before_sort"></xf:extension>
+
+	<!--[XF:above_sort_by]-->
+	<div class="menu-row menu-row--separated">
+		{{ phrase('sort_by:') }}
+		<div class="inputGroup u-inputSpacer">
+			<span class="u-srOnly" id="ctrl_sort_by">{{ phrase('sort_order') }}</span>
+			<xf:select name="order" value="{{ $filters.order ?: $forum.default_sort_order }}" aria-labelledby="ctrl_sort_by">
+				<xf:foreach loop="$sortOptions" key="$sortKey" value="$null">
+					<xf:option value="{$sortKey}">{{ phrase_dynamic('forum_sort.' . $sortKey) }}</xf:option>
+				</xf:foreach>
+			</xf:select>
+			<span class="inputGroup-splitter"></span>
+			<span class="u-srOnly" id="ctrl_sort_direction">{{ phrase('sort_direction') }}</span>
+			<xf:select name="direction" value="{{ $filters.direction ?: $forum.default_sort_direction }}" aria-labelledby="ctrl_sort_direction">
+				<xf:option value="desc">{{ phrase('descending') }}</xf:option>
+				<xf:option value="asc">{{ phrase('ascending') }}</xf:option>
+			</xf:select>
+		</div>
+	</div>
+
+	<xf:extension id="end"></xf:extension>
+
+	<div class="menu-footer">
+		<span class="menu-footer-controls">
+			<xf:button type="submit" class="button--primary">{{ phrase('filter') }}</xf:button>
+		</span>
+	</div>
+	<xf:hiddenval name="apply">1</xf:hiddenval>
+</xf:form>

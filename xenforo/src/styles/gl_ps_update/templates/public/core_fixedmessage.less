@@ -1,0 +1,50 @@
+// ############################ FIXED MESSAGE BAR ################
+
+.fixedMessageBar
+{
+	.xf-fixedMessage();
+	.m-transitionFadeDown();
+	.m-clearFix();
+}
+
+.fixedMessageBar-inner
+{
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.fixedMessageBar-message
+{
+	order: 1;
+}
+
+.fixedMessageBar-close
+{
+	float: right;
+	margin-left: 1em;
+	order: 2;
+	color: inherit;
+
+	&:before
+	{
+		.m-faBase();
+		.m-faContent(@fa-var-times); //, .69em
+	}
+
+	&:hover
+	{
+		text-decoration: none;
+		color: xf-intensify(@xf-fixedMessage--color, 10%);
+	}
+}
+
+.fixedMessageBar {
+    backdrop-filter: blur(12px);
+    border-top: 1px solid rgba(52, 73, 94, 0.7);
+    box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+}
+.fixedMessageBar-inner {
+    border-radius: 12px;
+    padding: 10px 16px;
+}

@@ -1,0 +1,67 @@
+{
+    "admin/shoutbox_ban_delete_confirm.html": {
+        "version_id": 1000100,
+        "version_string": "1.0.1",
+        "hash": "974652aca2abfae60e0463de060d928e"
+    },
+    "admin/shoutbox_ban_history.html": {
+        "version_id": 1000100,
+        "version_string": "1.0.1",
+        "hash": "d4ba138843756310724de338c6e4daa1"
+    },
+    "admin/shoutbox_bans_list.html": {
+        "version_id": 1000100,
+        "version_string": "1.0.1",
+        "hash": "26fb43159b69e1655b835b3b62db5af6"
+    },
+    "public/shoutbox_ban_confirm.html": {
+        "version_id": 1000300,
+        "version_string": "1.0.3",
+        "hash": "a401ed48d9db7f8e5c455417197b4252"
+    },
+    "public/shoutbox_ban_info.html": {
+        "version_id": 1000100,
+        "version_string": "1.0.1",
+        "hash": "6a8eea781a9dad698c6d6a86eedde8c6"
+    },
+    "public/shoutbox_bans.html": {
+        "version_id": 1000100,
+        "version_string": "1.0.1",
+        "hash": "2793e83570a47d3f6a676b1da1f2202d"
+    },
+    "public/shoutbox_box.less": {
+        "version_id": 1000400,
+        "version_string": "1.0.4",
+        "hash": "d641726a18bce543bce0ea7291ae0202"
+    },
+    "public/shoutbox_delete_confirm.html": {
+        "version_id": 1000100,
+        "version_string": "1.0.1",
+        "hash": "874934c20977a8d42d61aa5bc1671126"
+    },
+    "public/shoutbox_edit_message.html": {
+        "version_id": 1000100,
+        "version_string": "1.0.1",
+        "hash": "ae924ffce25477d2a484fbd1783979a8"
+    },
+    "public/shoutbox_full_box.html": {
+        "version_id": 1000300,
+        "version_string": "1.0.3",
+        "hash": "4bd36bb277aa524c2e76fe225bc500af"
+    },
+    "public/shoutbox_messages.html": {
+        "version_id": 1000400,
+        "version_string": "1.0.4",
+        "hash": "51e73c9eaa0db87ebef88a80bd087837"
+    },
+    "public/shoutbox_poll_response.html": {
+        "version_id": 1000300,
+        "version_string": "1.0.3",
+        "hash": "b36e152a8bfa070d74983a9927e3f4e3"
+    },
+    "public/shoutbox_unban_confirm.html": {
+        "version_id": 1000100,
+        "version_string": "1.0.1",
+        "hash": "c6f2d506be9a0c63524661ea395db191"
+    }
+}

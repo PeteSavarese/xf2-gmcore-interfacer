@@ -1,0 +1,148 @@
+<xf:macro id="moderator_menu_actions" arg-user="!" arg-context="!">
+	<!--[XF:moderator_menu:top]-->
+	<xf:if is="$xf.visitor.canCleanSpam() && $user.isPossibleSpammer()">
+		<a href="{{ link('spam-cleaner', $user, {'no_redirect': 1}) }}" class="menu-linkRow" data-xf-click="overlay">{{ phrase('spam') }}</a>
+	</xf:if>
+	<xf:if is="$user.canWarn()">
+		<a href="{{ link('members/warn', $user) }}" class="menu-linkRow">{{ phrase('warn') }}</a>
+	</xf:if>
+	<xf:if is="$xf.visitor.canViewWarnings() && $user.warning_count AND $context == 'tooltip'">
+		<a href="{{ $user.canViewFullProfile() ? link('members', $user) . '#warnings' : link('members/warnings', $user) }}" class="menu-linkRow">{{ phrase('view_warnings_x', {'count': $user.warning_count|number}) }}</a>
+	</xf:if>
+	<xf:if is="$xf.visitor.canViewIps()">
+		<a href="{{ link('members/user-ips', $user) }}" class="menu-linkRow" data-xf-click="overlay">{{ phrase('ip_addresses') }}</a>
+		<a href="{{ link('members/shared-ips', $user) }}" class="menu-linkRow" data-xf-click="overlay">{{ phrase('shared_ips') }}</a>
+	</xf:if>
+	<xf:if is="$user.canBan()">
+		<a href="{{ link('members/ban', $user) }}" class="menu-linkRow" data-xf-click="overlay">
+			<xf:if is="$user.is_banned">
+				{{ phrase('edit_ban') }}
+			<xf:else />
+				{{ phrase('ban_member') }}
+			</xf:if>
+		</a>
+	</xf:if>
+	<xf:if is="$user.canEdit()">
+		<a href="{{ link('members/edit', $user) }}" class="menu-linkRow">{{ phrase('edit') }}</a>
+	</xf:if>
+	<!--[XF:moderator_menu:bottom]-->
+</xf:macro>
+
+<xf:macro id="member_stat_pairs" arg-user="!" arg-context="!">
+	<!--[XF:stat_pairs:above_joined]-->
+	<!--[XF:stat_pairs:above_messages]-->
+	<dl class="pairs pairs--rows pairs--rows--centered fauxBlockLink">
+		<dt>{{ phrase('messages') }}</dt>
+		<dd>
+			<xf:if is="$xf.visitor.canSearch()">
+				<a href="{{ link('search/member', null, {'user_id': $user.user_id, 'content': 'post'}) }}" rel="nofollow" class="fauxBlockLink-linkRow u-concealed">
+					{$user.message_count|number}
+				</a>
+			<xf:else />
+				{$user.message_count|number}
+			</xf:if>
+		</dd>
+	</dl>
+	<xf:if is="$user.question_solution_count">
+		<!--[XF:stat_pairs:above_solved]-->
+		<dl class="pairs pairs--rows pairs--rows--centered fauxBlockLink">
+			<dt>{{ phrase('solutions') }}</dt>
+			<dd>
+				{$user.question_solution_count|number}
+			</dd>
+		</dl>
+	</xf:if>
+	<!--[XF:stat_pairs:above_likes]-->
+	<!--[XF:stat_pairs:above_reactions]-->
+	<dl class="pairs pairs--rows pairs--rows--centered">
+		<dt>{{ phrase('reaction_score') }}</dt>
+		<dd>
+			{$user.reaction_score|number}
+		</dd>
+	</dl>
+	<!--[XF:stat_pairs:above_trophies]-->
+	<xf:if is="$xf.options.enableTrophies">
+		<dl class="pairs pairs--rows pairs--rows--centered fauxBlockLink">
+			<dt title="{{ phrase('trophy_points')|for_attr }}">{{ phrase('points') }}</dt>
+			<dd>
+				<a href="{{ link('members/trophies', $user) }}" rel="nofollow" data-xf-click="overlay" class="fauxBlockLink-linkRow u-concealed">
+					{$user.trophy_points|number}
+				</a>
+			</dd>
+		</dl>
+	</xf:if>
+	<!--[XF:stat_pairs:below_trophies]-->
+	<xf:if is="$xf.visitor.canViewWarnings() && $user.warning_points">
+		<dl class="pairs pairs--rows pairs--rows--centered fauxBlockLink">
+			<dt>{{ phrase('warnings') }}</dt>
+			<dd>
+				<a href="{{ ($context == 'tooltip' && $user.canViewFullProfile()) ? link('members', $user) . '#warnings' : link('members/warnings', $user) }}" data-xf-click="{{ $context == 'tooltip' ? '' : 'overlay' }}" class="fauxBlockLink-linkRow u-concealed">
+					{$user.warning_points|number} / {$user.warning_count|number}
+				</a>
+			</dd>
+		</dl>
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="member_action_buttons" arg-user="!" arg-context="!">
+	<!--[XF:action_groups:outer_start]-->
+	<xf:if contentcheck="true">
+		<!--[XF:action_groups:start]-->
+		<div class="buttonGroup">
+		<xf:contentcheck>
+			<!--[XF:action_group_1:start]-->
+			<xf:if is="$xf.visitor.canFollowUser($user)">
+				<xf:button href="{{ link('members/follow', $user) }}"
+					class="button--link"
+					data-xf-click="switch"
+					data-sk-follow="{{ phrase('follow') }}"
+					data-sk-unfollow="{{ phrase('unfollow') }}">
+					{{ $xf.visitor.isFollowing($user) ? phrase('unfollow') : phrase('follow') }}
+				</xf:button>
+			</xf:if>
+			<xf:if is="$xf.visitor.canIgnoreUser($user)">
+				<a href="{{ link('members/ignore', $user) }}"
+					class="button button--link"
+					data-xf-click="switch"
+					data-sk-ignore="{{ phrase('ignore')|for_attr }}"
+					data-sk-unignore="{{ phrase('unignore')|for_attr }}">
+					{{ $xf.visitor.isIgnoring($user) ? phrase('unignore') : phrase('ignore') }}
+				</a>
+			</xf:if>
+			<!--[XF:action_group_1:end]-->
+		</xf:contentcheck>
+		</div>
+	</xf:if>
+
+	<!--[XF:action_groups:middle]-->
+
+	<xf:if contentcheck="true">
+		<div class="buttonGroup">
+		<xf:contentcheck>
+			<!--[XF:action_group_2:start]-->
+			<xf:if is="$xf.visitor.canStartConversationWith($user)">
+				<xf:button href="{{ link('direct-messages/add', null, {'to': $user.username}) }}" class="button--link">
+					{{ phrase('send_direct_message') }}
+				</xf:button>
+			</xf:if>
+			<xf:if is="$xf.visitor.canSearch() AND $context != 'tooltip'">
+				<div class="buttonGroup-buttonWrapper">
+					<xf:button class="button--link menuTrigger" data-xf-click="menu" aria-expanded="false" aria-haspopup="true">{{ phrase('find') }}</xf:button>
+					<div class="menu" data-menu="menu" aria-hidden="true">
+						<div class="menu-content">
+							<h4 class="menu-header">{{ phrase('find_content') }}</h4>
+							<!--[XF:find_menu:top]-->
+							<a href="{{ link('search/member', null, {'user_id': $user.user_id}) }}" rel="nofollow" class="menu-linkRow">{{ phrase('find_all_content_by_x', {'name': $user.username}) }}</a>
+							<a href="{{ link('search/member', null, {'user_id': $user.user_id, 'content': 'post', 'type': 'thread'}) }}" rel="nofollow" class="menu-linkRow">{{ phrase('find_all_threads_by_x', {'name': $user.username}) }}</a>
+							<!--[XF:find_menu:bottom]-->
+						</div>
+					</div>
+				</div>
+			</xf:if>
+			<!--[XF:action_group_2:end]-->
+		</xf:contentcheck>
+		</div>
+		<!--[XF:action_groups:end]-->
+	</xf:if>
+	<!--[XF:action_groups:outer_end]-->
+</xf:macro>

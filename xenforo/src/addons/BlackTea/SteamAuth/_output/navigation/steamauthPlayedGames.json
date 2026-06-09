@@ -1,0 +1,11 @@
+{
+    "parent_navigation_id": "steamauth",
+    "display_order": 300,
+    "navigation_type_id": "basic",
+    "type_config": {
+        "link": "{{ link('steam/played-games') }}",
+        "display_condition": "",
+        "extra_attributes": []
+    },
+    "enabled": true
+}

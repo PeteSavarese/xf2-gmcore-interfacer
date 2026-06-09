@@ -1,0 +1,51 @@
+<xf:if is="$user.is_banned">
+	<xf:title>{{ phrase('edit_ban:') }} {$user.username}</xf:title>
+<xf:else />
+	<xf:title>{{ phrase('ban_member') }}</xf:title>
+</xf:if>
+
+<xf:form action="{{ link('members/ban/save', $user) }}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:if is="$user.is_banned">
+				<xf:formrow label="{{ phrase('user_name') }}">{$user.username}</xf:formrow>
+
+				<xf:formrow label="{{ phrase('banned_by') }}">{$userBan.BanUser.username}</xf:formrow>
+
+				<xf:formrow label="{{ phrase('ban_started') }}">{{ date($userBan.ban_date) }}</xf:formrow>
+
+				<xf:formrow label="{{ phrase('ban_ends') }}">
+					<xf:if is="$userBan.end_date">
+						{{ date($userBan.end_date) }}
+					<xf:else />
+						{{ phrase('never') }}
+					</xf:if>
+				</xf:formrow>
+			</xf:if>
+
+			<xf:radiorow name="ban_length" value="{{ !$userBan.end_date ? 'permanent' : 'temporary' }}"
+				label="{{ phrase('ban_length') }}">
+
+				<xf:option label="{{ phrase('permanent') }}" value="permanent" />
+				<xf:option label="{{ phrase('until:') }}" value="temporary">
+					<xf:dateinput name="end_date" value="{{ $userBan.end_date ? date($userBan.end_date, 'Y-m-d') : '' }}" />
+				</xf:option>
+			</xf:radiorow>
+
+			<xf:textboxrow name="user_reason" value="{$userBan}"
+				label="{{ phrase('reason_for_banning') }}"
+				explain="{{ phrase('this_will_be_shown_to_user_if_provided') }}" />
+		</div>
+		<xf:submitrow icon="save">
+			<xf:html>
+				<xf:if is="$user.is_banned">
+					<xf:button href="{{ link('members/ban/lift', $user) }}" overlay="true">
+						{{ phrase('lift_ban') }}
+					</xf:button>
+				</xf:if>
+			</xf:html>
+		</xf:submitrow>
+	</div>
+
+	<xf:redirect />
+</xf:form>

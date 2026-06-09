@@ -1,0 +1,42 @@
+<xf:title>{{ phrase('previous_usernames:') }} {$user.username}</xf:title>
+
+<div class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:datalist data-xf-init="responsive-data-list">
+				<xf:datarow rowtype="header">
+					<xf:cell>{{ phrase('old_username') }}</xf:cell>
+					<xf:cell>{{ phrase('new_username') }}</xf:cell>
+					<xf:cell>{{ phrase('date') }}</xf:cell>
+				</xf:datarow>
+
+				<xf:foreach loop="$changes" value="$change">
+					<xf:datarow rowclass="dataList-row--noHover">
+						<xf:cell class="{{ $change.visible ? '' : 'dataList-cell--alt' }}">
+							{$change.old_username}
+						</xf:cell>
+						<xf:cell class="{{ $change.visible ? '' : 'dataList-cell--alt' }}">
+							{$change.new_username}
+							<xf:if is="$change.change_reason">
+								<a role="button"
+									tabindex="0"
+									data-xf-init="tooltip"
+									data-trigger="hover focus click"
+									title="{{ phrase('change_reason:') }} {$change.change_reason}"><xf:trim>
+									<xf:fa icon="fa-info-circle" />
+								</xf:trim></a>
+							</xf:if>
+						</xf:cell>
+						<xf:cell class="{{ $change.visible ? '' : 'dataList-cell--alt' }}">
+							<xf:date time="{$change.change_date}" />
+						</xf:cell>
+					</xf:datarow>
+				<xf:else />
+					<xf:datarow>
+						<xf:cell colspan="4">{{ phrase('no_entries_have_been_logged') }}</xf:cell>
+					</xf:datarow>
+				</xf:foreach>
+			</xf:datalist>
+		</div>
+	</div>
+</div>

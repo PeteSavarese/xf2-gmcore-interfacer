@@ -1,0 +1,57 @@
+{{ phrase('help_cookies_description', {'cookiePrefix': $xf.cookie.prefix}) }}
+
+<h3 class="textHeading">{{ phrase('standard_cookies_we_set') }}</h3>
+
+<xf:datalist data-xf-init="responsive-data-list">
+	<xf:datarow rowtype="header">
+		<xf:cell class="dataList-cell--min">{{ phrase('name') }}</xf:cell>
+		<xf:cell>{{ phrase('purpose') }}</xf:cell>
+	</xf:datarow>
+
+	<xf:datarow rowclass="dataList-row--subSection dataList-row--noHover">
+		<xf:cell colspan="2">{{ $xf.cookieConsent.getGroupLabel('_required') }}</xf:cell>
+	</xf:datarow>
+
+	<xf:datarow rowclass="dataList-row--noHover">
+		<xf:cell colspan="2">{{ $xf.cookieConsent.getGroupDescription('_required') }}</xf:cell>
+	</xf:datarow>
+
+	<xf:foreach loop="array_keys($xf.cookieConsent.getCookiesInGroup('_required'))" value="$name">
+		<xf:datarow rowclass="dataList-row--noHover">
+			<xf:cell class="dataList-cell--min dataList-cell--alt">{{ $xf.cookieConsent.getCookieLabel($name) }}</xf:cell>
+			<xf:cell>{{ $xf.cookieConsent.getCookieDescription($name) }}</xf:cell>
+		</xf:datarow>
+	</xf:foreach>
+
+	<xf:foreach loop="$xf.cookieConsent.getGroups(false, false)" value="$group">
+		<xf:datarow rowclass="dataList-row--subSection dataList-row--noHover">
+			<xf:cell colspan="2">{{ $xf.cookieConsent.getGroupLabel($group) }}</xf:cell>
+		</xf:datarow>
+
+		<xf:datarow rowclass="dataList-row--noHover">
+			<xf:cell colspan="2">{{ $xf.cookieConsent.getGroupDescription($group) }}</xf:cell>
+		</xf:datarow>
+
+		<xf:foreach loop="array_keys($xf.cookieConsent.getCookiesInGroup($group))" value="$name">
+				<xf:datarow rowclass="dataList-row--noHover">
+					<xf:cell class="dataList-cell--min dataList-cell--alt">{{ $xf.cookieConsent.getCookieLabel($name) }}</xf:cell>
+					<xf:cell>{{ $xf.cookieConsent.getCookieDescription($name) }}</xf:cell>
+				</xf:datarow>
+		</xf:foreach>
+	</xf:foreach>
+
+	<xf:datarow rowclass="dataList-row--subSection dataList-row--noHover">
+		<xf:cell colspan="2">{{ $xf.cookieConsent.getGroupLabel('_third_party') }}</xf:cell>
+	</xf:datarow>
+
+	<xf:datarow rowclass="dataList-row--noHover">
+		<xf:cell colspan="2">{{ $xf.cookieConsent.getGroupDescription('_third_party') }}</xf:cell>
+	</xf:datarow>
+
+	<xf:foreach loop="$xf.cookieConsent.getThirdParties()" value="$name">
+		<xf:datarow rowclass="dataList-row--noHover">
+			<xf:cell class="dataList-cell--min dataList-cell--alt">{{ $xf.cookieConsent.getThirdPartyLabel($name) }}</xf:cell>
+			<xf:cell>{{ $xf.cookieConsent.getThirdPartyDescription($name) }}</xf:cell>
+		</xf:datarow>
+	</xf:foreach>
+</xf:datalist>

@@ -1,0 +1,16 @@
+<xf:title>{{ phrase('mark_all_alerts_read') }}</xf:title>
+
+<xf:wrap template="account_wrapper" />
+
+<xf:form action="{{ link('account/alerts/mark-read') }}" ajax="true" class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:inforow rowtype="confirm">
+				{{ phrase('please_confirm_that_you_want_to_mark_all_alerts_read') }}
+			</xf:inforow>
+		</div>
+		<xf:submitrow submit="{{ phrase('mark_read') }}" rowtype="simple" />
+	</div>
+
+	<xf:redirect url="{$redirect}" />
+</xf:form>

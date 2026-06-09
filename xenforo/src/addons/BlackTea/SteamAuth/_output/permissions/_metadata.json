@@ -1,0 +1,23 @@
+{
+    "steamauth-changePrivacy.json": {
+        "hash": "ee6bb51b1deca05309feb6c99d406164"
+    },
+    "steamauth-disassociate.json": {
+        "hash": "c69ba13d63cba222c3256af4d9ffa775"
+    },
+    "steamauth-viewAnalytics.json": {
+        "hash": "766639bed9ab790ac25756f0ca746191"
+    },
+    "steamauth-viewBanner.json": {
+        "hash": "22ae0dee86710acc8662aa948ee07095"
+    },
+    "steamauth-viewHiddenBanner.json": {
+        "hash": "310a0b994d37cd4f5b9dddd44bd936d4"
+    },
+    "steamauth-viewHiddenProfile.json": {
+        "hash": "f9722b4e49e4e2dce296257c5ec08dd4"
+    },
+    "steamauth-viewProfile.json": {
+        "hash": "21697b21f7b057fc4991f282c5619c73"
+    }
+}

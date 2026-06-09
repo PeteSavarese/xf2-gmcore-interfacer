@@ -1,0 +1,108 @@
+<xf:js src="xf/login_signup.js" min="1" />
+
+<xf:title>{{ phrase('register') }}</xf:title>
+
+<xf:head option="robots"><meta name="robots" content="noindex" /></xf:head>
+
+<xf:if is="$xf.session.preRegActionKey">
+	<div class="blockMessage blockMessage--highlight">
+		{{ phrase('pre_reg_action_notice') }}<br />
+		<br />
+		{{ phrase('already_have_account') }}
+		<xf:button class="button--link"
+			href="{{ link('login', null, {'_xfRedirect': $redirect}) }}"
+			data-xf-click="overlay"
+		>{{ phrase('login') }}</xf:button>
+	</div>
+</xf:if>
+
+<xf:if is="$providers is not empty">
+	<div class="block">
+		<div class="block-container">
+			<div class="block-body">
+				<xf:formrow rowtype="button"
+					label="You must register using"
+							hint="<a data-xf-init='tooltip' style='text-decoration: none;' title='Logging in with steam allows us to have all of your information linked easily to our forums and servers. This allows your store rank, stats, and more to be synced dynamically without hassle for you or us.'>Why?</a>">
+
+					<ul class="listHeap">
+						<xf:foreach loop="$providers" value="$provider">
+							<li>
+								<xf:macro template="connected_account_macros" name="button"
+									arg-provider="{$provider}" />
+							</li>
+						</xf:foreach>
+					</ul>
+				</xf:formrow>
+			</div>
+		</div>
+	</div>
+</xf:if>
+
+<xf:form action="{{ link('register/register') }}" ajax="true" class="block"
+	data-xf-init="reg-form" data-timer="{$xf.options.registrationTimer}">
+
+	<div class="block-container">
+		<div class="block-body">
+
+			<xf:comment>Spam catcher field</xf:comment>
+			<xf:textboxrow name="username" value="" autocomplete="off" rowclass="formRow--limited"
+				maxlength="{{ max_length($xf.visitor, 'username') }}"
+				label="{{ phrase('user_name') }}"
+				explain="{{ phrase('please_leave_this_field_blank') }}" />
+
+			<xf:macro template="register_macros" name="username_row"
+				arg-fieldName="{{ $regForm.getFieldName('username') }}"
+				arg-value="{$fields.username}" />
+
+			<xf:comment>Spam catcher field</xf:comment>
+			<xf:if is="{{ rand(0, 2) == 1 }}">
+				<xf:textboxrow name="{{ $regForm.getFieldName('email_hp') }}" value="" type="email" autocomplete="off"
+					rowclass="formRow--limited"
+					maxlength="{{ max_length($xf.visitor, 'email') }}"
+					label="{{ phrase('email') }}"
+					explain="{{ phrase('please_leave_this_field_blank') }}" />
+			</xf:if>
+
+			<xf:macro template="register_macros" name="email_row"
+				arg-fieldName="{{ $regForm.getFieldName('email') }}"
+				arg-value="{$fields.email}" />
+
+			<xf:comment>Spam catcher field</xf:comment>
+			<xf:if is="{{ rand(0, 2) == 1 }}">
+				<xf:textboxrow name="email" value="" type="email" autocomplete="off" rowclass="formRow--limited"
+					maxlength="{{ max_length($xf.visitor, 'email') }}"
+					label="{{ phrase('email') }}"
+					explain="{{ phrase('please_leave_this_field_blank') }}" />
+			</xf:if>
+
+			<xf:comment>Spam catcher field</xf:comment>
+			<xf:if is="{{ rand(0, 2) == 1 }}">
+				<xf:textboxrow name="password" type="password" autocomplete="off" rowclass="formRow--limited"
+					label="{{ phrase('password') }}"
+					explain="{{ phrase('please_leave_this_field_blank') }}" />
+			</xf:if>
+
+			<xf:passwordboxrow name="{{ $regForm.getFieldName('password') }}" autocomplete="new-password"
+				label="{{ phrase('password') }}"
+				hint="{{ phrase('required') }}"
+				required="required" checkstrength="true" />
+
+			<xf:macro template="register_macros" name="dob_row" />
+
+			<xf:macro template="register_macros" name="location_row"
+				arg-value="{$fields.location}" />
+
+			<xf:macro template="register_macros" name="custom_fields" />
+
+			<xf:captcharow label="{{ phrase('verification') }}" hint="{{ phrase('required') }}" />
+
+			<xf:macro template="register_macros" name="email_choice_row" />
+
+			<xf:macro template="register_macros" name="tos_row" />
+		</div>
+		<xf:macro template="register_macros" name="submit_row" />
+	</div>
+
+	<xf:hiddenval name="reg_key">{{ $regForm.getUniqueKey() }}</xf:hiddenval>
+	<xf:hiddenval name="{{ $regForm.getFieldName('timezone') }}" value="" data-xf-init="auto-timezone" />
+</xf:form>

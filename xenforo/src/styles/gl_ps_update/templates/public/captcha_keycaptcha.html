@@ -1,0 +1,7 @@
+<xf:js src="xf/captcha.js" min="1" />
+
+<div class="keycaptcha-root" data-xf-init="key-captcha" data-user="{$keyUserId}" data-session="{$sessionId}" data-sign="{$sign}" data-sign2="{$sign2}">
+	<noscript>{{ phrase('please_enable_javascript_to_continue') }}</noscript>
+	<span class="u-jsOnly">{{ phrase('loading...') }}</span>
+</div>
+<xf:hiddenval name="keycaptcha_code" value="" />

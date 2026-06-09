@@ -1,0 +1,183 @@
+<xf:title page="{$page}">{{ phrase('new_posts') }}</xf:title>
+
+<xf:wrap template="whats_new_wrapper">
+	<xf:set var="$pageSelected">new_thread</xf:set>
+</xf:wrap>
+
+<xf:pageaction>
+	<xf:if is="$xf.visitor.canCreateThread() OR $xf.visitor.canCreateThreadPreReg()">
+		<xf:button href="{{ link('forums/create-thread') }}" class="button--cta" icon="write" overlay="true" rel="nofollow">
+			{{ phrase('post_thread...') }}
+		</xf:button>
+	</xf:if>
+</xf:pageaction>
+
+<xf:if is="$canInlineMod">
+	<xf:js src="xf/inline_mod.js" min="1" />
+</xf:if>
+
+<div class="block" data-xf-init="{{ $canInlineMod ? 'inline-mod' : '' }}" data-type="thread" data-href="{{ link('inline-mod') }}">
+	<xf:if is="$findNew.result_count">
+		<div class="block-outer">
+			<xf:pagenav
+				page="{$page}" perpage="{$perPage}" total="{$findNew.result_count}"
+				link="whats-new/posts" data="{$findNew}"
+				wrapperclass="block-outer-main" />
+
+			<xf:if contentcheck="true">
+				<div class="block-outer-opposite">
+					<div class="buttonGroup">
+					<xf:contentcheck>
+						<xf:macro id="buttons"
+							arg-findNew="{$findNew}"
+							arg-canInlineMod="{$canInlineMod}" />
+					</xf:contentcheck>
+					</div>
+				</div>
+			</xf:if>
+		</div>
+	</xf:if>
+
+	<div class="block-container">
+		<xf:macro id="filter_bar"
+			arg-findNew="{$findNew}"
+			arg-rerunRoute="whats-new/posts"
+			arg-rerunData="{$findNew}"
+			arg-filterRoute="whats-new/posts" />
+
+		<xf:macro id="results"
+			arg-findNew="{$findNew}"
+			arg-threads="{$threads}"
+			arg-latestRoute="whats-new/posts" />
+	</div>
+
+	<xf:if is="$findNew.result_count">
+		<div class="block-outer block-outer--after">
+			<xf:pagenav
+				page="{$page}" perpage="{$perPage}" total="{$findNew.result_count}"
+				link="whats-new/posts" data="{$findNew}"
+				wrapperclass="block-outer-main" />
+			<xf:showignored wrapperclass="block-outer-opposite" />
+		</div>
+	</xf:if>
+</div>
+
+<xf:macro id="buttons"
+	arg-findNew="!"
+	arg-canInlineMod="{{ false }}">
+
+	<xf:if is="$canInlineMod">
+		<xf:macro id="inline_mod_macros::button" />
+	</xf:if>
+	<xf:if is="$xf.visitor.user_id">
+		<xf:button href="{{ link('forums/mark-read', null, {'date': $findNew.cache_date}) }}"
+			class="button--link" overlay="true">
+			{{ phrase('mark_forums_read') }}
+		</xf:button>
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="filter_bar"
+	arg-findNew="!"
+	arg-rerunRoute="!"
+	arg-rerunData="{{ null }}"
+	arg-rerunQuery="{{ [] }}"
+	arg-filterRoute="!">
+
+	<xf:if is="$xf.visitor.user_id">
+		<div class="block-filterBar">
+			<div class="filterBar">
+				<xf:if contentcheck="true">
+					<ul class="filterBar-filters">
+					<xf:contentcheck>
+						<!--[XF:filters:top]-->
+						<xf:if is="$findNew.filters.unread">
+							<li><a href="{{ link($rerunRoute, $rerunData, $rerunQuery + {'remove': 'unread'}) }}"
+								class="filterBar-filterToggle" data-xf-init="tooltip" title="{{ phrase('remove_this_filter')|for_attr }}">
+								<span class="filterBar-filterToggle-label">{{ phrase('show_only:') }}</span>
+								{{ phrase('filter_unread') }}</a></li>
+						</xf:if>
+						<xf:if is="$findNew.filters.watched">
+							<li><a href="{{ link($rerunRoute, $rerunData, $rerunQuery + {'remove': 'watched'}) }}"
+								class="filterBar-filterToggle" data-xf-init="tooltip" title="{{ phrase('remove_this_filter')|for_attr }}">
+								<span class="filterBar-filterToggle-label">{{ phrase('show_only:') }}</span>
+								{{ phrase('filter_watched') }}</a></li>
+						</xf:if>
+						<xf:if is="$findNew.filters.participated">
+							<li><a href="{{ link($rerunRoute, $rerunData, $rerunQuery + {'remove': 'participated'}) }}"
+								class="filterBar-filterToggle" data-xf-init="tooltip" title="{{ phrase('remove_this_filter')|for_attr }}">
+								<span class="filterBar-filterToggle-label">{{ phrase('show_only:') }}</span>
+								{{ phrase('filter_participated') }}</a></li>
+						</xf:if>
+						<xf:if is="$findNew.filters.started">
+							<li><a href="{{ link($rerunRoute, $rerunData, $rerunQuery + {'remove': 'started'}) }}"
+								class="filterBar-filterToggle" data-xf-init="tooltip" title="{{ phrase('remove_this_filter')|for_attr }}">
+								<span class="filterBar-filterToggle-label">{{ phrase('show_only:') }}</span>
+								{{ phrase('filter_started') }}</a></li>
+						</xf:if>
+						<xf:if is="$findNew.filters.unanswered">
+							<li><a href="{{ link($rerunRoute, $rerunData, $rerunQuery + {'remove': 'unanswered'}) }}"
+								class="filterBar-filterToggle" data-xf-init="tooltip" title="{{ phrase('remove_this_filter')|for_attr }}">
+								<span class="filterBar-filterToggle-label">{{ phrase('show_only:') }}</span>
+								{{ phrase('filter_unanswered') }}</a></li>
+						</xf:if>
+						<!--[XF:filters:bottom]-->
+					</xf:contentcheck>
+					</ul>
+				</xf:if>
+
+				<a class="filterBar-menuTrigger" data-xf-click="menu" role="button" tabindex="0" aria-expanded="false" aria-haspopup="true">{{ phrase('filters') }}</a>
+				<xf:macro id="filter_menu" arg-findNew="{$findNew}" arg-submitRoute="{$filterRoute}" />
+			</div>
+		</div>
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="filter_menu" arg-findNew="!" arg-submitRoute="!">
+	<div class="menu" data-menu="menu" aria-hidden="true">
+		<div class="menu-content">
+			<h4 class="menu-header">{{ phrase('show_only:') }}</h4>
+			<xf:form action="{{ link($submitRoute) }}">
+				<div class="menu-row">
+					<xf:checkbox>
+						<xf:option name="unread" selected="{$findNew.filters.unread}">{{ phrase('unread_threads') }}</xf:option>
+						<xf:option name="watched" selected="{$findNew.filters.watched}">{{ phrase('watched_content') }}</xf:option>
+						<xf:option name="participated" selected="{$findNew.filters.participated}">{{ phrase('threads_in_which_youve_participated') }}</xf:option>
+						<xf:option name="started" selected="{$findNew.filters.started}">{{ phrase('threads_youve_started') }}</xf:option>
+						<xf:option name="unanswered" selected="{$findNew.filters.unanswered}">{{ phrase('unanswered_threads') }}</xf:option>
+						<!--[XF:filter_menu:filters_extra]-->
+					</xf:checkbox>
+				</div>
+				<!--[XF:filter_menu:below_filters]-->
+
+				<xf:macro id="filter_macros::find_new_filter_footer" />
+			</xf:form>
+		</div>
+	</div>
+</xf:macro>
+
+<xf:macro id="results" arg-findNew="!" arg-threads="!" arg-latestRoute="!">
+	<xf:if is="$findNew.result_count">
+		<xf:set var="$activityBarShown" value="{{ false }}" />
+		<div class="structItemContainer">
+			<xf:foreach loop="$threads" value="$thread">
+				<xf:if is="$xf.visitor.user_id AND !$activityBarShown AND $thread.last_post_date < $xf.session.previousActivity">
+					<div class="structItem structItem--note">
+						<div class="structItem-cell">{{ phrase('threads_below_not_updated_since_your_last_visit') }}</div>
+					</div>
+					<xf:set var="$activityBarShown" value="{{ true }}" />
+				</xf:if>
+
+				<xf:macro id="thread_list_macros::item" arg-thread="{$thread}" />
+			</xf:foreach>
+		</div>
+	<xf:else />
+		<div class="block-row">
+			<xf:if is="$xf.visitor.user_id AND ($findNew.filters.unread AND count($findNew.filters) == 1)">
+				{{ phrase('no_unread_posts_view_latest', {'link': link($latestRoute, null, {'skip': 1})}) }}
+			<xf:else />
+				{{ phrase('no_results_found') }}
+			</xf:if>
+		</div>
+	</xf:if>
+</xf:macro>

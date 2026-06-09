@@ -1,0 +1,88 @@
+<xf:title>Manual Rank Apply</xf:title>
+
+<xf:if is="$successMsg">
+    <div class="blockMessage blockMessage--success">{$successMsg}</div>
+</xf:if>
+
+<div class="block">
+    <div class="block-container">
+        <h3 class="block-formSectionHeader">PayPal Lookup</h3>
+        <div class="block-body">
+            <p class="block-row u-muted">Enter a PayPal capture ID to auto-detect the rank before applying.</p>
+
+            <xf:form action="{{ link('gl-store/manualapplyfetch') }}" method="post">
+                <xf:formrow label="PayPal Capture ID" hint="17-char, e.g. 06A21469RJ8606838">
+                    <xf:textbox name="paypal_capture_id" maxlength="20" class="input--wide"
+                        value="{$fetchResult.capture_id}" />
+                </xf:formrow>
+                <xf:submitrow label="Fetch from PayPal" icon="search" />
+            </xf:form>
+
+            <xf:if is="$fetchResult">
+                <div style="margin-top: 12px; padding: 12px; background: #f8f8f8; border: 1px solid #ddd;">
+                    <strong>Capture ID:</strong> {$fetchResult.capture_id}<br>
+                    <strong>custom_id raw:</strong> {$fetchResult.custom_id}<br>
+                    <strong>Detected rank:</strong>
+                    <xf:if is="$fetchResult.rank_group">
+                        {$fetchResult.rank_group.title} (ID: {$fetchResult.rank_id})
+                    <xf:else />
+                        <span style="color:#c00;">Not recognized</span>
+                    </xf:if><br>
+                    <strong>Amount:</strong> <xf:if is="$fetchResult.amount">${$fetchResult.amount}<xf:else />Unknown</xf:if>
+                </div>
+
+                <xf:form action="{{ link('gl-store/manualapplyprocess') }}" method="post" style="margin-top:12px;">
+                    <input type="hidden" name="mode" value="paypal" />
+                    <input type="hidden" name="paypal_capture_id" value="{$fetchResult.capture_id}" />
+
+                    <xf:formrow label="Rank">
+                        <xf:select name="rank_id" class="input--inline">
+                            <xf:foreach loop="$allRanks" value="$rg">
+                                <xf:option value="{$rg.upgrade_id}" selected="$fetchResult.rank_id == $rg.upgrade_id">{$rg.title}</xf:option>
+                            </xf:foreach>
+                        </xf:select>
+                    </xf:formrow>
+                    <xf:formrow label="Purchaser username" hint="Leave blank to use your admin account">
+                        <xf:textbox name="purchaser_username" ac="single" class="input--wide" />
+                    </xf:formrow>
+                    <xf:formrow label="Receiver username">
+                        <xf:textbox name="receiver_username" ac="single" class="input--wide" />
+                    </xf:formrow>
+                    <xf:submitrow label="Apply Rank" icon="save" />
+                </xf:form>
+            </xf:if>
+        </div>
+    </div>
+</div>
+
+<div class="block">
+    <div class="block-container">
+        <h3 class="block-formSectionHeader">Fully Manual Apply</h3>
+        <div class="block-body">
+            <p class="block-row u-muted">Apply a rank with no PayPal lookup. Use this for compensation, corrections, or off-platform purchases.</p>
+
+            <xf:form action="{{ link('gl-store/manualapplyprocess') }}" method="post">
+                <input type="hidden" name="mode" value="manual" />
+
+                <xf:formrow label="Rank">
+                    <xf:select name="rank_id" class="input--inline">
+                        <xf:option value="">-- select rank --</xf:option>
+                        <xf:foreach loop="$allRanks" value="$rg">
+                            <xf:option value="{$rg.upgrade_id}">{$rg.title}</xf:option>
+                        </xf:foreach>
+                    </xf:select>
+                </xf:formrow>
+                <xf:formrow label="Purchaser username" hint="Leave blank to use your admin account">
+                    <xf:textbox name="purchaser_username" class="input--wide" />
+                </xf:formrow>
+                <xf:formrow label="Receiver username">
+                    <xf:textbox name="receiver_username" class="input--wide" />
+                </xf:formrow>
+                <xf:formrow label="PayPal reference (optional)" hint="For audit log only; no PayPal call is made">
+                    <xf:textbox name="paypal_reference" class="input--wide" />
+                </xf:formrow>
+                <xf:submitrow label="Apply Rank" icon="save" />
+            </xf:form>
+        </div>
+    </div>
+</div>

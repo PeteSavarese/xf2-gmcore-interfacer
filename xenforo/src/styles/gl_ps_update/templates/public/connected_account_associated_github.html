@@ -1,0 +1,9 @@
+<xf:if is="$providerData.profile_link">
+	<a href="{$providerData.profile_link}" target="_blank">
+		<img src="{{ $providerData.avatar_url ?: 'https://avatars.githubusercontent.com/u/{$connectedAccounts.github}?v=3' }}" width="48" alt="" />
+	</a>
+	<div><a href="{$providerData.profile_link}" target="_blank">{{ $providerData.username ?: phrase('view_account') }}</a></div>
+<xf:else />
+	<img src="{{ $providerData.avatar_url ?: 'https://avatars.githubusercontent.com/u/{$connectedAccounts.github}?v=3' }}" width="48" alt="" />
+	<div>{{ $providerData.username ?: phrase('account_associated') }}</div>
+</xf:if>

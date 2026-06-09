@@ -1,0 +1,10 @@
+<xf:if is="{$hasNewPost}">
+	<div class="message js-newMessagesIndicator">
+		<div class="message-inner">
+			<div class="message-cell message-cell--alert">
+				{{ phrase('messages_have_been_posted_since_you_loaded_this_page') }}
+				<a href="{{ link('threads/new-posts', $thread, {'after': $lastDate}) }}" data-xf-click="message-loader">{{ phrase('view_them') }}</a>
+			</div>
+		</div>
+	</div>
+</xf:if>

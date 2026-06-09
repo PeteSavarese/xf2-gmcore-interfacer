@@ -1,0 +1,42 @@
+.progressBar
+{
+	position: relative;
+	width: 100%;
+	background: linear-gradient(180deg, @xf-blockFooterBg, mix(@xf-blockFooterBg, @xf-contentBg, 50%));
+	border: @xf-borderSize solid @xf-borderColorFaint;
+	border-radius: @xf-borderRadiusSmall;
+	overflow: hidden;
+}
+
+.progressBar-progress
+{
+	background: linear-gradient(180deg, @xf-progressBarColor, xf-diminish(@xf-progressBarColor, 10%));
+	width: 0;
+	height: 20px;
+	font-size: 80%;
+	padding: 2px 0;
+}
+
+.progressBar-label
+{
+	position: absolute;
+	left: 0;
+	right: 0;
+	color: @xf-textColor;
+	text-align: center;
+	overflow: hidden;
+}
+
+.progressBar {
+	height: 6px;
+	background: rgba(255, 255, 255, 0.08);
+	border-radius: 4px;
+	overflow: hidden;
+}
+
+.progressBar-fill,
+.progressBar .progressBar-progress {
+	background: @gl-gradient;
+	border-radius: 4px;
+	transition: width 0.3s ease;
+}

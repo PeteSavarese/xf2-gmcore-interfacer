@@ -1,0 +1,13 @@
+<xf:macro id="suggestion" extends="post_macros::post">
+	<xf:extension id="main_cell">
+		<xf:extensionparent />
+
+		<xf:if is="$thread.isContentVotingSupported()">
+			<div class="message-cell message-cell--vote">
+				<xf:macro id="content_vote_macros::vote_control"
+					arg-link="threads/vote"
+					arg-content="{$thread}" />
+			</div>
+		</xf:if>
+	</xf:extension>
+</xf:macro>

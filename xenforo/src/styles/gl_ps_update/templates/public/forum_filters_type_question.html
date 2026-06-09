@@ -1,0 +1,13 @@
+<xf:extends template="forum_filters" />
+
+<xf:extension id="before_date_limit">
+	<div class="menu-row menu-row--separated">
+		<xf:checkbox>
+			<xf:option name="unsolved" selected="{$filters.unsolved}" label="{{ phrase('only_show_unsolved_questions') }}" />
+			<xf:option name="unanswered" selected="{$filters.unanswered}" label="{{ phrase('only_show_questions_that_have_received_no_answers') }}" />
+			<xf:if is="$xf.visitor.user_id">
+				<xf:option name="your_answers" selected="{$filters.your_answers}" label="{{ phrase('only_show_questions_youve_answered') }}" />
+			</xf:if>
+		</xf:checkbox>
+	</div>
+</xf:extension>

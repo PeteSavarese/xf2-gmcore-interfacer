@@ -1,0 +1,17 @@
+<xf:page option="template">OFFLINE_CONTAINER</xf:page>
+<xf:page option="css">{$css|raw}</xf:page>
+
+<xf:title>{{ phrase('page_could_not_be_loaded') }}</xf:title>
+
+<div class="p-offline-main">
+	{{ phrase('page_could_not_be_loaded_explain', {'title': $xf.options.boardShortTitle ?: $xf.options.boardTitle}) }}
+
+	<a href="javascript:window.location.reload();" class="button">{{ phrase('reload') }}</a>
+</div>
+
+<script{{ $xf.request.isRocketLoaderDisabled() ? ' data-cfasync="false"' : ''}}>
+	window.addEventListener('online', function()
+	{
+		window.location.reload();
+	});
+</script>

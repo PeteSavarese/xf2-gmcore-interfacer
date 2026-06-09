@@ -1,0 +1,6 @@
+<xf:if is="$extra.comment">
+	{{ phrase('report_that_you_made_recently_has_been_resolved_comment_x', {'comment': $extra.comment, 'title': $extra.title|strip_tags}) }}
+<xf:else />
+	{{ phrase('report_that_you_made_recently_has_been_resolved', {'title': $extra.title|strip_tags}) }}
+</xf:if>
+<push:url>{{ base_url($extra.link, 'canonical') }}</push:url>

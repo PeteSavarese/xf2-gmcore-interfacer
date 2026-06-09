@@ -1,0 +1,84 @@
+<xf:title>{{ phrase('reactions_received') }}</xf:title>
+
+<xf:wrap template="account_wrapper" />
+
+<xf:if is="count($reactions) > 0 || $page > 1 || $hasNext">
+	<xf:if is="!$listOnly">
+		<div class="block">
+			<div class="block-container">
+				<h3 class="tabs hScroller block-minorTabHeader" data-xf-init="tabs h-scroller"
+					data-panes="< .block-container | .js-reactionTabPanes" data-state="replace" role="tablist">
+					<span class="hScroller-scroll">
+						<xf:foreach loop="$tabSummary" key="$reactionId" value="$total">
+							<a class="tabs-tab tabs-tab--reaction{$reactionId}{{ $reactionId == $activeReactionId ? ' is-active' : '' }}" role="tab" id="{{ $reactionId ? 'reaction-' . $reactionId : '' }}">
+								<xf:if is="$reactionId">
+									<xf:reaction id="{$reactionId}" small="true" showtitle="true" appendtitle="{$total|number|parens}" />
+								<xf:else />
+									<bdi>{{ phrase('all') }}</bdi> {$total|number|parens}
+								</xf:if>
+							</a>
+						</xf:foreach>
+					</span>
+				</h3>
+				<ul class="tabPanes js-reactionTabPanes">
+					<xf:foreach loop="$tabSummary" key="$reactionId" value="$total">
+						<xf:if is="$reactionId == $activeReactionId">
+							<li class="{{ $reactionId == $activeReactionId ? 'is-active' : '' }}" role="tabpanel" id="reaction-{$reactionId}">
+								<xf:macro id="reactions_list"
+									arg-reactions="{$reactions}"
+									arg-hasNext="{$hasNext}"
+									arg-page="{$page}"
+									arg-reactionId="{$reactionId|default(0)}" />
+							</li>
+						<xf:else />
+							<li data-href="{{ link('account/reactions', null, {'reaction_id': $reactionId, 'list_only': 1}) }}" class="{{ $reactionId == $activeReactionId ? 'is-active' : '' }}" role="tabpanel" id="reaction-{$reactionId}">
+								<div class="blockMessage">{{ phrase('loading...') }}</div>
+							</li>
+						</xf:if>
+					</xf:foreach>
+				</ul>
+			</div>
+		</div>
+	<xf:else />
+		<xf:macro id="reactions_list"
+			arg-reactions="{$reactions}"
+			arg-hasNext="{$hasNext}"
+			arg-page="{$page}"
+			arg-reactionId="{$activeReactionId|default(0)}" />
+	</xf:if>
+<xf:else />
+	<div class="blockMessage">{{ phrase('unfortunately_none_of_your_content_has_received_any_reactions_yet') }}</div>
+</xf:if>
+
+<xf:macro id="reactions_list"
+	arg-reactions="!"
+	arg-hasNext="!"
+	arg-page="!"
+	arg-reactionId="0">
+	<ul class="block-body js-reactionList-{$reactionId}">
+		<xf:foreach loop="$reactions" value="$reaction">
+			<li class="block-row block-row--separated">
+				<div class="contentRow">
+					<span class="contentRow-figure">
+						<xf:avatar user="$reaction.ReactionUser" size="s" />
+					</span>
+					<div class="contentRow-main">
+						{$reaction.render()|raw}
+					</div>
+				</div>
+			</li>
+		<xf:else />
+			<div class="block-row">{{ phrase('there_are_no_visible_reactions_on_this_page') }}</div>
+		</xf:foreach>
+		<xf:if is="$hasNext">
+			<li class="block-footer">
+				<span class="block-footer-controls"><xf:button href="{{ link('account/reactions', null, {'reaction_id': $reactionId, 'page': $page + 1}) }}"
+					data-xf-click="inserter"
+					data-replace=".js-reactionList-{$reactionId}"
+					data-scroll-target="< .block">
+						{{ phrase('more...') }}
+				</xf:button></span>
+			</li>
+		</xf:if>
+	</ul>
+</xf:macro>

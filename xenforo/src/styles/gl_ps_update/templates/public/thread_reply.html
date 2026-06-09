@@ -1,0 +1,47 @@
+<xf:title>{{ phrase('reply_to_thread') }}</xf:title>
+
+<xf:head option="metaNoindex"><meta name="robots" content="noindex" /></xf:head>
+
+<xf:breadcrumb source="$thread.getBreadcrumbs()" />
+
+<xf:form action="{{ link('threads/add-reply', $thread) }}" class="block" ajax="true" draft="{{ link('threads/draft', $thread) }}" data-xf-init="attachment-manager">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:editorrow name="message"
+				value="{$defaultMessage}"
+				attachments="{{ $attachmentData ? $attachmentData.attachments : [] }}"
+				rowtype="fullWidth noLabel"
+				placeholder="{{ phrase('reply_placeholder') }}"
+				label="{{ phrase('message') }}"
+				data-preview-url="{{ link('threads/reply-preview', $thread) }}" />
+
+			<xf:formrow>
+				<xf:if is="$attachmentData">
+					<xf:macro id="helper_attach_upload::upload_block"
+						arg-attachmentData="{$attachmentData}"
+						arg-forceHash="{$thread.draft_reply.attachment_hash}" />
+				</xf:if>
+
+				<xf:if is="$xf.options.multiQuote">
+					<xf:macro id="multi_quote_macros::button"
+						arg-href="{{ link('threads/multi-quote', $thread) }}"
+						arg-messageSelector=".js-post"
+						arg-storageKey="multiQuoteThread" />
+				</xf:if>
+			</xf:formrow>
+
+			<xf:if is="!$xf.visitor.user_id AND !$thread.canReplyPreReg()">
+				<xf:textboxrow name="_xfUsername" data-xf-init="guest-username"
+					autocomplete="username"
+					maxlength="{{ max_length($xf.visitor, 'username') }}"
+					label="{{ phrase('name') }}"/>
+			<xf:elseif is="$xf.visitor.user_id" />
+				<xf:macro id="helper_thread_options::watch_input" arg-thread="{$thread}" />
+				<xf:macro id="helper_thread_options::thread_status" arg-thread="{$thread}" />
+			</xf:if>
+
+			<xf:captcharow label="{{ phrase('verification') }}" context="xf_post_thread_reply" />
+		</div>
+		<xf:submitrow submit="{{ phrase('post_reply') }}" icon="reply" sticky="true" />
+	</div>
+</xf:form>

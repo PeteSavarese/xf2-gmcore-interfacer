@@ -1,0 +1,46 @@
+<xf:title>{{ phrase('edit_profile_post') }}</xf:title>
+
+<xf:breadcrumb href="{{ link('members', $profileUser) }}">{$profileUser.username}</xf:breadcrumb>
+
+<xf:form action="{{ link('profile-posts/edit', $profilePost) }}" data-xf-init="attachment-manager" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<span class="u-anchorTarget js-editContainer"></span>
+
+			<xf:editorrow name="message"
+				value="{$profilePost.message}"
+				attachments="{{ $attachmentData ? $attachmentData.attachments : [] }}"
+				rowtype="{{ $quickEdit ? 'fullWidth noLabel' : '' }}"
+				label="{{ phrase('message') }}"
+				data-min-height="{{ $quickEdit ? 40 : 100 }}"
+				rendereropts="{{ {'treatAsStructuredText': true} }}" />
+
+			<xf:if is="$attachmentData">
+				<xf:formrow rowtype="{{ $quickEdit ? 'fullWidth noLabel' : '' }}">
+					<xf:macro id="helper_attach_upload::upload_link_from_data"
+						arg-attachmentData="{$attachmentData}" />
+					<xf:macro id="helper_attach_upload::uploaded_files_list"
+						arg-attachments="{$attachmentData.attachments}"
+						arg-class="attachmentUploads--spaced" />
+				</xf:formrow>
+			</xf:if>
+
+			<xf:if is="$profilePost.canSendModeratorActionAlert()">
+				<xf:formrow rowtype="{{ $quickEdit ? 'fullWidth noLabel' : '' }}">
+					<xf:macro id="helper_action::author_alert" arg-row="{{ false }}" />
+				</xf:formrow>
+			</xf:if>
+		</div>
+		<xf:submitrow icon="save" sticky="true" rowtype="{{ $quickEdit ? 'simple' : '' }}">
+			<xf:html>
+				<xf:if is="$quickEdit">
+					<xf:button class="js-cancelButton">{{ phrase('button.cancel') }}</xf:button>
+				</xf:if>
+			</xf:html>
+		</xf:submitrow>
+	</div>
+
+	<xf:if is="$noInlineMod">
+		<xf:hiddenval name="_xfNoInlineMod">1</xf:hiddenval>
+	</xf:if>
+</xf:form>

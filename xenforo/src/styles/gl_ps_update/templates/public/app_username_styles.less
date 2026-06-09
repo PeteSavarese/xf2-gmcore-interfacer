@@ -1,0 +1,20 @@
+.username--invisible
+{
+	color: @xf-textColorMuted;
+}
+
+.username--banned
+{
+	text-decoration: line-through;
+}
+
+<xf:foreach loop="$displayStyles" key="$id" value="$style" if="$style.username_css">
+	.username--style{$id}
+	{
+		{$style.username_css|raw}
+	}
+</xf:foreach>
+
+.username:hover {
+    text-shadow: 0 0 8px rgba(52, 152, 219, 0.3);
+}

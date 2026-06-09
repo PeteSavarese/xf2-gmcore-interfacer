@@ -1,0 +1,43 @@
+<xf:title>{{ phrase('edit_profile_post_comment') }}</xf:title>
+
+<xf:breadcrumb href="{{ link('members', $profilePost.ProfileUser) }}">{$profilePost.ProfileUser.username}</xf:breadcrumb>
+<xf:breadcrumb href="{{ link('profile-posts', $profilePost) }}">{{ phrase('profile_post_by_x', {'name': $profilePost.username}) }}</xf:breadcrumb>
+
+<xf:form action="{{ link('profile-posts/comments/edit', $comment) }}"
+	data-xf-init="attachment-manager" class="{{ !$quickEdit ? 'block' : '' }}" ajax="true">
+	<div class="{{ !$quickEdit ? 'block-container' : '' }}">
+		<div class="{{ !$quickEdit ? 'block-body' : '' }}">
+			<xf:editorrow name="message"
+				value="{$comment.message}"
+				attachments="{{ $attachmentData ? $attachmentData.attachments : [] }}"
+				rowtype="{{ $quickEdit ? 'fullWidth noLabel' : '' }}"
+				label="{{ phrase('message') }}"
+				data-min-height="{{ $quickEdit ? 40 : 100 }}"
+				rendereropts="{{ {'treatAsStructuredText': true} }}" />
+
+			<xf:if is="$attachmentData">
+				<xf:formrow rowtype="{{ $quickEdit ? 'fullWidth noLabel' : '' }}">
+					<xf:macro id="helper_attach_upload::upload_link_from_data"
+						arg-attachmentData="{$attachmentData}" />
+					<xf:macro id="helper_attach_upload::uploaded_files_list"
+						arg-attachments="{$attachmentData.attachments}"
+						arg-class="attachmentUploads--spaced" />
+				</xf:formrow>
+			</xf:if>
+
+			<xf:if is="$comment.canSendModeratorActionAlert()">
+				<xf:formrow rowtype="{{ $quickEdit ? 'fullWidth noLabel' : '' }}">
+					<xf:macro id="helper_action::author_alert" arg-row="{{ false }}" />
+				</xf:formrow>
+			</xf:if>
+		</div>
+		<xf:if is="$quickEdit">
+			<xf:formrow rowtype="fullWidth noLabel">
+				<xf:button type="submit" class="button--primary" icon="save" />
+				<xf:button class="js-cancelButton">{{ phrase('button.cancel') }}</xf:button>
+			</xf:formrow>
+		<xf:else />
+			<xf:submitrow icon="save" />
+		</xf:if>
+	</div>
+</xf:form>

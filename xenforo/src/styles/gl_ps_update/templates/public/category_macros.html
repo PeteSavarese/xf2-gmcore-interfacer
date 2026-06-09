@@ -1,0 +1,6 @@
+<xf:macro id="category_page_options" arg-category="!">
+	<xf:page option="searchConstraints" value="{{ {
+		phrase('threads'): {'search_type': 'post'},
+		phrase('this_category'): {'search_type': 'post', 'c': {'nodes': [$category.node_id], 'child_nodes': 1}}
+	} }}" />
+</xf:macro>

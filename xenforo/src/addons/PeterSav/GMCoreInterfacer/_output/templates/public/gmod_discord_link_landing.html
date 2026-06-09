@@ -1,0 +1,178 @@
+<xf:title>Discord Link</xf:title>
+<xf:css src="gmod_interfacer.less" />
+
+<xf:if is="$notice">
+  <div class="notice notice--{$notice.type}" style="padding:10px 12px;border-radius:8px;margin-bottom:10px;
+	  background: {{ $notice.type == 'success' ? 'var(--gmod-success)' : ($notice.type == 'error' ? 'var(--gmod-danger)' : 'var(--gmod-info-bg)') }};
+	  border: 1px solid rgba(255,255,255,0.15);">
+    <xf:fa
+      icon="{{ $notice.type == 'success' ? 'fa-check-circle' : ($notice.type == 'error' ? 'fa-exclamation-triangle' : 'fa-info-circle') }}"
+      aria-hidden="true" />
+    <span class="color:var(--gmod-text-secondary)" style="margin-left:6px;">{$notice.text}</span>
+  </div>
+</xf:if>
+
+
+<div class="header">
+  <div class="header-content">
+    <div class="header-title">Discord Link</div>
+    <p class="store-subtitle">
+      Link your Discord to join our Discord server, automatically sync your ranks, and hang out with everyone.
+    </p>
+    <div class="header-badges">
+      <span class="header-badge">
+        <xf:fa icon="fa-volume" aria-hidden="true" /> Voice chats
+      </span>
+      <span class="header-badge">
+        <xf:fa icon="fa-bullhorn" aria-hidden="true" /> Announcements
+      </span>
+      <span class="header-badge">
+        <xf:fa icon="fa-users" aria-hidden="true" /> Events & game nights
+      </span>
+    </div>
+  </div>
+</div>
+
+<div class="grid">
+  <div style="display:flex;justify-content:center;align-items:flex-start;">
+    <iframe src="https://discord.com/widget?id=999162748401373184&theme=dark" width="350" height="500"
+      allowtransparency="true" frameborder="0"
+      sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts">
+    </iframe>
+  </div>
+
+  <div class="card" style="margin-bottom: 0;">
+    <xf:if is="$discordAccount">
+      <div class="card-header">
+        <span>
+          <xf:fa icon="fa-rotate" aria-hidden="true" /> Discord Link Status
+        </span>
+        <span class="badge badge-primary">Linked</span>
+      </div>
+
+      <div class="card-content">
+        <xf:set var="$__avatarHash" value="{$discordAvatar}" />
+        <xf:if is="!$__avatarHash && $avatar">
+          <xf:set var="$__avatarHash" value="{$avatar}" />
+        </xf:if>
+
+        <xf:if is="$discordAccount">
+          <xf:set var="$__avatarUrl"
+            value="https://cdn.discordapp.com/avatars/{$discordAccount.user.id}/{$discordAccount.user.avatar}.png?size=256" />
+          <xf:else />
+          <xf:set var="$__avatarUrl" value="https://cdn.discordapp.com/embed/avatars/0.png" />
+        </xf:if>
+
+        <div class="avatar-container" style="padding-top:0;">
+          <img src="{$__avatarUrl}" alt="Discord avatar"
+            style="width:90px;height:90px;border-radius:50%;object-fit:cover;border:2px solid var(--gmod-primary);" />
+          <div class="username" style="margin-top:10px;">
+            <xf:if is="{$discordAccount.user.global_name}">
+              <strong>{$discordAccount.user.global_name}
+                <xf:if is="{$discordAccount.user.discriminator}">#{$discriminator}</xf:if>
+              </strong>
+              <xf:else />
+              Linked Account
+            </xf:if>
+          </div>
+        </div>
+
+        <div class="info-grid" style="margin-top:10px;">
+          <div class="info-item" style="align-items:flex-start;">
+            <div class="info-label">Discord ID</div>
+            <div class="info-value">
+              <span class="badge badge-primary" style="font-size:0.95rem;">
+                <xf:fa icon="fa-id-badge" aria-hidden="true" /> <span class="discordId">{$discordAccount.user.id}</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="info-item" style="align-items:flex-start;">
+            <div class="info-label">Roles</div>
+            <div class="info-value">
+              <xf:foreach loop="$discordAccount.roles" value="$roleId">
+                <xf:set var="$role" value="{$guildRoles.{$roleId}}" />
+
+                <xf:if is="$role">
+                  <span class="badge badge-primary"
+                    style="font-size:0.95rem;background-color:{{format_discord_role_bg_color($role.color)}}">
+                    <span style="color:{{format_discord_role_fg_color($role.color)}}">{$role.name}</span>
+                  </span>
+                </xf:if>
+              </xf:foreach>
+            </div>
+          </div>
+
+          <div class="info-item" style="align-items:flex-start;">
+            <div class="info-label">Joined Server</div>
+            <div class="info-value">
+              <span class="badge badge-primary" style="font-size:0.95rem;">
+                <span>{{format_date_string($discordAccount.joined_at, "M j, Y, h:i A")}}</span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="rank-description" style="margin-top:15px;">
+          <ul>
+            <li>Store ranks will automatically sync when purchased.</li>
+            <li>Enjoy voice, events, and announcements with the community.</li>
+          </ul>
+        </div>
+
+        <div class="action-bar">
+          <xf:button href="/discord/unlink" class="button--cta" icon="link" rel="nofollow">
+            Unlink Discord
+          </xf:button>
+        </div>
+      </div>
+
+      <xf:else />
+      <div class="card-header">
+        <span>
+          <xf:fa icon="fa-rotate" aria-hidden="true" /> Discord Link Status
+        </span>
+        <span class="badge badge-warning">Not Linked</span>
+      </div>
+
+      <div class="card-content">
+        <div class="empty-state" style="padding:15px 15px 5px 15px;">
+          <xf:fa icon="fa-info-circle" aria-hidden="true" />
+          <p>You haven't linked your Discord account yet.</p>
+        </div>
+
+        <div class="rank-description" style="margin:10px 0 15px 0;">
+          <ul>
+            <li>Access to high quality voice channels</li>
+            <li>Interact with community members across multiple channels</li>
+            <li>Get announcements for events, updates, and more</li>
+            <li>Participate in community-led events and game nights</li>
+          </ul>
+        </div>
+
+        <div class="action-bar">
+          <xf:if is="$xf.visitor.user_id">
+            <xf:button
+              href="https://discord.com/api/oauth2/authorize?client_id={$client_id}&amp;redirect_uri={{ base_url('discord/process', 'full') }}&amp;response_type=code&amp;scope=identify%20guilds.join"
+              class="button--cta" icon="link" rel="nofollow">
+              Link Discord
+            </xf:button>
+            <xf:else />
+            <xf:button href="/login" class="button--cta" icon="log-in" rel="nofollow">
+              Log in to link
+            </xf:button>
+          </xf:if>
+        </div>
+
+        <div class="info-grid">
+          <div class="info-item">
+            <div class="info-label">Why link?</div>
+            <div class="info-value">Linking your Discord account automatically allows us to sync all your
+              roles to Discord! Whether it be store ranks or other forum groups, we have you covered.
+            </div>
+          </div>
+        </div>
+      </div>
+    </xf:if>
+  </div>
+</div>

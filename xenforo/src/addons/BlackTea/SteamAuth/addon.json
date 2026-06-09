@@ -1,0 +1,14 @@
+{
+    "legacy_addon_id": "",
+    "title": "BlackTea/SteamAuth",
+    "description": "",
+    "version_id": 10709070,
+    "version_string": "1.7.9",
+    "dev": "Studio70",
+    "dev_url": "https://s70.su",
+    "faq_url": "https://xenforo.com/community/resources/s70-steam-integration-connected-accounts-now-with-xf1-importing.6088/field?field=faq",
+    "support_url": "https://discord.gg/KgRTSqb",
+    "extra_urls": [],
+    "require": [],
+    "icon": "fab fa-steam"
+}

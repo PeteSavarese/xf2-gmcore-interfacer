@@ -1,0 +1,10 @@
+<xf:title>{{ phrase('edit_tags') }}</xf:title>
+
+<xf:breadcrumb source="$thread.getBreadcrumbs()" />
+
+<xf:macro id="tag_macros::edit_form"
+	arg-action="{{ link('threads/tags', $thread) }}"
+	arg-uneditableTags="{$uneditableTags}"
+	arg-editableTags="{$editableTags}"
+	arg-minTags="{$forum.min_tags}"
+	arg-tagList="tagList--thread-{$thread.thread_id}" />

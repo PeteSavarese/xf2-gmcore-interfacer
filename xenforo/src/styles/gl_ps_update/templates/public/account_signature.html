@@ -1,0 +1,15 @@
+<xf:title>{{ phrase('edit_signature') }}</xf:title>
+
+<xf:wrap template="account_wrapper" />
+
+<xf:form action="{{ link('account/signature') }}" ajax="true" class="block" data-redirect="off">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:editorrow name="signature" value="{$xf.visitor.Profile}" column="signature_"
+				rowtype="fullWidth noLabel"
+				removebuttons="{$disabledButtons}"
+				label="{{ phrase('signature') }}" />
+		</div>
+		<xf:submitrow icon="save" rowtype="simple" />
+	</div>
+</xf:form>

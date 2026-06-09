@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phrases>
+  <phrase title="admin_navigation.blacktea_steamauth" version_id="10401070" version_string="1.4.1"><![CDATA[Steam]]></phrase>
+  <phrase title="admin_navigation.steam_list" version_id="10401070" version_string="1.4.1"><![CDATA[List users]]></phrase>
+  <phrase title="admin_navigation.steam_settings" version_id="10401070" version_string="1.4.1"><![CDATA[Settings]]></phrase>
+  <phrase title="admin_navigation.steam_setup" version_id="10401070" version_string="1.4.1"><![CDATA[Setup]]></phrase>
+  <phrase title="admin_navigation.steam_support" version_id="10709070" version_string="1.7.9"><![CDATA[Support]]></phrase>
+  <phrase title="admin_permission.blacktea_steamauth" version_id="10401070" version_string="1.4.1"><![CDATA[Steam Auth]]></phrase>
+  <phrase title="allow_view_steam" version_id="10501070" version_string="1.5.0"><![CDATA[View your Steam Profile]]></phrase>
+  <phrase title="allow_view_steam_banner" version_id="10501070" version_string="1.5.0"><![CDATA[View your Steam Banner]]></phrase>
+  <phrase title="blacktea_steamauth_active_games" version_id="10700070" version_string="1.7.0"><![CDATA[Most active games]]></phrase>
+  <phrase title="blacktea_steamauth_active_players" version_id="10700070" version_string="1.7.0"><![CDATA[Most active players]]></phrase>
+  <phrase title="blacktea_steamauth_banner_above" version_id="10504070" version_string="1.5.4"><![CDATA[Display Above User Extras]]></phrase>
+  <phrase title="blacktea_steamauth_banner_below" version_id="10504070" version_string="1.5.4"><![CDATA[Display Below User Extras]]></phrase>
+  <phrase title="blacktea_steamauth_data_anonymised" version_id="10709070" version_string="1.7.9"><![CDATA[No personally identifiable information or API keys will be exported]]></phrase>
+  <phrase title="blacktea_steamauth_export_addon_permissions" version_id="10709070" version_string="1.7.9"><![CDATA[Permissions]]></phrase>
+  <phrase title="blacktea_steamauth_export_addon_settings" version_id="10709070" version_string="1.7.9"><![CDATA[Settings]]></phrase>
+  <phrase title="blacktea_steamauth_export_addon_setup" version_id="10709070" version_string="1.7.9"><![CDATA[Setup]]></phrase>
+  <phrase title="blacktea_steamauth_export_addon_users" version_id="10709070" version_string="1.7.9"><![CDATA[Users]]></phrase>
+  <phrase title="blacktea_steamauth_export_enabled_addons" version_id="10709070" version_string="1.7.9"><![CDATA[Enabled Addons]]></phrase>
+  <phrase title="blacktea_steamauth_export_website_configuration" version_id="10709070" version_string="1.7.9"><![CDATA[Website Configuration]]></phrase>
+  <phrase title="blacktea_steamauth_hours" version_id="10700070" version_string="1.7.0"><![CDATA[h]]></phrase>
+  <phrase title="blacktea_steamauth_last_updated" version_id="10700070" version_string="1.7.0"><![CDATA[Updated]]></phrase>
+  <phrase title="blacktea_steamauth_list_users" version_id="10401070" version_string="1.4.1"><![CDATA[List Steam Connected Accounts]]></phrase>
+  <phrase title="blacktea_steamauth_no_active_games" version_id="10700070" version_string="1.7.0"><![CDATA[There are no active games to display.]]></phrase>
+  <phrase title="blacktea_steamauth_no_active_players" version_id="10700070" version_string="1.7.0"><![CDATA[There are no active players to display.]]></phrase>
+  <phrase title="blacktea_steamauth_no_banner" version_id="10504070" version_string="1.5.4"><![CDATA[Hide Steam Profile Banner]]></phrase>
+  <phrase title="blacktea_steamauth_no_owned_games" version_id="10700070" version_string="1.7.0"><![CDATA[There are no owned games to display.]]></phrase>
+  <phrase title="blacktea_steamauth_no_played_games" version_id="10700070" version_string="1.7.0"><![CDATA[There are no played games to display.]]></phrase>
+  <phrase title="blacktea_steamauth_notice_cannot_fetch" version_id="10704070" version_string="1.7.4"><![CDATA[We were unable to query your games list either due to your privacy settings or an issue with the Steam servers. If you'd like to appear on the leaderboards, please ensure your Steam privacy is set to public.]]></phrase>
+  <phrase title="blacktea_steamauth_owned_games" version_id="10700070" version_string="1.7.0"><![CDATA[Most owned games]]></phrase>
+  <phrase title="blacktea_steamauth_played_games" version_id="10700070" version_string="1.7.0"><![CDATA[Most played games]]></phrase>
+  <phrase title="blacktea_steamauth_recent_hours" version_id="10700070" version_string="1.7.0"><![CDATA[Recent hours]]></phrase>
+  <phrase title="blacktea_steamauth_steam_label" version_id="10401070" version_string="1.4.1"><![CDATA[Steam]]></phrase>
+  <phrase title="blacktea_steamauth_support" version_id="10709070" version_string="1.7.9"><![CDATA[Steam Authentication Support]]></phrase>
+  <phrase title="blacktea_steamauth_support_export_options" version_id="10709070" version_string="1.7.9"><![CDATA[Export Options]]></phrase>
+  <phrase title="blacktea_steamauth_total" version_id="10700070" version_string="1.7.0"><![CDATA[Total]]></phrase>
+  <phrase title="blacktea_steamauth_total_hours" version_id="10700070" version_string="1.7.0"><![CDATA[Total hours]]></phrase>
+  <phrase title="blacktea_steamauth_users" version_id="10700070" version_string="1.7.0"><![CDATA[users]]></phrase>
+  <phrase title="blacktea_steamauth_viewing_analytics" version_id="10702070" version_string="1.7.2"><![CDATA[Viewing analytics]]></phrase>
+  <phrase title="blacktea_steamauth_visibility_away" version_id="10501070" version_string="1.5.0"><![CDATA[Away]]></phrase>
+  <phrase title="blacktea_steamauth_visibility_busy" version_id="10501070" version_string="1.5.0"><![CDATA[Busy]]></phrase>
+  <phrase title="blacktea_steamauth_visibility_ingame" version_id="10501070" version_string="1.5.0"><![CDATA[In-Game]]></phrase>
+  <phrase title="blacktea_steamauth_visibility_offline" version_id="10501070" version_string="1.5.0"><![CDATA[Offline]]></phrase>
+  <phrase title="blacktea_steamauth_visibility_online" version_id="10501070" version_string="1.5.0"><![CDATA[Online]]></phrase>
+  <phrase title="blacktea_steamauth_visibility_play" version_id="10501070" version_string="1.5.0"><![CDATA[Looking to Play]]></phrase>
+  <phrase title="blacktea_steamauth_visibility_snooze" version_id="10501070" version_string="1.5.0"><![CDATA[Snooze]]></phrase>
+  <phrase title="blacktea_steamauth_visibility_trade" version_id="10501070" version_string="1.5.0"><![CDATA[Looking to Trade]]></phrase>
+  <phrase title="con_acc.steam" version_id="10000010" version_string="1.0.0"><![CDATA[Steam]]></phrase>
+  <phrase title="con_acc_desc.steam" version_id="10000010" version_string="1.0.0"><![CDATA[
+        Login/Register with Steam]]></phrase>
+  <phrase title="con_acc_steam_apikey_explain" version_id="10000010" version_string="1.0.0"><![CDATA[
+        Steam Web API Key]]></phrase>
+  <phrase title="con_acc_steam_domain_explain" version_id="10401070" version_string="1.4.1"><![CDATA[        Base domain WITH "https://" (e.g. https://example.com)]]></phrase>
+  <phrase title="cron_entry.steamAuthCleanup" version_id="10702070" version_string="1.7.2"><![CDATA[SteamAuth: Cleanup]]></phrase>
+  <phrase title="cron_entry.steamAuthUpdateUserGames" version_id="10700070" version_string="1.7.0"><![CDATA[SteamAuth: Update User Games]]></phrase>
+  <phrase title="message_macros_steam_label" version_id="10000010" version_string="1.0.0"><![CDATA[Steam]]></phrase>
+  <phrase title="message_macros_steam_view" version_id="10000010" version_string="1.0.0"><![CDATA[View]]></phrase>
+  <phrase title="nav.steamauth" version_id="10700070" version_string="1.7.0"><![CDATA[Steam]]></phrase>
+  <phrase title="nav.steamauthActiveGames" version_id="10700070" version_string="1.7.0"><![CDATA[Most active games]]></phrase>
+  <phrase title="nav.steamauthActivePlayers" version_id="10700070" version_string="1.7.0"><![CDATA[Most active players]]></phrase>
+  <phrase title="nav.steamauthOwnedGames" version_id="10700070" version_string="1.7.0"><![CDATA[Most owned games]]></phrase>
+  <phrase title="nav.steamauthPlayedGames" version_id="10700070" version_string="1.7.0"><![CDATA[Most played games]]></phrase>
+  <phrase title="option.blacktea_steamauth_actions" version_id="10300070" version_string="1.3.0"><![CDATA[Actions]]></phrase>
+  <phrase title="option.blacktea_steamauth_api_sleep" version_id="10701030" version_string="1.7.1"><![CDATA[API rate limit]]></phrase>
+  <phrase title="option.blacktea_steamauth_enabled_pages" version_id="10700070" version_string="1.7.0"><![CDATA[Enabled pages]]></phrase>
+  <phrase title="option.blacktea_steamauth_force_registration" version_id="10701030" version_string="1.7.1"><![CDATA[Require registration through steam]]></phrase>
+  <phrase title="option.blacktea_steamauth_game_update_frequency" version_id="10701030" version_string="1.7.1"><![CDATA[Analytics update frequency]]></phrase>
+  <phrase title="option.blacktea_steamauth_message_macro" version_id="10701030" version_string="1.7.1"><![CDATA[Show Steam profile links in messages]]></phrase>
+  <phrase title="option.blacktea_steamauth_message_macro_steamid" version_id="10701030" version_string="1.7.1"><![CDATA[Replace Steam profile links with Steam IDs]]></phrase>
+  <phrase title="option.blacktea_steamauth_user_banner" version_id="10501070" version_string="1.5.0"><![CDATA[Show Steam banner in user posts]]></phrase>
+  <phrase title="option.blacktea_steamauth_user_update_limit" version_id="10701030" version_string="1.7.1"><![CDATA[User update rate limit]]></phrase>
+  <phrase title="option.blacktea_steamauth_verbose_log" version_id="10701030" version_string="1.7.1"><![CDATA[Enable verbose logging]]></phrase>
+  <phrase title="option_explain.blacktea_steamauth_actions" version_id="10300070" version_string="1.3.0"><![CDATA[]]></phrase>
+  <phrase title="option_explain.blacktea_steamauth_api_sleep" version_id="10701030" version_string="1.7.1"><![CDATA[The amount of time, in seconds, to pause between each Steam API call when performing the game statistics update. If you run a large forum and are experiencing issues with the Steam API, you can try increasing the delay between each API call.]]></phrase>
+  <phrase title="option_explain.blacktea_steamauth_enabled_pages" version_id="10700070" version_string="1.7.0"><![CDATA[Unchecking these will disable visiting the page itself. However, this does not remove the navigation tab for these pages. In order to disable the navigation, please see the built-in XenForo navigation settings under Setup > Navigation > Public navigation.]]></phrase>
+  <phrase title="option_explain.blacktea_steamauth_force_registration" version_id="10701030" version_string="1.7.1"><![CDATA[Force new users to register using their Steam account. This does not prevent existing users from signing in via standard username and password authentication.]]></phrase>
+  <phrase title="option_explain.blacktea_steamauth_game_update_frequency" version_id="10701030" version_string="1.7.1"><![CDATA[The amount of time, in seconds, before the Steam game statistics are updated. You can disable this entirely by visiting the built-in XenForo cron settings.]]></phrase>
+  <phrase title="option_explain.blacktea_steamauth_message_macro" version_id="10701030" version_string="1.7.1"><![CDATA[Displays a link to the user’s Steam profile in the message postbit This is typically located on the left-hand side of posts and private messages.
+
+Please note that once enabled, you will need to configure the Steam permissions for your usergroups. Otherwise, members will not be able to see these links even when this setting is enabled.]]></phrase>
+  <phrase title="option_explain.blacktea_steamauth_message_macro_steamid" version_id="10701030" version_string="1.7.1"><![CDATA[Once enabled, this will replace the standard profile link text shown in messages with the user’s Steam 64-bit ID. This only replaces the text within the link; it does not remove the profile hyperlink itself.
+
+Note that this requires the above setting to be enabled before this takes effect.]]></phrase>
+  <phrase title="option_explain.blacktea_steamauth_user_banner" version_id="10701030" version_string="1.7.1"><![CDATA[This setting controls the display options for the Steam profile banners. These are the little cards that show basic information about the user’s Steam profile (e.g., their avatar, whether or not they are signed-in, and what they are currently playing).
+
+Ticking an option other than “Disable” will result in the profile banner displaying either above or below the user extras respectively. User extras refers to the list of basic profile information typically show on the left-hand side of user posts and private messages (e.g., post count, join date, and location).]]></phrase>
+  <phrase title="option_explain.blacktea_steamauth_user_update_limit" version_id="10701030" version_string="1.7.1"><![CDATA[The amount of users whose Steam statistics will be updated during each run of the analytics cronjob.]]></phrase>
+  <phrase title="option_explain.blacktea_steamauth_verbose_log" version_id="10701030" version_string="1.7.1"><![CDATA[Ticking this box will make error logging significantly more fine-grained. If you are experiencing unexpected issues with add-on, for better debugging, you may try enabling this setting.]]></phrase>
+  <phrase title="option_group.blacktea_steamauth_options" version_id="10000010" version_string="1.0.0"><![CDATA[Steam Auth]]></phrase>
+  <phrase title="option_group_description.blacktea_steamauth_options" version_id="10000010" version_string="1.0.0"><![CDATA[Login with Steam]]></phrase>
+  <phrase title="permission.steamauth_changePrivacy" version_id="10401070" version_string="1.4.1"><![CDATA[Can change privacy settings]]></phrase>
+  <phrase title="permission.steamauth_disassociate" version_id="10401070" version_string="1.4.1"><![CDATA[Can disassociate]]></phrase>
+  <phrase title="permission.steamauth_viewAnalytics" version_id="10709070" version_string="1.7.9"><![CDATA[Can view Steam Analytics]]></phrase>
+  <phrase title="permission.steamauth_viewBanner" version_id="10501070" version_string="1.5.0"><![CDATA[Can view Steam Banners]]></phrase>
+  <phrase title="permission.steamauth_viewHiddenBanner" version_id="10501070" version_string="1.5.0"><![CDATA[Can view hidden Steam Banners]]></phrase>
+  <phrase title="permission.steamauth_viewHiddenProfile" version_id="10401070" version_string="1.4.1"><![CDATA[Can view hidden Steam Profiles]]></phrase>
+  <phrase title="permission.steamauth_viewProfile" version_id="10401070" version_string="1.4.1"><![CDATA[Can view Steam Profiles]]></phrase>
+  <phrase title="permission_interface.steamauth" version_id="10401070" version_string="1.4.1"><![CDATA[Steam Auth]]></phrase>
+  <phrase title="recent_hours" version_id="10700070" version_string="1.7.0"><![CDATA[Recent hours]]></phrase>
+  <phrase title="steamid_change" version_id="10300070" version_string="1.3.0"><![CDATA[SteamID64]]></phrase>
+</phrases>

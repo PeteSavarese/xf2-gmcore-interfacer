@@ -1,0 +1,9 @@
+{
+    "template": "message_macros",
+    "description": "Adds a Steam profile banner to user posts (below)",
+    "execution_order": 10,
+    "enabled": true,
+    "action": "preg_replace",
+    "find": "/<xf:macro\\s+id=\"user_info\"[\\s\\S]*?<span[^>]*class=\"[^\"]*\\bmessage-userArrow\\b[^\"]*\"[^>]*><\\/span>/",
+    "replace": "$0\n<xf:if is=\"can_display_steam_user_banner('after')\">\n\t{{steam_user_banner($user)}}\n</xf:if>"
+}

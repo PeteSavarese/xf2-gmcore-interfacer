@@ -1,0 +1,304 @@
+<xf:macro id="poll_block" arg-poll="!" arg-showVoteBlock="{{ false }}" arg-simpleDisplay="{{ false }}" arg-forceTitle="{{ false }}">
+	<xf:form action="{{ $poll.getLink('vote') }}" ajax="true" class="block js-pollContainer-{$poll.poll_id}" data-xf-init="poll-block">
+		<div class="poll-macros block-container">
+			<h2 class="{{ $simpleDisplay ? 'block-minorHeader' : 'block-header' }}">
+				<xf:if is="$simpleDisplay">
+					<a href="{{ $poll.getLink('content') }}">{{ $forceTitle ?: $poll.question }}</a>
+				<xf:else />
+					<xf:fa icon="fa-chart-bar" /> {{ $forceTitle ?: $poll.question }}
+					<xf:if is="$poll.canEdit()">
+						<xf:button href="{{ $poll.getLink('edit') }}" class="button--link button--small u-pullRight"
+							overlay="true" icon="edit" />
+					</xf:if>
+				</xf:if>
+			</h2>
+			<xf:if is="$poll.canVote() AND ($showVoteBlock OR !$poll.hasVoted())">
+				<xf:macro id="vote" arg-poll="{$poll}" />
+			<xf:else />
+				<xf:macro id="result" arg-poll="{$poll}" arg-simpleDisplay="{$simpleDisplay}" />
+			</xf:if>
+		</div>
+		<xf:hiddenval name="simple_display">{$simpleDisplay}</xf:hiddenval>
+	</xf:form>
+</xf:macro>
+
+<xf:macro id="vote" arg-poll="!">
+	<div class="block-body">
+		<div class="block-row">
+			<xf:if is="$poll.max_votes == 1">
+				<xf:radio name="responses[]">
+					<xf:foreach loop="$poll.responses" key="$responseId" value="$response">
+						<xf:option value="{$responseId}" selected="{{ $poll.hasVoted($responseId) }}">{$response.response|censor}</xf:option>
+					</xf:foreach>
+				</xf:radio>
+			<xf:else />
+				<xf:checkbox name="responses[]">
+					<xf:foreach loop="$poll.responses" key="$responseId" value="$response">
+						<xf:option value="{$responseId}" selected="{{ $poll.hasVoted($responseId) }}">{$response.response|censor}</xf:option>
+					</xf:foreach>
+				</xf:checkbox>
+			</xf:if>
+		</div>
+		<xf:if contentcheck="true">
+			<hr class="block-separator" />
+			<div class="block-row block-row--minor">
+				<ul class="listInline">
+				<xf:contentcheck>
+					<xf:if is="$poll.close_date">
+						<xf:if is="!$poll.isClosed()">
+							<li>{{ phrase('this_poll_will_close:') }} <xf:date time="{$poll.close_date}" />.</li>
+						<xf:else />
+							<li>{{ phrase('poll_closed') }} <xf:date time="{$poll.close_date}" />.</li>
+						</xf:if>
+					</xf:if>
+					<xf:if is="$poll.max_votes != 1">
+						<li>{{ phrase('multiple_votes_allowed') }}</li>
+					</xf:if>
+					<xf:if is="$poll.public_votes">
+						<li>{{ phrase('your_vote_will_be_publicly_visible') }}</li>
+					</xf:if>
+				</xf:contentcheck>
+				</ul>
+			</div>
+		</xf:if>
+	</div>
+	<div class="block-footer">
+		<span class="block-footer-controls">
+			<xf:button type="submit" class="button--primary" icon="vote">{{ phrase('cast_vote') }}</xf:button>
+			<xf:if is="$poll.canViewResults()">
+				<xf:button href="{{ $poll.getLink('results') }}" overlay="true" icon="result" rel="nofollow">{{ phrase('view_results') }}</xf:button>
+			</xf:if>
+		</span>
+	</div>
+</xf:macro>
+
+<xf:macro id="result" arg-poll="!" arg-simpleDisplay="{{ false }}" arg-showFooter="{{ true }}">
+	<xf:css src="poll.less" />
+	<xf:set var="$canViewResults" value="{{ $poll.canViewResults() }}" />
+
+	<div class="block-body">
+		<ul class="listPlain">
+		<xf:foreach loop="$poll.responses" key="$responseId" value="$response">
+			<li>
+				<xf:set var="$canShowVoters" value="{{ $canViewResults AND $poll.public_votes AND $response.response_vote_count AND !$simpleDisplay }}" />
+				<div class="{{ $canShowVoters ? 'fauxBlockLink' : '' }}">
+					<div class="pollResult {{ $simpleDisplay ? 'pollResult--simple' : '' }} {{ $poll.hasVoted($responseId) ? 'pollResult--voted' : '' }} {{ $canShowVoters ? 'pollResult--showVoters' : '' }}">
+						<h3 class="pollResult-response">{$response.response|censor}</h3>
+						<xf:if is="$canViewResults">
+							<span class="pollResult-votes">
+								<xf:if is="$canShowVoters">
+									<a class="fauxBlockLink-blockLink"
+										data-xf-click="toggle"
+										data-target=".js-pollResultVoters-{$responseId}"
+										role="button"
+										tabindex="0">
+										<span class="u-muted">{{ phrase('votes:') }}</span> {$response.response_vote_count|number}
+									</a>
+								<xf:else />
+									<span class="u-muted">{{ phrase('votes:') }}</span> {$response.response_vote_count|number}
+								</xf:if>
+							</span>
+							<span class="pollResult-percentage">
+								{{ $poll.getVotePercentage($response.response_vote_count)|number(1) }}%
+							</span>
+							<span class="pollResult-graph" aria-hidden="true">
+								<span class="pollResult-bar"><xf:if is="$response.response_vote_count">
+									<i style="width: {{ $poll.getVotePercentage($response.response_vote_count) }}%"></i>
+								</xf:if></span>
+							</span>
+						</xf:if>
+					</div>
+				</div>
+				<xf:if is="$canShowVoters">
+					<div class="pollResult-voters js-pollResultVoters-{$responseId} toggleTarget"
+						data-href="{{ $poll.getLink('results', {'response': $responseId}) }}"
+						data-load-selector=".js-pollVoters"></div>
+				</xf:if>
+			</li>
+		</xf:foreach>
+		</ul>
+		<xf:if is="!$canViewResults">
+			<hr class="block-separator" />
+			<div class="block-row block-row--minor">
+				<span class="u-muted">{{ phrase('results_only_viewable_after_voting') }}</span>
+			</div>
+		<xf:elseif is="!$simpleDisplay" />
+			<hr class="block-separator" />
+			<div class="block-row block-row--minor">
+				<ul class="listInline listInline--bullet">
+					<li>
+						<dl class="pairs pairs--inline">
+							<dt>{{ phrase('total_voters') }}</dt>
+							<dd>{$poll.voter_count|number}</dd>
+						</dl>
+					</li>
+					<xf:if is="$poll.close_date">
+						<xf:if is="!$poll.isClosed()">
+							<li>{{ phrase('this_poll_will_close:') }} <xf:date time="{$poll.close_date}" />.</li>
+						<xf:else />
+							<li>{{ phrase('poll_closed') }} <xf:date time="{$poll.close_date}" />.</li>
+						</xf:if>
+					</xf:if>
+				</ul>
+			</div>
+		</xf:if>
+	</div>
+	<xf:if is="$showFooter">
+		<xf:if contentcheck="true">
+			<div class="block-footer">
+			<xf:contentcheck>
+				<xf:if is="$simpleDisplay">
+					<a href="{{ $poll.getLink('content') }}">{{ phrase('see_comments...') }}</a>
+				<xf:else />
+					<xf:if is="$poll.canVote() AND $poll.hasVoted()">
+						<span class="block-footer-controls"><xf:button href="{{ $poll.getLink('vote') }}"
+							data-xf-click="inserter" data-replace=".js-pollContainer-{$poll.poll_id}">
+							{{ phrase('change_vote') }}
+						</xf:button></span>
+					</xf:if>
+				</xf:if>
+			</xf:contentcheck>
+			</div>
+		</xf:if>
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="add_edit_inputs" arg-poll="{{ null }}" arg-draft="{{ [] }}" arg-rowType="">
+	<xf:if is="!$poll OR $poll.canEditDetails()">
+		<xf:textboxrow
+			name="poll[question]"
+			value="{{ $draft.question ?: $poll.question }}"
+			maxlength="{{ max_length('XF:Poll', 'question') }}"
+			rowtype="{$rowType}}"
+			label="{{ phrase('question') }}" />
+
+	<xf:else />
+		<xf:formrow label="{{ phrase('question') }}" rowtype="{$rowType}}">{$poll.question}</xf:formrow>
+	</xf:if>
+
+	<xf:set var="$responsesId" value="{{ unique_id() }}" />
+	<xf:formrow rowtype="input {$rowType}"
+		label="{{ phrase('possible_responses') }}" labelid="{$responsesId}">
+
+		<ul class="inputList" role="group" aria-labelledby="{$responsesId}">
+			<xf:if is="$poll">
+				<xf:foreach loop="$poll.Responses" value="$response">
+					<li>
+						<xf:if is="$poll.canEditDetails()">
+							<xf:textbox name="poll[existing_responses][{$response.poll_response_id}]"
+								value="{$response.response}"
+								maxlength="{{ max_length('XF:PollResponse', 'response') }}"
+								aria-label="{{ phrase('poll_choice')|for_attr }}"
+								placeholder="{{ phrase('poll_choice...') }}" />
+						<xf:else />
+							{$response.response}
+						</xf:if>
+					</li>
+				</xf:foreach>
+				<xf:set var="$remainingResponses" value="{{ $xf.options.pollMaximumResponses - count($poll.responses) }}" />
+			<xf:elseif is="$draft" />
+				<xf:foreach loop="$draft.new_responses" value="$response" i="$count" if="$response">
+					<li>
+						<xf:textbox name="poll[new_responses][]" value="{$response}"
+							maxlength="{{ max_length('XF:PollResponse', 'response') }}"
+							aria-label="{{ phrase('poll_choice')|for_attr }}"
+							placeholder="{{ phrase('poll_choice...') }}" />
+					</li>
+				</xf:foreach>
+				<xf:set var="$remainingResponses" value="{{ $xf.options.pollMaximumResponses - $count }}" />
+			<xf:else />
+				<xf:set var="$remainingResponses" value="{$xf.options.pollMaximumResponses}" />
+			</xf:if>
+			<xf:if is="$remainingResponses > 0">
+				<li data-xf-init="field-adder" data-remaining="{{ $remainingResponses - 1 }}">
+					<xf:textbox name="poll[new_responses][]" value=""
+						maxlength="{{ max_length('XF:PollResponse', 'response') }}"
+						aria-label="{{ phrase('poll_choice')|for_attr }}"
+						placeholder="{{ phrase('poll_choice...') }}" />
+				</li>
+			</xf:if>
+		</ul>
+	</xf:formrow>
+
+	<xf:radiorow name="poll[max_votes_type]"
+		label="{{ phrase('maximum_selectable_responses') }}"
+		explain="{{ phrase('this_is_maximum_number_of_responses_voter_may_select_when_voting') }}"
+		rowtype="{$rowType}">
+
+		<xf:if is="($draft AND $draft.max_votes_type == 'single') OR !$poll OR $poll.max_votes == 1">
+			<xf:option value="single" selected="{{ ($draft AND $draft.max_votes_type == 'single') OR (!$draft AND !$poll.poll_id) OR $poll.max_votes == 1 }}"
+				label="{{ phrase('single_choice') }}" />
+		</xf:if>
+
+		<xf:option value="unlimited" selected="{{ ($draft AND $draft.max_votes_type == 'unlimited') OR $poll AND $poll.max_votes == 0 }}"
+			label="{{ phrase('unlimited') }}" />
+
+		<xf:option value="number" selected="{{ ($draft AND $draft.max_votes_value > 1) OR $poll.max_votes > 1 }}">
+			<xf:numberbox name="poll[max_votes_value]" min="1" max="255" value="{{ $draft.max_votes_value ?: ($poll.max_votes < 2 ? 2 : $poll.max_votes) }}" />
+		</xf:option>
+	</xf:radiorow>
+
+	<xf:checkboxrow label="{{ phrase('options') }}" rowtype="{$rowType}">
+		<xf:option name="poll[change_vote]" selected="{{ ($draft AND $draft.change_vote) OR !$poll OR $poll.change_vote }}">
+			{{ phrase('allow_voters_to_change_their_votes') }}
+		</xf:option>
+
+		<xf:if is="!$poll OR $poll.canChangePollVisibility()">
+			<xf:option name="poll[public_votes]" selected="{{ ($draft AND $draft.public_votes) OR $poll AND $poll.public_votes }}">
+				{{ phrase('display_votes_publicly') }}
+			</xf:option>
+		</xf:if>
+
+		<xf:option name="poll[view_results_unvoted]" selected="{{ ($draft AND $draft.view_results_unvoted) OR !$poll OR $poll.view_results_unvoted }}">
+			{{ phrase('allow_results_to_be_viewed_without_voting') }}
+		</xf:option>
+
+		<xf:if is="$poll AND $poll.close_date">
+			<xf:option name="poll[remove_close]" selected="{$poll.close_date}">
+				{{ phrase('close_this_poll_on_x', {'close_date': date_time($poll.close_date)}) }}
+			</xf:option>
+		<xf:else />
+			<xf:option name="poll[close]"
+				selected="$draft AND $draft.close"
+				label="{{ phrase('close_this_poll_after:') }}">
+
+				<xf:dependent>
+					<div class="inputGroup">
+						<xf:numberbox name="poll[close_length]" value="{{ ($draft AND $draft.close_length) ? $draft.close_length : 7 }}" min="1" max="365" />
+						<span class="inputGroup-splitter"></span>
+						<xf:select name="poll[close_units]" class="input--autoSize">
+							<xf:option value="hours" selected="$draft AND $draft.close_units == 'hours'">{{ phrase('hours') }}</xf:option>
+							<xf:option value="days" selected="($draft AND $draft.close_units == 'days') OR !$draft">{{ phrase('days') }}</xf:option>
+							<xf:option value="weeks" selected="$draft AND $draft.close_units == 'weeks'">{{ phrase('weeks') }}</xf:option>
+							<xf:option value="months" selected="$draft AND $draft.close_units == 'months'">{{ phrase('months') }}</xf:option>
+						</xf:select>
+					</div>
+				</xf:dependent>
+			</xf:option>
+		</xf:if>
+	</xf:checkboxrow>
+
+</xf:macro>
+
+<xf:macro id="delete_block" arg-poll="!">
+	<xf:form action="{{ $poll.getLink('delete') }}" class="block" ajax="true">
+		<div class="block-container">
+			<div class="block-body">
+				<h2 class="block-header">{{ phrase('delete_poll') }}</h2>
+
+				<xf:radiorow name="poll_action">
+					<xf:option checked="1">{{ phrase('do_nothing') }}</xf:option>
+
+					<xf:if is="$poll.voter_count">
+						<xf:option value="reset">{{ phrase('reset_all_votes') }}</xf:option>
+					</xf:if>
+
+					<xf:option value="remove">{{ phrase('delete_entire_poll') }}</xf:option>
+				</xf:radiorow>
+			</div>
+
+			<xf:redirect fallback="{{ $poll.getLink('content') }}" />
+			<xf:submitrow icon="delete" />
+		</div>
+	</xf:form>
+</xf:macro>

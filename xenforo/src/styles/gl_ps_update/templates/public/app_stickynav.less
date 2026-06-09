@@ -1,0 +1,39 @@
+// STICKY NAV SETUP
+
+.p-navSticky
+{
+	z-index: @zIndex-1;
+
+	&.is-sticky
+	{
+		z-index: @zIndex-4;
+		.m-dropShadow(0, 0, 8px, 3px, 0.3);
+	}
+
+	@supports (position: sticky) or (position: -webkit-sticky)
+	{
+		&
+		{
+			position: -webkit-sticky;
+			position: sticky;
+			top: 0;
+
+			&.is-sticky-broken,
+			&.is-sticky-disabled
+			{
+				position: static;
+				top: auto;
+			}
+		}
+	}
+}
+
+.p-navSticky {
+    margin-top: (-@header-navHeight - 12px); /* @header-navHeight calculates ~37px but actual rendered height is ~49px */
+    z-index: 200;
+}
+
+.p-navSticky.is-sticky {
+    backdrop-filter: blur(12px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+}

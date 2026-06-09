@@ -1,0 +1,4 @@
+{{ phrase('push_alert_profile_post_insert', {
+	'username': $user.username ?: $alert.username
+}) }}
+<push:url>{{ link('canonical:profile-posts', $content) }}</push:url>

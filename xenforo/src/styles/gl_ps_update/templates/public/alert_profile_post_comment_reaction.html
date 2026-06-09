@@ -1,0 +1,14 @@
+<xf:if is="$xf.visitor.user_id == $content.ProfilePost.user_id">
+	{{ phrase('x_reacted_to_your_comment_on_your_profile_post', {
+		'name': username_link($user, false, {'defaultname': $alert.username}),
+		'post_attributes': 'href="' . link('profile-posts/comments', $content) . '" class="fauxBlockLink-blockLink"',
+		'reaction': alert_reaction($extra.reaction_id)|preescaped
+	}) }}
+<xf:else />
+	{{ phrase('x_reacted_to_your_comment_on_ys_profile_post', {
+		'name': username_link($user, false, {'defaultname': $alert.username}),
+		'post_attributes': 'href="' . link('profile-posts/comments', $content) . '" class="fauxBlockLink-blockLink"',
+		'reaction': alert_reaction($extra.reaction_id)|preescaped,
+		'poster': $content.ProfilePost.username
+	}) }}
+</xf:if>

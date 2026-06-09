@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<admin_permission>
+  <admin_permission admin_permission_id="gmod_db_options" display_order="0"/>
+  <admin_permission admin_permission_id="gmod_manage_store_ranks" display_order="0"/>
+</admin_permission>

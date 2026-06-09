@@ -1,0 +1,51 @@
+<xf:if is="$features is not empty">
+	<xf:if is="$style == 'simple'">
+		<div class="block" {{ widget_data($widget) }}>
+			<div class="block-container">
+				<h3 class="block-minorHeader">
+					<a href="{$link}">{{ $title ?: phrase('featured_content') }}</a>
+				</h3>
+
+				<ul class="block-body">
+					<xf:foreach loop="$features" value="$feature">
+						<li class="block-row">
+							{{ $feature.render('simple', $snippetLength)|raw }}
+						</li>
+					</xf:foreach>
+				</ul>
+			</div>
+		</div>
+	<xf:elseif is="$style == 'carousel'" />
+		<xf:macro name="carousel_macros::setup" />
+
+		<div class="carousel {{ $hasMore ? 'carousel--withFooter' : '' }}" {{ widget_data($widget) }}>
+			<ul class="carousel-body carousel-body--show2" data-xf-init="carousel">
+				<xf:foreach loop="$features" value="$feature">
+					<li class="carousel-container">
+						<div class="carousel-item">
+							{{ $feature.render('carousel', $snippetLength)|raw }}
+						</div>
+					</li>
+				</xf:foreach>
+			</ul>
+
+			<xf:if is="$hasMore">
+				<div class="carousel-footer">
+					<a href="{$link}">{{ phrase('view_all_featured_content') }}</a>
+				</div>
+			</xf:if>
+		</div>
+	<xf:else />
+		<xf:css src="message.less" />
+
+		<div class="block block--articles block--messages block--previews" {{ widget_data($widget) }}>
+			<div class="block-container">
+				<div class="block-body">
+					<xf:foreach loop="$features" value="$feature">
+						{{ $feature.render('article', $snippetLength)|raw }}
+					</xf:foreach>
+				</div>
+			</div>
+		</div>
+	</xf:if>
+</xf:if>

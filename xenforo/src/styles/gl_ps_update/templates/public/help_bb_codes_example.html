@@ -1,0 +1,8 @@
+<dl class="example">
+	<dt>{{ phrase('example:') }}</dt>
+	<dd>{{ $bbCodeExampleHtml ? $bbCodeExampleHtml|raw|nl2br : $bbCodeEval|nl2br }}</dd>
+</dl>
+<dl class="output">
+	<dt>{{ phrase('output:') }}</dt>
+	<dd>{{ bb_code($bbCodeEval, 'help', null) }}</dd>
+</dl>

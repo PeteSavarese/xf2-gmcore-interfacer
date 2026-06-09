@@ -1,0 +1,22 @@
+<xf:css src="member.less" />
+
+<xf:if contentcheck="true">
+	<div class="block"{{ widget_data($widget) }}>
+		<div class="block-container">
+			<h3 class="block-minorHeader">
+				<a href="{{ link('members', null, {'key': $memberStat.member_stat_key}) }}">
+					{$title}
+				</a>
+			</h3>
+			<ol class="block-body">
+				<xf:contentcheck>
+					<xf:foreach loop="$results" key="$userId" value="$data">
+						<li class="block-row">
+							<xf:macro id="member_notable::overview_row" arg-data="{$data}" />
+						</li>
+					</xf:foreach>
+				</xf:contentcheck>
+			</ol>
+		</div>
+	</div>
+</xf:if>

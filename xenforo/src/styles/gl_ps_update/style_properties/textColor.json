@@ -1,0 +1,16 @@
+{
+    "group_name": "color",
+    "title": "Text color",
+    "description": "Unless otherwise specified, text will be this color",
+    "property_type": "value",
+    "css_components": [],
+    "value_type": "color",
+    "value_parameters": "",
+    "has_variations": true,
+    "depends_on": "",
+    "value_group": "textBasic",
+    "property_value": {
+        "default": "#ecf0f1"
+    },
+    "display_order": 100
+}

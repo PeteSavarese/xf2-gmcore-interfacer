@@ -1,0 +1,53 @@
+<xf:if is="$result.isBasicLink()">
+	<div>
+		<a href="{$result.url}"
+			class="{{ $linkInfo.class ?: '' }}"
+			target="{{ $linkInfo.target ?: '' }}"
+			rel="{{ $rels ? $rels|join(' ') : '' }}"
+			data-proxy-href="{{ $proxyUrl ?: '' }}">
+			{{ $result.title ?: $result.url }}
+		</a>
+	</div>
+<xf:else />
+	<xf:css src="bb_code.less" />
+
+	<div class="bbCodeBlock bbCodeBlock--unfurl {{ $result.pending ? 'is-pending' : '' }} {{ $result.is_recrawl ? 'is-recrawl' : '' }} {{ $simple ? 'is-simple' : '' }} js-unfurl fauxBlockLink"
+		data-unfurl="true" data-result-id="{$result.result_id}" data-url="{$result.url}" data-host="{$result.host}" data-pending="{{ $result.pending ? 'true' : 'false' }}">
+		<div class="contentRow">
+			<xf:if is="($result.pending OR $imageUrl) AND !$simple">
+				<div class="contentRow-figure contentRow-figure--fixedSmall js-unfurl-figure">
+					<xf:if is="$imageUrl">
+						<img src="{$imageUrl}" loading="lazy" alt="{$result.host}" class="bbCodeBlockUnfurl-image" data-onerror="hide-parent"/>
+					<xf:else />
+						<span class="fa-2x u-muted">
+							<xf:fa icon="fa-spinner fa-pulse" />
+						</span>
+					</xf:if>
+				</div>
+			</xf:if>
+			<div class="contentRow-main">
+				<h3 class="contentRow-header js-unfurl-title">
+					<a href="{$result.url}"
+						class="{{ $linkInfo.class ?: '' }} fauxBlockLink-blockLink"
+						target="{{ $linkInfo.target ?: '' }}"
+						rel="{{ $rels ? $rels|join(' ') : '' }}"
+						data-proxy-href="{{ $proxyUrl ?: '' }}">
+						{{ $result.title ?: phrase('loading...') }}
+					</a>
+				</h3>
+
+				<div class="contentRow-snippet js-unfurl-desc">{{ snippet($result.description, $simple ? 50 : 300) }}</div>
+
+				<div class="contentRow-minor contentRow-minor--hideLinks">
+					<span class="js-unfurl-favicon">
+						<xf:if is="$faviconUrl">
+							<img src="{$faviconUrl}" loading="lazy" alt="{$result.host}" class="bbCodeBlockUnfurl-icon"
+								data-onerror="hide-parent"/>
+						</xf:if>
+					</span>
+					{$result.host}
+				</div>
+			</div>
+		</div>
+	</div>
+</xf:if>

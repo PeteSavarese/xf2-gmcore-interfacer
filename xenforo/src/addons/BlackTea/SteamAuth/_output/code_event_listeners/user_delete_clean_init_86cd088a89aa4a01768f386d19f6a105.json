@@ -1,0 +1,9 @@
+{
+    "event_id": "user_delete_clean_init",
+    "execute_order": 10,
+    "callback_class": "BlackTea\\SteamAuth\\Listener\\UserDeleteClean",
+    "callback_method": "run",
+    "active": true,
+    "hint": "",
+    "description": ""
+}

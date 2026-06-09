@@ -1,0 +1,34 @@
+.menuTrigger.menuTrigger--prefix
+{
+	text-decoration: none;
+}
+
+.menuPrefix,
+.menuPrefix.label--hidden
+{
+	display: block;
+	font-size: @xf-fontSizeSmall;
+	cursor: default;
+	padding: @xf-paddingMedium;
+	//margin-bottom: (@xf-paddingMedium * -1);
+
+	&.label--hidden
+	{
+		border: 1px solid @xf-borderColorFaint;
+	}
+
+	&.menuPrefix--none
+	{
+		color: @xf-textColorMuted;
+		text-decoration: none;
+	}
+}
+
+.prefixMenu-item {
+    border-radius: 999px;
+    padding: 4px 10px;
+    transition: all 0.2s ease;
+}
+.prefixMenu-item:hover {
+    background: rgba(52, 152, 219, 0.08);
+}

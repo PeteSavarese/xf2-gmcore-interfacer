@@ -1,0 +1,20 @@
+<xf:if is="$extra.welcome">
+	{{ phrase('welcome_to_boardtitle', {'boardTitle': $xf.options.boardTitle}) }}
+</xf:if>
+<xf:if is="$content.isFirstPost()">
+	{{ phrase('welcome_to_boardtitle', {
+		'boardTitle': $xf.options.boardTitle
+	})}}
+	{{ phrase('your_thread_x_was_created', {
+		'title': prefix('thread', $content.Thread, 'plain') . $content.Thread.title
+	}) }}
+	<push:url>{{ link('canonical:threads', $content.Thread) }}</push:url>
+<xf:else />
+	{{ phrase('welcome_to_boardtitle', {
+		'boardTitle': $xf.options.boardTitle
+	})}}
+	{{ phrase('your_reply_to_thread_x_was_submitted', {
+		'title': prefix('thread', $content.Thread, 'plain') . $content.Thread.title
+	}) }}
+	<push:url>{{ link('canonical:posts', $content) }}</push:url>
+</xf:if>

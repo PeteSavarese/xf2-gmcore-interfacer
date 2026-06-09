@@ -1,0 +1,6 @@
+{{ phrase('x_reacted_to_your_post_in_the_thread_y', {
+	'name': username_link($user, false, {'defaultname': $alert.username}),
+	'reaction': alert_reaction($extra.reaction_id)|preescaped,
+	'posterParams': 'href="' . link('posts', $content) . '" class="fauxBlockLink-blockLink"',
+	'title': prefix('thread', $content.Thread) . $content.Thread.title
+}) }}

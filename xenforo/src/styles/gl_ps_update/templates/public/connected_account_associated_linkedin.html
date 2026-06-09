@@ -1,0 +1,6 @@
+<xf:if is="$providerData.avatarUrl">
+	<img src="{$providerData.avatarUrl}" width="48" alt="" />
+	<div>{$providerData.formattedName}</div>
+<xf:else />
+	{{ phrase('account_associated') }}
+</xf:if>

@@ -1,0 +1,200 @@
+<xf:macro id="head" arg-app="!" arg-jsState="{{ null }}">
+	<xf:set var="$cssUrls" value="{{ ['public:normalize.css', 'public:fa.css'] }}" />
+	<xf:if is="$xf.style.isVariationsEnabled()">
+		<xf:set var="$cssUrls" value="{{ array_merge($cssUrls, ['public:variations.less']) }}" />
+	</xf:if>
+	<xf:set var="$cssUrls" value="{{ array_merge($cssUrls, ['public:core.less', $app . ':app.less']) }}" />
+
+	<link rel="stylesheet" href="{{ css_url($cssUrls) }}" />
+
+	<!--XF:CSS-->
+
+	<xf:if is="$xf.fullJs">
+		<script{{ $xf.request.isRocketLoaderDisabled() ? ' data-cfasync="false"' : ''}} src="{{ js_url('xf/preamble.js') }}"></script>
+	<xf:else />
+		<script{{ $xf.request.isRocketLoaderDisabled() ? ' data-cfasync="false"' : ''}} src="{{ js_url('xf/preamble.min.js') }}"></script>
+	</xf:if>
+
+	<xf:corejs />
+
+	<script{{ $xf.request.isRocketLoaderDisabled() ? ' data-cfasync="false"' : ''}}>
+		XF.ready(() =>
+		{
+			XF.extendObject(true, XF.config, {
+				// <!--[XF:js_global:xf_extend_start]-->
+				userId: {$xf.visitor.user_id},
+				enablePush: {{ $xf.options.enablePush ? 'true' : 'false' }},
+				pushAppServerKey: '{$xf.options.pushKeysVAPID.publicKey}',
+				url: {
+					fullBase: '{{ base_url(null, true)|escape("js") }}',
+					basePath: '{{ base_url(null, false)|escape("js") }}',
+					css: '{{ css_url(["__SENTINEL__"], false)|escape("js") }}',
+					js: '{{ js_url("__SENTINEL__")|escape("js") }}',
+					icon: '{{ icon_url("__VARIANT__", "__NAME__")|escape("js") }}',
+					iconInline: '{{ icon_url("__VARIANT__", "__NAME__", true)|escape("js") }}',
+					keepAlive: '{{ link_type($app, "login/keep-alive")|escape("js") }}'
+				},
+				cookie: {
+					path: '{{ $xf.cookie.path|escape("js") }}',
+					domain: '{{ $xf.cookie.domain|escape("js") }}',
+					prefix: '{{ $xf.cookie.prefix|escape("js") }}',
+					secure: {{ $xf.cookie.secure ? 'true' : 'false' }},
+					consentMode: '{{ $xf.cookieConsent.getMode() }}',
+					consented: {{ $xf.cookieConsent.getConsentedGroups()|json|raw }}
+				},
+				cacheKey: '{{ cache_key()|escape("js") }}',
+				csrf: '{{ csrf_token()|escape("js") }}',
+				js: {'<!--XF:JS:JSON-->'},
+				fullJs: {{ $xf.fullJs ? 'true' : 'false' }},
+				css: {'<!--XF:CSS:JSON-->'},
+				time: {
+					now: {$xf.time},
+					today: {$xf.timeDetails.today},
+					todayDow: {$xf.timeDetails.todayDow},
+					tomorrow: {$xf.timeDetails.tomorrow},
+					yesterday: {$xf.timeDetails.yesterday},
+					week: {$xf.timeDetails.week},
+					month: {$xf.timeDetails.month},
+					year: {$xf.timeDetails.year}
+				},
+				style: {
+					light: '{{ $xf.style.isVariationsEnabled() ? $xf.style.getStyleTypeVariation("light")|escape("js") : "" }}',
+					dark: '{{ $xf.style.isVariationsEnabled() ? $xf.style.getStyleTypeVariation("dark")|escape("js") : "" }}',
+					defaultColorScheme: '{{ property_variation('styleType', 'default')|escape("js") }}'
+				},
+				borderSizeFeature: '{{ property('borderSizeFeature') }}',
+				fontAwesomeWeight: '{{ fa_weight() }}',
+				enableRtnProtect: {{ $xf.enableRtnProtect ? 'true' : 'false' }},
+				<xf:if is="$xf.serviceWorkerPath !== null">
+					serviceWorkerPath: '{{ $xf.serviceWorkerPath|escape("js") }}',
+				</xf:if>
+				enableFormSubmitSticky: {{ property('formSubmitSticky') ? 'true' : 'false' }},
+				imageOptimization: '{$xf.options.imageOptimization}',
+				imageOptimizationQuality: {{ $xf.app.config.maxImageResizeQuality / 100 }},
+				uploadMaxFilesize: {$xf.uploadMaxFilesize},
+				uploadMaxWidth: {{ $xf.options.attachmentMaxDimensions.width ?: 0 }},
+				uploadMaxHeight: {{ $xf.options.attachmentMaxDimensions.height ?: 0 }},
+				allowedVideoExtensions: {$xf.allowedVideoExtensions|json|raw},
+				allowedAudioExtensions: {$xf.allowedAudioExtensions|json|raw},
+				shortcodeToEmoji: {{ $xf.options.shortcodeToEmoji ? 'true' : 'false' }},
+				visitorCounts: {
+					conversations_unread: '{$xf.visitor.conversations_unread|number}',
+					alerts_unviewed: '{$xf.visitor.alerts_unviewed|number}',
+					total_unread: '{{ ($xf.visitor.conversations_unread + $xf.visitor.alerts_unviewed)|number }}',
+					title_count: {{ in_array($xf.options.displayVisitorCount, ['title_count', 'title_and_icon']) ? 'true' : 'false' }},
+					icon_indicator: {{ in_array($xf.options.displayVisitorCount, ['icon_indicator', 'title_and_icon']) ? 'true' : 'false' }}
+				},
+				jsMt: {{ js_mt()|json|raw }},
+				jsState: {{ $jsState ? $jsState|json|raw : '{}' }},
+				publicMetadataLogoUrl: '{{ property('publicMetadataLogoUrl') ? base_url(property('publicMetadataLogoUrl'), true) : '' }}',
+				publicPushBadgeUrl: '{{ property('publicPushBadgeUrl') ? base_url(property('publicPushBadgeUrl'), true) : '' }}'
+			})
+
+			XF.extendObject(XF.phrases, {
+				// <!--[XF:js_global:xf_phrase_start]-->
+				date_x_at_time_y:     "{{ phrase('date_x_at_time_y')|escape('js') }}",
+				day_x_at_time_y:      "{{ phrase('day_x_at_time_y')|escape('js') }}",
+				yesterday_at_x:       "{{ phrase('yesterday_at_x')|escape('js') }}",
+				x_minutes_ago:        "{{ phrase('x_minutes_ago')|escape('js') }}",
+				one_minute_ago:       "{{ phrase('one_minute_ago')|escape('js') }}",
+				a_moment_ago:         "{{ phrase('a_moment_ago')|escape('js') }}",
+				today_at_x:           "{{ phrase('today_at_x')|escape('js') }}",
+				in_a_moment:          "{{ phrase('in_a_moment')|escape('js') }}",
+				in_a_minute:          "{{ phrase('in_a_minute')|escape('js') }}",
+				in_x_minutes:         "{{ phrase('in_x_minutes')|escape('js') }}",
+				later_today_at_x:     "{{ phrase('later_today_at_x')|escape('js') }}",
+				tomorrow_at_x:        "{{ phrase('tomorrow_at_x')|escape('js') }}",
+				short_date_x_minutes: "{{ phrase('short_date_x_minutes')|escape('js') }}",
+				short_date_x_hours:   "{{ phrase('short_date_x_hours')|escape('js') }}",
+				short_date_x_days:    "{{ phrase('short_date_x_days')|escape('js') }}",
+
+				day0: "{{ phrase('day_sunday')|escape('js') }}",
+				day1: "{{ phrase('day_monday')|escape('js') }}",
+				day2: "{{ phrase('day_tuesday')|escape('js') }}",
+				day3: "{{ phrase('day_wednesday')|escape('js') }}",
+				day4: "{{ phrase('day_thursday')|escape('js') }}",
+				day5: "{{ phrase('day_friday')|escape('js') }}",
+				day6: "{{ phrase('day_saturday')|escape('js') }}",
+
+				dayShort0: "{{ phrase('day_sunday_short')|escape('js') }}",
+				dayShort1: "{{ phrase('day_monday_short')|escape('js') }}",
+				dayShort2: "{{ phrase('day_tuesday_short')|escape('js') }}",
+				dayShort3: "{{ phrase('day_wednesday_short')|escape('js') }}",
+				dayShort4: "{{ phrase('day_thursday_short')|escape('js') }}",
+				dayShort5: "{{ phrase('day_friday_short')|escape('js') }}",
+				dayShort6: "{{ phrase('day_saturday_short')|escape('js') }}",
+
+				month0: "{{ phrase('month_1')|escape('js') }}",
+				month1: "{{ phrase('month_2')|escape('js') }}",
+				month2: "{{ phrase('month_3')|escape('js') }}",
+				month3: "{{ phrase('month_4')|escape('js') }}",
+				month4: "{{ phrase('month_5')|escape('js') }}",
+				month5: "{{ phrase('month_6')|escape('js') }}",
+				month6: "{{ phrase('month_7')|escape('js') }}",
+				month7: "{{ phrase('month_8')|escape('js') }}",
+				month8: "{{ phrase('month_9')|escape('js') }}",
+				month9: "{{ phrase('month_10')|escape('js') }}",
+				month10: "{{ phrase('month_11')|escape('js') }}",
+				month11: "{{ phrase('month_12')|escape('js') }}",
+
+				active_user_changed_reload_page: "{{ phrase('active_user_changed_reload_page')|escape('js') }}",
+				server_did_not_respond_in_time_try_again: "{{ phrase('server_did_not_respond_in_time_try_again')|escape('js') }}",
+				oops_we_ran_into_some_problems: "{{ phrase('oops_we_ran_into_some_problems')|escape('js') }}",
+				oops_we_ran_into_some_problems_more_details_console: "{{ phrase('oops_we_ran_into_some_problems_more_details_console')|escape('js') }}",
+				file_too_large_to_upload: "{{ phrase('file_too_large_to_upload')|escape('js') }}",
+				uploaded_file_is_too_large_for_server_to_process: "{{ phrase('uploaded_file_is_too_large_for_server_to_process')|escape('js') }}",
+				files_being_uploaded_are_you_sure: "{{ phrase('files_being_uploaded_are_you_sure')|escape('js') }}",
+				attach: "{{ phrase('button.attach')|escape('js') }}",
+				rich_text_box: "{{ phrase('rich_text_box')|escape('js') }}",
+				close: "{{ phrase('close')|escape('js') }}",
+				link_copied_to_clipboard: "{{ phrase('link_copied_to_clipboard')|escape('js') }}",
+				text_copied_to_clipboard: "{{ phrase('text_copied_to_clipboard')|escape('js') }}",
+				loading: "{{ phrase('loading...')|escape('js') }}",
+				you_have_exceeded_maximum_number_of_selectable_items: "{{ phrase('you_have_exceeded_maximum_number_of_selectable_items')|escape('js') }}",
+
+				processing: "{{ phrase('processing')|escape('js') }}",
+				'processing...': "{{ phrase('processing...')|escape('js') }}",
+
+				showing_x_of_y_items: "{{ phrase('showing_x_of_y_items')|escape('js') }}",
+				showing_all_items: "{{ phrase('showing_all_items')|escape('js') }}",
+				no_items_to_display: "{{ phrase('no_items_to_display')|escape('js') }}",
+
+				number_button_up: "{{ phrase('number_button_up')|escape('js') }}",
+				number_button_down: "{{ phrase('number_button_down')|escape('js') }}",
+
+				push_enable_notification_title: "{{ phrase('push_enable_notification_title', {'boardTitle': $xf.options.boardTitle})|escape('js') }}",
+				push_enable_notification_body: "{{ phrase('push_enable_notification_body')|escape('js') }}",
+
+				pull_down_to_refresh: "{{ phrase('pull_down_to_refresh')|escape('js') }}",
+				release_to_refresh: "{{ phrase('release_to_refresh')|escape('js') }}",
+				refreshing: "{{ phrase('refreshing...')|escape('js') }}"
+			})
+		})
+	</script>
+
+	<!--XF:JS-->
+</xf:macro>
+
+<xf:macro id="body" arg-app="!" >
+	<form style="display:none" hidden="hidden">
+		<input type="text" name="_xfClientLoadTime" value="" id="_xfClientLoadTime" title="_xfClientLoadTime" tabindex="-1" />
+	</form>
+
+	<xf:if is="$xf.visitor.canSearch() && $xf.request.getFullRequestUri() === link('full:index')">
+		<script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@type": "WebSite",
+			"url": "{{ link('canonical:index')|escape('js') }}",
+			"potentialAction": {
+				"@type": "SearchAction",
+				"target": {
+					"@type": "EntryPoint",
+					"urlTemplate": "{{ link('canonical:search/search')|escape('js') . ($xf.options.useFriendlyUrls ? '?' : '&') . 'keywords={search_keywords}' }}"
+				},
+				"query-input": "required name=search_keywords"
+			}
+		}
+		</script>
+	</xf:if>
+</xf:macro>

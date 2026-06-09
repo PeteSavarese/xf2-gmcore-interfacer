@@ -1,0 +1,9 @@
+{
+    "template": "connected_account_macros",
+    "description": "Adds associate button CSS",
+    "execution_order": 10,
+    "enabled": true,
+    "action": "preg_replace",
+    "find": "/<xf:macro name=\"associate\" arg-provider=\"!\">/",
+    "replace": "$0\n<xf:css src=\"public:login_steam.less\" />"
+}

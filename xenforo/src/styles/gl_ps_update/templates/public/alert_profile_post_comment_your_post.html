@@ -1,0 +1,5 @@
+{{ phrase('x_commented_on_your_post_on_ys_profile', {
+	'name': username_link($user, false, {'defaultname': $alert.username}),
+	'post_params': 'href="' . link('profile-posts/comments', $content) . '" class="fauxBlockLink-blockLink"',
+	'profile': $content.ProfilePost.ProfileUser.username
+}) }}

@@ -1,0 +1,30 @@
+<xf:title>{{ phrase('edit_message_in_direct_message:') }} {$conversation.title}</xf:title>
+
+<xf:breadcrumb href="{{ link('direct-messages') }}">{{ phrase('direct_messages') }}</xf:breadcrumb>
+<xf:breadcrumb href="{{ link('direct-messages', $conversation) }}">{$conversation.title}</xf:breadcrumb>
+
+<xf:form action="{{ link('direct-messages/replies/edit', $message) }}" ajax="true" class="block"
+	data-xf-init="attachment-manager">
+
+	<div class="block-container">
+		<div class="block-body">
+			<xf:editorrow name="message" value="{$message.message}" attachments="{$attachmentData.attachments}"
+				rowtype="{{ $quickEdit ? 'fullWidth noLabel' : '' }}"
+				label="{{ phrase('message') }}"
+				data-preview-url="{{ link('direct-messages/replies/preview', $message) }}" />
+
+			<xf:formrow rowtype="{{ $quickEdit ? 'fullWidth noLabel' : '' }}">
+				<xf:if is="$attachmentData">
+					<xf:macro id="helper_attach_upload::upload_block" arg-attachmentData="{$attachmentData}" />
+				</xf:if>
+			</xf:formrow>
+		</div>
+		<xf:submitrow icon="save" sticky="true" rowtype="{{ $quickEdit ? 'simple' : '' }}">
+			<xf:html>
+				<xf:if is="$quickEdit">
+					<xf:button class="js-cancelButton" icon="cancel">{{ phrase('button.cancel') }}</xf:button>
+				</xf:if>
+			</xf:html>
+		</xf:submitrow>
+	</div>
+</xf:form>

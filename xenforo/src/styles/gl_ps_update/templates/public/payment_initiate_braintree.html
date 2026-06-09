@@ -1,0 +1,94 @@
+<xf:css src="payment_initiate.less" />
+<xf:js src="xf/payment.js" min="1" />
+
+<xf:title>{{ phrase('enter_payment_details') }}</xf:title>
+
+<div class="blocks">
+	<xf:form action="{{ link('purchase/process', null, {'request_key': $purchaseRequest.request_key}) }}" class="block"
+		data-xf-init="braintree-payment-form"
+		data-client-token="{$clientToken}">
+
+		<div class="block-container">
+			<div class="block-body">
+				<xf:formrow label="{{ phrase('pay_by_card') }}" controlid="card-number" rowtype="input">
+					<div class="inputGroup">
+						<div class="inputGroup-text"><span style="width: 30px;"><xf:fa icon="fa-lg fa-credit-card" id="brand-icon" /></span></div>
+						<div id="card-number" class="input is-disabled"></div>
+						<div class="inputGroup-splitter"></div>
+						<div id="card-expiry" class="input is-disabled" style="width: 130px"></div>
+						<div class="inputGroup-splitter"></div>
+						<div id="card-cvv" class="input is-disabled" style="width: 75px"></div>
+					</div>
+					<div class="formRow-explain">{{ phrase('payments_processed_securely_by_x', {'link': 'https://braintreepayments.com/', 'provider': 'Braintree'}) }}</div>
+				</xf:formrow>
+
+				<hr class="formRowSep" />
+
+				<xf:formrow label="" rowtype="button">
+					<xf:button type="submit" icon="payment">
+						{{ phrase('pay_x', {'cost': $purchase.cost|currency($purchase.currency)}) }}
+					</xf:button>
+				</xf:formrow>
+
+				<script type="application/json" class="js-formStyles">
+					{
+						<xf:foreach loop="$xf.style.getVariations()" value="$variation">
+							"{{ $variation|escape('json') }}": {
+								"input": {
+									"color": "{{ property_variation('textColor', $variation, '#141414') }}",
+									"font-family": "{{ property_variation('fontFamilyUi', $variation) }}",
+									"font-size": "16px",
+									"line-height": "{{ property_variation('lineHeightDefault', $variation, '1.4') }}"
+								},
+								"input.invalid": {
+									"color": "#c84448"
+								}
+							},
+						</xf:foreach>
+						"_": "_"
+					}
+				</script>
+			</div>
+		</div>
+	</xf:form>
+
+	<xf:if is="$paymentProfile.options.apple_pay_enable OR $paymentProfile.options.paypal_enable">
+		<div class="blocks-textJoiner"><span></span><em>{{ phrase('or_separator') }}</em><span></span></div>
+
+		<xf:if is="$paymentProfile.options.apple_pay_enable">
+			<xf:form action="{{ link('purchase/process', null, {'request_key': $purchaseRequest.request_key}) }}" class="block u-hidden"
+				data-xf-init="braintree-apple-pay-form"
+				data-client-token="{$clientToken}"
+				data-currency-code="{$purchase.currency}"
+				data-board-title="{$xf.options.boardTitle}"
+				data-title="{$purchase.purchasableTitle}"
+				data-amount="{$purchase.cost}">
+
+				<div class="block-container">
+					<div class="block-body">
+						<xf:formrow rowtype="button"
+							label="{{ phrase('pay_with_apple_pay') }}">
+							<xf:button class="button--apple js-applePayButton">&nbsp;</xf:button>
+						</xf:formrow>
+					</div>
+				</div>
+			</xf:form>
+		</xf:if>
+		<xf:if is="$paymentProfile.options.paypal_enable">
+			<xf:form action="{{ link('purchase/process', null, {'request_key': $purchaseRequest.request_key}) }}" class="block"
+				data-xf-init="braintree-paypal-form"
+				data-client-token="{$clientToken}"
+				data-test-payments="{{ $xf.livePayments ? 'off' : 'on' }}">
+
+				<div class="block-container">
+					<div class="block-body">
+						<xf:formrow rowtype="button"
+							label="{{ phrase('pay_with_paypal') }}">
+							<div id="paypal-button"></div>
+						</xf:formrow>
+					</div>
+				</div>
+			</xf:form>
+		</xf:if>
+	</xf:if>
+</div>

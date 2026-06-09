@@ -1,0 +1,14 @@
+<xf:if is="$xf.cookieConsent.getMode() == 'advanced'">
+	<div class="u-pageCentered">
+		<xf:macro name="misc_cookies::cookie_consent_form" />
+	</div>
+<xf:else />
+	<div class="u-alignCenter">
+		{{ phrase('this_site_uses_cookies_notice') }}
+	</div>
+
+	<div class="u-inputSpacer u-alignCenter">
+		<xf:button icon="confirm" href="{{ link('account/dismiss-notice', null, {'notice_id': $notice.notice_id}) }}" class="js-noticeDismiss button--notice">{{ phrase('accept') }}</xf:button>
+		<xf:button href="{{ link('help/cookies') }}" class="button--notice">{{ phrase('learn_more...') }}</xf:button>
+	</div>
+</xf:if>

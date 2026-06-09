@@ -1,0 +1,4 @@
+{{ phrase('your_posts_in_thread_x_were_merged_together', {
+	'source': '<a href="' . base_url($extra.threadLink) . '" class="fauxBlockLink-blockLink">' . prefix('thread', $extra.prefix_id) . $extra.title . '</a>'
+}) }}
+<xf:if is="$extra.reason">{{ phrase('reason:') }} {$extra.reason}</xf:if>

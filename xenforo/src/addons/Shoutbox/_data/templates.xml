@@ -1,0 +1,629 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+  <template type="admin" title="shoutbox_ban_delete_confirm" version_id="1000100" version_string="1.0.1"><![CDATA[<xf:title>Remove shoutbox ban</xf:title>
+
+<xf:form action="{{ link('shoutbox-bans/delete', $ban) }}" class="block" ajax="false">
+	<div class="block-container">
+		<div class="block-body">
+			<div class="blockRow" style="padding:6px 10px;">
+				Are you sure you want to remove the shoutbox ban for <strong>{$user.username}</strong>?
+			</div>
+		</div>
+		<xf:submitrow submit="Remove ban" icon="delete" />
+	</div>
+</xf:form>
+]]></template>
+  <template type="admin" title="shoutbox_ban_history" version_id="1000100" version_string="1.0.1"><![CDATA[<xf:title>
+	<xf:if is="$user">Shoutbox ban history: {$user.username}<xf:else />Shoutbox ban history</xf:if>
+</xf:title>
+
+<xf:pageaction>
+	<xf:button href="{{ link('shoutbox-bans') }}">Active bans</xf:button>
+	<xf:button href="{{ link('shoutbox-bans/expired') }}">Expired bans</xf:button>
+</xf:pageaction>
+
+<xf:if is="$history is not empty">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:datalist>
+				<xf:foreach loop="$history" value="$entry">
+					<xf:set var="$userLabel" value="{$entry.User.username}" />
+					<xf:set var="$bannedBy" value="{$entry.BannedBy.username}" />
+					<xf:set var="$unbannedBy" value="{{$entry.UnbannedBy.username ?: 'Cron Job'}}" />
+
+
+					<xf:set var="$reasonText" value="N/A" />
+					<xf:if is="$entry.reason">
+						<xf:set var="$reasonText" value="{$entry.reason}" />
+					</xf:if>
+
+					<xf:datarow
+						label="{$userLabel} - Reason: {$reasonText}"
+						explain="Banned By: {$bannedBy} • Banned: {{ timestamp_format($entry.banned_on) }}\<br>
+            Unbanned by: {$unbannedBy} • Unbanned: {{ timestamp_format($entry.unbanned_on) }}">
+					</xf:datarow>
+				</xf:foreach>
+			</xf:datalist>
+		</div>
+		<div class="block-footer">
+			<span class="block-footer-counter">{{ display_totals($history, $total) }}</span>
+			<xf:pagenav page="$page" perpage="$perPage" total="$total" link="shoutbox-bans/history" wrapperclass="block-footer-pagenav" />
+		</div>
+	</div>
+<xf:else />
+	<div class="blockMessage">No shoutbox ban history found.</div>
+</xf:if>
+]]></template>
+  <template type="admin" title="shoutbox_bans_list" version_id="1000100" version_string="1.0.1"><![CDATA[<xf:title>
+	<xf:if is="$tab == 'expired'">Expired shoutbox bans<xf:else />Active shoutbox bans</xf:if>
+</xf:title>
+
+<xf:pageaction>
+	<xf:button href="{{ link('shoutbox-bans/history') }}">Ban history</xf:button>
+	<xf:if is="$tab != 'expired'">
+		<xf:button href="{{ link('shoutbox-bans/expired') }}">View expired</xf:button>
+	<xf:else />
+		<xf:button href="{{ link('shoutbox-bans') }}">View active</xf:button>
+	</xf:if>
+</xf:pageaction>
+
+<xf:if is="$bans is not empty">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:datalist>
+				<xf:foreach loop="$bans" value="$ban">
+					<xf:set var="$userLabel" value="" />
+					<xf:if is="$ban.User">
+						<xf:set var="$userLabel" value="{$ban.User.username}" />
+					<xf:else />
+						<xf:set var="$userLabel" value="{$ban.user_id}" />
+					</xf:if>
+
+					<xf:set var="$bannedBy" value="{$ban.ban_user_id}" />
+					<xf:if is="$ban.BannedBy">
+						<xf:set var="$bannedBy" value="{$ban.BannedBy.username}" />
+					</xf:if>
+
+					<xf:set var="$reasonText" value="-" />
+					<xf:if is="$ban.reason">
+						<xf:set var="$reasonText" value="{$ban.reason}" />
+					</xf:if>
+
+					<xf:set var="$bannedOnText" value="{{ timestamp_format($ban.banned_on) }}" />
+					<xf:set var="$expiresText" value="Never" />
+					<xf:if is="$ban.expires_on">
+						<xf:set var="$expiresText" value="{{ timestamp_format($ban.expires_on) }}" />
+					</xf:if>
+
+					<xf:set var="$historyLink" value="" />
+					<xf:if is="$ban.User">
+						<xf:set var="$historyLink" value="{{ link('shoutbox-bans/history', $ban.User) }}" />
+					</xf:if>
+
+					<xf:datarow
+						label="{$userLabel}"
+						explain="Reason: {$reasonText} • Banned: {$bannedOnText} • Expires: {$expiresText} • By: {$bannedBy}"
+						href="{$historyLink}"
+						delete="{{ link('shoutbox-bans/delete', $ban) }}">
+					</xf:datarow>
+				</xf:foreach>
+			</xf:datalist>
+		</div>
+		<div class="block-footer">
+			<span class="block-footer-counter">{{ display_totals($bans, $total) }}</span>
+			<xf:pagenav page="$page" perpage="$perPage" total="$total" link="shoutbox-bans" wrapperclass="block-footer-pagenav" />
+		</div>
+	</div>
+<xf:else />
+	<div class="blockMessage">No shoutbox bans found.</div>
+</xf:if>
+]]></template>
+  <template type="public" title="shoutbox_ban_confirm" version_id="1000300" version_string="1.0.3"><![CDATA[<xf:title>{{ phrase('ban_user') }}</xf:title>
+
+<xf:form action="{{ link('shoutbox/' . $message.id . '/ban') }}" ajax="true" class="block">
+    <div class="block-container">
+        <div class="block-body">
+            <xf:inforow rowtype="confirm">
+                Please confirm that you want to ban the following user from the shoutbox:
+                <strong>{{ $user.username }}</strong>
+            </xf:inforow>
+
+            <xf:textarearow
+                name="reason"
+                value=""
+                label="{{ phrase('reason') }}"
+                rows="3"
+            />
+
+            <xf:radiorow name="ban_length" value="permanent" label="Ban length">
+                <xf:option value="permanent">{{ phrase('permanent') }}</xf:option>
+                <xf:option value="temporary" label="{{ phrase('for_length:') }}">
+                    <xf:dependent>
+                        <div class="inputGroup">
+                            <xf:numberbox name="ban_length_value" value="1" min="1" />
+                            <span class="inputGroup-splitter"></span>
+                            <xf:select name="ban_length_unit" value="days" class="input--inline">
+                                <xf:option value="minutes">{{ phrase('minutes') }}</xf:option>
+                                <xf:option value="hours">{{ phrase('hours') }}</xf:option>
+                                <xf:option value="days">{{ phrase('days') }}</xf:option>
+                                <xf:option value="weeks">{{ phrase('weeks') }}</xf:option>
+                                <xf:option value="months">{{ phrase('months') }}</xf:option>
+                                <xf:option value="years">{{ phrase('years') }}</xf:option>
+                            </xf:select>
+                        </div>
+                    </xf:dependent>
+                </xf:option>
+            </xf:radiorow>
+
+            <div class="blockMessage blockMessage--important blockMessage--iconic">
+                This will not stop a user from posting in the Discord shoutbox. To also prevent messaging in Discord, you
+                will need to timeout the user in the Discord server as well.
+            </div>
+        </div>
+
+        <xf:submitrow rowtype="simple" icon="ban" submit="{{ phrase('ban_user') }}" />
+    </div>
+</xf:form>]]></template>
+  <template type="public" title="shoutbox_ban_info" version_id="1000100" version_string="1.0.1"><![CDATA[<xf:title>Shoutbox ban</xf:title>
+
+<xf:form action="#" class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:inforow rowtype="confirm">
+				You are currently banned from posting in the shoutbox.
+			</xf:inforow>
+
+			<xf:if is="$ban.BannedBy">
+				<xf:formrow label="Banned by">{$ban.BannedBy.username}</xf:formrow>
+			</xf:if>
+
+			<xf:formrow label="Ban issued">{{ shoutbox_date_dynamic($ban.banned_on) }}</xf:formrow>
+
+			<xf:formrow label="Ban expires">
+				<xf:if is="$ban.expires_on">
+					{{ shoutbox_date_dynamic($ban.expires_on) }}
+				<xf:else />
+					Permanent
+				</xf:if>
+			</xf:formrow>
+
+			<xf:if is="$ban.reason">
+				<xf:formrow label="{{ phrase('reason') }}">{$ban.reason|escape}</xf:formrow>
+			</xf:if>
+		</div>
+	</div>
+</xf:form>
+]]></template>
+  <template type="public" title="shoutbox_bans" version_id="1000100" version_string="1.0.1"><![CDATA[<xf:title>Shoutbox bans</xf:title>
+
+<xf:css src="gmod_interfacer.less" />
+
+<xf:if is="!$xf.visitor.hasPermission('shoutbox', 'can_ban_user')">
+	<xf:comment>Safety: controller already blocks, but keep template defensive.</xf:comment>
+	<xf:macro template="public:error" name="simple" arg-message="{{ phrase('no_permission') }}" />
+<xf:else />
+	<div class="card" style="margin-bottom: 0;">
+		<div class="card-header">
+			<span><xf:fa icon="fa-gavel" aria-hidden="true"/> Active bans</span>
+		</div>
+		<div class="card-content">
+			<xf:if is="$bans is empty">
+				<div class="block-row">No active shoutbox bans.</div>
+			<xf:else />
+				<div class="table-container">
+					<table>
+						<thead>
+						<tr>
+							<th>User</th>
+							<th>Banned</th>
+							<th>Expires</th>
+							<th>Reason</th>
+							<th>Staff</th>
+							<th>Actions</th>
+						</tr>
+						</thead>
+						<tbody>
+						<xf:foreach loop="$bans" value="$ban">
+							<tr>
+								<td>
+									<xf:if is="$ban.User">{{ username_link($ban.User, true) }}<xf:else />User #{$ban.user_id}</xf:if>
+								</td>
+								<td>{{ shoutbox_date_dynamic($ban.banned_on) }}</td>
+								<td><xf:if is="$ban.expires_on">{{ shoutbox_date_dynamic($ban.expires_on) }}<xf:else />Never (Permanent)</xf:if></td>
+								<td><xf:if is="$ban.reason">{$ban.reason|escape}<xf:else />-</xf:if></td>
+								<td>
+									<xf:if is="$ban.BannedBy">{{ username_link($ban.BannedBy, true) }}<xf:else />-</xf:if>
+								</td>
+								<td>
+									<xf:button href="{{ link('shoutbox/unban', null, {'user_id': $ban.user_id}) }}" class="button--cta" overlay="true" rel="nofollow">
+										Unban
+									</xf:button>
+								</td>
+							</tr>
+						</xf:foreach>
+						</tbody>
+					</table>
+				</div>
+			</xf:if>
+		</div>
+	</div>
+</xf:if>
+]]></template>
+  <template type="public" title="shoutbox_box.less" version_id="1000400" version_string="1.0.4"><![CDATA[.shoutbox_box_main {
+  width: 100%;
+}
+
+.block-body-shoutbox {
+  padding: 5px 5px 0px 5px;
+}
+
+.shoutbox-messages-box {
+  border: none;
+  height: 350px;
+  margin-bottom: 5px;
+  overflow-y: scroll;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+.shoutbox-enter-bbcode-holders {
+  display: table;
+  width: 100%;
+  margin: 10px;
+}
+
+.shoutbox-input-container {
+  padding: 10px 0px 10px 0px;
+}
+
+.shoutbox-input-message-holder {
+  width: 100%;
+  display: inline-flex;
+
+  dl > dd {
+    padding: 0px !important;
+
+    .fr-element.fr-view {
+      min-height: 40px !important;
+    }
+  }
+}
+
+.shoutbox-input-message {
+  width: 100%;
+}
+
+.shoutbox-bbcode-button {
+  margin-left: 5px;
+  padding: 6px 12px !important;
+  height: auto !important;
+}
+
+.shoutbox-entries {
+  padding: 5px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.shoutbox-messageMenu {
+  float: none;
+  display: inline-block;
+  vertical-align: middle;
+  padding: 0;
+  background: none;
+  line-height: 1;
+  margin-right: 6px;
+  color: inherit;
+}
+
+.shoutbox-messageContent {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.shoutbox_box_main .block-header {
+  background: @gl-gradient !important;
+  border-bottom: 2px solid @gl-border-accent !important;
+  border-radius: @gl-radius @gl-radius 0 0 !important;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  font-size: 14px;
+  position: relative;
+  color: white;
+
+  > .block-desc {
+    color: rgba(255, 255, 255, 0.65);
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 18px;
+    right: 18px;
+    height: 2px;
+    background: linear-gradient(90deg, @gl-accent, rgba(52, 73, 94, 0.7));
+    border-radius: @gl-radius-pill;
+    opacity: 0.85;
+  }
+}
+
+.shoutbox-messageContent {
+  .fa-discord,
+  .avatar,
+  .shoutbox-messageDate,
+  time {
+    margin-right: 6px;
+  }
+
+  .bbImageWrapper {
+    display: inline-block;
+    max-width: 100%;
+  }
+
+  .bbImage {
+    max-width: 100%;
+    height: auto;
+    max-height: 180px;
+    vertical-align: text-bottom;
+  }
+}
+
+ol > li {
+  list-style: none;
+  margin-bottom: 5px;
+
+  time {
+    font-size: 12px;
+  }
+
+  span > .bbWrapper {
+    display: inline;
+  }
+}
+
+#shoutbox_send_msg_button {
+  background: @gl-cta-gradient;
+  color: @gl-text;
+  border: none;
+  font-weight: 600;
+
+  &:hover {
+    filter: brightness(1.08);
+    box-shadow: @gl-shadow-sm, 0 6px 16px rgba(52, 152, 219, 0.25);
+    transform: none;
+  }
+}
+
+.button--iconOnly.shoutbox-bbcode-button {
+  background: @gl-bg-card;
+  color: @gl-text-secondary;
+  border: 1px solid @gl-border;
+
+  &:hover {
+    background: @gl-bg-card-hover;
+    color: @gl-text;
+    border-color: @gl-border-accent;
+    transform: none;
+  }
+}
+
+.shoutbox-discordEmoji {
+  height: 1.4em;
+  width: auto;
+  vertical-align: text-bottom;
+  margin: 0 1px;
+}]]></template>
+  <template type="public" title="shoutbox_delete_confirm" version_id="1000100" version_string="1.0.1"><![CDATA[<xf:title>{{ phrase('delete') }}</xf:title>
+
+<xf:form action="shoutbox/{$message.id}/delete" ajax="true" class="block">
+    <div class="block-container">
+        <div class="block-body">
+            <div class="blockMessage blockMessage--warning">
+                Please confirm that you want to delete this message from the shoutbox.
+            </div>
+        </div>
+        <xf:submitrow submit="{{ phrase('delete') }}" icon="delete"/>
+    </div>
+</xf:form>]]></template>
+  <template type="public" title="shoutbox_edit_message" version_id="1000100" version_string="1.0.1"><![CDATA[<xf:title>{{ phrase('edit') }}</xf:title>
+
+<xf:form action="shoutbox/{$message.id}/edit" ajax="true" class="block">
+    <div class="block-container">
+        <div class="block-body">
+            <xf:textboxrow name="message" value="{$message.message}" label="{{ phrase('message') }}" maxlength="1000"/>
+        </div>
+        <xf:submitrow submit="{{ phrase('save') }}" icon="save"/>
+    </div>
+</xf:form>
+]]></template>
+  <template type="public" title="shoutbox_full_box" version_id="1000300" version_string="1.0.3"><![CDATA[<xf:css src="shoutbox_box.less" />
+<xf:css src="editor.less" />
+<xf:js prod="shoutbox/shoutbox.min.js" dev="shoutbox/shoutbox.js" />
+
+<div class="block shoutbox_box_main" data-xf-init="shoutbox" data-poll-url="{{ link('shoutbox/poll') }}"
+     data-send-url="{{ link('shoutbox/sendmessage') }}" data-older-url="{{ link('shoutbox/older') }}">
+    <div class="block-container">
+        <h2 class="block-header">Shoutbox
+            <xf:if is="$xf.visitor.hasPermission('shoutbox', 'can_ban_user')">
+                <xf:button href="{{ link('shoutbox/bans') }}" class="button--small" icon="ban">Bans</xf:button>
+            </xf:if>
+            <span class="block-desc">A quick way to live chat with the community! Come join our Discord too by clicking <a
+                    href="{{ link('discord') }}">here</a>!</span>
+        </h2>
+        <div class="block-body block-body-shoutbox">
+            <div class="shoutbox-messages-box">
+                <ol class="shoutbox-entries">
+                    <xf:include template="shoutbox_messages"/>
+                </ol>
+            </div>
+            <div class="shoutbox-input-container">
+                <xf:if is="{$xf.visitor.user_id}">
+                    <xf:if is="$activeBan">
+                        <div class="blockMessage blockMessage--important blockMessage--iconic">
+                            You are banned from posting in the shoutbox.
+                            <xf:if is="$activeBan.expires_on">
+                                Ban ends: {{ shoutbox_date_dynamic($activeBan.expires_on) }}.
+                                <xf:else/>
+                                Ban length: Permanent.
+                            </xf:if>
+                            <a href="{{ link('shoutbox/ban-info') }}" data-xf-click="overlay">Details</a>
+                        </div>
+                    </xf:if>
+                    <span class="shoutbox-input-message-holder">
+                      <input aria-label="Enter message" class="input shoutbox-input-message<xf:if is=" $activeBan"> disabled
+                </xf:if>
+                " id="shoutbox_input_message"
+                name="keywords" placeholder="<xf:if is="$activeBan">You are banned from posting in the shoutbox.<xf:else/>Enter your message…</xf:if>" type="text"
+                <xf:if is="$activeBan"> disabled="disabled"</xf:if>
+                autocomplete="off">
+                <a class="button button--cta shoutbox-bbcode-button<xf:if is=" $activeBan"> disabled</xf:if>"
+                id="shoutbox_send_msg_button"
+                <xf:if is="$activeBan"> aria-disabled="true"</xf:if>
+                >Send</a>
+                <xf:button class="button--iconOnly shoutbox-bbcode-button" title="{{ phrase('smilies') }}"
+                           data-xf-init="tooltip" data-xf-click="menu" aria-expanded="false" aria-haspopup="true"
+                           fa="fal fa-smile"/>
+                <div class="menu menu--emoji" data-menu="menu" aria-hidden="true" data-xf-init="shoutbox-emoji-button"
+                     data-href="{{ link('editor/smilies-emoji') }}" data-load-target=".js-xfSmilieMenuBody">
+                    <div class="menu-content">
+                        <div class="js-xfSmilieMenuBody">
+                            <div class="menu-row">{{ phrase('loading...') }}</div>
+                        </div>
+                    </div>
+                </div>
+                <xf:button type="button" id="shoutbox_resize_button" class="button--iconOnly shoutbox-bbcode-button"
+                           title="Resize shoutbox" data-xf-init="tooltip" fa="fal fa-arrows-alt-v"/>
+                </span>
+                <xf:else/>
+                <span class="shoutbox-input-message-holder">
+          <input aria-label="Enter message" class="input shoutbox-input-message disabled" id="shoutbox_input_message"
+                 name="keywords" placeholder="You must be logged in to post in the shoutbox." type="text" disabled/>
+                    <a class="button button--cta shoutbox-bbcode-button disabled" id="shoutbox_send_msg_button" disabled>Send</a>
+                    <xf:button type="button" id="shoutbox_resize_button" class="button--iconOnly shoutbox-bbcode-button"
+                               title="Resize shoutbox" data-xf-init="tooltip" fa="fal fa-arrows-alt-v"/>
+        </span>
+                </xf:if>
+            </div>
+        </div>
+    </div>
+</div>
+]]></template>
+  <template type="public" title="shoutbox_messages" version_id="1000400" version_string="1.0.4"><![CDATA[<xf:foreach loop="$messages" value="$message">
+    <li data-messageid="{$message.id}" class="messageRow">
+        <xf:set var="$canDelete"
+                value="{{$xf.visitor.hasPermission('shoutbox', 'can_delete_messages') || ($xf.visitor.user_id && $xf.visitor.user_id == $message.user_id)}}"/>
+        <xf:set var="$canBan" value="{$xf.visitor.hasPermission('shoutbox', 'can_ban_user')}"/>
+        <xf:set var="$canEdit"
+                value="{{$canDelete || ($xf.visitor.user_id && $xf.visitor.user_id == $message.user_id)}}"/>
+
+        <div class="shoutbox-messageContent">
+            <xf:if is="$canDelete || $canBan || $canEdit">
+                <a href="#" class="menuTrigger shoutbox-messageMenu" data-xf-click="menu" aria-expanded="false"
+                   aria-haspopup="true" title="{{ phrase('more_options') }}">
+                    <span class="u-srOnly">{{ phrase('more_options') }}</span>
+                </a>
+
+                <div class="menu" data-menu="menu" aria-hidden="true">
+                    <div class="menu-content">
+                        <h3 class="menu-header">{{ phrase('actions') }}</h3>
+                        <xf:if is="$canEdit">
+                            <xf:if is="$message.is_discord_message">
+                                <a class="menu-linkRow" data-xf-init="tooltip"
+                                   title="Message sent from Discord cannot be edited via the shoutbox." tabindex="-1"
+                                   aria-disabled="true" style="opacity: 0.5;">{{ phrase('edit') }}</a>
+                                <xf:else/>
+                                <a href="shoutbox/{$message.id}/edit" data-xf-click="overlay" class="menu-linkRow">{{
+                                    phrase('edit') }}</a>
+                            </xf:if>
+                        </xf:if>
+                        <xf:if is="$canDelete">
+                            <a href="shoutbox/{$message.id}/delete" data-xf-click="overlay"
+                               class="menu-linkRow menu-linkRow--destructive">{{ phrase('delete') }}</a>
+                        </xf:if>
+                        <xf:if is="$canBan">
+                            <xf:if is="$message.User">
+                                <xf:if is="{{ shoutbox_is_banned($message.user_id) }}">
+                                    <a href="{{ link('shoutbox/unban', null, {'user_id': $message.user_id}) }}"
+                                       data-xf-click="overlay"
+                                       class="menu-linkRow menu-linkRow--destructive">Unban user</a>
+                                    <xf:else/>
+                                    <a href="shoutbox/{$message.id}/ban" data-xf-click="overlay"
+                                       class="menu-linkRow menu-linkRow--destructive">{{ phrase('ban_user') }}</a>
+                                </xf:if>
+                            </xf:if>
+                        </xf:if>
+                    </div>
+                </div>
+            </xf:if>
+
+            <xf:if is="$message.is_discord_message">
+                <xf:fa icon="fab fa-discord" style="color:#7289da;" data-xf-init="tooltip"
+                       title="This message was sent through the Discord server."/>
+            </xf:if>
+
+
+            <xf:if is="$message.discord_avatar_url">
+                <span class="avatar avatar--xxs">
+                    <img src="{$message.discord_avatar_url|escape('html_attr')}"
+                         alt="{$message.discord_username|escape('html_attr')}" loading="lazy"/>
+                </span>
+                <xf:elseif is="$message.User"/>
+                {{ avatar($message.User, 'xxs') }}
+                <xf:else/>
+                <span class="avatar avatar--xxs avatar--default">
+                    <span class="avatar-u">?</span>
+                </span>
+            </xf:if>
+
+            <span class="shoutbox-messageDate">{{ shoutbox_date_dynamic($message.created_on) }}</span>
+
+            <xf:if is="$message.discord_username">
+                <span class="username" dir="auto">{$message.discord_username|escape}</span>:&nbsp;
+                <xf:elseif is="$message.User"/>
+                {{ username_link($message.User, true) }}:&nbsp;
+                <xf:else/>
+                <span class="username" dir="auto">Discord User</span>:&nbsp;
+            </xf:if>
+            <xf:if is="$message.is_message_edited">
+                <span class="shoutbox-messageEdited"
+                      style="font-size: 0.85em; color: #888; margin: 4px 4px;">(edited)</span>
+            </xf:if>
+            <span>{{ shoutbox_discord_emoji_to_img(short_to_emoji(bb_code(shoutbox_mediaify($message.message), 'post', $message.User))) }}</span>
+        </div>
+    </li>
+</xf:foreach>
+]]></template>
+  <template type="public" title="shoutbox_poll_response" version_id="1000300" version_string="1.0.3"><![CDATA[{$html|raw}]]></template>
+  <template type="public" title="shoutbox_unban_confirm" version_id="1000100" version_string="1.0.1"><![CDATA[<xf:title>{{ phrase('confirm_action') }}</xf:title>
+
+<xf:form action="{{ link('shoutbox/unban', null, {'user_id': $ban.user_id}) }}" ajax="true" class="block">
+	<div class="block-container">
+		<xf:hiddenval name="user_id" value="{$ban.user_id}" />
+		<div class="block-body">
+			<xf:inforow rowtype="confirm">
+				Please confirm that you want to remove the shoutbox ban for
+				<strong><xf:if is="$ban.User">{{ username_link($ban.User, true) }}<xf:else />User #{$ban.user_id}</xf:if></strong>
+			</xf:inforow>
+			<xf:formrow label="{{ phrase('banned_by') }}">{{ username_link($ban.BannedBy, true) }}</xf:formrow>
+			<xf:formrow label="Ban issued">{{ shoutbox_date_dynamic($ban.banned_on) }}</xf:formrow>
+			<xf:formrow label="Ban expires">
+				<xf:if is="$ban.expires_on">
+					{{ shoutbox_date_dynamic($ban.expires_on) }}
+				<xf:else />
+					{{ phrase('never') }}
+				</xf:if>
+			</xf:formrow>
+
+			<xf:if is="$ban.reason">
+				<xf:formrow label="{{ phrase('reason_for_ban') }}">
+					{$ban.reason}
+				</xf:formrow>
+			</xf:if>
+		</div>
+
+		<xf:submitrow rowtype="simple" submit="Unban" icon="delete" />
+	</div>
+</xf:form>]]></template>
+</templates>

@@ -1,0 +1,29 @@
+<xf:title>{{ phrase('confirm_action') }}</xf:title>
+
+<xf:form action="{{ link('posts/mark-solution', $post) }}" ajax="true" class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:inforow rowtype="confirm">
+				<xf:if is="$type == 'add' OR $type == 'replace'">
+					{{ phrase('please_confirm_you_want_mark_this_post_as_solution') }}
+				<xf:else />
+					{{ phrase('please_confirm_you_want_unmark_this_post_as_solution') }}
+				</xf:if>
+			</xf:inforow>
+
+			<xf:if is="$type == 'replace'">
+				<xf:inforow>
+					<div class="block-rowMessage block-rowMessage--important block-rowMessage--iconic">
+						{{ phrase('this_will_replace_existing_solution_x', {'url': link('posts', $existingSolution)}) }}
+
+						<div>
+							{{ bb_code('[QUOTE=%s]%s[/QUOTE]'|format($existingSolution.username, $existingSolution.message), 'question_thread_solution', $existingSolution) }}
+						</div>
+					</div>
+				</xf:inforow>
+			</xf:if>
+		</div>
+		<xf:submitrow rowtype="simple" icon="confirm" />
+		<xf:hiddenval name="confirm" value="1" />
+	</div>
+</xf:form>

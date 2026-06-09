@@ -1,0 +1,27 @@
+{
+    "group_name": "button",
+    "title": "Button base",
+    "description": "Defines the styling for the basic elements that are common to all text-based buttons",
+    "property_type": "css",
+    "css_components": [
+        "text",
+        "border_radius",
+        "padding",
+        "extra"
+    ],
+    "value_type": "",
+    "value_parameters": "",
+    "has_variations": false,
+    "depends_on": "",
+    "value_group": "",
+    "property_value": {
+        "font-size": "@xf-fontSizeSmall",
+        "border-radius": "@xf-borderRadiusMedium",
+        "padding-top": "10px",
+        "padding-right": "15px",
+        "padding-bottom": "10px",
+        "padding-left": "15px",
+        "extra": "text-align: center;"
+    },
+    "display_order": 20000
+}

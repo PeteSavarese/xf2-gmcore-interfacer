@@ -1,0 +1,180 @@
+<nav class="pageNavWrapper pageNavWrapper--{{ property('pageNavStyle') }} {$variantClass}">
+
+<xf:set var="$hasSkipStart" value="{{ $startInner > 2 }}" />
+<xf:set var="$hasSkipEnd" value="{{ $endInner + 1 < $totalPages }}" />
+<div class="pageNav {{ $hasSkipStart ? 'pageNav--skipStart' : '' }} {{ $hasSkipEnd ? 'pageNav--skipEnd' : '' }}">
+	<xf:if is="$prev">
+		<a href="{$prev}" class="pageNav-jump pageNav-jump--prev">{{ phrase('prev') }}</a>
+	</xf:if>
+
+	<ul class="pageNav-main">
+		<xf:macro id="page_link"
+			arg-page="1"
+			arg-current="{$current}"
+			arg-link="{$link}"
+			arg-data="{$data}"
+			arg-params="{$params}"
+			arg-hash="{$hash}"
+			arg-pageParam="{$pageParam}" />
+
+		<xf:if is="$hasSkipStart">
+			<xf:if is="$startInner == 3">
+				<xf:macro id="page_link"
+					arg-page="2"
+					arg-current="{$current}"
+					arg-link="{$link}"
+					arg-data="{$data}"
+					arg-params="{$params}"
+					arg-hash="{$hash}"
+					arg-pageParam="{$pageParam}"
+					arg-pageClass="pageNav-page--earlier" />
+				<xf:else />
+				<li class="pageNav-page pageNav-page--skip pageNav-page--skipStart">
+					<a data-xf-init="tooltip" title="{{ phrase('go_to_page')|for_attr }}"
+						data-xf-click="menu"
+						role="button" tabindex="0" aria-expanded="false" aria-haspopup="true">{$xf.language.ellipsis}</a>
+					<xf:macro id="page_jump_menu"
+						arg-page="{{ $startInner - 1 }}"
+						arg-totalPages="{$totalPages}"
+						arg-link="{$link}"
+						arg-data="{$data}"
+						arg-params="{$params}"
+						arg-hash="{$hash}"
+						arg-pageParam="{$pageParam}" />
+				</li>
+			</xf:if>
+		</xf:if>
+
+		<xf:foreach loop="$innerPages" value="$page">
+			<xf:macro id="page_link"
+				arg-page="{$page}"
+				arg-current="{$current}"
+				arg-link="{$link}"
+				arg-data="{$data}"
+				arg-params="{$params}"
+				arg-hash="{$hash}"
+				arg-pageParam="{$pageParam}"
+				arg-pageClass="{{ $page < $current ? 'pageNav-page--earlier' : ($page > $current ? 'pageNav-page--later' : '' ) }}" />
+		</xf:foreach>
+
+		<xf:if is="$hasSkipEnd">
+			<xf:if is="$endInner + 2 == $totalPages">
+				<xf:macro id="page_link"
+					arg-page="{{ $totalPages - 1 }}"
+					arg-current="{$current}"
+					arg-link="{$link}"
+					arg-data="{$data}"
+					arg-params="{$params}"
+					arg-hash="{$hash}"
+					arg-pageParam="{$pageParam}"
+					arg-pageClass="pageNav-page--later" />
+			<xf:else />
+				<li class="pageNav-page pageNav-page--skip pageNav-page--skipEnd">
+					<a data-xf-init="tooltip" title="{{ phrase('go_to_page')|for_attr }}"
+						data-xf-click="menu"
+						role="button" tabindex="0" aria-expanded="false" aria-haspopup="true">{$xf.language.ellipsis}</a>
+					<xf:macro id="page_jump_menu"
+						arg-page="{{ $endInner + 1 }}"
+						arg-totalPages="{$totalPages}"
+						arg-link="{$link}"
+						arg-data="{$data}"
+						arg-params="{$params}"
+						arg-hash="{$hash}"
+						arg-pageParam="{$pageParam}" />
+				</li>
+			</xf:if>
+		</xf:if>
+
+		<xf:macro id="page_link"
+			arg-page="{$totalPages}"
+			arg-current="{$current}"
+			arg-link="{$link}"
+			arg-data="{$data}"
+			arg-params="{$params}"
+			arg-hash="{$hash}"
+			arg-pageParam="{$pageParam}" />
+	</ul>
+
+	<xf:if is="$next">
+		<a href="{$next}" class="pageNav-jump pageNav-jump--next">{{ phrase('next') }}</a>
+	</xf:if>
+</div>
+
+<div class="pageNavSimple">
+	<xf:if is="$current > 1">
+		<a href="{{ link($link, $data, $params + {($pageParam): 1}, $hash) }}"
+			class="pageNavSimple-el pageNavSimple-el--first"
+			data-xf-init="tooltip" title="{{ phrase('first')|for_attr }}">
+			<i aria-hidden="true"></i> <span class="u-srOnly">{{ phrase('first') }}</span>
+		</a>
+		<a href="{{ link($link, $data, $params + {($pageParam): $current - 1}, $hash) }}" class="pageNavSimple-el pageNavSimple-el--prev">
+			<i aria-hidden="true"></i> {{ phrase('prev') }}
+		</a>
+	</xf:if>
+
+	<a class="pageNavSimple-el pageNavSimple-el--current"
+		data-xf-init="tooltip" title="{{ phrase('go_to_page')|for_attr }}"
+		data-xf-click="menu" role="button" tabindex="0" aria-expanded="false" aria-haspopup="true">
+		{{ phrase('x_of_y', {'current': $current, 'total': $totalPages}) }}
+	</a>
+	<xf:macro id="page_jump_menu"
+		arg-page="{$current}"
+		arg-totalPages="{$totalPages}"
+		arg-link="{$link}"
+		arg-data="{$data}"
+		arg-params="{$params}"
+		arg-hash="{$hash}"
+		arg-pageParam="{$pageParam}" />
+
+	<xf:if is="$current < $totalPages">
+		<a href="{{ link($link, $data, $params + {($pageParam): $current + 1}, $hash) }}" class="pageNavSimple-el pageNavSimple-el--next">
+			{{ phrase('next') }} <i aria-hidden="true"></i>
+		</a>
+		<a href="{{ link($link, $data, $params + {($pageParam): $totalPages}, $hash) }}"
+			class="pageNavSimple-el pageNavSimple-el--last"
+			data-xf-init="tooltip" title="{{ phrase('last')|for_attr }}">
+			<i aria-hidden="true"></i> <span class="u-srOnly">{{ phrase('last') }}</span>
+		</a>
+	</xf:if>
+</div>
+
+</nav>
+
+<xf:macro id="page_link"
+	arg-page="!"
+	arg-current="!"
+	arg-link="!"
+	arg-data="!"
+	arg-params="!"
+	arg-hash=""
+	arg-pageParam="!"
+	arg-pageClass="">
+
+	<xf:if is="$page == $current">
+		<li class="pageNav-page pageNav-page--current {$pageClass}"><a href="{{ link($link, $data, $params + {($pageParam): ($page > 1 ? $page : null)}, $hash) }}">{$page}</a></li>
+	<xf:else />
+		<li class="pageNav-page {$pageClass}"><a href="{{ link($link, $data, $params + {($pageParam): ($page > 1 ? $page : null)}, $hash) }}">{$page}</a></li>
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="page_jump_menu"
+	arg-page="!"
+	arg-totalPages="!"
+	arg-link="!"
+	arg-data="!"
+	arg-params="!"
+	arg-hash=""
+	arg-pageParam="!">
+
+	<div class="menu menu--pageJump" data-menu="menu" aria-hidden="true">
+		<div class="menu-content">
+			<h4 class="menu-header">{{ phrase('go_to_page') }}</h4>
+			<div class="menu-row" data-xf-init="page-jump" data-page-url="{{ link($link, $data, $params + {($pageParam): '%page%'}, $hash) }}">
+				<div class="inputGroup inputGroup--numbers">
+					<xf:numberbox class="input input--numberNarrow js-pageJumpPage" value="{$page}" min="1" max="{$totalPages}" data-menu-autofocus="true" />
+					<span class="inputGroup-text"><xf:button class="js-pageJumpGo">{{ phrase('go') }}</xf:button></span>
+				</div>
+			</div>
+		</div>
+	</div>
+</xf:macro>

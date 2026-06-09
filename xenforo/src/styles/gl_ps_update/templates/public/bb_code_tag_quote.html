@@ -1,0 +1,32 @@
+<xf:css src="bb_code.less" />
+
+<xf:set var="$isIgnored" value="{{ $attributes.member && $xf.visitor.isIgnoring($attributes.member) }}" />
+
+<blockquote data-attributes="{{ $attributes.member ? ('member: ' . $attributes.member) : '' }}" data-quote="{{ $name ?: null }}" data-source="{{ $source ? ($source.type . ': ' . $source.id) : '' }}"
+	class="bbCodeBlock bbCodeBlock--expandable bbCodeBlock--quote js-expandWatch">
+	<xf:if is="$name">
+		<div class="bbCodeBlock-title">
+			<xf:if is="$source">
+				<a href="{{ link('goto/' . {$source.type}, null, {'id': $source.id}) }}"
+					class="bbCodeBlock-sourceJump"
+					rel="nofollow"
+					data-xf-click="attribution"
+					data-content-selector="#{$source.type}-{$source.id}">{{ phrase('x_said:', {'name': $name}) }}</a>
+			<xf:else />
+				{{ phrase('x_said:', {'name': $name}) }}
+			</xf:if>
+		</div>
+	</xf:if>
+	<div class="bbCodeBlock-content">
+		<xf:if is="$isIgnored">
+			<div class="messageNotice messageNotice--nested messageNotice--ignored">
+				{{ phrase('you_are_ignoring_content_by_this_member') }}
+				<xf:showignored />
+			</div>
+		</xf:if>
+		<div class="bbCodeBlock-expandContent js-expandContent {{ $isIgnored ? 'is-ignored' : '' }}">
+			{$content}
+		</div>
+		<div class="bbCodeBlock-expandLink js-expandLink"><a role="button" tabindex="0">{{ phrase('click_to_expand') }}</a></div>
+	</div>
+</blockquote>

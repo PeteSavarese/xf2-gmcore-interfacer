@@ -1,0 +1,5 @@
+{{ phrase('x_quoted_your_post_in_thread_y', {
+	'name': $user.username ?: $alert.username,
+	'title': prefix('thread', $content.Thread, 'plain') . $content.Thread.title
+}) }}
+<push:url>{{ link('canonical:posts', $content) }}</push:url>

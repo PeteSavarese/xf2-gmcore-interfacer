@@ -1,0 +1,16 @@
+<xf:if is="$firstUnshownPost">
+	<div class="message">
+		<div class="message-inner">
+			<div class="message-cell message-cell--alert">
+				{{ phrase('there_more_posts_to_display') }} <a href="{{ link('posts', $firstUnshownPost) }}">{{ phrase('view_them') }}</a>
+			</div>
+		</div>
+	</div>
+</xf:if>
+
+<xf:foreach loop="$posts" value="$post">
+	<xf:macro id="{{ $templateOverrides.post_macro ?: 'post_macros::post' }}"
+		arg-post="{$post}"
+		arg-thread="{$thread}"
+		args="{$templateOverrides.post_macro_args}" />
+</xf:foreach>

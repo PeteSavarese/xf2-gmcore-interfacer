@@ -1,0 +1,57 @@
+<xf:title>{{ phrase('inline_moderation_copy_posts') }}</xf:title>
+
+<xf:form action="{{ link('inline-mod') }}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body js-prefixListenContainer">
+			<xf:inforow rowtype="confirm">{{ phrase('you_sure_you_want_to_copy_x_posts_to_new_thread', {'count': $total}) }}</xf:inforow>
+
+			<xf:radiorow name="thread_type" value="{$type}">
+				<xf:option value="new" checked="checked" labelclass="u-featuredText">
+					<xf:label>{{ phrase('new_thread') }}</xf:label>
+					<xf:dependent>
+						<label>{{ phrase('destination_forum:') }}</label>
+						<xf:select name="node_id" value="{$first.Thread.node_id}" class="js-nodeList">
+							<xf:foreach loop="$nodeTree.getFlattened(0)" value="$treeEntry">
+								<xf:option value="{$treeEntry.record.node_id}" disabled="{{ $treeEntry.record.node_type_id != 'Forum' ? 'disabled' : '' }}">{{ repeat_raw('&nbsp; ', $treeEntry.depth) }} {$treeEntry.record.title}</xf:option>
+							</xf:foreach>
+						</xf:select>
+					</xf:dependent>
+
+					<xf:dependent>
+						<label>{{ phrase('new_thread_title:') }}</label>
+						<xf:prefixinput
+							prefixes="{$prefixes}"
+							type="thread"
+							prefix-value="{$first.Thread.prefix_id}"
+							textbox-value="{$first.Thread.title}"
+							autofocus="autofocus"
+							href="{{ link('forums/prefixes') }}"
+							listen-to="< .js-prefixListenContainer | .js-nodeList"
+							maxlength="{{ max_length($first.Thread, 'title') }}" />
+					</xf:dependent>
+				</xf:option>
+
+				<xf:option value="existing" labelclass="u-featuredText">
+					<xf:label>{{ phrase('existing_thread') }}</xf:label>
+					<xf:dependent>
+						<label>{{ phrase('thread_url:') }}</label>
+						<xf:textbox name="existing_url" type="url" />
+					</xf:dependent>
+				</xf:option>
+			</xf:radiorow>
+
+			<xf:macro id="helper_action::author_alert" arg-selected="{{ $total == 1 }}" />
+		</div>
+		<xf:submitrow icon="copy" />
+	</div>
+
+	<xf:foreach loop="$posts" value="$post">
+		<xf:hiddenval name="ids[]">{$post.post_id}</xf:hiddenval>
+	</xf:foreach>
+
+	<xf:hiddenval name="type">post</xf:hiddenval>
+	<xf:hiddenval name="action">copy</xf:hiddenval>
+	<xf:hiddenval name="confirmed">1</xf:hiddenval>
+
+	<xf:redirect url="{$redirect}" />
+</xf:form>

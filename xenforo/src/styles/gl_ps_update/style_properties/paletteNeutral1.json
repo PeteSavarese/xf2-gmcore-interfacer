@@ -1,0 +1,16 @@
+{
+    "group_name": "palette",
+    "title": "Neutral 1",
+    "description": "",
+    "property_type": "value",
+    "css_components": [],
+    "value_type": "color",
+    "value_parameters": "hidePalette=true",
+    "has_variations": true,
+    "depends_on": "",
+    "value_group": "neutral",
+    "property_value": {
+        "default": "#172030"
+    },
+    "display_order": 3000
+}

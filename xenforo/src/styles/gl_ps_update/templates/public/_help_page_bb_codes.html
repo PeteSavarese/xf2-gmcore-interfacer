@@ -1,0 +1,203 @@
+<xf:css src="help_bb_codes.less" />
+
+<div class="ps--help-page-bb-codes block">
+	<div class="block-container">
+		<ul class="listPlain block-body">
+
+			<xf:macro id="row_output"
+				arg-title="{{ phrase('bb_code_help_b_i_u_s_title')|preEscaped }}"
+				arg-desc="{{ phrase('bb_code_help_b_i_u_s_desc')|preEscaped }}"
+				arg-example="{{ phrase('bb_code_help_b_i_u_s_example')|preEscaped }}"
+				arg-anchor="basic" />
+
+			<xf:macro id="row_output"
+				arg-title="{{ phrase('bb_code_help_color_font_size_title')|preEscaped }}"
+				arg-desc="{{ phrase('bb_code_help_color_font_size_desc')|preEscaped }}"
+				arg-example="{{ phrase('bb_code_help_color_font_size_example')|preEscaped }}"
+				arg-anchor="style" />
+
+			<xf:macro id="row_output"
+				arg-title="{{ phrase('bb_code_help_url_email_title')|preEscaped }}"
+				arg-desc="{{ phrase('bb_code_help_url_email_desc')|preEscaped }}"
+				arg-example="{{ phrase('bb_code_help_url_email_example')|preEscaped }}"
+				arg-anchor="email-url" />
+
+			<xf:macro id="row_output"
+				arg-title="{{ phrase('bb_code_help_url_email_advanced_title')|preEscaped }}"
+				arg-desc="{{ phrase('bb_code_help_url_email_advanced_desc')|preEscaped }}"
+				arg-example="{{ phrase('bb_code_help_url_email_advanced_example')|preEscaped }}"
+				arg-anchor="email-url-advanced" />
+
+			<xf:macro id="row_output"
+				arg-title="{{ phrase('bb_code_help_user_title')|preEscaped }}"
+				arg-desc="{{ phrase('bb_code_help_user_desc')|preEscaped }}"
+				arg-example="{{
+					phrase('bb_code_help_user_example', {
+						'id': $xf.visitor.user_id ? $xf.visitor.user_id : '1',
+						'name': phrase('user_name')
+					})|preEscaped
+				}}"
+				arg-anchor="user-mention" />
+
+			<xf:macro id="row_output"
+				arg-title="{{ phrase('bb_code_help_img_title')|preEscaped }}"
+				arg-desc="{{ phrase('bb_code_help_img_desc')|preEscaped }}"
+				arg-example="{{ phrase('bb_code_help_img_example', {
+				    'url': base_url(property('publicMetadataLogoUrl') ?: property('publicLogoUrl'), true)
+				})|preEscaped }}"
+				arg-anchor="image" />
+
+			<li class="bbCodeHelpItem block-row block-row--separated">
+				<span class="u-anchorTarget" id="media"></span>
+				<h3 class="block-textHeader">{{ phrase('bb_code_help_media_title') }}</h3>
+				<div>
+					{{ phrase('bb_code_help_media_desc') }}<br />
+					{{ phrase('approved_sites:') }} {{ media_sites() }}
+				</div>
+				<div class="bbCodeDemoBlock">
+					<dl class="bbCodeDemoBlock-item">
+						<dt>{{ phrase('example:') }}</dt>
+						<dd>[MEDIA=youtube]kQ0Eo1UccEE[/MEDIA]</dd>
+					</dl>
+					<dl class="bbCodeDemoBlock-item">
+						<dt>{{ phrase('output:') }}</dt>
+						<dd><i>{{ phrase('embedded_youtube_player_would_appear_here') }}</i></dd>
+					</dl>
+				</div>
+			</li>
+
+			<xf:macro id="row_output"
+				arg-title="{{ phrase('bb_code_help_list_title')|preEscaped }}"
+				arg-desc="{{ phrase('bb_code_help_list_desc')|preEscaped }}"
+				arg-example="{{ phrase('bb_code_help_list_example')|preEscaped }}"
+				arg-anchor="list" />
+
+			<xf:macro id="row_output"
+				arg-title="{{ phrase('bb_code_help_align_title')|preEscaped }}"
+				arg-desc="{{ phrase('bb_code_help_align_desc')|preEscaped }}"
+				arg-example="{{ phrase('bb_code_help_align_example')|preEscaped }}"
+				arg-anchor="align" />
+
+			<xf:macro id="row_output"
+				arg-title="{{ phrase('bb_code_help_quote_title')|preEscaped }}"
+				arg-desc="{{ phrase('bb_code_help_quote_desc')|preEscaped }}"
+				arg-example="{{ phrase('bb_code_help_quote_example')|preEscaped }}"
+				arg-anchor="quote" />
+
+			<xf:macro id="row_output"
+				arg-title="{{ phrase('bb_code_help_spoiler_title')|preEscaped }}"
+				arg-desc="{{ phrase('bb_code_help_spoiler_desc')|preEscaped }}"
+				arg-example="{{ phrase('bb_code_help_spoiler_example')|preEscaped }}"
+				arg-anchor="spoiler" />
+
+			<xf:macro id="row_output"
+				arg-title="{{ phrase('bb_code_help_ispoiler_title')|preEscaped }}"
+				arg-desc="{{ phrase('bb_code_help_ispoiler_desc')|preEscaped }}"
+				arg-example="{{ phrase('bb_code_help_ispoiler_example')|preEscaped }}"
+				arg-anchor="ispoiler" />
+
+			<xf:macro id="row_output"
+				arg-title="{{ phrase('bb_code_help_code_title')|preEscaped }}"
+				arg-desc="{{ phrase('bb_code_help_code_desc')|preEscaped }}"
+				arg-example="{{ phrase('bb_code_help_code_example')|preEscaped }}"
+				arg-anchor="code" />
+
+			<xf:macro id="row_output"
+				arg-title="{{ phrase('bb_code_help_icode_title')|preEscaped }}"
+				arg-desc="{{ phrase('bb_code_help_icode_desc')|preEscaped }}"
+				arg-example="{{ phrase('bb_code_help_icode_example')|preEscaped }}"
+				arg-anchor="icode" />
+
+			<xf:macro id="row_output"
+				arg-title="{{ phrase('bb_code_help_indent_title')|preEscaped }}"
+				arg-desc="{{ phrase('bb_code_help_indent_desc')|preEscaped }}"
+				arg-example="{{ phrase('bb_code_help_indent_example')|preEscaped }}"
+				arg-anchor="indent" />
+
+			<xf:macro id="row_output"
+				arg-title="{{ phrase('bb_code_help_table_title')|preEscaped }}"
+				arg-desc="{{ phrase('bb_code_help_table_desc')|preEscaped }}"
+				arg-example="{{ phrase('bb_code_help_table_example')|preEscaped }}"
+				arg-anchor="table" />
+
+			<xf:macro id="row_output"
+				arg-title="{{ phrase('bb_code_help_heading_title')|preEscaped }}"
+				arg-desc="{{ phrase('bb_code_help_heading_desc')|preEscaped }}"
+				arg-example="{{ phrase('bb_code_help_heading_example')|preEscaped }}"
+				arg-anchor="heading" />
+
+			<xf:macro id="row_output"
+				arg-title="{{ phrase('bb_code_help_plain_title')|preEscaped }}"
+				arg-desc="{{ phrase('bb_code_help_plain_desc')|preEscaped }}"
+				arg-example="{{ phrase('bb_code_help_plain_example')|preEscaped }}"
+				arg-anchor="plain" />
+
+			<li class="bbCodeHelpItem block-row block-row--separated">
+				<span class="u-anchorTarget" id="attach"></span>
+				<h3 class="block-textHeader">{{ phrase('bb_code_help_attach_title') }}</h3>
+				<div>{{ phrase('bb_code_help_attach_desc') }}</div>
+				<div class="bbCodeDemoBlock">
+					<dl class="bbCodeDemoBlock-item">
+						<dt>{{ phrase('example:') }}</dt>
+						<dd>
+							{{ phrase('thumbnail:') }} [ATTACH]123[/ATTACH]<br />
+							{{ phrase('full_size:') }} [ATTACH=full]123[/ATTACH]
+						</dd>
+					</dl>
+					<dl class="bbCodeDemoBlock-item">
+						<dt>{{ phrase('output:') }}</dt>
+						<dd><i>{{ phrase('contents_of_attachments_would_appear_here') }}</i></dd>
+					</dl>
+				</div>
+			</li>
+
+			<xf:foreach loop="$bbCodes" value="$bbCode" if="$bbCode.example is not empty">
+				<li class="bbCodeHelpItem block-row block-row--separated">
+					<span class="u-anchorTarget" id="{$bbCode.bb_code_id}"></span>
+					<h3 class="block-textHeader">
+						<xf:if is="$bbCode.has_option == 'no' OR $bbCode.has_option == 'optional'">[{$bbCode.bb_code_id|to_upper}]</xf:if>
+						<xf:if is="$bbCode.has_option == 'optional'"><span role="presentation" aria-hidden="true">&middot;</span></xf:if>
+						<xf:if is="$bbCode.has_option == 'yes' OR $bbCode.has_option == 'optional'">[{$bbCode.bb_code_id|to_upper}=<span class="block-textHeader-highlight">option</span>]</xf:if>
+						- {$bbCode.title}
+					</h3>
+					<xf:if contentcheck="true">
+						<div><xf:contentcheck>{$bbCode.description}</xf:contentcheck></div>
+					</xf:if>
+					<div class="bbCodeDemoBlock">
+						<dl class="bbCodeDemoBlock-item">
+							<dt>{{ phrase('example:') }}</dt>
+							<dd>{{ $bbCode.example|nl2br }}</dd>
+						</dl>
+						<dl class="bbCodeDemoBlock-item">
+							<dt>{{ phrase('output:') }}</dt>
+							<dd>{{ $bbCode.output is not empty ? $bbCode.output : bb_code($bbCode.example, 'help', null) }}</dd>
+						</dl>
+					</div>
+				</li>
+			</xf:foreach>
+
+		</ul>
+	</div>
+</div>
+
+<xf:macro id="row_output" arg-title="!" arg-desc="!" arg-example="!" arg-anchor="!">
+	<li class="bbCodeHelpItem block-row block-row--separated">
+		<span class="u-anchorTarget" id="{$anchor}"></span>
+		<h3 class="block-textHeader">{$title}</h3>
+		<div>{$desc}</div>
+		<xf:macro id="example_output" arg-bbCode="{$example}" />
+	</li>
+</xf:macro>
+
+<xf:macro id="example_output" arg-bbCode="!">
+	<div class="bbCodeDemoBlock">
+		<dl class="bbCodeDemoBlock-item">
+			<dt>{{ phrase('example:') }}</dt>
+			<dd>{{ $bbCode|nl2br }}</dd>
+		</dl>
+		<dl class="bbCodeDemoBlock-item">
+			<dt>{{ phrase('output:') }}</dt>
+			<dd>{{ bb_code($bbCode, 'help', null) }}</dd>
+		</dl>
+	</div>
+</xf:macro>

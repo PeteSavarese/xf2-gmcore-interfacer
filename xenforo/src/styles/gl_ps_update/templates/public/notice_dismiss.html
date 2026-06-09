@@ -1,0 +1,13 @@
+<xf:title>{{ phrase('dismiss_notice') }}</xf:title>
+
+<xf:form action="{{ link('account/dismiss-notice', null, {'notice_id': $notice.notice_id}) }}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:inforow rowtype="confirm">
+				{{ phrase('confirm_dismiss_notice') }}
+			</xf:inforow>
+		</div>
+		<xf:submitrow submit="{{ phrase('dismiss') }}" rowtype="simple" />
+	</div>
+	<xf:redirect />
+</xf:form>

@@ -1,0 +1,112 @@
+<xf:set var="$messageHtml"><xf:trim>
+
+	<div class="pairWrapper pairWrapper--spaced">
+		<dl class="pairs pairs--columns pairs--fixedSmall">
+			<dt>{{ phrase('current_username') }}</dt>
+			<dd>{$content.old_username}</dd>
+		</dl>
+
+		<dl class="pairs pairs--columns pairs--fixedSmall">
+			<dt>{{ phrase('new_username') }}</dt>
+			<dd>{$content.new_username}</dd>
+		</dl>
+
+		<dl class="pairs pairs--columns pairs--fixedSmall">
+			<dt>{{ phrase('change_reason') }}</dt>
+			<dd>{$content.change_reason|nl2br}</dd>
+		</dl>
+	</div>
+
+	<xf:if is="$previousChanges is not empty">
+		<br />
+
+		<xf:datalist data-xf-init="responsive-data-list" class="dataList--separated">
+			<thead>
+			<xf:datarow rowtype="subSection">
+				<xf:cell colspan="4">{{ phrase('username_change_log') }}</xf:cell>
+			</xf:datarow>
+			<xf:datarow rowtype="header">
+				<xf:cell>{{ phrase('old_username') }}</xf:cell>
+				<xf:cell>{{ phrase('new_username') }}</xf:cell>
+				<xf:cell>{{ phrase('change_state') }}</xf:cell>
+				<xf:cell>{{ phrase('date') }}</xf:cell>
+			</xf:datarow>
+			</thead>
+			<tbody class="dataList-rowGroup">
+			<xf:foreach loop="$previousChanges" value="$change">
+				<xf:datarow rowclass="dataList-row--noHover">
+					<xf:cell class="{{ $change.visible ? '' : 'dataList-cell--alt' }}">
+						{$change.old_username}
+					</xf:cell>
+					<xf:cell class="{{ $change.visible ? '' : 'dataList-cell--alt' }}">
+						{$change.new_username}
+						<xf:if is="$change.change_reason">
+							<a role="button"
+									tabindex="0"
+									data-xf-init="tooltip"
+									data-trigger="hover focus click"
+									title="{{ phrase('change_reason:') }} {$change.change_reason}"><xf:trim>
+									<xf:fa icon="fa-info-circle" />
+								</xf:trim></a>
+						</xf:if>
+					</xf:cell>
+					<xf:cell class="{{ $change.visible ? '' : 'dataList-cell--alt' }}">
+						<xf:if is="$change.change_state == 'approved'">
+							{{ phrase('approved') }}
+						<xf:elseif is="$change.change_state == 'moderated'" />
+							{{ phrase('awaiting_approval') }}
+						<xf:elseif is="$change.change_state == 'rejected'" />
+							{{ phrase('rejected') }}
+							<xf:if is="$change.reject_reason">
+								<a role="button"
+									tabindex="0"
+									data-xf-init="tooltip"
+									data-trigger="hover focus click"
+									title="{{ phrase('reason:') }} {$change.reject_reason}"><xf:trim>
+									<xf:fa icon="fa-info-circle" />
+								</xf:trim></a>
+							</xf:if>
+						</xf:if>
+					</xf:cell>
+					<xf:cell class="{{ $change.visible ? '' : 'dataList-cell--alt' }}">
+						<xf:date time="{$change.change_date}" />
+					</xf:cell>
+				</xf:datarow>
+			</xf:foreach>
+			</tbody>
+		</xf:datalist>
+	</xf:if>
+
+</xf:trim></xf:set>
+
+<xf:set var="$actionsHtml">
+
+	<xf:radio name="queue[{$unapprovedItem.content_type}][{$unapprovedItem.content_id}]">
+
+		<xf:option value="" checked="checked" label="{{ phrase('do_nothing') }}" data-xf-click="approval-control" />
+		<xf:option value="approve" label="{{ phrase('approve') }}" data-xf-click="approval-control" />
+		<xf:option value="reject" label="{{ phrase('reject_with_reason:') }}" data-xf-click="approval-control">
+			<xf:textbox name="reason[{$unapprovedItem.content_type}][{$unapprovedItem.content_id}]"
+				maxlength="100"
+				placeholder="{{ phrase('optional') }}" />
+			<xf:html>
+				<div class="formRow-explain">{{ phrase('this_will_be_shown_to_user_if_provided') }}</div>
+			</xf:html>
+		</xf:option>
+	</xf:radio>
+
+	<xf:checkbox>
+		<xf:option name="notify[{$unapprovedItem.content_type}][{$unapprovedItem.content_id}]" value="1" checked="{{ true }}">
+			{{ phrase('notify_user_if_action_was_taken') }}
+		</xf:option>
+	</xf:checkbox>
+
+</xf:set>
+
+<xf:macro id="approval_queue_macros::item_message_type"
+	arg-content="{$content}"
+	arg-contentDate="{$content.change_date}"
+	arg-user="{$content.User}"
+	arg-messageHtml="{$messageHtml}"
+	arg-typePhraseHtml="{{ phrase('username_change') }}"
+	arg-actionsHtml="{$actionsHtml}" />

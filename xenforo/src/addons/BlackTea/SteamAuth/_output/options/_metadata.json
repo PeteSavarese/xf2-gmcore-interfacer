@@ -1,0 +1,32 @@
+{
+    "blacktea_steamauth_actions.json": {
+        "hash": "69adf6989fab0aa84d56905bf1fdad5c"
+    },
+    "blacktea_steamauth_api_sleep.json": {
+        "hash": "c1e1df4c3906d3fe1aedcbe778a4c788"
+    },
+    "blacktea_steamauth_enabled_pages.json": {
+        "hash": "e7afd4e42a37f31d931fb7db6edd29d1"
+    },
+    "blacktea_steamauth_force_registration.json": {
+        "hash": "950094e8a15e0e3c9af4f08cfe6f4e73"
+    },
+    "blacktea_steamauth_game_update_frequency.json": {
+        "hash": "61457dd0b2b41625725ad1f1a2bd7669"
+    },
+    "blacktea_steamauth_message_macro.json": {
+        "hash": "5e59ac9c92a521c7511e613daf8e494f"
+    },
+    "blacktea_steamauth_message_macro_steamid.json": {
+        "hash": "661997ef233c56275c8b1d9a1c8ed2d8"
+    },
+    "blacktea_steamauth_user_banner.json": {
+        "hash": "1e88d01433947cb90ea5d41cc207773a"
+    },
+    "blacktea_steamauth_user_update_limit.json": {
+        "hash": "f5ed440b77509d2e8784aa1082af5b0f"
+    },
+    "blacktea_steamauth_verbose_log.json": {
+        "hash": "20e324d00838d420503112d62fb767ed"
+    }
+}

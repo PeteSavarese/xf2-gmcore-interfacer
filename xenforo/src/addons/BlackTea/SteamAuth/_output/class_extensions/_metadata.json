@@ -1,0 +1,14 @@
+{
+    "XF-Entity-UserPrivacy_BlackTea-SteamAuth-XF-Entity-UserPrivacy.json": {
+        "hash": "2cc33ae8b4e333d02afeacb927694d07"
+    },
+    "XF-Pub-Controller-Account_BlackTea-SteamAuth-XF-Pub-Controller-Account.json": {
+        "hash": "cd06579c192a720d9069b915f3c5dcd3"
+    },
+    "XF-Pub-Controller-Register_BlackTea-SteamAuth-XF-Pub-Controller-Register.json": {
+        "hash": "8fe61f75f79e8fea3264aa5f8c5eec74"
+    },
+    "XF-Template-Templater_BlackTea-SteamAuth-XF-Template-Templater.json": {
+        "hash": "b00aae250fc9b3d79e9d0081cc3bf9ff"
+    }
+}

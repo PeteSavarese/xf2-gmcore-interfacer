@@ -1,0 +1,33 @@
+<xf:title>{{ phrase('profile_banner') }}</xf:title>
+
+<xf:css src="account_banner.less" />
+<xf:js src="xf/profile_banner.js" />
+
+<xf:wrap template="account_wrapper" />
+
+<xf:form action="{{ link('account/banner') }}" upload="true" ajax="true" class="block" data-xf-init="banner-upload">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:inforow rowtype="noPadding" rowclass="profileBannerContainer {{ $xf.visitor.Profile.banner_date ? 'profileBannerContainer--withBanner' : '' }}">
+				<xf:profilebanner user="$xf.visitor" size="l" data-xf-init="banner-positioner" class="js-banner">
+					<xf:hiddenval name="banner_position_y" class="js-bannerPosY">{$xf.visitor.Profile.banner_position_y}</xf:hiddenval>
+				</xf:profilebanner>
+				<div class="profileBannerContainer-explain">
+					{{ phrase('you_can_drag_image_to_change_focal_point_of_banner_explain') }}
+				</div>
+			</xf:inforow>
+
+			<xf:uploadrow name="upload" class="js-uploadBanner" accept=".gif,.jpeg,.jpg,.jpe,.png,.webp"
+				label="{{ phrase('upload_new_profile_banner') }}"
+				explain="{{ phrase('it_is_recommended_that_you_use_image_that_is_at_least_x_pixels', {
+					'width': 1280,
+					'height': 300
+				}) }}" />
+		</div>
+		<xf:submitrow submit="{{ phrase('okay') }}" rowtype="simple" class="js-overlayClose">
+			<xf:html>
+				<xf:button type="submit" name="delete_banner" value="1" class="js-deleteBanner is-hidden" icon="delete" />
+			</xf:html>
+		</xf:submitrow>
+	</div>
+</xf:form>

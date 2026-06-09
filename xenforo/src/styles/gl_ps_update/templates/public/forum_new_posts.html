@@ -1,0 +1,72 @@
+<xf:if is="$xf.options.forumsDefaultPage != 'new_posts' OR ($xf.options.indexRoute AND $xf.options.indexRoute != 'forums/')">
+	<xf:title page="{$page}">{{ phrase('new_posts') }}</xf:title>
+<xf:else />
+	<xf:h1>{$xf.options.boardTitle}</xf:h1>
+</xf:if>
+
+<xf:macro id="metadata_macros::metadata"
+	arg-description="{$xf.options.boardDescription}" />
+
+<xf:if is="$page > 1 OR $originalFindNewId">
+	<xf:head option="metaNoindex"><meta name="robots" content="noindex" /></xf:head>
+</xf:if>
+<xf:if is="$page <= 1">
+	<xf:macro id="metadata_macros::canonical_url" arg-canonicalUrl="{{ link('canonical:' . $selfRoute) }}" />
+</xf:if>
+
+<xf:wrap template="forum_overview_wrapper">
+	<xf:set var="$pageSelected">new_posts</xf:set>
+</xf:wrap>
+
+<xf:widgetpos id="forum_new_posts_sidebar" position="sidebar" />
+
+<xf:if is="$canInlineMod">
+	<xf:js src="xf/inline_mod.js" min="1" />
+</xf:if>
+
+<div class="block" data-xf-init="{{ $canInlineMod ? 'inline-mod' : '' }}" data-type="thread" data-href="{{ link('inline-mod') }}">
+	<xf:if is="$findNew.result_count">
+		<div class="block-outer"><xf:trim>
+			<xf:pagenav
+				page="{$page}" perpage="{$perPage}" total="{$findNew.result_count}"
+				link="forums/new-posts" params="{{ {'f': $findNew.find_new_id} }}"
+				wrapperclass="block-outer-main" />
+
+			<xf:if contentcheck="true">
+				<div class="block-outer-opposite">
+					<div class="buttonGroup">
+					<xf:contentcheck>
+						<xf:macro id="whats_new_posts::buttons"
+							arg-findNew="{$findNew}"
+							arg-canInlineMod="{$canInlineMod}" />
+					</xf:contentcheck>
+					</div>
+				</div>
+			</xf:if>
+		</xf:trim></div>
+	</xf:if>
+
+	<div class="block-container">
+		<xf:macro id="whats_new_posts::filter_bar"
+			arg-findNew="{$findNew}"
+			arg-rerunRoute="forums/new-posts"
+			arg-rerunQuery="{{ {'f': $findNew.find_new_id} }}"
+			arg-filterRoute="forums/new-posts" />
+
+		<xf:macro id="whats_new_posts::results"
+			arg-findNew="{$findNew}"
+			arg-threads="{$threads}"
+			arg-latestRoute="forums/new-posts" />
+	</div>
+
+	<xf:if is="$findNew.result_count">
+		<div class="block-outer block-outer--after">
+			<xf:pagenav
+				page="{$page}" perpage="{$perPage}" total="{$findNew.result_count}"
+				link="forums/new-posts" params="{{ {'f': $findNew.find_new_id} }}"
+				wrapperclass="block-outer-main" />
+
+			<xf:showignored wrapperclass="block-outer-opposite" />
+		</div>
+	</xf:if>
+</div>

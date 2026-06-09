@@ -1,0 +1,21 @@
+<xf:if is="$canInlineMod">
+	<xf:js src="xf/inline_mod.js" min="1" />
+</xf:if>
+
+<div class="block" data-xf-init="{{ $canInlineMod ? 'inline-mod' : '' }}" data-type="post" data-href="{{ link('inline-mod') }}">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:if is="$isPinnedFirstPost">
+				<xf:macro id="{{ $templateOverrides.pinned_first_post_macro ?: 'post_macros::post' }}"
+					arg-post="{$post}"
+					arg-thread="{$thread}"
+					args="{$templateOverrides.pinned_first_post_macro_args}" />
+			<xf:else />
+				<xf:macro id="{{ $templateOverrides.post_macro ?: 'post_macros::post' }}"
+					arg-post="{$post}"
+					arg-thread="{$thread}"
+					args="{$templateOverrides.post_macro_args}" />
+			</xf:if>
+		</div>
+	</div>
+</div>

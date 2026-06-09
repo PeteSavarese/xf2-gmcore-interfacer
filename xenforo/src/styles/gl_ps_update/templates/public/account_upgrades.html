@@ -1,0 +1,96 @@
+<xf:title>{{ phrase('account_upgrades') }}</xf:title>
+
+<xf:wrap template="account_wrapper" />
+
+<xf:js src="xf/payment.js" min="1" />
+
+<xf:if contentcheck="true">
+	<xf:contentcheck>
+
+		<xf:if is="$available is not empty">
+			<div class="block">
+				<div class="block-container">
+					<h2 class="block-header">{{ phrase('available_upgrades') }}</h2>
+
+					<div class="block-body">
+					<xf:foreach loop="$available" value="$upgrade">
+						<xf:formrow rowtype="button"
+							label="{$upgrade.title}"
+							hint="{$upgrade.cost_phrase}"
+							explain="{$upgrade.description|raw}">
+
+							<xf:form action="{{ link('purchase', $upgrade, {'user_upgrade_id': $upgrade.user_upgrade_id}) }}" ajax="true" data-xf-init="payment-provider-container">
+								<div class="inputGroup">
+									<xf:if is="{{ count($upgrade.payment_profile_ids) > 1 }}">
+										<xf:select name="payment_profile_id">
+											<xf:option>{{ phrase('(choose_payment_method)') }}</xf:option>
+											<xf:foreach loop="$upgrade.payment_profile_ids" value="$profileId">
+												<xf:if is="{$profiles.{$profileId}}">
+													<xf:option value="{$profileId}">{{ $profiles.{$profileId}.display_title ?: $profiles.{$profileId}.title }}</xf:option>
+												</xf:if>
+											</xf:foreach>
+										</xf:select>
+
+										<span class="inputGroup-splitter"></span>
+
+										<xf:button type="submit" icon="purchase" />
+									<xf:else />
+										<xf:button type="submit" icon="purchase" />
+
+										<xf:hiddenval name="payment_profile_id">{$upgrade.payment_profile_ids|first}</xf:hiddenval>
+									</xf:if>
+								</div>
+								<div class="js-paymentProviderReply-user_upgrade{$upgrade.user_upgrade_id}"></div>
+							</xf:form>
+
+						</xf:formrow>
+					</xf:foreach>
+					</div>
+				</div>
+			</div>
+		</xf:if>
+
+		<xf:if is="$purchased is not empty">
+			<div class="block">
+				<div class="block-container">
+					<h2 class="block-header">{{ phrase('purchased_upgrades') }}</h2>
+
+					<ul class="block-body listPlain">
+					<xf:foreach loop="$purchased" value="$upgrade">
+						<li>
+							<div>
+								<xf:set var="$active" value="{$upgrade.Active.{$xf.visitor.user_id}}" />
+								<xf:formrow
+									label="{$upgrade.title}"
+									hint="{$upgrade.cost_phrase}"
+									explain="{$upgrade.description|raw}">
+
+									<xf:if is="$active.end_date">
+										{{ phrase('expires:') }} <xf:date time="{$active.end_date}" />
+									<xf:else />
+										{{ phrase('expires_never') }}
+									</xf:if>
+
+									<xf:if contentcheck="true">
+										<div style="margin-top: 5px;">
+											<xf:contentcheck>
+												<xf:if is="$upgrade.length_unit && $upgrade.recurring && $active.PurchaseRequest">
+													<xf:set var="$provider" value="{$active.PurchaseRequest.PaymentProfile.Provider}" />
+													{{ $provider.renderChangePayment($active)|raw }}
+													{{ $provider.renderCancellation($active)|raw }}
+												</xf:if>
+											</xf:contentcheck>
+										</div>
+									</xf:if>
+								</xf:formrow>
+							</div>
+						</li>
+					</xf:foreach>
+					</ul>
+				</div>
+			</div>
+		</xf:if>
+	</xf:contentcheck>
+<xf:else />
+	<div class="blockMessage">{{ phrase('there_currently_no_purchasable_user_upgrades') }}</div>
+</xf:if>

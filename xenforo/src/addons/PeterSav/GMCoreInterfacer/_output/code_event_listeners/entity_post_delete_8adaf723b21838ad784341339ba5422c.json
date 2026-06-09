@@ -1,0 +1,9 @@
+{
+    "event_id": "entity_post_delete",
+    "execute_order": 10,
+    "callback_class": "PeterSav\\GModInterface\\Listener\\DiscordSync",
+    "callback_method": "userBanEntityPostDelete",
+    "active": true,
+    "hint": "XF\\Entity\\UserBan",
+    "description": "Sync Discord roles when a user ban is lifted (deleted)."
+}

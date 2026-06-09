@@ -1,0 +1,11 @@
+{
+    "parent_navigation_id": "",
+    "display_order": 210,
+    "navigation_type_id": "basic",
+    "type_config": {
+        "link": "{{ link('steam/active-players') }}",
+        "display_condition": "",
+        "extra_attributes": []
+    },
+    "enabled": false
+}

@@ -1,0 +1,84 @@
+<xf:title>{{ phrase('edit_post') }}</xf:title>
+
+<xf:breadcrumb source="$thread.getBreadcrumbs()" />
+
+<xf:form action="{{ link('posts/edit', $post) }}" ajax="true" class="block"
+	data-xf-init="attachment-manager{{ ($post.isFirstPost() AND $thread.canEdit()) ? ' post-edit' : '' }}">
+
+	<div class="block-container">
+		<div class="block-body">
+			<span class="u-anchorTarget js-editContainer"></span>
+			<xf:if is="$post.isFirstPost() AND $thread.canEdit()">
+				<xf:prefixinputrow
+					label="{{ phrase('title') }}"
+					prefixes="{{ $thread.isPrefixEditable() ? $prefixes : [] }}"
+					type="thread"
+					prefix-value="{$thread.prefix_id}"
+					textbox-value="{$thread.title}"
+					placeholder="{{ phrase('title...') }}"
+					rowtype="{{ $quickEdit ? 'fullWidth' : '' }}"
+					maxlength="{{ max_length($thread, 'title') }}"
+					help-href="{{ link('forums/prefix-help', $forum) }}" />
+			</xf:if>
+
+			<xf:editorrow name="message" value="{$post.message}"
+				attachments="{$attachmentData.attachments}"
+				rowtype="fullWidth noLabel"
+				data-min-height="{{ $quickEdit ? 100 : '' }}"
+				label="{{ phrase('message') }}"
+				data-preview-url="{{ link('posts/preview', $post) }}" />
+
+			<xf:formrow rowtype="{{ $quickEdit ? 'fullWidth noLabel mergePrev' : '' }}">
+				<xf:if is="$attachmentData">
+					<xf:macro id="helper_attach_upload::upload_block" arg-attachmentData="{$attachmentData}" />
+				</xf:if>
+			</xf:formrow>
+
+			<xf:if is="$post.isFirstPost() AND $thread.canEdit()">
+				<xf:if contentcheck="true">
+					<xf:if is="!$quickEdit">
+						<hr class="formRowSep" />
+					</xf:if>
+					<xf:contentcheck>
+						{{ $thread.TypeHandler.renderExtraDataEdit(
+							$thread,
+							'edit',
+							$quickEdit ? 'first_post_quick' : 'first_post'
+						)|raw }}
+					</xf:contentcheck>
+				</xf:if>
+
+				<xf:if contentcheck="true">
+					<hr class="formRowSep" />
+					<xf:contentcheck>
+						<xf:macro id="custom_fields_macros::custom_fields_edit"
+							arg-type="threads"
+							arg-set="{$thread.custom_fields}"
+							arg-editMode="{{ $thread.getFieldEditMode() }}"
+							arg-onlyInclude="{$forum.field_cache}"
+							arg-rowType="{{ $quickEdit ? 'fullWidth' : '' }}" />
+					</xf:contentcheck>
+				</xf:if>
+			</xf:if>
+
+			<xf:if is="$post.canEditSilently()">
+				<xf:formrow rowtype="{{ $quickEdit ? 'fullWidth noLabel' : '' }}">
+					<xf:macro id="helper_action::edit_type" arg-canEditSilently="{$post.canEditSilently()}" />
+				</xf:formrow>
+			</xf:if>
+
+			<xf:if is="$post.canSendModeratorActionAlert()">
+				<xf:formrow rowtype="{{ $quickEdit ? 'fullWidth noLabel' : '' }}">
+					<xf:macro id="helper_action::author_alert" arg-row="{{ false }}" />
+				</xf:formrow>
+			</xf:if>
+		</div>
+		<xf:submitrow icon="save" sticky="true" rowtype="{{ $quickEdit ? 'simple' : '' }}">
+			<xf:html>
+				<xf:if is="$quickEdit">
+					<xf:button class="js-cancelButton">{{ phrase('button.cancel') }}</xf:button>
+				</xf:if>
+			</xf:html>
+		</xf:submitrow>
+	</div>
+</xf:form>

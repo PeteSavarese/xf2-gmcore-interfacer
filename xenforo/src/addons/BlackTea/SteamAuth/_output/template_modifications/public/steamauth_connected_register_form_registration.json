@@ -1,0 +1,9 @@
+{
+    "template": "register_form",
+    "description": "Adds the ability for administrators to remove non-steam registration",
+    "execution_order": 10,
+    "enabled": true,
+    "action": "preg_replace",
+    "find": "/<xf:form [\\s\\S]*?<\\/xf:form>/",
+    "replace": "<xf:if is=\"!$xf.options.blacktea_steamauth_force_registration\">\n$0\n</xf:if>"
+}

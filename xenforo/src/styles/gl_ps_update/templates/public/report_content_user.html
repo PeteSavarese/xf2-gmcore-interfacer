@@ -1,0 +1,21 @@
+<xf:set var="$user" value="{{ $report.getContent() }}" />
+
+<div class="block-row block-row--separated block-row--minor">
+	<div>
+		<dl class="pairs pairs--inline">
+			<dt>{{ phrase('joined') }}</dt>
+			<dd><xf:date time="$user.register_date" /></dd>
+		</dl>
+	</div>
+	
+	<xf:if contentcheck="true">
+		<div>
+			<dl class="pairs pairs--inline">
+				<dt>{{ phrase('last_seen') }}</dt>
+				<dd dir="auto">
+					<xf:contentcheck><xf:useractivity user="$user" /></xf:contentcheck>
+				</dd>
+			</dl>
+		</div>
+	</xf:if>
+</div>

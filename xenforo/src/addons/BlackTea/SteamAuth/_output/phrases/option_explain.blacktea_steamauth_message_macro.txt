@@ -1,0 +1,3 @@
+Displays a link to the user’s Steam profile in the message postbit This is typically located on the left-hand side of posts and private messages.
+
+Please note that once enabled, you will need to configure the Steam permissions for your usergroups. Otherwise, members will not be able to see these links even when this setting is enabled.

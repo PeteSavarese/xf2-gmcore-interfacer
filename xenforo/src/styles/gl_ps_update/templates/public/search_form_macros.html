@@ -1,0 +1,73 @@
+<xf:macro id="keywords" arg-input="{{ [] }}" arg-canTitleLimit="{{ true }}">
+	<xf:set var="$controlId">{{ unique_id() }}</xf:set>
+	<xf:formrow rowtype="input" controlid="{$controlId}"
+		label="{{ phrase('keywords') }}">
+
+		<ul class="inputList">
+			<li>
+				<xf:textbox type="search" name="keywords"
+					data-xf-init="{{ $xf.searchAutoComplete ? 'search-auto-complete' : '' }}"
+					data-acurl="{{ link('search/auto-complete') }}"
+					value="{$input.keywords}"
+					autofocus="autofocus"
+					id="{$controlId}" />
+			</li>
+			<xf:if is="$canTitleLimit">
+				<li>
+					<xf:checkbox standalone="true">
+						<xf:option name="c[title_only]" selected="{$input.c.title_only}">
+							<xf:label>
+								{{ phrase('search_titles_only') }}
+
+								<xf:if is="$xf.options.enableTagging">
+									<span tabindex="0" role="button"
+										data-xf-init="tooltip" data-trigger="hover focus click" title="{{ phrase('tags_will_also_be_searched')|for_attr }}">
+
+										<xf:fa icon="far fa-question-circle" class="u-muted u-smaller"
+											title="{{ phrase('note')|for_attr }}" />
+									</span>
+								</xf:if>
+							</xf:label>
+						</xf:option>
+					</xf:checkbox>
+				</li>
+			</xf:if>
+		</ul>
+	</xf:formrow>
+</xf:macro>
+
+<xf:macro id="user" arg-input="{{ [] }}">
+	<xf:textboxrow name="c[users]" value="{$input.c.users}" ac="true"
+		label="{{ phrase('posted_by') }}"
+		explain="{{ phrase('separate_names_with_comma') }}" />
+</xf:macro>
+
+<xf:macro id="date" arg-input="{{ [] }}">
+	<xf:dateinputrow name="c[newer_than]" value="{$input.c.newer_than}"
+		label="{{ phrase('newer_than') }}" />
+
+	<xf:dateinputrow name="c[older_than]" value="{$input.c.older_than}"
+		label="{{ phrase('older_than') }}" />
+</xf:macro>
+
+<xf:macro id="order" arg-input="{{ [] }}" arg-isRelevanceSupported="!" arg-options="{{ [] }}">
+	<xf:if is="$isRelevanceSupported || count($options)">
+		<xf:radiorow name="order" value="{$input.order|default($isRelevanceSupported ? 'relevance' : 'date')}"
+			label="{{ phrase('order_by') }}">
+
+			<xf:if is="$isRelevanceSupported">
+				<xf:option value="relevance">{{ phrase('relevance') }}</xf:option>
+			</xf:if>
+			<xf:option value="date">{{ phrase('date') }}</xf:option>
+			<xf:options source="$options" />
+		</xf:radiorow>
+	<xf:else />
+		<xf:hiddenval name="order">{$input.order|default($isRelevanceSupported ? 'relevance' : 'date')}</xf:hiddenval>
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="grouped" arg-label="!" arg-input="{{ [] }}">
+	<xf:checkboxrow>
+		<xf:option name="grouped" value="1" selected="{$input.grouped}">{$label}</xf:option>
+	</xf:checkboxrow>
+</xf:macro>

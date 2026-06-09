@@ -1,0 +1,24 @@
+<xf:if is="can_change_steam_profile_privacy()">
+	<dl class="inputLabelPair">
+		<dt>{{ phrase('allow_view_steam') }}:</dt>
+		<dd>
+			<xf:select name="privacy[allow_view_steam]" value="{$xf.visitor.Privacy.allow_view_steam}">
+				<xf:option value="everyone">{{ phrase('all_visitors') }}</xf:option>
+				<xf:option value="members">{{ phrase('members_only') }}</xf:option>
+				<xf:option value="none">{{ phrase('nobody') }}</xf:option>
+			</xf:select>
+		</dd>
+	</dl>
+</xf:if>
+<xf:if is="can_change_steam_banner_privacy()">
+	<dl class="inputLabelPair">
+		<dt>{{ phrase('allow_view_steam_banner') }}:</dt>
+		<dd>
+			<xf:select name="privacy[allow_view_steam_banner]" value="{$xf.visitor.Privacy.allow_view_steam_banner}">
+				<xf:option value="everyone">{{ phrase('all_visitors') }}</xf:option>
+				<xf:option value="members">{{ phrase('members_only') }}</xf:option>
+				<xf:option value="none">{{ phrase('nobody') }}</xf:option>
+			</xf:select>
+		</dd>
+	</dl>
+</xf:if>

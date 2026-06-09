@@ -1,0 +1,17 @@
+{
+    "group_name": "basic",
+    "title": "Logo URL",
+    "description": "The path from your XenForo root directory to your logo. If you specify alternate variations, they should be the same size. If you specify an SVG, you should set <b>Emails &gt; Email logo URL</b> to a PNG, or similar, for better compatibility.",
+    "property_type": "value",
+    "css_components": [],
+    "value_type": "string",
+    "value_parameters": "asset=logo",
+    "has_variations": true,
+    "depends_on": "",
+    "value_group": "logo",
+    "property_value": {
+        "default": "/images/forum/logo_circle.svg",
+        "alternate": "styles/trueknife/logo.png"
+    },
+    "display_order": 101
+}

@@ -1,0 +1,61 @@
+<xf:macro id="setup" arg-canViewAttachments="!">
+	<xf:if is="$canViewAttachments">
+		<xf:css src="lightbox.less" />
+		<xf:js prod="xf/lightbox-compiled.js" dev="vendor/fancyapps/fancybox/fancybox.umd.js, xf/lightbox.js" />
+
+		<xf:if is="!page_param('hasLb')">
+			<script class="js-extraPhrases" type="application/json">
+			{
+				"lightbox_close": "{{ phrase('lightbox_close')|escape('js') }}",
+				"lightbox_next": "{{ phrase('lightbox_next')|escape('js') }}",
+				"lightbox_previous": "{{ phrase('lightbox_previous')|escape('js') }}",
+				"lightbox_error": "{{ phrase('lightbox_error')|escape('js') }}",
+				"lightbox_start_slideshow": "{{ phrase('lightbox_start_slideshow')|escape('js') }}",
+				"lightbox_stop_slideshow": "{{ phrase('lightbox_stop_slideshow')|escape('js') }}",
+				"lightbox_full_screen": "{{ phrase('lightbox_full_screen')|escape('js') }}",
+				"lightbox_thumbnails": "{{ phrase('lightbox_thumbnails')|escape('js') }}",
+				"lightbox_download": "{{ phrase('lightbox_download')|escape('js') }}",
+				"lightbox_share": "{{ phrase('lightbox_share')|escape('js') }}",
+				"lightbox_zoom": "{{ phrase('lightbox_zoom')|escape('js') }}",
+				"lightbox_new_window": "{{ phrase('lightbox_new_window')|escape('js') }}",
+				"lightbox_toggle_sidebar": "{{ phrase('lightbox_toggle_sidebar')|escape('js') }}"
+			}
+			</script>
+		</xf:if>
+		<xf:page option="hasLb" value="{{ true }}" />
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="single_image"
+	arg-canViewAttachments="!"
+	arg-src="!"
+	arg-dataUrl=""
+	arg-containerZoom="1"
+	arg-alt=""
+	arg-title=""
+	arg-sidebarHref=""
+	arg-captionExtraHtml=""
+	arg-styleAttr=""
+	arg-alignClass=""
+	arg-width=""
+	arg-height="">
+
+	<xf:macro id="setup" arg-canViewAttachments="{$canViewAttachments}" />
+
+	<div class="bbImageWrapper {$alignClass} js-lbImage" title="{$alt|for_attr}"
+		data-src="{$src}"
+		data-type="image"
+		data-lb-sidebar-href="{$sidebarHref}"
+		data-lb-caption-extra-html="{$captionExtraHtml|for_attr}"
+		data-single-image="1"
+	>
+		<img src="{$src}"
+			data-url="{$dataUrl}"
+			class="bbImage"
+			data-zoom-target="1"
+			style="{$styleAttr}"
+			alt="{$alt|for_attr}"
+			title="{$title|for_attr}"
+			width="{$width}" height="{$height}" loading="lazy" />
+	</div>
+</xf:macro>

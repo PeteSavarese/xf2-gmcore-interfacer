@@ -1,0 +1,40 @@
+<xf:macro id="notice_list" arg-type="!" arg-notices="!">
+	<xf:if is="{$notices} is not empty">
+		<xf:css src="notices.less" />
+		<xf:if is="$type == 'scrolling'">
+			<xf:macro name="carousel_macros::setup" />
+		</xf:if>
+
+		<ul class="notices notices--{$type} {{ count($notices) > 1 ? 'notices--isMulti' : '' }} js-notices"
+			data-xf-init="notices"
+			data-type="{$type}"
+			data-scroll-interval="{{ property('noticeScrollInterval') }}">
+
+			<xf:foreach loop="{$notices}" value="$notice">
+				<xf:macro id="notice" arg-notice="{$notice}" arg-type="{$type}" arg-contentHtml="{$notice.message}" />
+			</xf:foreach>
+		</ul>
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="notice" arg-notice="!" arg-type="!" arg-contentHtml="!">
+	<li class="notice js-notice {{ $notice.display_style == 'custom' ? $notice.css_class : 'notice--' . $notice.display_style }}{{ $notice.display_image ? ' notice--hasImage' : '' }}{{ $notice.visibility ? ' notice--hide' . $notice.visibility : '' }}"
+		data-notice-id="{$notice.notice_id}"
+		data-delay-duration="{$notice.delay_duration}"
+		data-display-duration="{$notice.display_duration}"
+		data-auto-dismiss="{$notice.auto_dismiss}"
+		data-visibility="{$notice.visibility}">
+
+		<xf:if is="$notice.display_image == 'avatar'">
+			<div class="notice-image"><xf:avatar user="$xf.visitor" size="s" href="" /></div>
+		<xf:elseif is="$notice.display_image == 'image'" />
+			<div class="notice-image"><img src="{{ base_url($notice.image_url) }}" alt="" /></div>
+		</xf:if>
+		<div class="notice-content">
+			<xf:if is="$notice.dismissible AND !$notice.custom_dismissible">
+				<a href="{{ link('account/dismiss-notice', null, {'notice_id': $notice.notice_id}) }}" class="notice-dismiss js-noticeDismiss" data-xf-init="tooltip" title="{{ phrase('dismiss_notice')|for_attr }}"></a>
+			</xf:if>
+			{$contentHtml|raw}
+		</div>
+	</li>
+</xf:macro>

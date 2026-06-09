@@ -1,0 +1,30 @@
+<xf:title>{{ phrase('confirm_action') }}</xf:title>
+
+<xf:form action="{{ link('shoutbox/unban', null, {'user_id': $ban.user_id}) }}" ajax="true" class="block">
+	<div class="block-container">
+		<xf:hiddenval name="user_id" value="{$ban.user_id}" />
+		<div class="block-body">
+			<xf:inforow rowtype="confirm">
+				Please confirm that you want to remove the shoutbox ban for
+				<strong><xf:if is="$ban.User">{{ username_link($ban.User, true) }}<xf:else />User #{$ban.user_id}</xf:if></strong>
+			</xf:inforow>
+			<xf:formrow label="{{ phrase('banned_by') }}">{{ username_link($ban.BannedBy, true) }}</xf:formrow>
+			<xf:formrow label="Ban issued">{{ shoutbox_date_dynamic($ban.banned_on) }}</xf:formrow>
+			<xf:formrow label="Ban expires">
+				<xf:if is="$ban.expires_on">
+					{{ shoutbox_date_dynamic($ban.expires_on) }}
+				<xf:else />
+					{{ phrase('never') }}
+				</xf:if>
+			</xf:formrow>
+
+			<xf:if is="$ban.reason">
+				<xf:formrow label="{{ phrase('reason_for_ban') }}">
+					{$ban.reason}
+				</xf:formrow>
+			</xf:if>
+		</div>
+
+		<xf:submitrow rowtype="simple" submit="Unban" icon="delete" />
+	</div>
+</xf:form>

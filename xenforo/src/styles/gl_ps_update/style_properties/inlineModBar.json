@@ -1,0 +1,27 @@
+{
+    "group_name": "inlineMod",
+    "title": "Inline moderation bar",
+    "description": "A bar containing controls appears when content is selected for inline moderation. Its appearance is controlled here",
+    "property_type": "css",
+    "css_components": [
+        "text",
+        "background",
+        "border",
+        "padding",
+        "extra"
+    ],
+    "value_type": "",
+    "value_parameters": "",
+    "has_variations": false,
+    "depends_on": "",
+    "value_group": "",
+    "property_value": {
+        "color": "@xf-paletteColor2",
+        "background-color": "rgba(52, 152, 219, 0.2)",
+        "border-bottom-width": "@xf-borderSize",
+        "border-bottom-color": "#3498db",
+        "padding-top": "@xf-paddingSmall",
+        "padding-bottom": "@xf-paddingSmall"
+    },
+    "display_order": 20000
+}

@@ -1,0 +1,26 @@
+{
+    "group_name": "block",
+    "title": "Block header",
+    "description": "Blocks often have title bars at their tops, which are styled here",
+    "property_type": "css",
+    "css_components": [
+        "text",
+        "background",
+        "border",
+        "extra"
+    ],
+    "value_type": "",
+    "value_parameters": "",
+    "has_variations": false,
+    "depends_on": "",
+    "value_group": "",
+    "property_value": {
+        "font-size": "@xf-fontSizeLarger",
+        "color": "@xf-textColorEmphasized",
+        "background-color": "rgba(23, 32, 48, 0.98)",
+        "border-bottom-width": "@xf-borderSize",
+        "border-bottom-color": "@xf-borderColorLight",
+        "extra": ".block-header {\n\tbackground: linear-gradient(135deg, rgba(23, 32, 48, 0.98) 0%, rgba(30, 42, 56, 0.9) 100%);\n\tborder-bottom: 2px solid rgba(52, 152, 219, 0.45);\n\tborder-radius: 12px 12px 0 0;\n}"
+    },
+    "display_order": 20100
+}

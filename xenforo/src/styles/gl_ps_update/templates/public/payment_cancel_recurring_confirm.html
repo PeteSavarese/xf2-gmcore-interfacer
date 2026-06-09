@@ -1,0 +1,16 @@
+<xf:title>{{ phrase('confirm_cancellation_of_subscription:') }} {$purchasableItem.title}</xf:title>
+
+<xf:form action="{{ link('purchase/cancel-recurring', null, {'request_key': $purchaseRequest.request_key}) }}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:inforow rowtype="confirm">
+				{{ phrase('please_confirm_that_you_want_to_cancel_following_subscription:') }}
+				<strong>{$purchasableItem.title}</strong>
+				<div class="blockMessage blockMessage--important">
+					{{ phrase('note_your_subscription_may_appear_active_until_original_expiry_date') }}
+				</div>
+			</xf:inforow>
+		</div>
+		<xf:submitrow submit="{{ phrase('button.cancel') }}" rowtype="simple" />
+	</div>
+</xf:form>

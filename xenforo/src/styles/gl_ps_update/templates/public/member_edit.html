@@ -1,0 +1,52 @@
+<xf:title>{{ phrase('edit_member:') }} {$user.username}</xf:title>
+
+<xf:breadcrumb href="{{ link('members', $user) }}">{$user.username}</xf:breadcrumb>
+
+<xf:form action="{{ link('members/edit', $user) }}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:if is="$user.getAvatarUrl('s')">
+				<xf:formrow label="{{ phrase('current_avatar') }}">
+					<xf:avatar user="{$user}" size="l" />
+					<div><br /><xf:checkbox standalone="true">
+						<xf:option name="delete_avatar" label="{{ phrase('delete_current_avatar') }}" />
+					</xf:checkbox></div>
+				</xf:formrow>
+			</xf:if>
+
+			<xf:if is="$user.Profile.banner_date">
+				<xf:formrow label="{{ phrase('current_profile_banner') }}">
+					<xf:profilebanner user="$user" size="l" class="memberProfileBanner--small" />
+					<div><xf:checkbox standalone="true">
+						<xf:option name="delete_banner" label="{{ phrase('delete_current_banner') }}" />
+					</xf:checkbox></div>
+				</xf:formrow>
+			</xf:if>
+
+			<xf:textboxrow name="user[custom_title]" value="{$user}" column="custom_title_"
+				label="{{ phrase('custom_title') }}" />
+
+			<xf:textboxrow name="profile[location]" value="{$user.Profile}" column="location_"
+				label="{{ phrase('location') }}" />
+
+			<xf:textboxrow name="profile[website]" value="{$user.Profile}" column="website_"
+				label="{{ phrase('website') }}" />
+
+			<xf:textarearow name="profile[about]" value="{$user.Profile}" column="about_"
+				autosize="true"
+				label="{{ phrase('about_you') }}" />
+
+			<xf:textarearow name="profile[signature]" value="{$user.Profile}" column="signature_"
+				autosize="true"
+				label="{{ phrase('signature') }}" />
+
+			<xf:macro id="custom_fields_macros::custom_fields_edit"
+				arg-type="users"
+				arg-set="{$user.Profile.custom_fields}"
+				arg-editMode="moderator" />
+		</div>
+		<xf:submitrow icon="save" sticky="true" />
+	</div>
+
+	<xf:hiddenval name="not_admin">{{ $notAdmin ? 1 : 0 }}</xf:hiddenval>
+</xf:form>

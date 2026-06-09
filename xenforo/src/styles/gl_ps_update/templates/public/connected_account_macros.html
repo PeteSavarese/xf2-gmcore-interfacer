@@ -1,0 +1,43 @@
+<xf:macro id="associate" arg-provider="!">
+	<xf:formrow label="{$provider.title}" rowtype="button">
+
+		<xf:macro id="connected_account_macros::button"
+			arg-provider="{$provider}"
+			arg-text="{{ phrase('continue_with_x', {'provider': $provider.title}) }}" />
+	</xf:formrow>
+</xf:macro>
+
+<xf:macro id="disassociate" arg-provider="!" arg-hasPassword="!">
+	<xf:set var="$explain" value="{{ (!$hasPassword && count($xf.visitor.Profile.connected_accounts) == 1) ? phrase('disassociating_with_all_accounts_cause_password_emailed_x', {'email': $xf.visitor.email|email_display}) : '' }}" />
+	<xf:formrow
+		label="{$provider.title}"
+		explain="{$explain}">
+
+		<div>{$provider.renderAssociated()|raw}</div>
+
+		<xf:form action="{{ link('account/connected-accounts/disassociate', $provider) }}" class="u-inputSpacer">
+			<xf:checkbox>
+				<xf:option name="disassociate"
+					label="{{ phrase('disassociate_x_account', {'provider': $provider.title}) }}">
+
+					<xf:dependent>
+						<xf:button type="submit">{{ phrase('confirm_disassociation') }}</xf:button>
+					</xf:dependent>
+				</xf:option>
+			</xf:checkbox>
+		</xf:form>
+	</xf:formrow>
+</xf:macro>
+
+<xf:macro id="button" arg-provider="!" arg-link="{{ null }}" arg-text="{{ null }}">
+	<xf:button href="{{ $link ?: link('register/connected-accounts', $provider, {'setup': true}) }}"
+		fa="{$provider.icon_class}"
+		class="button--provider button--provider--{$provider.provider_id}"
+		data-xf-click="overlay">
+
+		<xf:if is="!$provider.icon_class && $provider.icon_url">
+			<img class="button-icon" alt="" src="{$provider.icon_url}" />
+		</xf:if>
+		{{ $text ?: $provider.title }}
+	</xf:button>
+</xf:macro>

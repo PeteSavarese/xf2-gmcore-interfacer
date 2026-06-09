@@ -1,0 +1,19 @@
+{
+    "group_name": "page",
+    "title": "Page background",
+    "description": "The page background, behind all block elements, uses the styling rules defined here",
+    "property_type": "css",
+    "css_components": [
+        "background",
+        "extra"
+    ],
+    "value_type": "",
+    "value_parameters": "",
+    "has_variations": false,
+    "depends_on": "",
+    "value_group": "",
+    "property_value": {
+        "background-color": "#0f1822"
+    },
+    "display_order": 20200
+}

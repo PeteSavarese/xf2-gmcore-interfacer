@@ -1,0 +1,98 @@
+<xf:title>{$page.title}</xf:title>
+<xf:if is="$page.description">
+	<xf:description>{$page.description|raw}</xf:description>
+</xf:if>
+
+<xf:if is="!$page.isSearchEngineIndexable()">
+	<xf:head option="metaNoindex"><meta name="robots" content="noindex" /></xf:head>
+</xf:if>
+
+<xf:macro id="metadata_macros::canonical_url" arg-canonicalUrl="{{ link('canonical:pages', $page) }}" />
+
+<xf:breadcrumb source="$page.getBreadcrumbs(false)" />
+
+<xf:pageaction><xf:if contentcheck="true">
+	<xf:contentcheck>
+		<xf:macro id="bookmark_macros::link"
+			arg-content="{$page.Node}"
+			arg-confirmUrl="{{ link('pages/bookmark', $page) }}"
+			arg-class="button button--link" />
+	</xf:contentcheck>
+</xf:if></xf:pageaction>
+
+<xf:set var="$logVisits">
+	<div class="block-outer block-outer--after">
+		<ul class="listInline listInline--bullet">
+			<li><dl class="pairs pairs--inline">
+				<dt>{{ phrase('published') }}</dt>
+				<dd>{{ date($page.publish_date) }}</dd>
+			</dl></li>
+			<li><dl class="pairs pairs--inline">
+				<dt>{{ phrase('page_views') }}</dt>
+				<dd>{{ number($page.view_count) }}</dd>
+			</dl></li>
+		</ul>
+	</div>
+</xf:set>
+
+<xf:if is="$page.advanced_mode">
+	<xf:include template="{$page.getTemplateName()}" />
+
+	<xf:if is="$page.log_visits">
+		<div class="block">
+			{$logVisits|raw}
+		</div>
+	</xf:if>
+<xf:else />
+	<div class="block">
+		<div class="block-container">
+			<div class="block-body block-row">
+				<xf:include template="{$page.getTemplateName()}" />
+			</div>
+		</div>
+		<xf:if is="$page.log_visits">
+			{$logVisits|raw}
+		</xf:if>
+	</div>
+</xf:if>
+
+<div class="blockMessage blockMessage--none">
+	<xf:macro id="share_page_macros::buttons" arg-iconic="{{ true }}" arg-label="{{ phrase('share:') }}" />
+</div>
+
+<xf:sidenav mode="prepend">
+	<xf:if contentcheck="true">
+		<div class="block">
+			<div class="block-container">
+				<div class="block-body">
+					<xf:contentcheck>
+						<xf:if is="$page.list_siblings AND $siblings is not empty">
+							<xf:if is="$parent">
+								<a href="{{ link($parent.getRoute(), $parent) }}" class="blockLink">{$parent.title}</a>
+							</xf:if>
+
+							<xf:foreach loop="$siblings" value="$node">
+								<a href="{{ link($node.getRoute(), $node) }}" class="blockLink {{ $node.node_id == $page.node_id ? 'is-selected' : '' }}">
+									<span class="u-depth{{ $parent ? 1 : 0 }}">{$node.title}</span>
+								</a>
+								<xf:if is="$node.node_id == $page.node_id AND $page.list_children AND $children is not empty">
+									<xf:foreach loop="$children" value="$childNode">
+										<a href="{{ link($childNode.getRoute(), $childNode) }}" class="blockLink">
+											<span class="u-depth{{ $parent ? 2 : 1 }}">{$childNode.title}</span>
+										</a>
+									</xf:foreach>
+								</xf:if>
+							</xf:foreach>
+							<xf:elseif is="$page.list_children AND $children is not empty" />
+							<xf:foreach loop="$children" value="$childNode">
+								<a href="{{ link($childNode.getRoute(), $childNode) }}" class="blockLink">
+									{$childNode.title}
+								</a>
+							</xf:foreach>
+						</xf:if>
+					</xf:contentcheck>
+				</div>
+			</div>
+		</div>
+	</xf:if>
+</xf:sidenav>

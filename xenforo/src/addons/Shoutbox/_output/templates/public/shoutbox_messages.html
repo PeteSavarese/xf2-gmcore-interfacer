@@ -1,0 +1,84 @@
+<xf:foreach loop="$messages" value="$message">
+    <li data-messageid="{$message.id}" class="messageRow">
+        <xf:set var="$canDelete"
+                value="{{$xf.visitor.hasPermission('shoutbox', 'can_delete_messages') || ($xf.visitor.user_id && $xf.visitor.user_id == $message.user_id)}}"/>
+        <xf:set var="$canBan" value="{$xf.visitor.hasPermission('shoutbox', 'can_ban_user')}"/>
+        <xf:set var="$canEdit"
+                value="{{$canDelete || ($xf.visitor.user_id && $xf.visitor.user_id == $message.user_id)}}"/>
+
+        <div class="shoutbox-messageContent">
+            <xf:if is="$canDelete || $canBan || $canEdit">
+                <a href="#" class="menuTrigger shoutbox-messageMenu" data-xf-click="menu" aria-expanded="false"
+                   aria-haspopup="true" title="{{ phrase('more_options') }}">
+                    <span class="u-srOnly">{{ phrase('more_options') }}</span>
+                </a>
+
+                <div class="menu" data-menu="menu" aria-hidden="true">
+                    <div class="menu-content">
+                        <h3 class="menu-header">{{ phrase('actions') }}</h3>
+                        <xf:if is="$canEdit">
+                            <xf:if is="$message.is_discord_message">
+                                <a class="menu-linkRow" data-xf-init="tooltip"
+                                   title="Message sent from Discord cannot be edited via the shoutbox." tabindex="-1"
+                                   aria-disabled="true" style="opacity: 0.5;">{{ phrase('edit') }}</a>
+                                <xf:else/>
+                                <a href="shoutbox/{$message.id}/edit" data-xf-click="overlay" class="menu-linkRow">{{
+                                    phrase('edit') }}</a>
+                            </xf:if>
+                        </xf:if>
+                        <xf:if is="$canDelete">
+                            <a href="shoutbox/{$message.id}/delete" data-xf-click="overlay"
+                               class="menu-linkRow menu-linkRow--destructive">{{ phrase('delete') }}</a>
+                        </xf:if>
+                        <xf:if is="$canBan">
+                            <xf:if is="$message.User">
+                                <xf:if is="{{ shoutbox_is_banned($message.user_id) }}">
+                                    <a href="{{ link('shoutbox/unban', null, {'user_id': $message.user_id}) }}"
+                                       data-xf-click="overlay"
+                                       class="menu-linkRow menu-linkRow--destructive">Unban user</a>
+                                    <xf:else/>
+                                    <a href="shoutbox/{$message.id}/ban" data-xf-click="overlay"
+                                       class="menu-linkRow menu-linkRow--destructive">{{ phrase('ban_user') }}</a>
+                                </xf:if>
+                            </xf:if>
+                        </xf:if>
+                    </div>
+                </div>
+            </xf:if>
+
+            <xf:if is="$message.is_discord_message">
+                <xf:fa icon="fab fa-discord" style="color:#7289da;" data-xf-init="tooltip"
+                       title="This message was sent through the Discord server."/>
+            </xf:if>
+
+
+            <xf:if is="$message.discord_avatar_url">
+                <span class="avatar avatar--xxs">
+                    <img src="{$message.discord_avatar_url|escape('html_attr')}"
+                         alt="{$message.discord_username|escape('html_attr')}" loading="lazy"/>
+                </span>
+                <xf:elseif is="$message.User"/>
+                {{ avatar($message.User, 'xxs') }}
+                <xf:else/>
+                <span class="avatar avatar--xxs avatar--default">
+                    <span class="avatar-u">?</span>
+                </span>
+            </xf:if>
+
+            <span class="shoutbox-messageDate">{{ shoutbox_date_dynamic($message.created_on) }}</span>
+
+            <xf:if is="$message.discord_username">
+                <span class="username" dir="auto">{$message.discord_username|escape}</span>:&nbsp;
+                <xf:elseif is="$message.User"/>
+                {{ username_link($message.User, true) }}:&nbsp;
+                <xf:else/>
+                <span class="username" dir="auto">Discord User</span>:&nbsp;
+            </xf:if>
+            <xf:if is="$message.is_message_edited">
+                <span class="shoutbox-messageEdited"
+                      style="font-size: 0.85em; color: #888; margin: 4px 4px;">(edited)</span>
+            </xf:if>
+            <span>{{ shoutbox_discord_emoji_to_img(short_to_emoji(bb_code(shoutbox_mediaify($message.message), 'post', $message.User))) }}</span>
+        </div>
+    </li>
+</xf:foreach>

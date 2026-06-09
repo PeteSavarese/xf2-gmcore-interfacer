@@ -1,0 +1,10 @@
+<xf:js prod="xf/tel_box-compiled.js" dev="vendor/intl-tel-input/intlTelInput.min.js, vendor/intl-tel-input/utils.js, xf/tel_box.js" />
+
+<xf:css src="tel_box.less" />
+
+<div data-xf-init="tel-box">
+	<input type="tel" name="{$name}" value="{$value}" class="input js-telInput" {$attrsHtml|raw} />
+
+	<xf:hiddenval name="{$dialCodeName}" class="js-dialCode" />
+	<xf:hiddenval name="{$intlNumberName}" class="js-intlNumb" />
+</div>

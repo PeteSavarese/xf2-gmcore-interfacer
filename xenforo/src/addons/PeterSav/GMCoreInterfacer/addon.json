@@ -1,0 +1,13 @@
+{
+    "legacy_addon_id": "",
+    "title": "GMCore Interfacer",
+    "description": "Allows for connection to GMod server. Server syncing, donation system, and history logs.",
+    "version_id": 1013100,
+    "version_string": "1.1.31",
+    "dev": "Peter Savarese",
+    "dev_url": "https://petersav.com/",
+    "faq_url": "",
+    "extra_urls": [],
+    "require": [],
+    "icon": "fa-gamepad"
+}

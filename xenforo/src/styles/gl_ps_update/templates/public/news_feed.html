@@ -1,0 +1,37 @@
+<xf:title>{{ phrase('your_news_feed') }}</xf:title>
+
+<xf:wrap template="whats_new_wrapper">
+	<xf:set var="$pageSelected" value="news_feed" />
+</xf:wrap>
+
+<div class="block">
+	<div class="block-container">
+		<xf:if is="$newsFeedItems is not empty">
+			<ul class="block-body js-newsFeedTarget">
+				<xf:foreach loop="$newsFeedItems" value="$item">
+					<xf:macro id="news_feed_macros::feed_row" arg-item="{$item}" />
+				</xf:foreach>
+			</ul>
+			<div class="block-footer js-newsFeedLoadMore">
+				<span class="block-footer-controls"><xf:button href="{{ link('whats-new/news-feed', null, {'before_id': $oldestItemId}) }}"
+					rel="nofollow"
+					data-xf-click="inserter"
+					data-append=".js-newsFeedTarget"
+					data-replace=".js-newsFeedLoadMore">
+					{{ phrase('show_older_items') }}
+				</xf:button></span>
+			</div>
+		<xf:elseif is="$beforeId" />
+			<div class="block-body js-newsFeedTarget">
+				<div class="block-row block-row--separated">{{ phrase('there_no_more_items_to_show') }}</div>
+			</div>
+		<xf:else />
+			<div class="block-body js-newsFeedTarget">
+				<div class="block-row">
+					{{ phrase('your_news_feed_is_currently_empty') }}
+					<a href="{{ link('account/following') }}">{{ phrase('follow_people_to_fill_it') }}</a>
+				</div>
+			</div>
+		</xf:if>
+	</div>
+</div>

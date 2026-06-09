@@ -1,0 +1,35 @@
+<xf:title>{{ phrase('attachment_upload') }}</xf:title>
+
+<xf:form action="{{ link('attachments/upload', null, {'type': $type, 'hash': $hash, 'context': $context}) }}" class="block" upload="true" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:if is="$existing is not empty OR $new is not empty">
+				<xf:formrow label="{{ phrase('existing_attachments') }}">
+					<xf:css src="attachments.less" />
+					<ul class="attachUploadList">
+						<xf:foreach loop="$existing" value="$attachment">
+							<xf:macro id="helper_attach_upload::uploaded_file"
+								arg-attachment="{$attachment}"
+								arg-noJsFallback="{{ true }}" />
+						</xf:foreach>
+						<xf:foreach loop="$new" value="$attachment">
+							<xf:macro id="helper_attach_upload::uploaded_file"
+								arg-attachment="{$attachment}"
+								arg-noJsFallback="{{ true }}" />
+						</xf:foreach>
+					</ul>
+				</xf:formrow>
+			</xf:if>
+			<xf:if is="$canUpload">
+				<xf:uploadrow name="upload" accept=".{$constraints.extensions|join(',.')}"
+					label="{{ phrase('attach_file') }}"
+					explain="{{ phrase('you_may_close_this_window_tab_once_you_have_uploaded_your_files_to_return') }}" />
+			<xf:elseif is="!$canUpload AND $uploadError" />
+				<xf:formrow label="{{ phrase('attach_file') }}">{$uploadError}</xf:formrow>
+			</xf:if>
+		</div>
+		<xf:if is="$canUpload">
+			<xf:submitrow submit="{{ phrase('upload') }}" icon="upload" />
+		</xf:if>
+	</div>
+</xf:form>

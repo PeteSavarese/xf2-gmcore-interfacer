@@ -1,0 +1,35 @@
+<xf:css src="gmod_servers_widget.css" />
+<div class="block">
+	<div class="block-container">
+		<h3 class="block-minorHeader"><a href="/gl/servers">Server List</a></h3>
+
+		<xf:foreach loop="{$servers}" value="$server">
+			<div class="widget-serverRow">
+				<div class="widget-RowLeftMap">
+					<img class="widget-mapImage" src="/images/maps/{{ remove_trailing_gmod_map($server.currentMap) }}.png">
+				</div>
+				<div class="widget-serverRowMiddle">
+					<span class="widget-niceServerName">{$server.niceName}</span><br>
+					<span>{{ remove_trailing_gmod_map($server.currentMap) }}</span>
+				</div>
+
+				<div class="widget-serverRowRight">
+					<span class="widget-serverCount">
+						<xf:if is="$server.offline">
+							Offline
+						<xf:else />
+							{$server.playerCount}/{$server.maxCount}
+						</xf:if>
+					</span>
+
+					<xf:if is="$server.offline">
+						<xf:else />
+						<a href="steam://connect/{$server.serverAddr}" class="button button--link widget-joinServerButton" style="height: 32px; padding-top: 7px;">
+							<xf:fa icon="fa-sign-in" aria-hidden="true"/>
+						</a>
+					</xf:if>
+				</div>
+			</div>
+		</xf:foreach>
+	</div>
+</div>

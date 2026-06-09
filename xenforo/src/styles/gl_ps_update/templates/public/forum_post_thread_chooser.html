@@ -1,0 +1,186 @@
+<xf:title>{{ phrase('post_thread_in') }}</xf:title>
+
+<xf:head option="metaNoindex"><meta name="robots" content="noindex" /></xf:head>
+
+<xf:macro id="node_list" arg-children="{$nodeTree}" arg-extras="{$nodeExtras}" />
+
+<xf:macro id="node_list" arg-children="!" arg-extras="!"  arg-depth="0">
+	<xf:foreach loop="$children" key="$id" value="$child">
+		<xf:macro id="node_list_entry"
+			arg-node="{$child.record}" arg-extras="{$extras.{$id}}"
+			arg-children="{$child.children}" arg-childExtras="{$extras}"
+			arg-depth="{$depth}" />
+	</xf:foreach>
+</xf:macro>
+
+<xf:macro id="node_list_entry" arg-node="!" arg-extras="!" arg-children="!" arg-childExtras="!" arg-depth="0">
+	<xf:if is="$depth == 0">
+		<xf:if is="$node.node_type_id == 'Category'">
+			<xf:macro id="node_list_entry_category_level_0"
+				arg-node="{$node}"
+				arg-extras="{$extras}"
+				arg-children="{$children}"
+				arg-childExtras="{$childExtras}"
+				arg-depth="{$depth}" />
+		<xf:elseif is="$node.node_type_id == 'Forum' AND ($node.Data.canCreateThread() OR $node.Data.canCreateThreadPreReg())" />
+			<xf:macro id="node_list_entry_forum_level_0"
+				arg-node="{$node}"
+				arg-extras="{$extras}"
+				arg-children="{$children}"
+				arg-childExtras="{$childExtras}"
+				arg-depth="{$depth}" />
+		<xf:else />
+			<xf:macro id="node_list_entry_no_posting_level_0"
+				arg-node="{$node}"
+				arg-extras="{$extras}"
+				arg-children="{$children}"
+				arg-childExtras="{$childExtras}"
+				arg-depth="{$depth}" />
+		</xf:if>
+	<xf:else />
+		<xf:if is="$node.node_type_id == 'Forum' AND ($node.Data.canCreateThread() OR $node.Data.canCreateThreadPreReg())">
+			<xf:macro id="node_list_entry_forum"
+				arg-node="{$node}"
+				arg-extras="{$extras}"
+				arg-children="{$children}"
+				arg-childExtras="{$childExtras}"
+				arg-depth="{$depth}" />
+		<xf:else />
+			<xf:macro id="node_list_entry_no_posting"
+				arg-node="{$node}"
+				arg-extras="{$extras}"
+				arg-children="{$children}"
+				arg-childExtras="{$childExtras}"
+				arg-depth="{$depth}" />
+		</xf:if>
+	</xf:if>
+</xf:macro>
+
+<xf:macro id="node_list_entry_category_level_0"
+	arg-node="!"
+	arg-extras="!"
+	arg-children="!"
+	arg-childExtras="!"
+	arg-depth="0">
+
+	<div class="block block--treeEntryChooser">
+		<div class="block-container">
+			<h2 class="block-header">
+				{$node.title}
+				<xf:if is="$node.description">
+					<span class="block-desc">
+						{$node.description|raw}
+					</span>
+				</xf:if>
+			</h2>
+			<div class="block-body">
+				<xf:macro id="node_list"
+					arg-children="{$children}" arg-extras="{$childExtras}" arg-depth="{{ $depth + 1 }}" />
+			</div>
+		</div>
+	</div>
+</xf:macro>
+
+<xf:macro id="node_list_entry_forum_level_0"
+	arg-node="!"
+	arg-extras="!"
+	arg-children="!"
+	arg-childExtras="!"
+	arg-depth="0">
+
+	<div class="block block--treeEntryChooser">
+		<div class="block-container">
+			<xf:macro id="node_list_entry_forum"
+				arg-node="{$node}"
+				arg-extras="{$extras}"
+				arg-children="{$children}"
+				arg-childExtras="{$childExtras}"
+				arg-depth="{$depth}" />
+		</div>
+	</div>
+</xf:macro>
+
+<xf:macro id="node_list_entry_no_posting_level_0"
+	arg-node="!"
+	arg-extras="!"
+	arg-children="!"
+	arg-childExtras="!"
+	arg-depth="0">
+
+	<div class="block block--treeEntryChooser">
+		<div class="block-container">
+			<xf:macro id="node_list_entry_no_posting"
+				arg-node="{$node}"
+				arg-extras="{$extras}"
+				arg-children="{$children}"
+				arg-childExtras="{$childExtras}"
+				arg-depth="{$depth}" />
+		</div>
+	</div>
+</xf:macro>
+
+<xf:macro id="node_list_entry_forum"
+	arg-node="!"
+	arg-extras="!"
+	arg-children="!"
+	arg-childExtras="!"
+	arg-depth="0">
+
+	<div class="block-row block-row--clickable block-row--separated fauxBlockLink">
+		<div class="contentRow contentRow--alignMiddle{{ $depth > 1 ? ' u-depth' . ($depth - 1) : '' }}">
+			<div class="contentRow-main">
+				<h2 class="contentRow-title">
+					<a href="{{ link('forums/post-thread', $node) }}" class="fauxBlockLink-blockLink" rel="nofollow">
+						{$node.title}
+					</a>
+				</h2>
+				<xf:if is="$node.description">
+					<div class="contentRow-minor contentRow-minor--singleLine">
+						{$node.description|raw}
+					</div>
+				</xf:if>
+			</div>
+			<div class="contentRow-suffix">
+				<dl class="pairs pairs--rows pairs--rows--centered">
+					<dt>{{ phrase('threads') }}</dt>
+					<dd>{$extras.discussion_count|number_short}</dd>
+				</dl>
+			</div>
+		</div>
+	</div>
+	<xf:macro id="node_list"
+		arg-children="{$children}" arg-extras="{$childExtras}" arg-depth="{{ $depth + 1 }}" />
+</xf:macro>
+
+<xf:macro id="node_list_entry_no_posting"
+	arg-node="!"
+	arg-extras="!"
+	arg-children="!"
+	arg-childExtras="!"
+	arg-depth="0">
+
+	<div class="block-row block-row--separated">
+		<div class="contentRow contentRow--alignMiddle{{ $depth > 1 ? ' u-depth' . ($depth - 1) : '' }} is-disabled">
+			<div class="contentRow-main">
+				<h2 class="contentRow-title">
+					{$node.title}
+				</h2>
+				<xf:if is="$node.node_type_id == 'Forum'">
+					<div class="contentRow-minor contentRow-minor--singleLine">
+						{{ phrase('no_permission_to_post') }}
+					</div>
+				</xf:if>
+			</div>
+			<div class="contentRow-suffix">
+				<dl class="pairs pairs--rows pairs--rows--centered">
+					<dt>{{ phrase('threads') }}</dt>
+					<dd>{{ $node.node_type_id == 'Forum' ? $extras.discussion_count|number_short : phrase('n_a') }}</dd>
+				</dl>
+			</div>
+		</div>
+	</div>
+	<xf:macro id="node_list"
+		arg-children="{$children}"
+		arg-extras="{$childExtras}"
+		arg-depth="{{ $depth + 1 }}" />
+</xf:macro>

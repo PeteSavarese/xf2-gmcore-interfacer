@@ -1,0 +1,29 @@
+{
+    "group_name": "input",
+    "title": "Form input",
+    "description": "Controls the style of most text-input boxes",
+    "property_type": "css",
+    "css_components": [
+        "text",
+        "background",
+        "border",
+        "border_radius",
+        "padding",
+        "extra"
+    ],
+    "value_type": "",
+    "value_parameters": "",
+    "has_variations": false,
+    "depends_on": "",
+    "value_group": "",
+    "property_value": {
+        "font-size": "@xf-fontSizeNormal",
+        "color": "#ecf0f1",
+        "background-color": "#15202c",
+        "border-width": "@xf-borderSize",
+        "border-color": "rgba(52, 73, 94, 0.7)",
+        "border-radius": "@xf-borderRadiusMedium",
+        "padding": "@xf-paddingMedium"
+    },
+    "display_order": 20000
+}

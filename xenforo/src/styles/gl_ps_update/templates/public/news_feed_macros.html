@@ -1,0 +1,16 @@
+<xf:macro id="feed_row" arg-item="!">
+	<li class="block-row block-row--separated {{ $xf.visitor.isIgnoring($item.user_id) ? ' is-ignored' : '' }}" data-author="{{ $item.User ? $item.User.username : $item.username }}">
+		<xf:macro id="feed_item" arg-item="{$item}" />
+	</li>
+</xf:macro>
+
+<xf:macro id="feed_item" arg-item="!">
+	<div class="contentRow{{ $item.isVisible() ? '' : ' is-deleted' }}">
+		<span class="contentRow-figure">
+			<xf:avatar user="$item.User" size="s" defaultname="{$item.username}" />
+		</span>
+		<div class="contentRow-main">
+			{$item.render()|raw}
+		</div>
+	</div>
+</xf:macro>

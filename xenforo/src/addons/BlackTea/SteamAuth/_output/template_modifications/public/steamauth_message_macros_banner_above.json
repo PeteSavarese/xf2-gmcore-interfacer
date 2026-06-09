@@ -1,0 +1,9 @@
+{
+    "template": "message_macros",
+    "description": "Adds a Steam profile banner to user posts (above)",
+    "execution_order": 10,
+    "enabled": true,
+    "action": "str_replace",
+    "find": "<xf:set var=\"$extras\"",
+    "replace": "<xf:if is=\"can_display_steam_user_banner('before')\">\n\t{{steam_user_banner($user)}}\n</xf:if>\n$0"
+}

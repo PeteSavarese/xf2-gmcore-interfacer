@@ -1,0 +1,26 @@
+<xf:title>Manage Store Ranks</xf:title>
+
+<xf:pageaction>
+    <xf:button href="/admin.php?gl-store/add" icon="add">Add store rank</xf:button>
+</xf:pageaction>
+
+<div class="block-container">
+    <div class="block-body">
+        <xf:datalist>
+            <xf:foreach loop="$groups" value="$group">
+                <xf:if is="$group.length != 0">
+                    <xf:set var="$hintPrice" value="{$group.price} per {$group.length_unit}"/>
+                    <xf:else/>
+                    <xf:set var="$hintPrice" value="{$group.price}"/>
+                </xf:if>
+
+                <xf:datarow
+                        label="{$group.title}"
+                        hint="{$hintPrice}"
+                        href="/admin.php?gl-store/{$group.upgrade_id}/editgroup"
+                        delete="{{ link('gl-store/delete', {'group_id': $group.upgrade_id}) }}">
+                </xf:datarow>
+            </xf:foreach>
+        </xf:datalist>
+    </div>
+</div>

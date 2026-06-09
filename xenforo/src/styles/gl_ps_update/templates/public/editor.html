@@ -1,0 +1,142 @@
+<xf:if is="is_editor_capable()">
+	<xf:css src="editor.less" />
+
+	<xf:if is="$fullEditorJs">
+		<xf:js src="vendor/froala/froala-compiled.full.js, xf/editor.js" />
+	<xf:else />
+		<xf:js prod="xf/editor-compiled.js" dev="vendor/froala/froala-compiled.js, xf/editor.js" />
+	</xf:if>
+	<!--[XF:include_js]-->
+
+	<script class="js-editorToolbars" type="application/json">{$editorToolbars|json|raw}</script>
+	<script class="js-editorToolbarSizes" type="application/json">{$editorToolbarSizes|json|raw}</script>
+	<script class="js-editorDropdowns" type="application/json">{$editorDropdowns|json|raw}</script>
+	<script class="js-editorLanguage" type="application/json">
+		{
+			"Align Center": "{{ phrase('align_center')|escape('json') }}",
+			"Align Left": "{{ phrase('align_left')|escape('json') }}",
+			"Align Right": "{{ phrase('align_right')|escape('json') }}",
+			"Align Justify": "{{ phrase('justify_text')|escape('json') }}",
+			"Align": "{{ phrase('alignment')|escape('json') }}",
+			"Alignment": "{{ phrase('alignment')|escape('json') }}",
+			"Back": "{{ phrase('back')|escape('json') }}",
+			"Bold": "{{ phrase('weight_bold')|escape('json') }}",
+			"By URL": "{{ phrase('by_url')|escape('json') }}",
+			"Clear Formatting": "{{ phrase('remove_formatting')|escape('json') }}",
+			"Code": "{{ phrase('code')|escape('json') }}",
+			"Text Color": "{{ phrase('text_color')|escape('json') }}",
+			"Decrease Indent": "{{ phrase('outdent')|escape('json') }}",
+			"Delete Draft": "{{ phrase('delete_draft')|escape('json') }}",
+			"Drafts": "{{ phrase('drafts')|escape('json') }}",
+			"Drop image": "{{ phrase('drop_image')|escape('json') }}",
+			"Drop video": "{{ phrase('drop_video')|escape('json') }}",
+			"Edit Link": "{{ phrase('edit_link')|escape('json') }}",
+			"Font Family": "{{ phrase('font_family')|escape('json') }}",
+			"Font Size": "{{ phrase('font_size')|escape('json') }}",
+			"Normal": "{{ phrase('paragraph_normal')|escape('json') }}",
+			"Heading 1": "{{ phrase('heading_1')|escape('json') }}",
+			"Heading 2": "{{ phrase('heading_2')|escape('json') }}",
+			"Heading 3": "{{ phrase('heading_3')|escape('json') }}",
+			"Increase Indent": "{{ phrase('indent')|escape('json') }}",
+			"Inline Code": "{{ phrase('inline_code')|escape('json') }}",
+			"Insert GIF": "{{ phrase('insert_gif') }}",
+			"Insert Horizontal Line": "{{ phrase('insert_horizontal_line')|escape('json') }}",
+			"Inline Spoiler": "{{ phrase('inline_spoiler')|escape('json') }}",
+			"Insert Image": "{{ phrase('insert_image')|escape('json') }}",
+			"Insert Link": "{{ phrase('insert_link')|escape('json') }}",
+			"Insert": "{{ phrase('insert')|escape('json') }}",
+			"Italic": "{{ phrase('italic')|escape('json') }}",
+			"List": "{{ phrase('list')|escape('json') }}",
+			"Loading image": "{{ phrase('loading_image')|escape('json') }}",
+			"Media": "{{ phrase('media')|escape('json') }}",
+			"More Text": "{{ phrase('more_options...')|escape('json') }}",
+			"More Paragraph": "{{ phrase('more_options...')|escape('json') }}",
+			"More Rich": "{{ phrase('more_options...')|escape('json') }}",
+			"More Misc": "{{ phrase('more_options...')|escape('json') }}",
+			"Open Link": "{{ phrase('open_link')|escape('json') }}",
+			"or click": "{{ phrase('or_click_here')|escape('json') }}",
+			"Ordered List": "{{ phrase('ordered_list')|escape('json') }}",
+			"Paragraph Format": "{{ phrase('paragraph_format')|escape('json') }}",
+			"Preview": "{{ phrase('preview')|escape('json') }}",
+			"Quote": "{{ phrase('quote')|escape('json') }}",
+			"Redo": "{{ phrase('redo')|escape('json') }}",
+			"Remove": "{{ phrase('remove')|escape('json') }}",
+			"Replace": "{{ phrase('replace')|escape('json') }}",
+			"Save Draft": "{{ phrase('save_draft')|escape('json') }}",
+			"Smilies": "{{ phrase('smilies')|escape('json') }}",
+			"Something went wrong. Please try again.": "{{ phrase('something_went_wrong_please_try_again')|escape('json') }}",
+			"Spoiler": "{{ phrase('spoiler')|escape('json') }}",
+			"Strikethrough": "{{ phrase('strike_through')|escape('json') }}",
+			"Text": "{{ phrase('text')|escape('json') }}",
+			"Toggle BB Code": "{{ phrase('toggle_bb_code')|escape('json') }}",
+			"Underline": "{{ phrase('underline')|escape('json') }}",
+			"Undo": "{{ phrase('undo')|escape('json') }}",
+			"Unlink": "{{ phrase('unlink')|escape('json') }}",
+			"Unordered List": "{{ phrase('unordered_list')|escape('json') }}",
+			"Update": "{{ phrase('update')|escape('json') }}",
+			"Upload Image": "{{ phrase('upload_image')|escape('json') }}",
+			"Uploading": "{{ phrase('uploading')|escape('json') }}",
+			"URL": "{{ phrase('url')|escape('json') }}",
+			"Insert Table": "{{ phrase('insert_table')|escape('json') }}",
+			"Table Header": "{{ phrase('table_header')|escape('json') }}",
+			"Remove Table": "{{ phrase('remove_table')|escape('json') }}",
+			"Row": "{{ phrase('row')|escape('json') }}",
+			"Column": "{{ phrase('column')|escape('json') }}",
+			"Insert row above": "{{ phrase('insert_row_above')|escape('json') }}",
+			"Insert row below": "{{ phrase('insert_row_below')|escape('json') }}",
+			"Delete row": "{{ phrase('delete_row')|escape('json') }}",
+			"Insert column before": "{{ phrase('insert_column_before')|escape('json') }}",
+			"Insert column after": "{{ phrase('insert_column_after')|escape('json') }}",
+			"Delete column": "{{ phrase('delete_column')|escape('json') }}",
+			"Ctrl": "{{ phrase('ctrl')|escape('json') }}",
+			"Shift": "{{ phrase('shift')|escape('json') }}",
+			"Alt": "{{ phrase('alt')|escape('json') }}",
+			"Insert Video": "{{ phrase('insert_video')|escape('json') }}",
+			"Upload Video": "{{ phrase('upload_video')|escape('json') }}",
+			"Width": "{{ phrase('width')|escape('json') }}",
+			"Height": "{{ phrase('height')|escape('json') }}",
+			"Change Size": "{{ phrase('change_size')|escape('json') }}",
+			"None": "{{ phrase('none')|escape('json') }}",
+			"Alternative Text": "{{ phrase('alt_text')|escape('json') }}",
+			"__lang end__": ""
+		}
+	</script>
+
+	<script class="js-editorCustom" type="application/json">
+		{$customIcons|json|raw}
+	</script>
+
+	<script class="js-xfEditorMenu" type="text/template">
+		<div class="editor-popup menu" data-menu="menu" aria-hidden="true"
+			data-href="{{ mustache('href') }}"
+			data-load-target=".js-xfEditorMenuBody">
+			<div class="menu-content">
+				<div class="js-xfEditorMenuBody">
+					<div class="menu-row">{{ phrase('loading...') }}</div>
+				</div>
+			</div>
+		</div>
+	</script>
+
+	<textarea name="{$htmlName}"
+		class="input js-editor u-jsOnly"
+		data-xf-init="editor"
+		data-original-name="{$name}"
+		data-buttons-remove="{$removeButtons|join(',')}"
+		style="visibility: hidden; height: {{ $height + 37 }}px; {$styleAttr}"
+		aria-label="{{ phrase('rich_text_box')|for_attr }}"
+		{$attrsHtml|raw}>{$htmlValue}</textarea>
+
+	<xf:comment>37, above, refers to the total height of the editor toolbar</xf:comment>
+
+	<input type="hidden" value="{$value}" data-bb-code="{$name}" />
+
+	<noscript>
+		<textarea name="{$name}" class="input" aria-label="{{ phrase('rich_text_box')|for_attr }}">{$value}</textarea>
+	</noscript>
+
+<xf:else />
+
+	<textarea name="{$name}" class="input input--fitHeight js-editor" style="min-height: {$height}px; {$styleAttr}" data-xf-init="textarea-handler user-mentioner emoji-completer draft-trigger" aria-label="{{ phrase('rich_text_box')|for_attr }}" {$attrsHtml|raw}>{$value}</textarea>
+
+</xf:if>

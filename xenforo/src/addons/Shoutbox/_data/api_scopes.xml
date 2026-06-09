@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<api_scopes>
+  <api_scope api_scope_id="shoutbox:read"/>
+  <api_scope api_scope_id="shoutbox:write"/>
+</api_scopes>

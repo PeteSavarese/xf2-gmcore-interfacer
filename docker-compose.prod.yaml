@@ -1,0 +1,9 @@
+services:
+  nginx:
+    image: ${NGINX_IMAGE:?set NGINX_IMAGE}
+    ports:
+      - "8080:80"
+  php:
+    image: ${PHP_IMAGE:?set PHP_IMAGE}
+    environment:
+      ENVIRONMENT: prod

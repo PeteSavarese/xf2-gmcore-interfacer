@@ -1,0 +1,23 @@
+{
+  "admin_shoutbox-bans_.json": {
+    "hash": "006a7b95787c8b61ab471ed1eb9507f5"
+  },
+  "api_shoutbox_discord_delete.json": {
+    "hash": "f56e70d27b44742cf5e0cffca122d63c"
+  },
+  "api_shoutbox_discord_ingest.json": {
+    "hash": "7301eb86b543f52b98cb210ad5d13f53"
+  },
+  "api_shoutbox_discord_timeout.json": {
+    "hash": "a500140b083cac8b42df8f2c1fe2ca32"
+  },
+  "api_shoutbox_discord_untimeout.json": {
+    "hash": "278e993fbf561f473ef03ffc5105b932"
+  },
+  "api_shoutbox_discord_update.json": {
+    "hash": "8fbef931c2c8a4867e60635336312e2c"
+  },
+  "public_shoutbox_.json": {
+    "hash": "900cfd986966afeef3c04c437dae340c"
+  }
+}

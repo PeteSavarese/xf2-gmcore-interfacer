@@ -1,0 +1,11 @@
+{
+    "route_type": "public",
+    "route_prefix": "steam",
+    "sub_name": "owned-games",
+    "format": "owned-games/:page",
+    "build_class": "",
+    "build_method": "",
+    "controller": "BlackTea\\SteamAuth:Steam",
+    "context": "steamauth",
+    "action_prefix": "ownedGames"
+}

@@ -1,0 +1,89 @@
+<xf:macro id="stars" arg-rating="!" arg-class="">
+	<xf:css src="rating_stars.less" />
+
+	<span class="ratingStars {$class}" title="{{ phrase('x_stars', {'rating': $rating|number(2)})|for_attr }}">
+		<span class="ratingStars-star{{ $rating >= 1 ? ' ratingStars-star--full' : '' }}{{ ($rating >= 0.5 AND $rating < 1) ? ' ratingStars-star--half' : '' }}"></span>
+		<span class="ratingStars-star{{ $rating >= 2 ? ' ratingStars-star--full' : '' }}{{ ($rating >= 1.5 AND $rating < 2) ? ' ratingStars-star--half' : '' }}"></span>
+		<span class="ratingStars-star{{ $rating >= 3 ? ' ratingStars-star--full' : '' }}{{ ($rating >= 2.5 AND $rating < 3) ? ' ratingStars-star--half' : '' }}"></span>
+		<span class="ratingStars-star{{ $rating >= 4 ? ' ratingStars-star--full' : '' }}{{ ($rating >= 3.5 AND $rating < 4) ? ' ratingStars-star--half' : '' }}"></span>
+		<span class="ratingStars-star{{ $rating >= 5 ? ' ratingStars-star--full' : '' }}{{ ($rating >= 4.5 AND $rating < 5) ? ' ratingStars-star--half' : '' }}"></span>
+		<span class="u-srOnly">{{ phrase('x_stars', {'rating': $rating|number(2)}) }}</span>
+	</span>
+</xf:macro>
+
+<xf:macro id="stars_text" arg-rating="!" arg-count="{{ null }}" arg-text="{{ null }}" arg-rowClass="" arg-starsClass="">
+	<span class="ratingStarsRow {$rowClass}">
+		<xf:macro id="rating_macros::stars"
+			arg-rating="{$rating}"
+			arg-class="{$starsClass}" />
+		<span class="ratingStarsRow-text">
+			<xf:if is="$text is not empty">{$text}<xf:else />{{ phrase('x_ratings', {'count': $count|number}) }}</xf:if>
+		</span>
+	</span>
+</xf:macro>
+
+<xf:macro id="setup">
+	<xf:css src="rating_stars.less" />
+	<xf:js src="xf/rating.js" min="1" />
+</xf:macro>
+
+<xf:macro id="rating"
+	arg-row="{{ true }}"
+	arg-rowType="{$rowType}"
+	arg-rowLabel="{{ phrase('rating') }}"
+	arg-rowHint=""
+	arg-rowExplain=""
+	arg-name="rating"
+	arg-currentRating="0"
+	arg-ratingHref=""
+	arg-controlId=""
+	arg-readOnly="false"
+	arg-deselectable="false"
+	arg-showSelected="true"
+	arg-range="{{ {
+		1: phrase('terrible'),
+		2: phrase('poor'),
+		3: phrase('average'),
+		4: phrase('good'),
+		5: phrase('excellent')
+	} }}">
+
+	<xf:macro id="setup" />
+
+	<xf:if is="$row AND !$controlId">
+		<xf:set var="$controlId" value="{{ unique_id() }}" />
+	</xf:if>
+
+	<xf:set var="$inner">
+		<xf:select name="{$name}"
+			class="br-select"
+			id="{$controlId}"
+			data-xf-init="rating"
+			data-initial-rating="{$currentRating}"
+			data-rating-href="{$ratingHref}"
+			data-readonly="{$readOnly}"
+			data-deselectable="{$deselectable}"
+			data-show-selected="{$showSelected}">
+
+			<xf:if is="$deselectable">
+				<xf:option value="" />
+			</xf:if>
+			<xf:foreach loop="$range" key="$value" value="$label">
+				<xf:option value="{$value}">{$label}</xf:option>
+			</xf:foreach>
+		</xf:select>
+	</xf:set>
+
+	<xf:if is="$row">
+		<xf:formrow class="u-jsOnly" rowtype="{$rowType}"
+			label="{$rowLabel}"
+			controlid="{$controlId}"
+			hint="{$rowHint|raw}"
+			explain="{$rowExplain|raw}">
+
+			{$inner|raw}
+		</xf:formrow>
+	<xf:else />
+		{$inner|raw}
+	</xf:if>
+</xf:macro>

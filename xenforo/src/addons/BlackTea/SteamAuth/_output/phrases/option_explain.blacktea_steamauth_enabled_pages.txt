@@ -1,0 +1,1 @@
+Unchecking these will disable visiting the page itself. However, this does not remove the navigation tab for these pages. In order to disable the navigation, please see the built-in XenForo navigation settings under Setup > Navigation > Public navigation.

@@ -1,0 +1,11 @@
+{
+    "route_type": "public",
+    "route_prefix": "gl",
+    "sub_name": "servers",
+    "format": "servers",
+    "build_class": "",
+    "build_method": "",
+    "controller": "PeterSav\\GModInterface:Servers",
+    "context": "gmodServers",
+    "action_prefix": ""
+}

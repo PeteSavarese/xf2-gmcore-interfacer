@@ -1,0 +1,5 @@
+{{ phrase('push_x_mentioned_you_comment_on_ys_profile', {
+	'name': $user.username ?: $alert.username,
+	'profile': $content.ProfilePost.ProfileUser.username
+}) }}
+<push:url>{{ link('canonical:profile-posts/comments', $content) }}</push:url>

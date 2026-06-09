@@ -1,0 +1,44 @@
+<xf:title>{{ phrase('reported_items') }}</xf:title>
+
+<div class="block">
+	<div class="block-outer">
+		<div class="block-outer-opposite">
+			<xf:button class="button--link menuTrigger" data-xf-click="menu" aria-expanded="false" aria-haspopup="true">{{ phrase('find_reports') }}</xf:button>
+			<xf:macro id="report_list_macros::search_menu" />
+		</div>
+	</div>
+	<div class="block-container">
+		<h2 class="block-tabHeader tabs">
+			<a href="{{ link('reports') }}" class="tabs-tab is-active">{{ phrase('active_reports') }}</a>
+			<a href="{{ link('reports/closed') }}" class="tabs-tab">{{ phrase('closed_reports') }}</a>
+		</h2>
+		<div class="block-body">
+			<xf:if is="$openReports is not empty">
+				<div class="structItemContainer">
+					<xf:foreach loop="$openReports" value="$report">
+						<xf:macro id="report_list_macros::item" arg-report="{$report}" />
+					</xf:foreach>
+				</div>
+			<xf:else />
+				<div class="block-row">{{ phrase('there_no_active_reports_requiring_your_attention') }}</div>
+			</xf:if>
+		</div>
+	</div>
+</div>
+
+<div class="block">
+	<xf:if is="$closedReports is not empty">
+		<div class="block-container">
+			<h3 class="block-header">
+				{{ phrase('recently_closed_reports') }}
+			</h3>
+			<div class="block-body">
+				<div class="structItemContainer">
+					<xf:foreach loop="$closedReports" value="$report">
+						<xf:macro id="report_list_macros::item" arg-report="{$report}" />
+					</xf:foreach>
+				</div>
+			</div>
+		</div>
+	</xf:if>
+</div>

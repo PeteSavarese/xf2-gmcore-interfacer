@@ -1,0 +1,98 @@
+<xf:js src="xf/login_signup.js" min="1" />
+<xf:js src="xf/webauthn.js" min="1" />
+
+<xf:title>{{ phrase('log_in') }}</xf:title>
+
+<xf:head option="robots"><meta name="robots" content="noindex" /></xf:head>
+
+<xf:if is="$xf.session.preRegActionKey">
+	<div class="blockMessage blockMessage--highlight">
+		{{ phrase('pre_reg_action_notice_login') }}<br />
+		<br />
+		{{ phrase('dont_have_account_question') }}
+		<xf:button class="button--link"
+			href="{{ link('register', null, {'_xfRedirect': $redirect}) }}"
+			data-xf-click="overlay"
+		>{{ phrase('register') }}</xf:button>
+	</div>
+</xf:if>
+
+<xf:if contentcheck="true">
+	<div class="blockMessage blockMessage--error blockMessage--iconic">
+		<xf:contentcheck>{$error}</xf:contentcheck>
+	</div>
+</xf:if>
+
+<div class="blocks">
+	<xf:form action="{{ link('login/login') }}" class="block">
+		<div class="block-container">
+			<div class="block-body">
+				<xf:textboxrow name="login" value="{$login}" autofocus="autofocus" autocomplete="username"
+					label="{{ phrase('your_name_or_email_address') }}" />
+
+				<xf:passwordboxrow name="password" autocomplete="current-password"
+					label="{{ phrase('password') }}">
+
+					<xf:html>
+						<a href="{{ link('lost-password') }}" data-xf-click="overlay">{{ phrase('forgot_your_password') }}</a>
+					</xf:html>
+				</xf:passwordboxrow>
+
+				<xf:if is="$captcha">
+					<xf:captcharow label="{{ phrase('verification') }}" force="true" force-visible="true" context="xf_login" />
+				</xf:if>
+
+				<xf:checkboxrow>
+					<xf:option name="remember" selected="true">{{ phrase('stay_logged_in') }}</xf:option>
+				</xf:checkboxrow>
+
+				<xf:hiddenval name="_xfRedirect">{$redirect}</xf:hiddenval>
+			</div>
+			<xf:submitrow icon="login" />
+		</div>
+		<xf:if is="$xf.options.registrationSetup.enabled">
+			<div class="block-outer block-outer--after">
+				<div class="block-outer-middle">
+					{{ phrase('dont_have_account_question') }} <xf:button href="{{ link('register') }}">{{ phrase('register_now') }}</xf:button>
+				</div>
+			</div>
+		</xf:if>
+	</xf:form>
+
+	<div class="blocks-textJoiner"><span></span><em>{{ phrase('or_separator') }}</em><span></span></div>
+
+	<div class="block">
+		<div class="block-container">
+			<div class="block-body">
+				<xf:formrow rowtype="button"
+					label="{{ phrase('log_in_using') }}">
+
+					<ul class="listHeap">
+						<li>
+							<xf:form action="{{ link('login/login') }}" data-xf-init="webauthn"
+								data-type="get"
+								data-autotrigger="false"
+								data-autosubmit="true"
+								data-verifying="{{ phrase('verifying...') }}">
+
+									<xf:button class="button--icon button--provider button--provider--passkey js-webauthnStart">
+										{{ phrase('passkey') }}
+									</xf:button>
+
+								<xf:hiddenval name="webauthn_payload" />
+								<xf:hiddenval name="webauthn_challenge">{{ $passkey ? $passkey.getChallenge() : '' }}</xf:hiddenval>
+							</xf:form>
+						</li>
+
+						<xf:foreach loop="$providers" value="$provider" if="$providers is not empty">
+							<li>
+								<xf:macro id="connected_account_macros::button"
+									arg-provider="{$provider}" />
+							</li>
+						</xf:foreach>
+					</ul>
+				</xf:formrow>
+			</div>
+		</div>
+	</div>
+</div>

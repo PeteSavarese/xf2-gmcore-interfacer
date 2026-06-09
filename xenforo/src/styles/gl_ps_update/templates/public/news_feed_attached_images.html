@@ -1,0 +1,16 @@
+<xf:macro id="attached_images" arg-attachments="!" arg-link="!">
+	<xf:if contentcheck="true">
+		<ul class="listPlain listInline listInline--block">
+			<xf:contentcheck>
+				<xf:foreach loop="$attachments" value="$attachment" if="$attachment.has_thumbnail">
+					<li>
+						<a href="{$link}"><img src="{$attachment.thumbnail_url}"
+							srcset="{{ $attachment.has_retina_thumbnail ? $attachment.retina_thumbnail_url . ' 2x' : '' }}"
+							alt="{$attachment.filename}"
+							width="{$attachment.thumbnail_width}" height="{$attachment.thumbnail_height}" loading="lazy"/></a>
+					</li>
+				</xf:foreach>
+			</xf:contentcheck>
+		</ul>
+	</xf:if>
+</xf:macro>

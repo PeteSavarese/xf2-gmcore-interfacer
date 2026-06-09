@@ -1,0 +1,548 @@
+{
+    "admin_navigation.blacktea_steamauth.txt": {
+        "global_cache": false,
+        "version_id": 10401070,
+        "version_string": "1.4.1",
+        "hash": "4db4563826bad0eb2f60ee6e42d0ea4b"
+    },
+    "admin_navigation.steam_list.txt": {
+        "global_cache": false,
+        "version_id": 10401070,
+        "version_string": "1.4.1",
+        "hash": "f923f903857a5387d3db70494e074632"
+    },
+    "admin_navigation.steam_settings.txt": {
+        "global_cache": false,
+        "version_id": 10401070,
+        "version_string": "1.4.1",
+        "hash": "f4f70727dc34561dfde1a3c529b6205c"
+    },
+    "admin_navigation.steam_setup.txt": {
+        "global_cache": false,
+        "version_id": 10401070,
+        "version_string": "1.4.1",
+        "hash": "ad2376beebecdcf7846ba973fa1a005b"
+    },
+    "admin_navigation.steam_support.txt": {
+        "global_cache": false,
+        "version_id": 10709070,
+        "version_string": "1.7.9",
+        "hash": "db5eb84117d06047c97c9a0191b5fffe"
+    },
+    "admin_permission.blacktea_steamauth.txt": {
+        "global_cache": false,
+        "version_id": 10401070,
+        "version_string": "1.4.1",
+        "hash": "50098a22f2163e1a85113b623e2b5059"
+    },
+    "allow_view_steam.txt": {
+        "global_cache": false,
+        "version_id": 10501070,
+        "version_string": "1.5.0",
+        "hash": "815ce19969d3b30011c982f064f30a27"
+    },
+    "allow_view_steam_banner.txt": {
+        "global_cache": false,
+        "version_id": 10501070,
+        "version_string": "1.5.0",
+        "hash": "c7354eac52d2f4ee9d0cc1cfc8af8ce1"
+    },
+    "blacktea_steamauth_active_games.txt": {
+        "global_cache": false,
+        "version_id": 10700070,
+        "version_string": "1.7.0",
+        "hash": "2f6116e6e582a2ef6093082afa4fe859"
+    },
+    "blacktea_steamauth_active_players.txt": {
+        "global_cache": false,
+        "version_id": 10700070,
+        "version_string": "1.7.0",
+        "hash": "4f2adf8f66e9280bc55ab6ee716f6922"
+    },
+    "blacktea_steamauth_banner_above.txt": {
+        "global_cache": false,
+        "version_id": 10504070,
+        "version_string": "1.5.4",
+        "hash": "c3cf188abe768cb51fc560a402ebb197"
+    },
+    "blacktea_steamauth_banner_below.txt": {
+        "global_cache": false,
+        "version_id": 10504070,
+        "version_string": "1.5.4",
+        "hash": "5c1990d6fdcc80b3de5e5321020d738c"
+    },
+    "blacktea_steamauth_data_anonymised.txt": {
+        "global_cache": false,
+        "version_id": 10709070,
+        "version_string": "1.7.9",
+        "hash": "1e52b53a17890ff341224be4f85166b7"
+    },
+    "blacktea_steamauth_export_addon_permissions.txt": {
+        "global_cache": false,
+        "version_id": 10709070,
+        "version_string": "1.7.9",
+        "hash": "d08ccf52b4cdd08e41cfb99ec42e0b29"
+    },
+    "blacktea_steamauth_export_addon_settings.txt": {
+        "global_cache": false,
+        "version_id": 10709070,
+        "version_string": "1.7.9",
+        "hash": "f4f70727dc34561dfde1a3c529b6205c"
+    },
+    "blacktea_steamauth_export_addon_setup.txt": {
+        "global_cache": false,
+        "version_id": 10709070,
+        "version_string": "1.7.9",
+        "hash": "ad2376beebecdcf7846ba973fa1a005b"
+    },
+    "blacktea_steamauth_export_addon_users.txt": {
+        "global_cache": false,
+        "version_id": 10709070,
+        "version_string": "1.7.9",
+        "hash": "f9aae5fda8d810a29f12d1e61b4ab25f"
+    },
+    "blacktea_steamauth_export_enabled_addons.txt": {
+        "global_cache": false,
+        "version_id": 10709070,
+        "version_string": "1.7.9",
+        "hash": "26331f80916601649df222d34874fcfc"
+    },
+    "blacktea_steamauth_export_website_configuration.txt": {
+        "global_cache": false,
+        "version_id": 10709070,
+        "version_string": "1.7.9",
+        "hash": "23c63d3d1b19b9a6043a908cb0172b35"
+    },
+    "blacktea_steamauth_hours.txt": {
+        "global_cache": false,
+        "version_id": 10700070,
+        "version_string": "1.7.0",
+        "hash": "2510c39011c5be704182423e3a695e91"
+    },
+    "blacktea_steamauth_last_updated.txt": {
+        "global_cache": false,
+        "version_id": 10700070,
+        "version_string": "1.7.0",
+        "hash": "ff0a3b7f3daef040faf89a88fdac01b7"
+    },
+    "blacktea_steamauth_list_users.txt": {
+        "global_cache": false,
+        "version_id": 10401070,
+        "version_string": "1.4.1",
+        "hash": "998a3a7b02f441458748ab179ba69146"
+    },
+    "blacktea_steamauth_no_active_games.txt": {
+        "global_cache": false,
+        "version_id": 10700070,
+        "version_string": "1.7.0",
+        "hash": "bec5a372089c2c5b20af6fe5730aeda2"
+    },
+    "blacktea_steamauth_no_active_players.txt": {
+        "global_cache": false,
+        "version_id": 10700070,
+        "version_string": "1.7.0",
+        "hash": "a4e01c0006bcdd2b29c2ac75c946522d"
+    },
+    "blacktea_steamauth_no_banner.txt": {
+        "global_cache": false,
+        "version_id": 10504070,
+        "version_string": "1.5.4",
+        "hash": "13c84df2eb470fe8c62bef5e1865d0be"
+    },
+    "blacktea_steamauth_no_owned_games.txt": {
+        "global_cache": false,
+        "version_id": 10700070,
+        "version_string": "1.7.0",
+        "hash": "62ba2bfc7893a6477a7a7c46dd4b7ecf"
+    },
+    "blacktea_steamauth_no_played_games.txt": {
+        "global_cache": false,
+        "version_id": 10700070,
+        "version_string": "1.7.0",
+        "hash": "fefd1ab347c905e505dfbb7458e764a9"
+    },
+    "blacktea_steamauth_notice_cannot_fetch.txt": {
+        "global_cache": false,
+        "version_id": 10704070,
+        "version_string": "1.7.4",
+        "hash": "5c4e77d4cd7a9b626e6848387327e719"
+    },
+    "blacktea_steamauth_owned_games.txt": {
+        "global_cache": false,
+        "version_id": 10700070,
+        "version_string": "1.7.0",
+        "hash": "b8fd303079347aca7644eb14d69d8a94"
+    },
+    "blacktea_steamauth_played_games.txt": {
+        "global_cache": false,
+        "version_id": 10700070,
+        "version_string": "1.7.0",
+        "hash": "96051475f79d8a83fe5f032a6ae8765c"
+    },
+    "blacktea_steamauth_recent_hours.txt": {
+        "global_cache": false,
+        "version_id": 10700070,
+        "version_string": "1.7.0",
+        "hash": "0c554728ca630c7fa517060d4986fe78"
+    },
+    "blacktea_steamauth_steam_label.txt": {
+        "global_cache": false,
+        "version_id": 10401070,
+        "version_string": "1.4.1",
+        "hash": "4db4563826bad0eb2f60ee6e42d0ea4b"
+    },
+    "blacktea_steamauth_support.txt": {
+        "global_cache": false,
+        "version_id": 10709070,
+        "version_string": "1.7.9",
+        "hash": "dbe08513c5da0cb88fed5b8c2499468a"
+    },
+    "blacktea_steamauth_support_export_options.txt": {
+        "global_cache": false,
+        "version_id": 10709070,
+        "version_string": "1.7.9",
+        "hash": "7542d40cc585ba3445797c6543394a59"
+    },
+    "blacktea_steamauth_total.txt": {
+        "global_cache": false,
+        "version_id": 10700070,
+        "version_string": "1.7.0",
+        "hash": "96b0141273eabab320119c467cdcaf17"
+    },
+    "blacktea_steamauth_total_hours.txt": {
+        "global_cache": false,
+        "version_id": 10700070,
+        "version_string": "1.7.0",
+        "hash": "f84a57a55847b78564aba44ba8f1672d"
+    },
+    "blacktea_steamauth_users.txt": {
+        "global_cache": false,
+        "version_id": 10700070,
+        "version_string": "1.7.0",
+        "hash": "9bc65c2abec141778ffaa729489f3e87"
+    },
+    "blacktea_steamauth_viewing_analytics.txt": {
+        "global_cache": false,
+        "version_id": 10702070,
+        "version_string": "1.7.2",
+        "hash": "3fb5db79469ed0e073e8e14cc26a9ae8"
+    },
+    "blacktea_steamauth_visibility_away.txt": {
+        "global_cache": false,
+        "version_id": 10501070,
+        "version_string": "1.5.0",
+        "hash": "312dc56ea9c386a6bc913f988a233791"
+    },
+    "blacktea_steamauth_visibility_busy.txt": {
+        "global_cache": false,
+        "version_id": 10501070,
+        "version_string": "1.5.0",
+        "hash": "d8a942ef2b04672adfafef0ad817a407"
+    },
+    "blacktea_steamauth_visibility_ingame.txt": {
+        "global_cache": false,
+        "version_id": 10501070,
+        "version_string": "1.5.0",
+        "hash": "831984ff6cd4622a9741d731f145b3c6"
+    },
+    "blacktea_steamauth_visibility_offline.txt": {
+        "global_cache": false,
+        "version_id": 10501070,
+        "version_string": "1.5.0",
+        "hash": "8d9da4bc0e49a50e09ac9f7e56789d39"
+    },
+    "blacktea_steamauth_visibility_online.txt": {
+        "global_cache": false,
+        "version_id": 10501070,
+        "version_string": "1.5.0",
+        "hash": "54f664c70c22054ea0d8d26fc3997ce7"
+    },
+    "blacktea_steamauth_visibility_play.txt": {
+        "global_cache": false,
+        "version_id": 10501070,
+        "version_string": "1.5.0",
+        "hash": "c5068c10692e9be863c5afc378245771"
+    },
+    "blacktea_steamauth_visibility_snooze.txt": {
+        "global_cache": false,
+        "version_id": 10501070,
+        "version_string": "1.5.0",
+        "hash": "a353f86430afe39c08e95fb44fee46fa"
+    },
+    "blacktea_steamauth_visibility_trade.txt": {
+        "global_cache": false,
+        "version_id": 10501070,
+        "version_string": "1.5.0",
+        "hash": "bd99bc1bc91b045481dd02c87de57c29"
+    },
+    "con_acc.steam.txt": {
+        "global_cache": false,
+        "version_id": 10000010,
+        "version_string": "1.0.0",
+        "hash": "4db4563826bad0eb2f60ee6e42d0ea4b"
+    },
+    "con_acc_desc.steam.txt": {
+        "global_cache": false,
+        "version_id": 10000010,
+        "version_string": "1.0.0",
+        "hash": "c758a5ba203f023b7318ce30e4a98fb2"
+    },
+    "con_acc_steam_apikey_explain.txt": {
+        "global_cache": false,
+        "version_id": 10000010,
+        "version_string": "1.0.0",
+        "hash": "3e0908a5cc240b170b931814c2ce1cd5"
+    },
+    "con_acc_steam_domain_explain.txt": {
+        "global_cache": false,
+        "version_id": 10401070,
+        "version_string": "1.4.1",
+        "hash": "76f75aa147c6ad3a6bc63460ca380834"
+    },
+    "cron_entry.steamAuthCleanup.txt": {
+        "global_cache": false,
+        "version_id": 10702070,
+        "version_string": "1.7.2",
+        "hash": "35e2b8f91de7b675de4f1fad6c098416"
+    },
+    "cron_entry.steamAuthUpdateUserGames.txt": {
+        "global_cache": false,
+        "version_id": 10700070,
+        "version_string": "1.7.0",
+        "hash": "4a1e996d807605344c0a78f2cf1fcc6e"
+    },
+    "message_macros_steam_label.txt": {
+        "global_cache": false,
+        "version_id": 10000010,
+        "version_string": "1.0.0",
+        "hash": "4db4563826bad0eb2f60ee6e42d0ea4b"
+    },
+    "message_macros_steam_view.txt": {
+        "global_cache": false,
+        "version_id": 10000010,
+        "version_string": "1.0.0",
+        "hash": "4351cfebe4b61d8aa5efa1d020710005"
+    },
+    "nav.steamauth.txt": {
+        "global_cache": false,
+        "version_id": 10700070,
+        "version_string": "1.7.0",
+        "hash": "4db4563826bad0eb2f60ee6e42d0ea4b"
+    },
+    "nav.steamauthActiveGames.txt": {
+        "global_cache": false,
+        "version_id": 10700070,
+        "version_string": "1.7.0",
+        "hash": "2f6116e6e582a2ef6093082afa4fe859"
+    },
+    "nav.steamauthActivePlayers.txt": {
+        "global_cache": false,
+        "version_id": 10700070,
+        "version_string": "1.7.0",
+        "hash": "4f2adf8f66e9280bc55ab6ee716f6922"
+    },
+    "nav.steamauthOwnedGames.txt": {
+        "global_cache": false,
+        "version_id": 10700070,
+        "version_string": "1.7.0",
+        "hash": "b8fd303079347aca7644eb14d69d8a94"
+    },
+    "nav.steamauthPlayedGames.txt": {
+        "global_cache": false,
+        "version_id": 10700070,
+        "version_string": "1.7.0",
+        "hash": "96051475f79d8a83fe5f032a6ae8765c"
+    },
+    "option.blacktea_steamauth_actions.txt": {
+        "global_cache": false,
+        "version_id": 10300070,
+        "version_string": "1.3.0",
+        "hash": "06df33001c1d7187fdd81ea1f5b277aa"
+    },
+    "option.blacktea_steamauth_api_sleep.txt": {
+        "global_cache": false,
+        "version_id": 10701030,
+        "version_string": "1.7.1",
+        "hash": "6a5a6ba81b9383d45d42c0860c370190"
+    },
+    "option.blacktea_steamauth_enabled_pages.txt": {
+        "global_cache": false,
+        "version_id": 10700070,
+        "version_string": "1.7.0",
+        "hash": "f5464f363e94a6eb41c45262121bd6b4"
+    },
+    "option.blacktea_steamauth_force_registration.txt": {
+        "global_cache": false,
+        "version_id": 10701030,
+        "version_string": "1.7.1",
+        "hash": "c53e860fe0264898bc8a7ed08cc57067"
+    },
+    "option.blacktea_steamauth_game_update_frequency.txt": {
+        "global_cache": false,
+        "version_id": 10701030,
+        "version_string": "1.7.1",
+        "hash": "36abfb99d670d5c9e677cc661c2feaa4"
+    },
+    "option.blacktea_steamauth_message_macro.txt": {
+        "global_cache": false,
+        "version_id": 10701030,
+        "version_string": "1.7.1",
+        "hash": "222fc7c415874dc66c73bc2b6920b183"
+    },
+    "option.blacktea_steamauth_message_macro_steamid.txt": {
+        "global_cache": false,
+        "version_id": 10701030,
+        "version_string": "1.7.1",
+        "hash": "4247892713bcd407fa2d1cd1d9e7ab09"
+    },
+    "option.blacktea_steamauth_user_banner.txt": {
+        "global_cache": false,
+        "version_id": 10501070,
+        "version_string": "1.5.0",
+        "hash": "14c6b563df1759760fa728d28e393209"
+    },
+    "option.blacktea_steamauth_user_update_limit.txt": {
+        "global_cache": false,
+        "version_id": 10701030,
+        "version_string": "1.7.1",
+        "hash": "21190e90d3030036c20f3ff522121f70"
+    },
+    "option.blacktea_steamauth_verbose_log.txt": {
+        "global_cache": false,
+        "version_id": 10701030,
+        "version_string": "1.7.1",
+        "hash": "25f321fe018cf20163dc0c70e2eea888"
+    },
+    "option_explain.blacktea_steamauth_actions.txt": {
+        "global_cache": false,
+        "version_id": 10300070,
+        "version_string": "1.3.0",
+        "hash": "d41d8cd98f00b204e9800998ecf8427e"
+    },
+    "option_explain.blacktea_steamauth_api_sleep.txt": {
+        "global_cache": false,
+        "version_id": 10701030,
+        "version_string": "1.7.1",
+        "hash": "3f443c6a5d50cf0faa05331ac9210061"
+    },
+    "option_explain.blacktea_steamauth_enabled_pages.txt": {
+        "global_cache": false,
+        "version_id": 10700070,
+        "version_string": "1.7.0",
+        "hash": "675b33c517b92220f49b9f27b994141d"
+    },
+    "option_explain.blacktea_steamauth_force_registration.txt": {
+        "global_cache": false,
+        "version_id": 10701030,
+        "version_string": "1.7.1",
+        "hash": "6b171a312b4c791e9d71e6db163ff6c2"
+    },
+    "option_explain.blacktea_steamauth_game_update_frequency.txt": {
+        "global_cache": false,
+        "version_id": 10701030,
+        "version_string": "1.7.1",
+        "hash": "c473db7ee192852fc37cc8df89957799"
+    },
+    "option_explain.blacktea_steamauth_message_macro.txt": {
+        "global_cache": false,
+        "version_id": 10701030,
+        "version_string": "1.7.1",
+        "hash": "d66133088e800cdf86ac8870f0bc8f60"
+    },
+    "option_explain.blacktea_steamauth_message_macro_steamid.txt": {
+        "global_cache": false,
+        "version_id": 10701030,
+        "version_string": "1.7.1",
+        "hash": "2cd6dcc06252429ccc37c9fabf127bba"
+    },
+    "option_explain.blacktea_steamauth_user_banner.txt": {
+        "global_cache": false,
+        "version_id": 10701030,
+        "version_string": "1.7.1",
+        "hash": "d1bbca122e6566629c0cb62564b59f4c"
+    },
+    "option_explain.blacktea_steamauth_user_update_limit.txt": {
+        "global_cache": false,
+        "version_id": 10701030,
+        "version_string": "1.7.1",
+        "hash": "033fdf8e424a5b21b56787a741cbfe7f"
+    },
+    "option_explain.blacktea_steamauth_verbose_log.txt": {
+        "global_cache": false,
+        "version_id": 10701030,
+        "version_string": "1.7.1",
+        "hash": "2687f9293ece7d31658ef4c6d63eb078"
+    },
+    "option_group.blacktea_steamauth_options.txt": {
+        "global_cache": false,
+        "version_id": 10000010,
+        "version_string": "1.0.0",
+        "hash": "50098a22f2163e1a85113b623e2b5059"
+    },
+    "option_group_description.blacktea_steamauth_options.txt": {
+        "global_cache": false,
+        "version_id": 10000010,
+        "version_string": "1.0.0",
+        "hash": "f395f41ea95def2973ccd1b210096b8d"
+    },
+    "permission.steamauth_changePrivacy.txt": {
+        "global_cache": false,
+        "version_id": 10401070,
+        "version_string": "1.4.1",
+        "hash": "ac3b78ec28f8913327b6ec08dcf038ee"
+    },
+    "permission.steamauth_disassociate.txt": {
+        "global_cache": false,
+        "version_id": 10401070,
+        "version_string": "1.4.1",
+        "hash": "7664e6189c3969c212b97a02ff79143f"
+    },
+    "permission.steamauth_viewAnalytics.txt": {
+        "global_cache": false,
+        "version_id": 10709070,
+        "version_string": "1.7.9",
+        "hash": "5f807f827ded26359a06b1070aa50196"
+    },
+    "permission.steamauth_viewBanner.txt": {
+        "global_cache": false,
+        "version_id": 10501070,
+        "version_string": "1.5.0",
+        "hash": "e7752b171c38c915233c2126a8f3960e"
+    },
+    "permission.steamauth_viewHiddenBanner.txt": {
+        "global_cache": false,
+        "version_id": 10501070,
+        "version_string": "1.5.0",
+        "hash": "e36d337162586ac56041415d3b0a3db5"
+    },
+    "permission.steamauth_viewHiddenProfile.txt": {
+        "global_cache": false,
+        "version_id": 10401070,
+        "version_string": "1.4.1",
+        "hash": "5adf3576b8eb9d1684b2a4c888dbcc9f"
+    },
+    "permission.steamauth_viewProfile.txt": {
+        "global_cache": false,
+        "version_id": 10401070,
+        "version_string": "1.4.1",
+        "hash": "ddcf9cd16f4f06eb815d8156ae8cd81c"
+    },
+    "permission_interface.steamauth.txt": {
+        "global_cache": false,
+        "version_id": 10401070,
+        "version_string": "1.4.1",
+        "hash": "50098a22f2163e1a85113b623e2b5059"
+    },
+    "recent_hours.txt": {
+        "global_cache": false,
+        "version_id": 10700070,
+        "version_string": "1.7.0",
+        "hash": "0c554728ca630c7fa517060d4986fe78"
+    },
+    "steamid_change.txt": {
+        "global_cache": false,
+        "version_id": 10300070,
+        "version_string": "1.3.0",
+        "hash": "206e3a5ae27936402bad3b649ab4ece9"
+    }
+}

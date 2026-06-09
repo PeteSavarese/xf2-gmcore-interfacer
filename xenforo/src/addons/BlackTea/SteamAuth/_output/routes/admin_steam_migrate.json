@@ -1,0 +1,11 @@
+{
+    "route_type": "admin",
+    "route_prefix": "steam",
+    "sub_name": "migrate",
+    "format": "migrate/",
+    "build_class": "",
+    "build_method": "",
+    "controller": "BlackTea\\SteamAuth:Steam",
+    "context": "",
+    "action_prefix": "migrate"
+}

@@ -1,0 +1,51 @@
+<xf:js src="xf/prefix_menu.js" min="1" />
+
+<xf:title>{{ phrase('inline_moderation_move_threads') }}</xf:title>
+
+<xf:form action="{{ link('inline-mod') }}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body js-prefixListenContainer">
+			<xf:inforow rowtype="confirm">{{ phrase('you_sure_you_want_to_move_x_threads', {'count': $total}) }}</xf:inforow>
+			<xf:selectrow name="target_node_id" value="{$first.node_id}" class="js-nodeList"
+				label="{{ phrase('destination_forum') }}">
+
+				<xf:foreach loop="$nodeTree.getFlattened(0)" value="$treeEntry">
+					<xf:option value="{$treeEntry.record.node_id}" disabled="{{ $treeEntry.record.node_type_id != 'Forum' ? 'disabled' : '' }}">{{ repeat_raw('&nbsp; ', $treeEntry.depth) }} {$treeEntry.record.title}</xf:option>
+				</xf:foreach>
+			</xf:selectrow>
+
+			<xf:checkboxrow>
+				<xf:option name="apply_thread_prefix"
+					label="{{ phrase('apply_prefix_to_selected_threads') }}">
+
+					<xf:dependent>
+						<xf:macro id="prefix_macros::select"
+							arg-type="thread"
+							arg-prefixes="{$prefixes}"
+							arg-href="{{ link('forums/prefixes') }}"
+							arg-listenTo="< .js-prefixListenContainer | .js-nodeList" />
+					</xf:dependent>
+				</xf:option>
+			</xf:checkboxrow>
+
+			<xf:macro id="helper_action::thread_redirect" arg-label="{{ phrase('redirection_notice') }}" />
+
+			<xf:checkboxrow>
+				<xf:option name="notify_watchers" value="1" selected="{{ $total == 1 }}">{{ phrase('notify_members_watching_destination_forum') }}</xf:option>
+			</xf:checkboxrow>
+
+			<xf:macro id="helper_action::thread_alert" arg-selected="{{ $total == 1 }}" />
+		</div>
+		<xf:submitrow icon="move" />
+	</div>
+
+	<xf:foreach loop="$threads" value="$thread">
+		<xf:hiddenval name="ids[]">{$thread.thread_id}</xf:hiddenval>
+	</xf:foreach>
+
+	<xf:hiddenval name="type">thread</xf:hiddenval>
+	<xf:hiddenval name="action">move</xf:hiddenval>
+	<xf:hiddenval name="confirmed">1</xf:hiddenval>
+
+	<xf:redirect url="{$redirect}" />
+</xf:form>

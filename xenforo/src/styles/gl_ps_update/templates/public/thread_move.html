@@ -1,0 +1,48 @@
+<xf:title>{{ phrase('move_thread:') }} {{ prefix('thread', $thread, 'escaped') }}{$thread.title}</xf:title>
+<xf:h1>{{ phrase('move_thread:') }} {{ prefix('thread', $thread) }}{$thread.title}</xf:h1>
+
+<xf:breadcrumb source="$thread.getBreadcrumbs()" />
+
+<xf:form action="{{ link('threads/move', $thread) }}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body js-prefixListenContainer">
+			<xf:prefixinputrow
+				label="{{ phrase('title') }}"
+				prefixes="{{ $thread.isPrefixEditable() ? $prefixes : [] }}"
+				type="thread"
+				prefix-value="{$thread.prefix_id}"
+				textbox-value="{$thread.title}"
+				href="{{ link('forums/prefixes') }}"
+				listen-to="< .js-prefixListenContainer | .js-nodeList"
+				autofocus="autofocus"
+				maxlength="{{ max_length($thread, 'title') }}" />
+
+			<xf:selectrow name="target_node_id" value="{$forum.node_id}" class="js-nodeList"
+				data-xf-init="input-validator"
+				data-validation-url="{{ link('threads/move-warnings', $thread) }}"
+				data-error-target="< dd | .js-threadMoveWarnings"
+				label="{{ phrase('destination_forum') }}">
+
+				<xf:foreach loop="$nodeTree.getFlattened(0)" value="$treeEntry">
+					<xf:option value="{$treeEntry.record.node_id}" disabled="{{ $treeEntry.record.node_type_id != 'Forum' ? 'disabled' : '' }}">
+						{{ repeat_raw('&nbsp; ', $treeEntry.depth) }} {$treeEntry.record.title}
+					</xf:option>
+				</xf:foreach>
+				<xf:explain>
+					<div class="block-rowMessage block-rowMessage--important u-hidden u-hidden--transition js-threadMoveWarnings"></div>
+				</xf:explain>
+			</xf:selectrow>
+
+			<xf:macro id="helper_action::thread_redirect" arg-label="{{ phrase('redirection_notice') }}" />
+
+			<xf:checkboxrow>
+				<xf:option name="notify_watchers" value="1" selected="{{ true }}">{{ phrase('notify_members_watching_destination_forum') }}</xf:option>
+			</xf:checkboxrow>
+
+			<xf:if is="$thread.canSendModeratorActionAlert()">
+				<xf:macro id="helper_action::thread_alert" arg-selected="{{ true }}" />
+			</xf:if>
+		</div>
+		<xf:submitrow icon="save" sticky="true" />
+	</div>
+</xf:form>

@@ -1,0 +1,5 @@
+<xf:if is="$extra.comment">
+	{{ phrase('report_that_you_made_recently_has_been_resolved_comment_x', {'comment': $extra.comment, 'title': '<a href="' . $extra.link . '" class="fauxBlockLink-blockLink">' . $extra.title . '</a>'}) }}
+<xf:else />
+	{{ phrase('report_that_you_made_recently_has_been_resolved', {'title': '<a href="' . $extra.link . '" class="fauxBlockLink-blockLink">' . $extra.title . '</a>'}) }}
+</xf:if>

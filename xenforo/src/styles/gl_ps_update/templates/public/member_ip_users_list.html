@@ -1,0 +1,38 @@
+<xf:title>{{ phrase('users_logged_at_ip_x', {'ip': $ipPrintable}) }}</xf:title>
+
+<div class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:datalist>
+				<xf:foreach loop="$ips" value="$ip" key="$key">
+					<xf:set var="$user" value="{$ip.user}" />
+					<xf:datarow rowclass="dataList-row--noHover">
+						<xf:cell class="dataList-cell--min dataList-cell--alt">
+							<xf:avatar user="$user" size="s" href="{{ link('members', $user) }}" />
+						</xf:cell>
+						<xf:main href="{{ link('members', $user) }}">
+							<xf:label><xf:username user="$user" rich="true" notooltip="true" href="" /></xf:label>
+							<xf:hint><xf:usertitle user="$user" /></xf:hint>
+							<xf:explain>
+								<ul class="listInline listInline--bullet">
+									<xf:if is="$ip.ip_total > 1">
+										<li>{{ phrase('ip_x_and_y_more', {'ip': $ip.ips.0|ip, 'count': $ip.ip_total - 1}) }}</li>
+									<xf:else />
+										<li>{$ip.ips.0|ip}</li>
+									</xf:if>
+									<xf:if is="$ip.total > 1">
+										<li>{{ phrase('x_times', {'total': $ip.total|number}) }}</li>
+										<li><xf:date time="{$ip.first_date}" /> - <xf:date time="{$ip.last_date}" /></li>
+									<xf:else />
+										<li>{{ phrase('1_time') }}</li>
+										<li><xf:date time="{$ip.first_date}" /></li>
+									</xf:if>
+								</ul>
+							</xf:explain>
+						</xf:main>
+					</xf:datarow>
+				</xf:foreach>
+			</xf:datalist>
+		</div>
+	</div>
+</div>

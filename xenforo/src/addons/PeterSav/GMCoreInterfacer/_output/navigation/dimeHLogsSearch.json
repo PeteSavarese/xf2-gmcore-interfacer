@@ -1,0 +1,11 @@
+{
+    "parent_navigation_id": "gmodStaffTools",
+    "display_order": 100,
+    "navigation_type_id": "basic",
+    "type_config": {
+        "link": "/gl/hlogs/search",
+        "display_condition": "",
+        "extra_attributes": []
+    },
+    "enabled": true
+}

@@ -1,0 +1,2 @@
+{{ phrase('alert_user_following', {'username': $user.username ?: $alert.username}) }}
+<push:url>{{ link('canonical:members', $user) }}</push:url>

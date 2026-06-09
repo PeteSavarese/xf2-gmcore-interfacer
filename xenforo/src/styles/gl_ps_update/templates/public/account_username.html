@@ -1,0 +1,31 @@
+<xf:title>{{ phrase('change_username') }}</xf:title>
+
+<xf:wrap template="account_wrapper" />
+
+<xf:form action="{{ link('account/username') }}" ajax="true" class="block" data-force-flash-message="on">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:if is="$xf.visitor.getNextAllowedUsernameChange($xf.time)">
+				<xf:inforow>
+					<div class="blockMessage blockMessage--important">
+						{{ phrase('next_allowed_username_change_message', {'date': date($xf.visitor.getNextAllowedUsernameChange($xf.time))}) }}
+					</div>
+				</xf:inforow>
+			</xf:if>
+			<xf:textboxrow name="username" value="{$xf.visitor}" autofocus="autofocus" autocomplete="off"
+				maxlength="{{ max_length($xf.visitor, 'username') }}"
+				label="{{ phrase('user_name') }}"
+				validation-url="{{ link('misc/validate-username') }}" />
+			<xf:textarearow name="change_reason" autosize="true"
+				maxlength="{{ max_length('XF:UsernameChange', 'change_reason') }}"
+				label="{{ phrase('change_reason') }}"
+				hint="{{ $xf.options.usernameChangeRequireReason ? phrase('required') : '' }}"
+				required="{{ $xf.options.usernameChangeRequireReason ? 'required' : null }}"
+				explain="{{ phrase('username_change_reason_explain') }}" />
+		</div>
+
+		<xf:submitrow icon="save" sticky="true" />
+	</div>
+
+	<xf:redirect />
+</xf:form>

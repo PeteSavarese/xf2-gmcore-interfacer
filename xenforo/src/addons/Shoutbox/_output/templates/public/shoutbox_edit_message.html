@@ -1,0 +1,10 @@
+<xf:title>{{ phrase('edit') }}</xf:title>
+
+<xf:form action="shoutbox/{$message.id}/edit" ajax="true" class="block">
+    <div class="block-container">
+        <div class="block-body">
+            <xf:textboxrow name="message" value="{$message.message}" label="{{ phrase('message') }}" maxlength="1000"/>
+        </div>
+        <xf:submitrow submit="{{ phrase('save') }}" icon="save"/>
+    </div>
+</xf:form>

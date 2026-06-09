@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<options>
+  <option option_id="gmod_interfacer_db_host" edit_format="textbox" data_type="string" advanced="0">
+    <default_value>localhost</default_value>
+    <relation group_id="gmod_interfacer_settings" display_order="10"/>
+  </option>
+  <option option_id="gmod_interfacer_db_name" edit_format="textbox" data_type="string" advanced="0">
+    <default_value>gmcore_core</default_value>
+    <relation group_id="gmod_interfacer_settings" display_order="50"/>
+  </option>
+  <option option_id="gmod_interfacer_db_password" edit_format="textbox" data_type="string" advanced="0">
+    <default_value></default_value>
+    <relation group_id="gmod_interfacer_settings" display_order="40"/>
+  </option>
+  <option option_id="gmod_interfacer_db_port" edit_format="textbox" data_type="string" advanced="0">
+    <default_value>3306</default_value>
+    <relation group_id="gmod_interfacer_settings" display_order="20"/>
+  </option>
+  <option option_id="gmod_interfacer_db_username" edit_format="textbox" data_type="string" advanced="0">
+    <default_value>gmcore_core</default_value>
+    <relation group_id="gmod_interfacer_settings" display_order="30"/>
+  </option>
+  <option option_id="gmod_interfacer_discord_bot_client_id" edit_format="textbox" data_type="string" advanced="0">
+    <default_value></default_value>
+    <relation group_id="gmod_interfacer_discord" display_order="20"/>
+  </option>
+  <option option_id="gmod_interfacer_discord_bot_client_secret" edit_format="textbox" data_type="string" advanced="1">
+    <default_value></default_value>
+    <relation group_id="gmod_interfacer_discord" display_order="30"/>
+  </option>
+  <option option_id="gmod_interfacer_discord_bot_token" edit_format="textbox" data_type="string" advanced="1">
+    <default_value></default_value>
+    <relation group_id="gmod_interfacer_discord" display_order="40"/>
+  </option>
+  <option option_id="gmod_interfacer_discord_server_guild" edit_format="textbox" data_type="string" advanced="0">
+    <default_value></default_value>
+    <relation group_id="gmod_interfacer_discord" display_order="10"/>
+  </option>
+  <option option_id="gmod_interfacer_store_active" edit_format="onoff" data_type="boolean" advanced="0">
+    <default_value>0</default_value>
+    <relation group_id="gmod_interfacer_store_options" display_order="1"/>
+  </option>
+  <option option_id="gmod_interfacer_store_production_check" edit_format="onoff" data_type="boolean" advanced="0">
+    <default_value>0</default_value>
+    <relation group_id="gmod_interfacer_store_options" display_order="10"/>
+  </option>
+  <option option_id="gmod_interfacer_store_production_client_id" edit_format="textbox" data_type="string" advanced="0">
+    <default_value></default_value>
+    <relation group_id="gmod_interfacer_store_options" display_order="10"/>
+  </option>
+  <option option_id="gmod_interfacer_store_production_secret_key" edit_format="textbox" data_type="string" advanced="0">
+    <default_value></default_value>
+    <relation group_id="gmod_interfacer_store_options" display_order="100"/>
+  </option>
+  <option option_id="gmod_interfacer_store_sandbox_client_id" edit_format="textbox" data_type="string" advanced="0">
+    <default_value></default_value>
+    <relation group_id="gmod_interfacer_store_options" display_order="200"/>
+  </option>
+  <option option_id="gmod_interfacer_store_sandbox_secret_key" edit_format="textbox" data_type="string" advanced="0">
+    <default_value></default_value>
+    <relation group_id="gmod_interfacer_store_options" display_order="300"/>
+  </option>
+</options>

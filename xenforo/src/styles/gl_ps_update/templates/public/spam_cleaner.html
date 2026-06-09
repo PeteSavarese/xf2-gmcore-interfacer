@@ -1,0 +1,84 @@
+<xf:title>{{ phrase('spam_cleaner:') }} {$user.username}</xf:title>
+
+<xf:form action="{{ link('spam-cleaner', $user) }}" ajax="true" class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:formrow rowtype="fullWidth noLabel">
+				<div class="contentRow">
+					<div class="contentRow-figure">
+						<xf:avatar user="$user" size="m" />
+					</div>
+					<div class="contentRow-main">
+						<dl class="pairs pairs--columns">
+							<dt>{{ phrase('last_activity') }}</dt>
+							<dd><xf:date time="{$user.last_activity}" /></dd>
+						</dl>
+
+						<xf:if is="$xf.visitor.hasAdminPermission('user') AND $user.email">
+							<dl class="pairs pairs--columns">
+								<dt>{{ phrase('email') }}</dt>
+								<dd>{$user.email|email_display}</dd>
+							</dl>
+						</xf:if>
+
+						<xf:if is="$canViewIps">
+							<xf:set var="$registerIp" value="{{ $user.getIp('register') }}" />
+
+							<xf:if is="$registerIp">
+								<dl class="pairs pairs--columns">
+									<dt>{{ phrase('registration_ip') }}</dt>
+									<dd><a class="ip concealed" href="{{ link('misc/ip-info', null, {'ip': $registerIp|ip}) }}" target="_blank">{$registerIp|ip}</a></dd>
+								</dl>
+							</xf:if>
+
+							<xf:if is="$contentIp">
+								<dl class="pairs pairs--columns">
+									<dt>{{ phrase('content_ip') }}</dt>
+									<dd><a class="ip concealed" href="{{ link('misc/ip-info', null, {'ip': $contentIp|ip}) }}" target="_blank">{$contentIp|ip}</a></dd>
+								</dl>
+							</xf:if>
+						</xf:if>
+					</div>
+				</div>
+			</xf:formrow>
+
+			<xf:inforow>
+				<div class="pairJustifier">
+					<xf:macro id="member_macros::member_stat_pairs"
+						arg-user="{$user}"
+						arg-context="spam-cleaner" />
+				</div>
+			</xf:inforow>
+
+			<xf:checkboxrow label="{{ phrase('spam_cleaner_actions') }}">
+				<xf:option name="action_threads" checked="{$xf.options.spamDefaultOptions.action_threads}">
+					<xf:label>
+						<xf:if is="$xf.options.spamThreadAction.action == 'move'">
+							{{ phrase('move_spammers_threads') }}
+						<xf:else />
+							{{ phrase('delete_spammers_threads') }}
+						</xf:if>
+					</xf:label>
+				</xf:option>
+				<xf:option name="delete_messages" checked="{$xf.options.spamDefaultOptions.delete_messages}">
+					<xf:label>{{ phrase('delete_spammers_messages') }}</xf:label>
+				</xf:option>
+				<xf:option name="delete_conversations" checked="{$xf.options.spamDefaultOptions.delete_conversations}">
+					<xf:label>{{ phrase('delete_direct_messages_by_spammer') }}</xf:label>
+				</xf:option>
+				<xf:option name="ban_user" checked="{$xf.options.spamDefaultOptions.ban_user}">
+					<xf:label>{{ phrase('ban_spammer') }}</xf:label>
+				</xf:option>
+				<xf:if is="$canViewIps">
+					<xf:option name="check_ips" checked="{$xf.options.spamDefaultOptions.check_ips}">
+						<xf:label>{{ phrase('check_spammers_ips') }}</xf:label>
+					</xf:option>
+				</xf:if>
+			</xf:checkboxrow>
+		</div>
+
+		<xf:submitrow submit="{{ phrase('clean') }}" />
+	</div>
+
+	<xf:hiddenval name="no_redirect">{$noRedirect}</xf:hiddenval>
+</xf:form>

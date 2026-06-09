@@ -1,0 +1,16 @@
+{
+    "group_name": "palette",
+    "title": "Style type",
+    "description": "This defines the general type of style in use based on whether the content is placed on a light or dark background. This may change how colors are selected in certain scenarios.",
+    "property_type": "value",
+    "css_components": [],
+    "value_type": "radio",
+    "value_parameters": "light={{ phrase('light') }}\ndark={{ phrase('dark') }}",
+    "has_variations": true,
+    "depends_on": "",
+    "value_group": "setup",
+    "property_value": {
+        "default": "dark"
+    },
+    "display_order": 100
+}

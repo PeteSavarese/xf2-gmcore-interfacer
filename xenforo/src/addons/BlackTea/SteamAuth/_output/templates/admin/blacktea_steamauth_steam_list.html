@@ -1,0 +1,45 @@
+<xf:title>{{ phrase('blacktea_steamauth_list_users') }}</xf:title>
+<xf:css>
+	.dataList-cell.dataList-cell--image img {
+		margin-right: 8px;
+	}
+</xf:css>
+<xf:if is="!$items || empty($items)">
+	<div class="blockMessage">{{ phrase('no_items_have_been_created_yet') }}</div>
+<xf:else />
+	<xf:form action="" class="block">
+		<div class="block-outer">
+			<xf:macro template="filter_macros"
+					  name="quick_filter"
+					  arg-key="items"
+					  arg-ajax="{{ link('steam/list', null, {'criteria': $criteria}) }}"
+					  arg-class="block-outer-opposite" />
+		</div>
+		<div class="block-container">
+			<div class="block-body">
+				<xf:datalist>
+					<xf:foreach loop="$items" value="$item">
+						<xf:datarow>
+							<xf:cell class="dataList-cell--min dataList-cell--image dataList-cell--imageSmall" href="{{ link('users/edit', $item) }}">
+								<xf:avatar user="$item" size="s" href="" />
+							</xf:cell>
+							<xf:main href="{{ link('users/edit', $item) }}" label="{$item.username}" hint="{$item.email}" />
+							<xf:cell href="https://steamcommunity.com/profiles/{$connectedAccounts.{$item.user_id}.provider_key}/">
+								{$connectedAccounts.{$item.user_id}.provider_key}
+							</xf:cell>
+						</xf:datarow>
+					</xf:foreach>
+				</xf:datalist>
+			</div>
+			<div class="block-footer block-footer--split">
+				<span class="block-footer-counter">{{ display_totals($items, $total) }}</span>
+			</div>
+		</div>
+		<xf:pagenav
+			page="{$page}"
+			perpage="{$perPage}"
+			total="{$total}"
+			link="steam/list"
+			wrapperclass="js-filterHide block-outer block-outer--after" />
+	</xf:form>
+</xf:if>

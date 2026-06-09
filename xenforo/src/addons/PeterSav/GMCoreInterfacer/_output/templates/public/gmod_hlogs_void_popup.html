@@ -1,0 +1,17 @@
+<xf:title>History Logs - Void</xf:title>
+
+<xf:form action="/gl/{$banId}/void/add" id="addVoidForm" ajax="true" data-xf-init="ajax-submit">
+	<xf:textboxrow rowclass="formRow--noColon" label="Void Reason" name="void_reason" hint="<i>Required</i>">
+		<xf:explain>Enter reason for voiding ban. This will be visible when hovering over the "Void" tag on the selected ban.</xf:explain>
+	</xf:textboxrow>
+	
+    <xf:submitrow submit="Void Ban" class="js-overlayClose" />
+</xf:form>
+
+<xf:js>
+XF.on(document, 'ajax:complete', function(e, data) {
+    if (data.xhr.responseJSON && data.xhr.responseJSON.success) {
+        location.reload();
+    }
+});
+</xf:js>

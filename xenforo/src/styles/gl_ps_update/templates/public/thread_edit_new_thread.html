@@ -1,0 +1,5 @@
+<xf:macro id="{{ $templateOverrides.thread_list_macro ?: 'thread_list_macros::item' }}"
+	arg-thread="{$thread}"
+	arg-allowInlineMod="{{ $noInlineMod ? false : true }}"
+	arg-forum="{{ $forumName ? null : $forum }}"
+	args="{$templateOverrides.thread_list_macro_args}" />

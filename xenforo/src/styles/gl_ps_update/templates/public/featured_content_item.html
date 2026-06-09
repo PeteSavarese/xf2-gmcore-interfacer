@@ -1,0 +1,112 @@
+<xf:macro id="article" extends="content_display_macros::article"
+	arg-feature="!"
+	arg-content="!"
+	arg-snippetLength="{{ 0 }}">
+
+	<xf:extension id="image">
+		<xf:extensionparent />
+
+		<xf:if is="$feature.image">
+			<a href="{$feature.content_link}" class="articlePreview-image" tabindex="-1">
+				<img src="{$feature.image}" alt="{$feature.title}" loading="lazy" />
+			</a>
+		</xf:if>
+	</xf:extension>
+
+	<xf:extension id="title">
+		<xf:extensionparent />
+		<a href="{$feature.content_link}">{$feature.title}</a>
+	</xf:extension>
+
+	<xf:extension id="snippet">
+		<xf:extensionparent />
+
+		<div class="featured-content-item bbWrapper">
+			<xf:if is="$snippetLength">
+				{{ snippet($feature.snippet, $snippetLength) }}
+			<xf:else />
+				{$feature.snippet}
+			</xf:if>
+		</div>
+	</xf:extension>
+
+	<xf:extension id="meta">
+		<xf:extensionparent />
+
+		<xf:set var="$username"><xf:username user="{$feature.ContentUser}" defaultname="{$feature.content_username}" class="u-concealed" /></xf:set>
+
+		<li><xf:avatar user="{$feature.ContentUser}" size="xxs" defaultname="{$feature.content_username}"/></li>
+		<li class="articlePreview-by">{{ phrase('by_user_x', {'name': $username}) }}</li>
+		<li><a href="{$feature.content_link}" class="u-concealed" rel="nofollow"><xf:date time="{$feature.content_date}"/></a></li>
+		<li><span data-xf-init="tooltip" title="{{ phrase('featured_on_x', {'date': date($feature.feature_date)}) }}"><xf:fa icon="fa-award" /></span></li>
+	</xf:extension>
+
+	<xf:extension id="metadata">
+		<xf:extensionparent />
+
+		<xf:set var="$ldJson" value="{{ $feature.getStructuredData() }}" />
+		<xf:if is="$ldJson">
+			<script type="application/ld+json">
+				{{ $ldJson|json(true)|raw }}
+			</script>
+		</xf:if>
+	</xf:extension>
+</xf:macro>
+
+<xf:macro id="simple" extends="content_display_macros::simple"
+	arg-feature="!"
+	arg-content="!"
+	arg-snippetLength="{{ 0 }}">
+
+	<xf:extension id="image">
+		<xf:extensionparent />
+		<xf:avatar user="$feature.ContentUser" size="xxs" defaultname="{$feature.content_username}" />
+	</xf:extension>
+
+	<xf:extension id="title">
+		<xf:extensionparent />
+		<a href="{$feature.content_link}">{$feature.title}</a>
+	</xf:extension>
+
+	<xf:extension id="meta">
+		<xf:extensionparent />
+
+		<li>{{ $feature.ContentUser.username ?: $feature.content_username }}</li>
+		<li><xf:date time="{$feature.content_date}" /></li>
+		<li><span data-xf-init="tooltip" title="{{ phrase('featured_on_x', {'date': date($feature.feature_date)}) }}"><xf:fa icon="fa-award" /></span></li>
+	</xf:extension>
+</xf:macro>
+
+<xf:macro id="carousel" extends="content_display_macros::carousel"
+	arg-feature="!"
+	arg-content="!"
+	arg-snippetLength="{{ 0 }}">
+
+	<xf:extension id="image">
+		<xf:extensionparent />
+		<xf:avatar user="$feature.ContentUser" size="m" defaultname="{$feature.content_username}" notooltip="true" />
+	</xf:extension>
+
+	<xf:extension id="title">
+		<xf:extensionparent />
+		<a href="{$feature.content_link}">{$feature.title}</a>
+	</xf:extension>
+
+	<xf:extension id="snippet">
+		<xf:extensionparent />
+
+		<xf:if is="$snippetLength">
+			{{ snippet($feature.snippet, $snippetLength) }}
+		<xf:else />
+			{$feature.snippet}
+		</xf:if>
+	</xf:extension>
+
+	<xf:extension id="meta">
+		<xf:extensionparent />
+
+		<li><xf:username user="{$feature.ContentUser}" defaultname="{$feature.content_username}" /></li>
+		<li><xf:date time="{$feature.content_date}" /></li>
+		<li><span data-xf-init="tooltip" title="{{ phrase('featured_on_x', {'date': date($feature.feature_date)}) }}"><xf:fa icon="fa-award" /></span></li>
+	</xf:extension>
+</xf:macro>

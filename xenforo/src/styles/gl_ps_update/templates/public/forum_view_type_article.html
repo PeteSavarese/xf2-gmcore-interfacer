@@ -1,0 +1,99 @@
+<xf:extends template="forum_view" />
+
+<xf:extension id="thread_list_block_classes" value="block--articles
+	{{ ($forum.type_config.display_style != 'full' AND $forum.canViewThreadContent()) ? 'block--messages' : '' }}
+	{{ ($forum.type_config.display_style == 'preview' AND $forum.canViewThreadContent()) ? 'block--previews' : '' }}
+	{{ ($forum.type_config.display_style == 'expanded' AND $forum.canViewThreadContent()) ? 'block--expanded' : '' }}" />
+
+<xf:extension id="thread_list">
+
+	<xf:if is="$forum.type_config.display_style != 'full' AND $forum.canViewThreadContent()">
+		<xf:css src="message.less" />
+
+		<xf:if is="$stickyThreads is not empty OR $threads is not empty">
+			<xf:if is="$stickyThreads is not empty">
+				<xf:foreach loop="$stickyThreads" value="$thread">
+					<xf:macro id="article_helper"
+						arg-thread="{$thread}"
+						arg-post="{$thread.FirstPost}"
+						arg-forum="{$forum}"
+						args="{$templateOverrides.thread_list_macro_args}"  />
+				</xf:foreach>
+			</xf:if>
+
+			<xf:if is="$threads is not empty">
+				<xf:foreach loop="$threads" value="$thread">
+					<xf:macro id="article_helper"
+						arg-thread="{$thread}"
+						arg-post="{$thread.FirstPost}"
+						arg-forum="{$forum}"
+						args="{$templateOverrides.thread_list_macro_args}"  />
+				</xf:foreach>
+
+				<xf:if is="$showDateLimitDisabler">
+					<div class="structItem structItem--note">
+						<div class="structItem-cell">
+							<a href="{{ link('forums', $forum, {'page': $page, 'no_date_limit': 1} + $filters) }}">
+								{{ phrase('show_older_items') }}
+							</a>
+						</div>
+					</div>
+				</xf:if>
+			</xf:if>
+		<xf:elseif is="$filters" />
+			<div class="message js-emptyThreadList">
+				<div class="message-inner">
+					<div class="message-cell message-cell--main">
+						{{ phrase('there_no_threads_matching_your_filters') }}
+					</div>
+				</div>
+			</div>
+		<xf:elseif is="$showDateLimitDisabler" />
+			<div class="message js-emptyThreadList">
+				<div class="message-inner">
+					<div class="message-cell message-cell--main">
+						{{ phrase('there_no_threads_to_display') }}
+
+						<div style="margin-top: 1em">
+							<a href="{{ link('forums', $forum, {'page': $page, 'no_date_limit': 1} + $filters) }}">
+								{{ phrase('show_older_items') }}
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		<xf:else />
+			<div class="message js-emptyThreadList">
+				<div class="message-inner">
+					<div class="message-cell message-cell--main">
+						{{ phrase('there_no_threads_in_this_forum') }}
+					</div>
+				</div>
+			</div>
+		</xf:if>
+	<xf:else />
+		<xf:extensionparent />
+	</xf:if>
+</xf:extension>
+
+<xf:macro id="article_helper"
+	arg-thread="!"
+	arg-post="!"
+	arg-forum="!"
+	arg-allowInlineMod="{{ true }}">
+
+	<xf:if is="$forum.type_config.display_style == 'expanded'">
+		<xf:macro id="post_article_macros::article"
+			arg-thread="{$thread}"
+			arg-post="{$thread.FirstPost}"
+			arg-forum="{$forum}"
+			arg-isListItem="{{ true }}"
+			args="{$templateOverrides.thread_list_macro_args}"  />
+	<xf:else />
+		<xf:macro id="post_article_macros::article_preview"
+			arg-thread="{$thread}"
+			arg-post="{$thread.FirstPost}"
+			arg-forum="{$forum}"
+			args="{$templateOverrides.thread_list_macro_args}"  />
+	</xf:if>
+</xf:macro>

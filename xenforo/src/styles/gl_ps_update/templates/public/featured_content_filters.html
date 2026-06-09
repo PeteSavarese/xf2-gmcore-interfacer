@@ -1,0 +1,25 @@
+<xf:form action="{{ link('featured/filters') }}">
+	<!--[XF:above_content_type]-->
+	<div class="menu-row menu-row--separated">
+		<label for="ctrl_content_type">{{ phrase('content_type:') }}</label>
+		<div class="u-inputSpacer">
+			<xf:select name="content_type" value="{$filters.content_type}" id="ctrl_content_type">
+				<xf:option value="">{{ phrase('(any)') }}</xf:option>
+
+				<xf:foreach loop="$contentTypes" value="$contentType">
+					<xf:option value="{$contentType}">
+						{{ $xf.app.getContentTypePhrase($contentType) }}
+					</xf:option>
+				</xf:foreach>
+			</xf:select>
+		</div>
+	</div>
+
+	<xf:hiddenval name="apply">1</xf:hiddenval>
+
+	<div class="menu-footer">
+		<span class="menu-footer-controls">
+			<xf:button type="submit" class="button--primary">{{ phrase('filter') }}</xf:button>
+		</span>
+	</div>
+</xf:form>

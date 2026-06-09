@@ -1,0 +1,11 @@
+<xf:title>{{ phrase('edit_passkey') }}</xf:title>
+
+<xf:form action="{{ link('account/passkeys/edit', $passkey) }}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:textboxrow name="name" value="{$passkey.name}" label="{{ phrase('name') }}" required="true" />
+		</div>
+
+		<xf:submitrow sticky="true" icon="save" />
+	</div>
+</xf:form>

@@ -1,0 +1,17 @@
+{
+    "group_name": "palette",
+    "title": "Accent 3",
+    "description": "",
+    "property_type": "value",
+    "css_components": [],
+    "value_type": "color",
+    "value_parameters": "hidePalette=true",
+    "has_variations": true,
+    "depends_on": "",
+    "value_group": "accent",
+    "property_value": {
+        "default": "#34495e",
+        "alternate": "#2c3e50"
+    },
+    "display_order": 2200
+}

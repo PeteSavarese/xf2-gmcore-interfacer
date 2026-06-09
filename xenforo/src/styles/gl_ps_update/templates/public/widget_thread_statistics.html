@@ -1,0 +1,46 @@
+<xf:comment>You MUST have $thread context in your selected widget position for this to work!</xf:comment>
+<div class="block" {{ widget_data($widget) }}>
+	<div class="block-container">
+		<h3 class="block-minorHeader">{$title}</h3>
+
+		<div class="block-body block-row">
+			<dl class="pairs pairs--spaced pairs--small">
+				<dt>{{ phrase('created') }}</dt>
+				<dd>
+					<xf:username user="{$thread}" />,
+					<a href="{{ link('threads', $thread) }}" class="u-concealed">
+						<xf:date time="$thread.post_date"/>
+					</a>
+				</dd>
+			</dl>
+
+			<xf:if is="$thread.reply_count">
+				<dl class="pairs pairs--spaced">
+					<dt>{{ phrase('last_reply_from') }}</dt>
+					<dd>
+						<xf:username user="{$thread.last_post_cache}" />,
+						<a href="{{ link('threads/latest', $thread) }}" class="u-concealed">
+							<xf:date time="$thread.last_post_date" />
+						</a>
+					</dd>
+				</dl>
+			</xf:if>
+
+			<dl class="pairs pairs--justified count--replies">
+				<dt>{{ phrase('replies') }}</dt>
+				<dd>{$thread.reply_count|number}</dd>
+			</dl>
+
+			<dl class="pairs pairs--justified count--views">
+				<dt>{{ phrase('views') }}</dt>
+				<dd>{$thread.view_count|number}</dd>
+			</dl>
+			<xf:comment>
+				TODO: unique users?
+				potential new fields in thread table:
+				-	unique_user_count int unsigned not null
+				-   reaction_score int unsigned not null
+			</xf:comment>
+		</div>
+	</div>
+</div>

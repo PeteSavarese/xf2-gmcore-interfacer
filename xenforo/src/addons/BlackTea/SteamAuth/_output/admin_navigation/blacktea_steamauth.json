@@ -1,0 +1,11 @@
+{
+    "parent_navigation_id": "",
+    "display_order": 1000,
+    "link": "steam/list",
+    "icon": "fab fa-steam",
+    "admin_permission_id": "blacktea_steamauth",
+    "debug_only": false,
+    "development_only": false,
+    "super_admin_only": false,
+    "hide_no_children": true
+}

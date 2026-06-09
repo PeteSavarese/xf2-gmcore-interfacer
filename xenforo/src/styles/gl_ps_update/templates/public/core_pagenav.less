@@ -1,0 +1,409 @@
+// ####################################### PAGE NAVIGATION ########################
+
+@_page-paddingV: xf-default(@xf-buttonBase--padding-top, 6px);
+@_page-paddingH: 8px;
+@_page-paddingHSimple: 10px;
+
+.pageNavWrapper {}
+
+.m-pageNavElCore()
+{
+	white-space: nowrap;
+
+	.xf-blockBorder();
+	.xf-pageNavBase();
+
+	&:hover,
+	&:active
+	{
+		//background: xf-intensify(@xf-contentHighlightBg, 3%);
+		background: xf-intensify(@xf-pageNavBase--background-color, 3%);
+		text-decoration: none;
+	}
+}
+
+.pageNav-jump
+{
+	display: inline-block;
+	.m-pageNavElCore();
+	border-radius: @xf-borderRadiusSmall;
+	padding: @_page-paddingV @_page-paddingH;
+
+	&.pageNav-jump--prev:before,
+	&.pageNav-jump--next:after
+	{
+		font-size: 80%;
+		unicode-bidi: isolate; // maintain position in RTL with LTR text
+	}
+
+	&.pageNav-jump--prev:before
+	{
+		.m-faContent(@fa-var-solid-caret-left, false, ltr); // .61em
+		.m-faContent(@fa-var-solid-caret-right, false, rtl); // .61em
+		margin-right: .15em;
+	}
+
+	&.pageNav-jump--next:after
+	{
+		.m-faContent(@fa-var-solid-caret-right, false, ltr); // .61em
+		.m-faContent(@fa-var-solid-caret-left, false, rtl); // .61em
+		margin-left: .15em;
+	}
+}
+
+.pageNav-main
+{
+	.m-listPlain();
+	display: inline-table;
+}
+
+.pageNav-page
+{
+	display: table-cell;
+	.m-pageNavElCore();
+
+	&:not(:last-child)
+	{
+		border-right: none;
+	}
+
+	&:not(:first-child)
+	{
+		border-left-color: @xf-borderColorLight;
+	}
+
+	&:first-child
+	{
+		.m-borderLeftRadius(@xf-borderRadiusSmall);
+	}
+
+	&:last-child
+	{
+		.m-borderRightRadius(@xf-borderRadiusSmall);
+	}
+
+	> a
+	{
+		display: block;
+		padding: @_page-paddingV @_page-paddingH;
+		text-decoration: none;
+		color: inherit;
+	}
+
+	&.pageNav-page--current
+	{
+		.xf-pageNavCurrent();
+
+		cursor: pointer;
+
+		&:hover,
+		&:active
+		{
+			background: xf-intensify(@xf-contentAccentBg, 3%);
+		}
+
+		+ .pageNav-page
+		{
+			border-left: none;
+		}
+	}
+}
+
+// Hide relative page numbers on narrow devices when we have a skip entry as we don't necessarily have space.
+@media (max-width: @xf-responsiveNarrow)
+{
+	.pageNav--skipStart
+	{
+		.pageNav-page.pageNav-page--earlier
+		{
+			display: none;
+		}
+	}
+
+	.pageNav--skipEnd
+	{
+		.pageNav-page.pageNav-page--later
+		{
+			display: none;
+		}
+
+		.pageNav-page.pageNav-page--skipEnd
+		{
+			border-left: none;
+		}
+	}
+}
+
+// ########################### SIMPLE PAGE NAV VARIANT ########################
+
+.pageNavSimple
+{
+	display: inline-flex;
+}
+
+.pageNavSimple-el
+{
+	display: inline-block;
+	.xf-blockBorder();
+	border-radius: @xf-borderRadiusSmall;
+	padding: @_page-paddingV @_page-paddingHSimple;
+	font-size: @xf-fontSizeSmall;
+	text-align: center;
+	white-space: nowrap;
+	margin-right: 4px;
+
+	&:last-child
+	{
+		margin-right: 0;
+	}
+
+	&.pageNavSimple-el--current
+	{
+		.xf-contentAccentBase();
+
+		&:hover,
+		&:active
+		{
+			background: xf-intensify(@xf-contentAccentBg, 3%);
+			text-decoration: none;
+		}
+	}
+
+	&.pageNavSimple-el--prev,
+	&.pageNavSimple-el--next
+	{
+		background: linear-gradient(0deg, @xf-contentHighlightBg, mix(@xf-contentHighlightBg, @xf-contentBg, 25%));
+		color: @xf-linkColor;
+		min-width: 75px;
+
+		@media (max-width: 350px)
+		{
+			min-width: 0;
+		}
+
+		&:hover,
+		&:active
+		{
+			background: xf-intensify(@xf-contentHighlightBg, 3%);
+			text-decoration: none;
+		}
+	}
+
+	&.pageNavSimple-el--prev i:before
+	{
+		.m-faContent(@fa-var-solid-caret-left, false, ltr); // , .44em
+		.m-faContent(@fa-var-solid-caret-right, false, rtl); // , .44em
+	}
+
+	&.pageNavSimple-el--next i:before
+	{
+		.m-faContent(@fa-var-solid-caret-right, false, ltr); // , .44em
+		.m-faContent(@fa-var-solid-caret-left, false, rtl); // , .44em
+	}
+
+	&.pageNavSimple-el--first,
+	&.pageNavSimple-el--last
+	{
+		border-color: transparent;
+		padding-left: (@_page-paddingHSimple / 2);
+		padding-right: (@_page-paddingHSimple / 2);
+		color: fade(@xf-linkColor, 60%);
+
+		&:hover,
+		&:active
+		{
+			.xf-blockBorder();
+			background: xf-intensify(@xf-contentHighlightBg, 3%);
+			color: @xf-linkColor;
+			text-decoration: none;
+		}
+	}
+
+	&.pageNavSimple-el--first i:before
+	{
+		.m-faContent(@fa-var-solid-backward, false, ltr); // 1em
+		.m-faContent(@fa-var-solid-forward, false, rtl); // 1em
+	}
+
+	&.pageNavSimple-el--last i:before
+	{
+		.m-faContent(@fa-var-solid-forward, false, ltr); // 1em
+		.m-faContent(@fa-var-solid-backward, false, rtl); // 1em
+	}
+
+	&.is-disabled
+	{
+		border-color: transparent;
+		background: none;
+		color: @xf-textColorMuted;
+		text-decoration: none;
+		pointer-events: none;
+
+		&:hover
+		{
+			background: none;
+			color: @xf-textColorMuted;
+		}
+	}
+}
+
+// #################### DISPLAY VARIANTS #########################
+
+.pageNavWrapper--simple
+{
+	.pageNav
+	{
+		display: none;
+	}
+}
+
+.pageNavWrapper--full
+{
+	.pageNavSimple
+	{
+		display: none;
+	}
+}
+
+.pageNavWrapper--mixed
+{
+	.pageNavSimple
+	{
+		display: none;
+	}
+
+	@media (max-width: @xf-responsiveMedium)
+	{
+		.pageNav
+		{
+			display: none;
+		}
+
+		.pageNavSimple
+		{
+			display: inline-flex;
+		}
+	}
+}
+
+// Hide any block page nav that goes before the block as we will be wasting vertical space.
+@media (max-width: @xf-responsiveNarrow)
+{
+	.block-outer:not(.block-outer--after) .pageNavWrapper:not(.pageNavWrapper--forceShow)
+	{
+		display: none;
+	}
+
+	// this is a sanity check in case .block-outer--after is forgotten
+	.block-container + .block-outer .pageNavWrapper
+	{
+		display: block;
+	}
+}
+
+.pageNav {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-wrap: wrap;
+	gap: 4px;
+	padding: 12px 0;
+}
+
+.pageNav-main {
+	display: inline-flex !important;
+}
+
+.pageNav-page {
+	display: inline-flex !important;
+	align-items: center;
+	justify-content: center;
+	border-radius: 0 !important;
+	border: 1px solid @gl-border !important;
+	border-right: none !important;
+	background: rgba(255, 255, 255, 0.04);
+	color: @gl-text-secondary;
+	font-weight: 600;
+	font-size: 13px;
+	line-height: 1;
+	transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+	min-width: 36px;
+	height: 36px;
+	padding: 0;
+}
+
+.pageNav-page:first-child {
+	border-top-left-radius: @gl-radius !important;
+	border-bottom-left-radius: @gl-radius !important;
+}
+
+.pageNav-page:last-child {
+	border-right: 1px solid @gl-border !important;
+	border-top-right-radius: @gl-radius !important;
+	border-bottom-right-radius: @gl-radius !important;
+}
+
+.pageNav-page > a {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	padding: 0 10px;
+	color: inherit;
+	text-decoration: none;
+}
+
+.pageNav-page:hover {
+	border-color: @gl-border-accent !important;
+	color: @gl-text;
+	background: rgba(52, 152, 219, 0.1);
+	position: relative;
+	z-index: 1;
+}
+
+.pageNav-page.pageNav-page--current {
+	background: @gl-gradient;
+	color: @gl-text;
+	border-color: transparent !important;
+	box-shadow: 0 4px 16px rgba(52, 152, 219, 0.28);
+	cursor: default;
+	pointer-events: none;
+	position: relative;
+	z-index: 1;
+}
+
+.pageNav-page--skip {
+	border: none !important;
+	background: none;
+	color: @gl-text-muted;
+	padding: 0 4px;
+	min-width: 20px;
+	cursor: default;
+	pointer-events: none;
+}
+
+.pageNav-jump {
+	display: inline-flex !important;
+	align-items: center;
+	justify-content: center;
+	border-radius: @gl-radius !important;
+	border: 1px solid rgba(52, 152, 219, 0.25) !important;
+	background: rgba(52, 152, 219, 0.06);
+	color: @gl-accent;
+	font-weight: 700;
+	font-size: 13px;
+	line-height: 1;
+	min-width: 40px;
+	height: 36px;
+	padding: 0 10px;
+	text-decoration: none;
+	transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.pageNav-jump:hover {
+	background: rgba(52, 152, 219, 0.15);
+	border-color: @gl-border-accent !important;
+	color: @gl-text;
+	box-shadow: 0 0 14px rgba(52, 152, 219, 0.2);
+}

@@ -1,0 +1,62 @@
+<xf:title>Process Order</xf:title>
+
+<xf:css>
+.paymentHeaderSuccess {
+	font-size: 2em;	
+	display: inline-block;
+}
+	
+.paymentHeaderTextSuccess {
+	font-size: 2em;
+	display: inline-block;
+	color: limegreen;
+	padding: 0px 5px 0px 5px;
+}
+	
+.paymentHeaderFail {
+	font-size: 2em;	
+	display: inline-block;
+}
+	
+.paymentHeaderTextFail {
+	font-size: 2em;
+	display: inline-block;
+	color: #c94e4e;
+}
+</xf:css>
+
+<div style="padding:15px;">
+	<xf:if is="{$paymentFound} == false">
+		<center>
+			<span class="paymentHeaderFail">❌</span><h1 class="paymentHeaderTextFail"> Uh oh. There was a payment error! </h1><span class="paymentHeaderFail">❌</span>
+			
+			<p>Unfortunately there was a problem prcessing your payment with OrderID <span style="color:#c94e4e;font-weight:700;">{$orderId}</span>. Contact an Owner or Lead Administrator to further investigate this issue as we don't want you to not receive your store rank.</p>
+			<br>
+			<p>We apologize for the difficulties.</p>
+		</center>
+	<xf:else />
+		<center>
+			<span class="paymentHeaderSuccess">🎉</span><h1 class="paymentHeaderTextSuccess"> Success </h1><span class="paymentHeaderSuccess">🎉</span>
+	
+			<p>Your payment with OrderID <span style="color:limegreen;font-weight:700;">{$transactionId}</span> was successfully processed!
+				<xf:if is="{$isGift}">
+					The giftee
+				<xf:else />
+					You
+				</xf:if> 
+				should receive the rank soon, though rarely this may take a couple of hours. Contact an Owner or Lead Administrator if 
+				<xf:if is="{$isGift}">
+					the giftee does
+				<xf:else />
+					you do
+				</xf:if> 
+				not receive the rank within 24 hours.</p>
+			<br>
+			<p>Thank you for your purchase! 
+				<xf:if is="{$isGift} == false">
+					We hope you enjoy your new rank privileges!
+				</xf:if>	
+			</p>
+		</center>
+	</xf:if>
+</div>

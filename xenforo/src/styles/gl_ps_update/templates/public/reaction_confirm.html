@@ -1,0 +1,18 @@
+<xf:title>{{ phrase('confirm_action') }}</xf:title>
+
+<xf:form action="{$confirmUrl}" class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:inforow rowtype="confirm">
+				<xf:if is="$isUnreact">
+					{{ phrase('you_sure_you_want_to_remove_your_reaction') }}
+				<xf:else />
+					{{ phrase('you_sure_you_want_to_apply_this_reaction') }}
+					<strong><xf:reaction id="{$reaction.reaction_id}" showtitle="true" class="reaction--inline" /></strong>
+				</xf:if>
+			</xf:inforow>
+		</div>
+		<xf:submitrow icon="confirm" rowtype="simple" />
+	</div>
+	<xf:hiddenval name="reaction_id">{$reaction.reaction_id}</xf:hiddenval>
+</xf:form>
